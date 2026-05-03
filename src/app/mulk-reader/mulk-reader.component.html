@@ -227,7 +227,13 @@
 
       <ol id="verses-start" class="verses" start="1" tabindex="-1">
         @for (v of verses; track v.ayah) {
-          <li class="verses__item" [id]="'ayah-' + v.ayah" [attr.data-ayah]="v.ayah">
+          <li
+            class="verses__item"
+            [class.verses__item--active]="v.ayah === activeAyah"
+            [id]="'ayah-' + v.ayah"
+            [attr.data-ayah]="v.ayah"
+            [attr.aria-current]="v.ayah === activeAyah ? 'true' : null"
+          >
             <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
             <p class="verses__text">{{ v.text }}</p>
             @if (verseTr(v.ayah); as tr) {
