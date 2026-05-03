@@ -39,5 +39,9 @@
   "toolsHint": "آپ کی ترتیبات خودکار طور پر اس ڈیوائس پر محفوظ ہو جاتی ہیں۔",
   "footerAttributionBefore": "متن عثمانی ایڈیشن سے، ",
   "footerAttributionAfter": " کے ذریعے — تلاوتیں اور تفسیر وہاں ملاحظہ کریں۔",
-  "footerPrintNote": "کاغذی طباعت کے لیے اپنے معتمد مصحف کو دیکھیں؛ اسکرین پر صرف پڑھنے اور جائزے کے لیے ہے۔"
+  "footerPrintNote": "کاغذی طباعت کے لیے اپنے معتمد مصحف کو دیکھیں؛ اسکرین پر صرف پڑھنے اور جائزے کے لیے ہے۔",
+  "translationEnShort": "انگریزی",
+  "translationUrShort": "اردو",
+  "verseTranslationsAria": "آیت {{n}} — انگریزی اور اردو معنی",
+  "footerTranslationAttribution": "آیات کے معنی: انگریزی (صحیح انٹرنیشنل) اور اردو (فتح محمد جالندھری)، Quran.com سے۔"
 }
