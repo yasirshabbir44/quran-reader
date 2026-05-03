@@ -2,11 +2,15 @@ import { DOCUMENT, isPlatformBrowser, NgClass } from '@angular/common';
 import {
   afterNextRender,
   Component,
+  effect,
   HostListener,
   inject,
   OnInit,
   PLATFORM_ID,
 } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { UiLocaleService } from '../core/ui-locale.service';
+import { UiTranslatePipe } from '../core/ui-translate.pipe';
 import { SURAH_MULK_VERSES } from '../data/surah-mulk';
 import { SURAH_MULK_META } from '../data/surah-mulk-meta';
 
@@ -21,13 +25,15 @@ type ReaderWidth = 'narrow' | 'medium' | 'wide';
 @Component({
   selector: 'app-mulk-reader',
   standalone: true,
-  imports: [NgClass],
+  imports: [NgClass, UiTranslatePipe],
   templateUrl: './mulk-reader.component.html',
   styleUrl: './mulk-reader.component.scss',
 })
 export class MulkReaderComponent implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly title = inject(Title);
+  protected readonly ui = inject(UiLocaleService);
 
   protected readonly verses = SURAH_MULK_VERSES;
   protected readonly meta = SURAH_MULK_META;
@@ -45,6 +51,11 @@ export class MulkReaderComponent implements OnInit {
   private ayahElements: HTMLElement[] | null = null;
 
   constructor() {
+    effect(() => {
+      this.ui.locale();
+      this.title.setTitle(this.ui.translate('documentTitle'));
+    });
+
     afterNextRender(() => {
       if (!isPlatformBrowser(this.platformId)) {
         return;
@@ -94,12 +105,19 @@ export class MulkReaderComponent implements OnInit {
     });
   }
 
+  protected onUiLocaleChange(event: Event): void {
+    const v = (event.target as HTMLSelectElement).value;
+    if (v === 'en' || v === 'ar' || v === 'ur') {
+      this.ui.setLocale(v);
+    }
+  }
+
   protected scrollToTop(): void {
     this.document.defaultView?.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  protected formatArNum(n: number): string {
-    return n.toLocaleString('ar-u-nu-arab');
+  protected formatUiNum(n: number): string {
+    return n.toLocaleString(this.ui.numberLocaleTag());
   }
 
   protected setFont(f: ReaderFont): void {
