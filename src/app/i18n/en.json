@@ -39,5 +39,9 @@
   "toolsHint": "Your settings are saved automatically on this device.",
   "footerAttributionBefore": "Text from the Uthmani edition via ",
   "footerAttributionAfter": " — compare recitations and tafsir there.",
-  "footerPrintNote": "For paper printing use your trusted mushaf; on-screen display is for reading and review only."
+  "footerPrintNote": "For paper printing use your trusted mushaf; on-screen display is for reading and review only.",
+  "translationEnShort": "English",
+  "translationUrShort": "Urdu",
+  "verseTranslationsAria": "Verse {{n}} — meanings in English and Urdu",
+  "footerTranslationAttribution": "Verse meanings: English (Saheeh International) and Urdu (Fatah Muhammad Jalandhari), from Quran.com."
 }

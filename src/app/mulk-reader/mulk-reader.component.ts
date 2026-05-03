@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui-translate.pipe';
-import { SURAH_MULK_VERSES } from '../data/surah-mulk';
 import { SURAH_MULK_META } from '../data/surah-mulk-meta';
+import { MULK_VERSE_TRANSLATION_BY_AYAH } from '../data/surah-mulk-translations';
+import { SURAH_MULK_VERSES } from '../data/surah-mulk';
 
 const LS_FONT = 'mulk-reader-font';
 const LS_LINE = 'mulk-reader-line';
@@ -125,6 +126,17 @@ export class MulkReaderComponent implements OnInit {
   protected setWidth(w: ReaderWidth): void {
     this.width = w;
     this.persist(LS_WIDTH, w);
+  }
+
+  protected verseTr(ayah: number): { en: string; ur: string } | undefined {
+    const t = MULK_VERSE_TRANSLATION_BY_AYAH[ayah];
+    if (!t) {
+      return undefined;
+    }
+    return {
+      en: t.en.replace(/\s+-\s*$/, '').trim(),
+      ur: t.ur.trim(),
+    };
   }
 
   protected jumpToAyah(event: Event): void {
