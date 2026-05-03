@@ -43,6 +43,7 @@ $focus: rgba(201, 162, 39, 0.45);
     display: block;
     height: 100%;
     width: var(--read-progress);
+    pointer-events: none;
     background: linear-gradient(90deg, #a67c1a, #e4c45c);
     box-shadow: 0 0 12px rgba(228, 196, 92, 0.35);
     transition: width 0.12s ease-out;
@@ -131,7 +132,6 @@ $focus: rgba(201, 162, 39, 0.45);
     transform: translateY(0);
     opacity: 1;
     visibility: visible;
-    pointer-events: auto;
   }
 }
 
@@ -169,7 +169,7 @@ $focus: rgba(201, 162, 39, 0.45);
   position: fixed;
   inset-inline-end: max(1rem, env(safe-area-inset-right));
   bottom: max(1.25rem, env(safe-area-inset-bottom));
-  z-index: 95;
+  z-index: 108;
   width: 3rem;
   height: 3rem;
   display: grid;
@@ -369,7 +369,7 @@ $focus: rgba(201, 162, 39, 0.45);
   position: fixed;
   top: 3px;
   inset-inline: 0;
-  z-index: 92;
+  z-index: 110;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
