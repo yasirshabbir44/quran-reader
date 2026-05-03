@@ -230,6 +230,22 @@
           <li class="verses__item" [id]="'ayah-' + v.ayah" [attr.data-ayah]="v.ayah">
             <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
             <p class="verses__text">{{ v.text }}</p>
+            @if (verseTr(v.ayah); as tr) {
+              <div
+                class="verses__translations"
+                role="group"
+                [attr.aria-label]="'verseTranslationsAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+              >
+                <div class="verses__tr-block verses__tr-block--en" dir="ltr" lang="en">
+                  <span class="verses__tr-label">{{ 'translationEnShort' | uiTranslate }}</span>
+                  <p class="verses__tr-text">{{ tr.en }}</p>
+                </div>
+                <div class="verses__tr-block verses__tr-block--ur" dir="rtl" lang="ur">
+                  <span class="verses__tr-label">{{ 'translationUrShort' | uiTranslate }}</span>
+                  <p class="verses__tr-text">{{ tr.ur }}</p>
+                </div>
+              </div>
+            }
           </li>
         }
       </ol>
@@ -240,6 +256,9 @@
         </p>
         <p class="reader__footer-line reader__footer-line--muted">
           {{ 'footerPrintNote' | uiTranslate }}
+        </p>
+        <p class="reader__footer-line reader__footer-line--muted">
+          {{ 'footerTranslationAttribution' | uiTranslate }}
         </p>
       </footer>
     </div>
