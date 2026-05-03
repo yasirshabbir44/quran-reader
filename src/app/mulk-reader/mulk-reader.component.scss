@@ -1,0 +1,300 @@
+// Refined reading surface: warm ink on deep twilight
+$ink: #f4f1ea;
+$ink-muted: #b8b3a8;
+$accent: #c9a227;
+$accent-soft: rgba(201, 162, 39, 0.14);
+$surface: rgba(22, 24, 28, 0.72);
+$border: rgba(255, 255, 255, 0.06);
+$focus: rgba(201, 162, 39, 0.45);
+
+.skip-link {
+  position: absolute;
+  inset-inline-start: 1rem;
+  top: 0.75rem;
+  z-index: 120;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-family: 'Amiri', serif;
+  color: #0f1419;
+  background: $accent;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 0.2s ease;
+
+  &:focus {
+    outline: none;
+    transform: translateY(0);
+  }
+}
+
+.reader__progress {
+  --read-progress: 0%;
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 100;
+  height: 3px;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.06);
+
+  &::after {
+    content: '';
+    display: block;
+    height: 100%;
+    width: var(--read-progress);
+    background: linear-gradient(90deg, #a67c1a, #e4c45c);
+    box-shadow: 0 0 12px rgba(228, 196, 92, 0.35);
+    transition: width 0.12s ease-out;
+  }
+}
+
+.reader__sticky {
+  position: fixed;
+  inset-inline: 0;
+  top: 3px;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  font-family: 'Amiri Quran', 'Amiri', serif;
+  background: rgba(12, 14, 18, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid $border;
+  transform: translateY(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.2s ease,
+    visibility 0.28s;
+
+  &--visible {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.reader__sticky-title {
+  font-size: 1.15rem;
+  color: $ink;
+  letter-spacing: 0.02em;
+}
+
+.reader__sticky-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  color: $accent;
+  background: $accent-soft;
+  border: 1px solid rgba(201, 162, 39, 0.25);
+}
+
+.reader__to-top {
+  position: fixed;
+  inset-inline-end: max(1rem, env(safe-area-inset-right));
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 95;
+  width: 3rem;
+  height: 3rem;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(18, 20, 24, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: $accent;
+  cursor: pointer;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.5rem) scale(0.94);
+  transition:
+    opacity 0.22s ease,
+    visibility 0.22s ease,
+    transform 0.22s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+
+  &--visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+
+  &:hover {
+    background: rgba(28, 30, 36, 0.95);
+    border-color: rgba(201, 162, 39, 0.35);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: 3px;
+  }
+}
+
+.reader__to-top-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+  transform: scaleY(0.9);
+}
+
+.reader {
+  min-height: 100vh;
+  padding: 2.25rem 0 4.5rem;
+}
+
+.reader__shell {
+  max-width: min(40rem, 100% - 2rem);
+  margin-inline: auto;
+  padding: 0 0.25rem;
+}
+
+.reader__header {
+  text-align: center;
+  margin-bottom: 2.75rem;
+  padding: 0 0.5rem 2rem;
+  border-bottom: 1px solid $border;
+}
+
+.reader__meta {
+  margin: 0 0 0.6rem;
+  font-family: 'Amiri', serif;
+  font-size: 0.92rem;
+  color: $ink-muted;
+  letter-spacing: 0.04em;
+}
+
+.reader__title {
+  margin: 0;
+  font-family: 'Amiri Quran', 'Amiri', serif;
+  font-size: clamp(2.1rem, 5.5vw, 2.85rem);
+  font-weight: 400;
+  color: $ink;
+  line-height: 1.38;
+  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.25);
+}
+
+.reader__subtitle {
+  margin: 0.85rem 0 0;
+  font-family: 'Amiri', serif;
+  font-size: 1.02rem;
+  color: #9d988c;
+  line-height: 1.5;
+}
+
+.verses {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.verses__item {
+  display: flex;
+  gap: 1.1rem;
+  align-items: flex-start;
+  margin-bottom: 1.25rem;
+  padding: 1.15rem 1.2rem 1.3rem;
+  border-radius: 1rem;
+  background: $surface;
+  border: 1px solid $border;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+
+  &:hover {
+    border-color: rgba(201, 162, 39, 0.18);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  }
+
+  &:focus-within {
+    outline: none;
+    border-color: rgba(201, 162, 39, 0.28);
+    box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.15), 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.verses__num {
+  flex-shrink: 0;
+  min-width: 2.35rem;
+  height: 2.35rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Amiri', serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: $accent;
+  background: $accent-soft;
+  border: 1px solid rgba(201, 162, 39, 0.22);
+  border-radius: 999px;
+  font-variant-numeric: tabular-nums;
+}
+
+.verses__text {
+  margin: 0;
+  font-family: 'Amiri Quran', 'Amiri', serif;
+  font-size: clamp(1.38rem, 3.6vw, 1.72rem);
+  line-height: 2.15;
+  text-align: justify;
+  text-justify: inter-word;
+  color: $ink;
+  word-spacing: 0.05em;
+  letter-spacing: 0.01em;
+}
+
+.reader__footer {
+  margin-top: 3.25rem;
+  padding: 1.75rem 0.5rem 0;
+  border-top: 1px solid $border;
+  text-align: center;
+  font-family: 'Amiri', serif;
+  font-size: 0.88rem;
+  color: $ink-muted;
+  line-height: 1.6;
+
+  a {
+    color: #d4b84a;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(212, 184, 74, 0.35);
+    transition: color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      color: #e8d078;
+      border-bottom-color: rgba(232, 208, 120, 0.55);
+    }
+
+    &:focus-visible {
+      outline: 2px solid $focus;
+      outline-offset: 2px;
+      border-radius: 2px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .reader {
+    padding-top: 1.75rem;
+  }
+
+  .reader__shell {
+    max-width: 100%;
+    margin-inline: 0;
+    padding: 0;
+  }
+
+  .verses__item {
+    padding-inline: 1rem;
+    border-radius: 0.85rem;
+  }
+}

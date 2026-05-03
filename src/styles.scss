@@ -1,0 +1,27 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Amiri', 'Amiri Quran', serif;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(201, 162, 39, 0.08), transparent 55%),
+    radial-gradient(90% 60% at 100% 40%, rgba(59, 91, 120, 0.12), transparent 50%),
+    linear-gradient(168deg, #0c0e12 0%, #141820 42%, #0f1419 100%);
+  background-attachment: fixed;
+  color: #ebe6dc;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}

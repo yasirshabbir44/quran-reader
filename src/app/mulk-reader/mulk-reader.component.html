@@ -1,0 +1,52 @@
+<a class="skip-link" href="#verses-start">تخطي إلى الآيات</a>
+
+<div
+  class="reader__progress"
+  role="progressbar"
+  [attr.aria-valuenow]="scrollProgress"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  [attr.aria-label]="'تقدّم القراءة ' + scrollProgress + ' بالمئة'"
+  [style.--read-progress]="scrollProgress + '%'"
+></div>
+
+<header class="reader__sticky" [class.reader__sticky--visible]="stickyHeaderVisible" aria-hidden="true">
+  <span class="reader__sticky-title">سُورَةُ المُلْك</span>
+  <span class="reader__sticky-badge">٦٧</span>
+</header>
+
+<button
+  type="button"
+  class="reader__to-top"
+  [class.reader__to-top--visible]="scrollTopVisible"
+  (click)="scrollToTop()"
+  aria-label="العودة إلى أعلى الصفحة"
+>
+  <span class="reader__to-top-icon" aria-hidden="true">↑</span>
+</button>
+
+<main class="reader" dir="rtl" lang="ar">
+  <div class="reader__shell">
+    <header class="reader__header">
+      <p class="reader__meta">سورة ٦٧ — ثلاثون آية</p>
+      <h1 class="reader__title">سُورَةُ المُلْك</h1>
+      <p class="reader__subtitle">النصُّ العُثمانيُّ — للقراءة والتدبُّر</p>
+    </header>
+
+    <ol id="verses-start" class="verses" start="1" tabindex="-1">
+      @for (v of verses; track v.ayah) {
+        <li class="verses__item">
+          <span class="verses__num" aria-hidden="true">{{ v.ayah }}</span>
+          <p class="verses__text">{{ v.text }}</p>
+        </li>
+      }
+    </ol>
+
+    <footer class="reader__footer">
+      <p>
+        النص من إصدار عُثماني عبر
+        <a href="https://quran.com" rel="noopener noreferrer" target="_blank">Quran.com</a>
+      </p>
+    </footer>
+  </div>
+</main>
