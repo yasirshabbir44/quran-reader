@@ -50,6 +50,7 @@ export class MulkReaderComponent implements OnInit {
         return;
       }
       this.ayahElements = this.verses.map((v) => this.document.getElementById(`ayah-${v.ayah}`));
+      this.updateActiveAyah();
     });
   }
 
