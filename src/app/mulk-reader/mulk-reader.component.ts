@@ -1,15 +1,8 @@
 import { DOCUMENT, isPlatformBrowser, NgClass } from '@angular/common';
-import {
-  afterNextRender,
-  Component,
-  effect,
-  HostListener,
-  inject,
-  OnInit,
-  PLATFORM_ID,
-} from '@angular/core';
+import { afterNextRender, Component, HostListener, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { UiLocaleService } from '../core/ui-locale.service';
+import { UiLocaleService, type UiLocaleCode } from '../core/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui-translate.pipe';
 import { SURAH_MULK_VERSES } from '../data/surah-mulk';
 import { SURAH_MULK_META } from '../data/surah-mulk-meta';
@@ -25,7 +18,7 @@ type ReaderWidth = 'narrow' | 'medium' | 'wide';
 @Component({
   selector: 'app-mulk-reader',
   standalone: true,
-  imports: [NgClass, UiTranslatePipe],
+  imports: [NgClass, FormsModule, UiTranslatePipe],
   templateUrl: './mulk-reader.component.html',
   styleUrl: './mulk-reader.component.scss',
 })
@@ -48,21 +41,14 @@ export class MulkReaderComponent implements OnInit {
   protected activeAyah = 1;
 
   private scrollRaf = 0;
-  private ayahElements: HTMLElement[] | null = null;
+  private ayahElements: (HTMLElement | null)[] | null = null;
 
   constructor() {
-    effect(() => {
-      this.ui.locale();
-      this.title.setTitle(this.ui.translate('documentTitle'));
-    });
-
     afterNextRender(() => {
       if (!isPlatformBrowser(this.platformId)) {
         return;
       }
-      this.ayahElements = this.verses
-        .map((v) => this.document.getElementById(`ayah-${v.ayah}`))
-        .filter((el): el is HTMLElement => !!el);
+      this.ayahElements = this.verses.map((v) => this.document.getElementById(`ayah-${v.ayah}`));
     });
   }
 
@@ -86,6 +72,7 @@ export class MulkReaderComponent implements OnInit {
     } catch {
       /* ignore */
     }
+    this.syncDocumentTitle();
   }
 
   @HostListener('window:scroll')
@@ -105,10 +92,10 @@ export class MulkReaderComponent implements OnInit {
     });
   }
 
-  protected onUiLocaleChange(event: Event): void {
-    const v = (event.target as HTMLSelectElement).value;
-    if (v === 'en' || v === 'ar' || v === 'ur') {
-      this.ui.setLocale(v);
+  protected onLocaleModelChange(value: string): void {
+    if (value === 'en' || value === 'ar' || value === 'ur') {
+      this.ui.setLocale(value as UiLocaleCode);
+      this.syncDocumentTitle();
     }
   }
 
@@ -117,7 +104,12 @@ export class MulkReaderComponent implements OnInit {
   }
 
   protected formatUiNum(n: number): string {
+    this.ui.locale();
     return n.toLocaleString(this.ui.numberLocaleTag());
+  }
+
+  private syncDocumentTitle(): void {
+    this.title.setTitle(this.ui.translate('documentTitle'));
   }
 
   protected setFont(f: ReaderFont): void {
@@ -151,8 +143,10 @@ export class MulkReaderComponent implements OnInit {
     const els = this.ayahElements;
     if (els?.length) {
       for (let i = 0; i < els.length; i++) {
-        if (els[i].getBoundingClientRect().top <= lineY) {
-          next = i + 1;
+        const el = els[i];
+        const verse = this.verses[i];
+        if (el && verse && el.getBoundingClientRect().top <= lineY) {
+          next = verse.ayah;
         }
       }
     } else {
