@@ -1,4 +1,4 @@
-<a class="skip-link" href="#verses-start">تخطي إلى الآيات</a>
+<a class="skip-link" href="#verses-start">{{ 'skipToVerses' | uiTranslate }}</a>
 
 <div
   class="reader__progress"
@@ -6,19 +6,19 @@
   [attr.aria-valuenow]="scrollProgress"
   aria-valuemin="0"
   aria-valuemax="100"
-  [attr.aria-label]="'تقدّم القراءة ' + scrollProgress + ' بالمئة'"
+  [attr.aria-label]="'readProgressAria' | uiTranslate: { pct: scrollProgress }"
   [style.--read-progress]="scrollProgress + '%'"
 ></div>
 
 <header
   class="reader__sticky"
   [class.reader__sticky--visible]="stickyHeaderVisible"
-  aria-label="مؤشر القراءة: سورة الملك والآية الحالية"
+  [attr.aria-label]="'stickyHeaderAria' | uiTranslate"
 >
   <span class="reader__sticky-title">سُورَةُ المُلْك</span>
-  <span class="reader__sticky-badge">{{ formatArNum(meta.number) }}</span>
+  <span class="reader__sticky-badge">{{ formatUiNum(meta.number) }}</span>
   <span class="reader__sticky-dot" aria-hidden="true">·</span>
-  <span class="reader__sticky-ayah">الآية {{ formatArNum(activeAyah) }}</span>
+  <span class="reader__sticky-ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(activeAyah) }}</span>
 </header>
 
 <button
@@ -26,7 +26,7 @@
   class="reader__to-top"
   [class.reader__to-top--visible]="scrollTopVisible"
   (click)="scrollToTop()"
-  aria-label="العودة إلى أعلى الصفحة"
+  [attr.aria-label]="'backToTopAria' | uiTranslate"
 >
   <span class="reader__to-top-icon" aria-hidden="true">↑</span>
 </button>
@@ -39,52 +39,66 @@
 >
   <div class="reader__shell">
     <header class="reader__header">
-      <p class="reader__meta">سورة {{ formatArNum(meta.number) }} — {{ formatArNum(meta.versesCount) }} آية</p>
+      <p class="reader__meta">
+        {{ 'surahWord' | uiTranslate }} {{ formatUiNum(meta.number) }} — {{ formatUiNum(meta.versesCount) }}
+        {{ 'versesWord' | uiTranslate }}
+      </p>
       <h1 class="reader__title">سُورَةُ المُلْك</h1>
-      <p class="reader__subtitle">النصُّ العُثمانيُّ — للقراءة والتدبُّر</p>
+      <p class="reader__subtitle">{{ 'subtitle' | uiTranslate }}</p>
 
-      <dl class="reader__facts" aria-label="معلومات عن السورة">
+      <dl class="reader__facts" [attr.aria-label]="'factsAria' | uiTranslate">
         <div class="reader__fact">
-          <dt>الجزء</dt>
-          <dd>{{ formatArNum(meta.juz) }}</dd>
+          <dt>{{ 'factJuz' | uiTranslate }}</dt>
+          <dd>{{ formatUiNum(meta.juz) }}</dd>
         </div>
         <div class="reader__fact">
-          <dt>النوع</dt>
+          <dt>{{ 'factType' | uiTranslate }}</dt>
           <dd>{{ meta.revelationType }}</dd>
         </div>
         <div class="reader__fact">
-          <dt>ترتيب النزول</dt>
-          <dd>{{ formatArNum(meta.revelationOrder) }}</dd>
+          <dt>{{ 'factRevelationOrder' | uiTranslate }}</dt>
+          <dd>{{ formatUiNum(meta.revelationOrder) }}</dd>
         </div>
         <div class="reader__fact">
-          <dt>بداية الصفحة</dt>
-          <dd>≈ {{ formatArNum(meta.mushafPageStart) }}</dd>
+          <dt>{{ 'factPageStart' | uiTranslate }}</dt>
+          <dd>≈ {{ formatUiNum(meta.mushafPageStart) }}</dd>
         </div>
       </dl>
 
       <details class="reader__about" open>
-        <summary class="reader__about-summary">عن السورة والموضوعات</summary>
+        <summary class="reader__about-summary">{{ 'aboutSummary' | uiTranslate }}</summary>
         <p class="reader__about-body">{{ meta.themes }}</p>
         <p class="reader__about-note">
-          رقم الصفحة تقريبي في مصحف المدينة (١٥ سطرًا)؛ قد تختلف الطبعات قليلًا.
+          {{ 'aboutNote' | uiTranslate }}
         </p>
       </details>
     </header>
 
-    <section class="reader__tools" aria-label="أدوات القراءة">
+    <section class="reader__tools" [attr.aria-label]="'toolsAria' | uiTranslate">
+      <div class="reader__tools-row reader__tools-row--wrap">
+        <div class="reader__tool-group reader__tool-group--lang">
+          <label class="reader__tool-label" for="ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+          <select id="ui-locale" class="reader__select" (change)="onUiLocaleChange($event)">
+            @for (opt of ui.availableLocales; track opt.code) {
+              <option [value]="opt.code" [selected]="opt.code === ui.locale()">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
       <div class="reader__tools-row">
         <div class="reader__tool-group">
-          <span class="reader__tool-label" id="lbl-jump">انتقال سريع</span>
-          <label class="reader__visually-hidden" for="jump-ayah">رقم الآية</label>
+          <span class="reader__tool-label" id="lbl-jump">{{ 'jumpQuick' | uiTranslate }}</span>
+          <label class="reader__visually-hidden" for="jump-ayah">{{ 'jumpAyahHiddenLabel' | uiTranslate }}</label>
           <select
             id="jump-ayah"
             class="reader__select"
             aria-labelledby="lbl-jump"
             (change)="jumpToAyah($event)"
           >
-            <option value="" disabled>اختر آية…</option>
+            <option value="" disabled>{{ 'chooseAyah' | uiTranslate }}</option>
             @for (v of verses; track v.ayah) {
-              <option [value]="v.ayah">الآية {{ formatArNum(v.ayah) }}</option>
+              <option [value]="v.ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(v.ayah) }}</option>
             }
           </select>
         </div>
@@ -92,8 +106,8 @@
 
       <div class="reader__tools-row reader__tools-row--wrap">
         <fieldset class="reader__fieldset">
-          <legend class="reader__legend">حجم الخط</legend>
-          <div class="reader__segment" role="group" aria-label="حجم الخط">
+          <legend class="reader__legend">{{ 'fontSizeLegend' | uiTranslate }}</legend>
+          <div class="reader__segment" role="group" [attr.aria-label]="'fontSizeAria' | uiTranslate">
             <button
               type="button"
               class="reader__seg-btn"
@@ -101,7 +115,7 @@
               [attr.aria-pressed]="font === 's'"
               (click)="setFont('s')"
             >
-              صغير
+              {{ 'fontSmall' | uiTranslate }}
             </button>
             <button
               type="button"
@@ -110,7 +124,7 @@
               [attr.aria-pressed]="font === 'm'"
               (click)="setFont('m')"
             >
-              متوسط
+              {{ 'fontMedium' | uiTranslate }}
             </button>
             <button
               type="button"
@@ -119,7 +133,7 @@
               [attr.aria-pressed]="font === 'l'"
               (click)="setFont('l')"
             >
-              كبير
+              {{ 'fontLarge' | uiTranslate }}
             </button>
             <button
               type="button"
@@ -128,14 +142,14 @@
               [attr.aria-pressed]="font === 'xl'"
               (click)="setFont('xl')"
             >
-              أكبر
+              {{ 'fontXL' | uiTranslate }}
             </button>
           </div>
         </fieldset>
 
         <fieldset class="reader__fieldset">
-          <legend class="reader__legend">تباعد الأسطر</legend>
-          <div class="reader__segment" role="group" aria-label="تباعد الأسطر">
+          <legend class="reader__legend">{{ 'lineHeightLegend' | uiTranslate }}</legend>
+          <div class="reader__segment" role="group" [attr.aria-label]="'lineHeightAria' | uiTranslate">
             <button
               type="button"
               class="reader__seg-btn"
@@ -143,7 +157,7 @@
               [attr.aria-pressed]="line === 'normal'"
               (click)="setLine('normal')"
             >
-              عادي
+              {{ 'lineNormal' | uiTranslate }}
             </button>
             <button
               type="button"
@@ -152,7 +166,7 @@
               [attr.aria-pressed]="line === 'relaxed'"
               (click)="setLine('relaxed')"
             >
-              مريح
+              {{ 'lineRelaxed' | uiTranslate }}
             </button>
             <button
               type="button"
@@ -161,14 +175,14 @@
               [attr.aria-pressed]="line === 'loose'"
               (click)="setLine('loose')"
             >
-              واسع
+              {{ 'lineLoose' | uiTranslate }}
             </button>
           </div>
         </fieldset>
 
         <fieldset class="reader__fieldset">
-          <legend class="reader__legend">عرض النص</legend>
-          <div class="reader__segment" role="group" aria-label="عرض النص">
+          <legend class="reader__legend">{{ 'textWidthLegend' | uiTranslate }}</legend>
+          <div class="reader__segment" role="group" [attr.aria-label]="'textWidthAria' | uiTranslate">
             <button
               type="button"
               class="reader__seg-btn"
@@ -176,7 +190,7 @@
               [attr.aria-pressed]="width === 'narrow'"
               (click)="setWidth('narrow')"
             >
-              ضيق
+              {{ 'widthNarrow' | uiTranslate }}
             </button>
             <button
               type="button"
@@ -185,7 +199,7 @@
               [attr.aria-pressed]="width === 'medium'"
               (click)="setWidth('medium')"
             >
-              متوسط
+              {{ 'widthMedium' | uiTranslate }}
             </button>
             <button
               type="button"
@@ -194,18 +208,18 @@
               [attr.aria-pressed]="width === 'wide'"
               (click)="setWidth('wide')"
             >
-              عريض
+              {{ 'widthWide' | uiTranslate }}
             </button>
           </div>
         </fieldset>
       </div>
-      <p class="reader__tools-hint">تُحفظ إعداداتك على هذا الجهاز تلقائيًا.</p>
+      <p class="reader__tools-hint">{{ 'toolsHint' | uiTranslate }}</p>
     </section>
 
     <ol id="verses-start" class="verses" start="1" tabindex="-1">
       @for (v of verses; track v.ayah) {
         <li class="verses__item" [id]="'ayah-' + v.ayah" [attr.data-ayah]="v.ayah">
-          <span class="verses__num" aria-hidden="true">{{ formatArNum(v.ayah) }}</span>
+          <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
           <p class="verses__text">{{ v.text }}</p>
         </li>
       }
@@ -213,12 +227,10 @@
 
     <footer class="reader__footer">
       <p class="reader__footer-line">
-        النص من إصدار عُثماني عبر
-        <a href="https://quran.com" rel="noopener noreferrer" target="_blank">Quran.com</a>
-        — يمكنك مقارنة التلاوات والتفاسير هناك.
+        {{ 'footerAttributionBefore' | uiTranslate }}<a href="https://quran.com" rel="noopener noreferrer" target="_blank">Quran.com</a>{{ 'footerAttributionAfter' | uiTranslate }}
       </p>
       <p class="reader__footer-line reader__footer-line--muted">
-        للطباعة الورقية راجع مصحفك المعتمد؛ العرض على الشاشة للقراءة والمراجعة فقط.
+        {{ 'footerPrintNote' | uiTranslate }}
       </p>
     </footer>
   </div>
