@@ -21,21 +21,26 @@
 
 <nav class="reader__topbar" [attr.aria-label]="'toolsAria' | uiTranslate">
   <div class="reader__topbar-brand">
-    <span class="reader__topbar-surah">{{ surah()!.nameAr }}</span>
-    <span class="reader__topbar-badge">{{ formatUiNum(surah()!.number) }}</span>
+
     <button
       type="button"
       class="reader__settings-btn"
       [class.reader__settings-btn--active]="settingsOpen"
       [attr.aria-expanded]="settingsOpen"
+      aria-label="Settings"
       aria-controls="reader-settings-panel"
       (click)="toggleSettingsPanel()"
     >
-      ⚙
+      <svg class="reader__settings-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          d="M12 8.75a3.25 3.25 0 1 0 0 6.5a3.25 3.25 0 0 0 0-6.5ZM4.5 12a7.42 7.42 0 0 0 .07.95l-1.44 1.12a.75.75 0 0 0-.19.96l1.37 2.37c.2.35.64.49 1 .33l1.7-.74c.5.39 1.05.72 1.64.96l.25 1.82c.06.39.39.68.78.68h2.74c.39 0 .72-.29.78-.68l.25-1.82c.59-.24 1.14-.57 1.64-.96l1.7.74c.36.16.8.02 1-.33l1.37-2.37a.75.75 0 0 0-.19-.96l-1.44-1.12c.05-.31.07-.63.07-.95s-.02-.64-.07-.95l1.44-1.12a.75.75 0 0 0 .19-.96l-1.37-2.37a.79.79 0 0 0-1-.33l-1.7.74a7.7 7.7 0 0 0-1.64-.96l-.25-1.82a.79.79 0 0 0-.78-.68H9.68c-.39 0-.72.29-.78.68l-.25 1.82c-.59.24-1.14.57-1.64.96l-1.7-.74a.79.79 0 0 0-1 .33L2.94 8.89a.75.75 0 0 0 .19.96l1.44 1.12c-.05.31-.07.63-.07.95Z"
+        />
+      </svg>
     </button>
   </div>
 
   <div class="reader__topbar-menu">
+
     <div class="reader__topbar-cluster reader__topbar-cluster--surah">
       <label class="reader__tool-label reader__tool-label--compact" for="pick-surah">{{ 'surahLabel' | uiTranslate }}</label>
       <select
@@ -318,8 +323,6 @@
         </details>
         }
       </header>
-
-      <p class="reader__settings-hint">{{ 'toolsHint' | uiTranslate }}</p>
 
       <ol id="verses-start" class="verses" start="1" tabindex="-1">
         @if (surahNumber() !== 9) {
