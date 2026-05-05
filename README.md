@@ -1,59 +1,98 @@
-# SurahMulkReader
+# Surah Mulk Reader
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+A lightweight Angular app for reading Quran with a focused default experience on Surah Al-Mulk (67), including Arabic text, English translation, and Urdu translation in one interface.
 
-## Development server
+## Project Overview
 
-To start a local development server, run:
+This app is designed for distraction-free recitation and study:
 
-```bash
-ng serve
-```
+- Opens directly to Surah Al-Mulk by default (`/surah/67`)
+- Supports reading any surah from `1` to `114` through route params (`/surah/:n`)
+- Shows Arabic + English + Urdu per ayah
+- Provides UI localization in English, Arabic, and Urdu
+- Tracks active ayah while scrolling and supports quick jump-to-ayah navigation
+- Saves reader preferences (font size, line spacing, content width) in `localStorage`
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Tech Stack
 
-## Code scaffolding
+- Angular 18 (standalone components + router + HttpClient)
+- TypeScript
+- SCSS
+- Local JSON corpus served from `public/quran-full.json`
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Getting Started
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### 1) Install dependencies
 
 ```bash
-ng build
+npm install
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### 2) Start development server
 
 ```bash
-ng test
+npm start
 ```
 
-## Running end-to-end tests
+Open `http://localhost:4200/`.
 
-For end-to-end (e2e) testing, run:
+### 3) Build for production
 
 ```bash
-ng e2e
+npm run build
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Build output is generated in `dist/surah-mulk-reader/`.
 
-## Additional Resources
+## Available Scripts
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- `npm start` - Run Angular dev server
+- `npm run build` - Create production build
+- `npm run watch` - Build in watch mode with development configuration
+- `npm run build-quran-data` - Rebuild `public/quran-full.json` from source datasets
+
+## Data Pipeline
+
+Quran data is loaded via `QuranDataService` from:
+
+- `public/quran-full.json`
+
+The `build-quran-data` script merges Arabic text, English translation, and Urdu translation into a single payload to keep the app offline-friendly and fast at runtime.
+
+## Localization
+
+UI locale packs live in:
+
+- `src/app/i18n/en.json`
+- `src/app/i18n/ar.json`
+- `src/app/i18n/ur.json`
+
+`UiLocaleService` also updates document language and direction (`lang` and `dir`) based on selected locale.
+
+## Routing
+
+- `/` redirects to `/surah/67`
+- `/surah/:n` renders the reader for the selected surah number
+- Unknown routes redirect back to `/surah/67`
+
+## Project Structure (Key Files)
+
+- `src/app/mulk-reader/mulk-reader.component.ts` - main reader logic and interactions
+- `src/app/core/quran-data.service.ts` - data loading service
+- `src/app/core/ui-locale.service.ts` - locale state and translation helpers
+- `src/app/core/ui-translate.pipe.ts` - template translation pipe
+- `src/app/app.routes.ts` - route definitions
+- `scripts/build-quran-data.mjs` - corpus build/merge script
+
+## Notes
+
+- The repository currently does not define a test script.
+- If you refresh Quran data sources, run `npm run build-quran-data` before building/deploying.
+
+## References
+
+- [Angular Documentation](https://angular.dev/)
+- [Angular CLI Command Reference](https://angular.dev/tools/cli)
+- [Quran JSON dataset (risan/quran-json)](https://github.com/risan/quran-json)
+- [Amiri Quran Font](https://fonts.google.com/specimen/Amiri+Quran)
+- [Noto Naskh Arabic Font](https://fonts.google.com/noto/specimen/Noto+Naskh+Arabic)
