@@ -55,43 +55,43 @@ $focus: rgba(201, 162, 39, 0.45);
 }
 
 
-.reader--font-s {
+.reader.reader--font-s {
   --verse-fs: clamp(1.22rem, 3.1vw, 1.48rem);
 }
 
-.reader--font-m {
+.reader.reader--font-m {
   --verse-fs: clamp(1.38rem, 3.6vw, 1.72rem);
 }
 
-.reader--font-l {
+.reader.reader--font-l {
   --verse-fs: clamp(1.52rem, 3.9vw, 1.95rem);
 }
 
-.reader--font-xl {
+.reader.reader--font-xl {
   --verse-fs: clamp(1.68rem, 4.2vw, 2.15rem);
 }
 
-.reader--line-normal {
+.reader.reader--line-normal {
   --verse-lh: 2.1;
 }
 
-.reader--line-relaxed {
+.reader.reader--line-relaxed {
   --verse-lh: 2.38;
 }
 
-.reader--line-loose {
+.reader.reader--line-loose {
   --verse-lh: 2.62;
 }
 
-.reader--measure-narrow {
+.reader.reader--measure-narrow {
   --shell-max: min(34rem, 100% - 2rem);
 }
 
-.reader--measure-medium {
+.reader.reader--measure-medium {
   --shell-max: min(40rem, 100% - 2rem);
 }
 
-.reader--measure-wide {
+.reader.reader--measure-wide {
   --shell-max: min(46rem, 100% - 2rem);
 }
 

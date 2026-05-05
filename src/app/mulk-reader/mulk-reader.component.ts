@@ -61,14 +61,15 @@ export class SurahReaderComponent implements OnInit {
   protected readonly surah = signal<QuranSurahPayload | null>(null);
   protected readonly surahList = signal<readonly { number: number; nameAr: string }[]>([]);
 
-  protected font: ReaderFont = 'm';
-  protected line: ReaderLine = 'normal';
-  protected width: ReaderWidth = 'medium';
+  protected readonly font = signal<ReaderFont>('m');
+  protected readonly line = signal<ReaderLine>('normal');
+  protected readonly width = signal<ReaderWidth>('medium');
 
   protected scrollProgress = 0;
   protected stickyHeaderVisible = false;
   protected scrollTopVisible = false;
   protected activeAyah = 1;
+  protected jumpAyahModel = '';
 
   private scrollRaf = 0;
   private ayahElements: (HTMLElement | null)[] | null = null;
@@ -116,9 +117,9 @@ export class SurahReaderComponent implements OnInit {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    this.font = this.readSetting(LS_FONT, FONT_OPTIONS, this.font);
-    this.line = this.readSetting(LS_LINE, LINE_OPTIONS, this.line);
-    this.width = this.readSetting(LS_WIDTH, WIDTH_OPTIONS, this.width);
+    this.font.set(this.readSetting(LS_FONT, FONT_OPTIONS, this.font()));
+    this.line.set(this.readSetting(LS_LINE, LINE_OPTIONS, this.line()));
+    this.width.set(this.readSetting(LS_WIDTH, WIDTH_OPTIONS, this.width()));
     this.syncDocumentTitle();
   }
 
@@ -172,17 +173,17 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected setFont(f: ReaderFont): void {
-    this.font = f;
+    this.font.set(f);
     this.persist(LS_FONT, f);
   }
 
   protected setLine(l: ReaderLine): void {
-    this.line = l;
+    this.line.set(l);
     this.persist(LS_LINE, l);
   }
 
   protected setWidth(w: ReaderWidth): void {
-    this.width = w;
+    this.width.set(w);
     this.persist(LS_WIDTH, w);
   }
 
@@ -195,11 +196,12 @@ export class SurahReaderComponent implements OnInit {
 
   protected jumpToAyah(event: Event): void {
     const select = event.target as HTMLSelectElement;
-    const n = Number(select.value);
+    const n = Number(select.value || this.jumpAyahModel);
     if (!n || !isPlatformBrowser(this.platformId)) {
       return;
     }
     this.document.getElementById(`ayah-${n}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.jumpAyahModel = '';
     select.value = '';
   }
 
