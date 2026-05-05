@@ -231,8 +231,10 @@ $focus: rgba(201, 162, 39, 0.45);
 
 .reader__layout {
   width: 100%;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  justify-items: center;
 }
 
 .reader__shell {
@@ -240,6 +242,41 @@ $focus: rgba(201, 162, 39, 0.45);
   margin-inline: auto;
   padding: 0 0.25rem;
   width: 100%;
+}
+
+.reader__side {
+  display: none;
+  width: 100%;
+  max-width: 16.5rem;
+}
+
+.reader__panel {
+  position: sticky;
+  top: calc(3px + var(--reader-topbar-h) + 1rem);
+  padding: 1rem;
+  border-radius: 0.9rem;
+  background: rgba(12, 14, 18, 0.72);
+  border: 1px solid $border;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+.reader__panel-title {
+  margin: 0 0 0.85rem;
+  font-family: 'Amiri', serif;
+  font-size: 0.95rem;
+  color: $accent;
+}
+
+.reader__panel-line {
+  margin: 0 0 0.55rem;
+  font-family: 'Amiri', serif;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: #d2cdc2;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .reader__header {
@@ -577,6 +614,23 @@ $focus: rgba(201, 162, 39, 0.45);
   flex: 1 1 11rem;
 }
 
+.reader__side .reader__fieldset {
+  margin-top: 1rem;
+}
+
+.reader__side .reader__fieldset:first-of-type {
+  margin-top: 0;
+}
+
+.reader__side .reader__segment {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.reader__side .reader__seg-btn {
+  min-width: 0;
+}
+
 .reader__legend {
   padding: 0;
   margin: 0 0 0.45rem;
@@ -823,5 +877,36 @@ $focus: rgba(201, 162, 39, 0.45);
 @media (min-width: 481px) and (max-width: 719px) {
   :host {
     --reader-topbar-h: 10.6rem;
+  }
+}
+
+@media (min-width: 1160px) {
+  .reader__layout {
+    grid-template-columns: minmax(13rem, 16.5rem) minmax(0, var(--shell-max)) minmax(13rem, 16.5rem);
+    align-items: start;
+    justify-content: center;
+    gap: 1.25rem;
+    padding-inline: 1rem;
+  }
+
+  .reader__side {
+    display: block;
+  }
+
+  .reader__side--left {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: start;
+  }
+
+  .reader__shell {
+    grid-column: 2;
+    max-width: none;
+  }
+
+  .reader__side--right {
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
   }
 }
