@@ -264,17 +264,6 @@
   [ngClass]="['reader--font-' + font(), 'reader--line-' + line(), 'reader--measure-' + width()]"
 >
   <div class="reader__layout">
-    <aside class="reader__side reader__side--left" [attr.aria-label]="'factsAria' | uiTranslate">
-      <section class="reader__panel">
-        <h2 class="reader__panel-title">{{ 'aboutSummary' | uiTranslate }}</h2>
-        <p class="reader__panel-line">
-          {{ 'surahWord' | uiTranslate }} {{ formatUiNum(surah()!.number) }} - {{ surah()!.nameAr }}
-        </p>
-        <p class="reader__panel-line">
-          {{ formatUiNum(surah()!.versesCount) }} {{ 'versesWord' | uiTranslate }}
-        </p>
-      </section>
-    </aside>
 
     <div class="reader__shell">
       <header class="reader__header">
