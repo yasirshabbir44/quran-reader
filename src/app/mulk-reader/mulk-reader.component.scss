@@ -1026,7 +1026,7 @@ $focus: rgba(201, 162, 39, 0.45);
 
 @media (min-width: 1160px) {
   .reader__layout {
-    grid-template-columns: minmax(13rem, 16.5rem) minmax(0, var(--shell-max));
+    grid-template-columns: minmax(0, var(--shell-max));
     align-items: start;
     justify-content: center;
     gap: 1.25rem;
@@ -1044,7 +1044,7 @@ $focus: rgba(201, 162, 39, 0.45);
   }
 
   .reader__shell {
-    grid-column: 2;
+    grid-column: 1;
     max-width: none;
   }
 }
