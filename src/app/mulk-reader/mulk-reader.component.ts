@@ -32,6 +32,7 @@ type ReaderFont = 's' | 'm' | 'l' | 'xl';
 type ReaderLine = 'normal' | 'relaxed' | 'loose';
 type ReaderWidth = 'narrow' | 'medium' | 'wide';
 type ReaderSetting = ReaderFont | ReaderLine | ReaderWidth;
+type ReaderMode = 'verse-by-verse' | 'reading';
 
 const FONT_OPTIONS: readonly ReaderFont[] = ['s', 'm', 'l', 'xl'];
 const LINE_OPTIONS: readonly ReaderLine[] = ['normal', 'relaxed', 'loose'];
@@ -64,15 +65,21 @@ export class SurahReaderComponent implements OnInit {
   protected readonly font = signal<ReaderFont>('m');
   protected readonly line = signal<ReaderLine>('normal');
   protected readonly width = signal<ReaderWidth>('medium');
+  protected readonly readingMode = signal<ReaderMode>('verse-by-verse');
+  protected readonly showTranslationEn = signal(true);
+  protected readonly showTranslationUr = signal(true);
+  protected settingsOpen = false;
 
   protected scrollProgress = 0;
   protected stickyHeaderVisible = false;
   protected scrollTopVisible = false;
   protected activeAyah = 1;
   protected jumpAyahModel = '';
+  protected copiedAyah: number | null = null;
 
   private scrollRaf = 0;
   private ayahElements: (HTMLElement | null)[] | null = null;
+  private pendingStartAyah: number | null = 1;
 
   constructor() {
     const corpus$ = this.quranData.load().pipe(
@@ -83,7 +90,7 @@ export class SurahReaderComponent implements OnInit {
       finalize(() => this.corpusLoading.set(false)),
     );
 
-    combineLatest([corpus$, this.route.paramMap])
+    combineLatest([corpus$, this.route.paramMap, this.route.queryParamMap])
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         tap(([payload]) => {
@@ -92,12 +99,20 @@ export class SurahReaderComponent implements OnInit {
           }
         }),
         filter(([payload]) => payload !== null),
-        map(([payload, pm]) => ({ payload: payload as QuranFullPayload, pm })),
+        map(([payload, pm, qm]) => ({ payload: payload as QuranFullPayload, pm, qm })),
       )
-      .subscribe(({ payload, pm }) => {
+      .subscribe(({ payload, pm, qm }) => {
         this.surahList.set(payload.surahs.map((s) => ({ number: s.number, nameAr: s.nameAr })));
         const raw = Number(pm.get('n'));
         const n = Number.isFinite(raw) && raw >= 1 && raw <= 114 ? Math.floor(raw) : 67;
+        const startingVerseRaw = Number(qm.get('startingVerse'));
+        this.pendingStartAyah =
+          Number.isFinite(startingVerseRaw) && startingVerseRaw >= 1 ? Math.floor(startingVerseRaw) : 1;
+        const queryMode = qm.get('readingMode') === 'reading' ? 'reading' : 'verse-by-verse';
+        this.readingMode.set(queryMode);
+        const translationState = this.parseTranslationSelection(qm.get('translations'));
+        this.showTranslationEn.set(translationState.en);
+        this.showTranslationUr.set(translationState.ur);
         if (n !== raw) {
           void this.router.navigate(['/surah', n], { replaceUrl: true });
           return;
@@ -172,6 +187,46 @@ export class SurahReaderComponent implements OnInit {
     void this.router.navigate(['/surah', n]);
   }
 
+  protected toggleSettingsPanel(): void {
+    this.settingsOpen = !this.settingsOpen;
+  }
+
+  protected closeSettingsPanel(): void {
+    this.settingsOpen = false;
+  }
+
+  protected setReadingMode(mode: ReaderMode): void {
+    this.readingMode.set(mode);
+    this.updateReaderQueryParams();
+  }
+
+  protected onTranslationToggle(key: 'en' | 'ur', checked: boolean): void {
+    if (key === 'en') {
+      this.showTranslationEn.set(checked);
+    } else {
+      this.showTranslationUr.set(checked);
+    }
+    if (!this.showTranslationEn() && !this.showTranslationUr()) {
+      if (key === 'en') {
+        this.showTranslationUr.set(true);
+      } else {
+        this.showTranslationEn.set(true);
+      }
+    }
+    this.updateReaderQueryParams();
+  }
+
+  protected showTranslations(): boolean {
+    return this.readingMode() === 'verse-by-verse' && (this.showTranslationEn() || this.showTranslationUr());
+  }
+
+  protected resetReaderViewSettings(): void {
+    this.readingMode.set('verse-by-verse');
+    this.showTranslationEn.set(true);
+    this.showTranslationUr.set(true);
+    this.updateReaderQueryParams();
+  }
+
   protected setFont(f: ReaderFont): void {
     this.font.set(f);
     this.persist(LS_FONT, f);
@@ -200,9 +255,36 @@ export class SurahReaderComponent implements OnInit {
     if (!n || !isPlatformBrowser(this.platformId)) {
       return;
     }
-    this.document.getElementById(`ayah-${n}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    this.scrollToAyah(n);
     this.jumpAyahModel = '';
     select.value = '';
+  }
+
+  protected copyAyah(v: QuranVerseRow): void {
+    if (!isPlatformBrowser(this.platformId) || !navigator.clipboard?.writeText) {
+      return;
+    }
+    const text = `${v.ar}\n\n${this.verseTr(v).en}\n\n${this.verseTr(v).ur}\n\n${this.surah()?.nameAr ?? ''} ${this.formatUiNum(this.surahNumber())}:${this.formatUiNum(v.ayah)}`;
+    void navigator.clipboard.writeText(text).then(() => {
+      this.copiedAyah = v.ayah;
+      setTimeout(() => {
+        if (this.copiedAyah === v.ayah) {
+          this.copiedAyah = null;
+        }
+      }, 1600);
+    });
+  }
+
+  protected shareAyah(v: QuranVerseRow): void {
+    if (!isPlatformBrowser(this.platformId) || !('share' in navigator)) {
+      return;
+    }
+    const sharePayload = {
+      title: `${this.surah()?.nameAr ?? 'Quran'} ${v.ayah}`,
+      text: `${v.ar}\n\n${this.verseTr(v).en}\n\n${this.surah()?.nameAr ?? ''} ${this.formatUiNum(this.surahNumber())}:${this.formatUiNum(v.ayah)}`,
+      url: `${this.document.location.origin}/surah/${this.surahNumber()}?startingVerse=${v.ayah}`,
+    };
+    void (navigator as Navigator & { share: (data: ShareData) => Promise<void> }).share(sharePayload);
   }
 
   private applySurah(n: number, payload: { surahs: readonly QuranSurahPayload[] }): void {
@@ -223,7 +305,20 @@ export class SurahReaderComponent implements OnInit {
     }
     const list = this.verses();
     this.ayahElements = list.map((v) => this.document.getElementById(`ayah-${v.ayah}`));
+    if (this.pendingStartAyah !== null) {
+      const safeAyah = Math.min(Math.max(this.pendingStartAyah, 1), list.length || 1);
+      this.scrollToAyah(safeAyah, false);
+      this.activeAyah = safeAyah;
+      this.pendingStartAyah = null;
+    }
     this.updateActiveAyah();
+  }
+
+  private scrollToAyah(ayah: number, smooth = true): void {
+    this.document.getElementById(`ayah-${ayah}`)?.scrollIntoView({
+      behavior: smooth ? 'smooth' : 'auto',
+      block: 'start',
+    });
   }
 
   private updateActiveAyah(): void {
@@ -288,5 +383,43 @@ export class SurahReaderComponent implements OnInit {
 
   private isAllowedOption<T extends string>(value: string, allowed: readonly T[]): value is T {
     return allowed.includes(value as T);
+  }
+
+  private parseTranslationSelection(raw: string | null): { en: boolean; ur: boolean } {
+    if (!raw) {
+      return { en: true, ur: true };
+    }
+    const tokens = raw
+      .split(',')
+      .map((item) => item.trim().toLowerCase())
+      .filter(Boolean);
+    if (!tokens.length) {
+      return { en: true, ur: true };
+    }
+    const en = tokens.includes('131') || tokens.includes('en');
+    const ur = tokens.includes('95') || tokens.includes('ur');
+    if (!en && !ur) {
+      return { en: true, ur: true };
+    }
+    return { en, ur };
+  }
+
+  private updateReaderQueryParams(): void {
+    const translations: string[] = [];
+    if (this.showTranslationEn()) {
+      translations.push('131');
+    }
+    if (this.showTranslationUr()) {
+      translations.push('95');
+    }
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        readingMode: this.readingMode(),
+        translations: translations.join(','),
+      },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 }
