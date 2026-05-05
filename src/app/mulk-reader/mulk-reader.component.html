@@ -23,6 +23,16 @@
   <div class="reader__topbar-brand">
     <span class="reader__topbar-surah">{{ surah()!.nameAr }}</span>
     <span class="reader__topbar-badge">{{ formatUiNum(surah()!.number) }}</span>
+    <button
+      type="button"
+      class="reader__settings-btn"
+      [class.reader__settings-btn--active]="settingsOpen"
+      [attr.aria-expanded]="settingsOpen"
+      aria-controls="reader-settings-panel"
+      (click)="toggleSettingsPanel()"
+    >
+      ⚙
+    </button>
   </div>
 
   <div class="reader__topbar-menu">
@@ -76,6 +86,155 @@
 
   </div>
 </nav>
+
+<section
+  id="reader-settings-panel"
+  class="reader__settings-panel"
+  [class.reader__settings-panel--open]="settingsOpen"
+  [attr.aria-hidden]="!settingsOpen"
+>
+  <div class="reader__settings-head">
+    <h2 class="reader__settings-title">Reading Settings</h2>
+    <button type="button" class="reader__settings-close" (click)="closeSettingsPanel()" aria-label="Close settings">✕</button>
+  </div>
+  <div class="reader__settings-grid">
+    <label class="reader__tool-label reader__tool-label--compact" for="reader-mode">Mode</label>
+    <select
+      id="reader-mode"
+      class="reader__select reader__select--compact"
+      [ngModel]="readingMode()"
+      [ngModelOptions]="{ standalone: true }"
+      (ngModelChange)="setReadingMode($event)"
+    >
+      <option value="verse-by-verse">Verse by Verse</option>
+      <option value="reading">Reading</option>
+    </select>
+
+    <label class="reader__tool-label reader__tool-label--compact">Translations</label>
+    <div class="reader__settings-checks">
+      <label class="reader__check">
+        <input type="checkbox" [checked]="showTranslationEn()" (change)="onTranslationToggle('en', $any($event.target).checked)" />
+        <span>English (ID 131)</span>
+      </label>
+      <label class="reader__check">
+        <input type="checkbox" [checked]="showTranslationUr()" (change)="onTranslationToggle('ur', $any($event.target).checked)" />
+        <span>Urdu (ID 95)</span>
+      </label>
+    </div>
+  </div>
+  <div class="reader__settings-tools">
+    <fieldset class="reader__fieldset">
+      <legend class="reader__legend">{{ 'fontSizeLegend' | uiTranslate }}</legend>
+      <div class="reader__segment" role="group" [attr.aria-label]="'fontSizeAria' | uiTranslate">
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="font() === 's'"
+          [attr.aria-pressed]="font() === 's'"
+          (click)="setFont('s')"
+        >
+          {{ 'fontSmall' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="font() === 'm'"
+          [attr.aria-pressed]="font() === 'm'"
+          (click)="setFont('m')"
+        >
+          {{ 'fontMedium' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="font() === 'l'"
+          [attr.aria-pressed]="font() === 'l'"
+          (click)="setFont('l')"
+        >
+          {{ 'fontLarge' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="font() === 'xl'"
+          [attr.aria-pressed]="font() === 'xl'"
+          (click)="setFont('xl')"
+        >
+          {{ 'fontXL' | uiTranslate }}
+        </button>
+      </div>
+    </fieldset>
+
+    <fieldset class="reader__fieldset">
+      <legend class="reader__legend">{{ 'lineHeightLegend' | uiTranslate }}</legend>
+      <div class="reader__segment" role="group" [attr.aria-label]="'lineHeightAria' | uiTranslate">
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="line() === 'normal'"
+          [attr.aria-pressed]="line() === 'normal'"
+          (click)="setLine('normal')"
+        >
+          {{ 'lineNormal' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="line() === 'relaxed'"
+          [attr.aria-pressed]="line() === 'relaxed'"
+          (click)="setLine('relaxed')"
+        >
+          {{ 'lineRelaxed' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="line() === 'loose'"
+          [attr.aria-pressed]="line() === 'loose'"
+          (click)="setLine('loose')"
+        >
+          {{ 'lineLoose' | uiTranslate }}
+        </button>
+      </div>
+    </fieldset>
+
+    <fieldset class="reader__fieldset">
+      <legend class="reader__legend">{{ 'textWidthLegend' | uiTranslate }}</legend>
+      <div class="reader__segment" role="group" [attr.aria-label]="'textWidthAria' | uiTranslate">
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="width() === 'narrow'"
+          [attr.aria-pressed]="width() === 'narrow'"
+          (click)="setWidth('narrow')"
+        >
+          {{ 'widthNarrow' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="width() === 'medium'"
+          [attr.aria-pressed]="width() === 'medium'"
+          (click)="setWidth('medium')"
+        >
+          {{ 'widthMedium' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="width() === 'wide'"
+          [attr.aria-pressed]="width() === 'wide'"
+          (click)="setWidth('wide')"
+        >
+          {{ 'widthWide' | uiTranslate }}
+        </button>
+      </div>
+    </fieldset>
+  </div>
+  <div class="reader__settings-actions">
+    <button type="button" class="reader__action-link" (click)="resetReaderViewSettings()">Reset</button>
+  </div>
+</section>
 
 <header
   class="reader__sticky"
@@ -174,6 +333,11 @@
       <p class="reader__settings-hint">{{ 'toolsHint' | uiTranslate }}</p>
 
       <ol id="verses-start" class="verses" start="1" tabindex="-1">
+        @if (surahNumber() !== 9) {
+        <li class="verses__bismillah" aria-hidden="true">
+          <p class="verses__bismillah-text">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ</p>
+        </li>
+        }
         @for (v of verses(); track v.ayah) {
         <li
           class="verses__item"
@@ -182,22 +346,46 @@
           [attr.data-ayah]="v.ayah"
           [attr.aria-current]="v.ayah === activeAyah ? 'true' : null"
         >
-          <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
+          <div class="verses__head">
+            <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
+            <div class="verses__actions">
+              <button
+                type="button"
+                class="verses__action-btn"
+                (click)="copyAyah(v)"
+                [attr.aria-label]="'Copy verse ' + formatUiNum(v.ayah)"
+                [attr.title]="copiedAyah === v.ayah ? 'Copied' : 'Copy'"
+              >
+                {{ copiedAyah === v.ayah ? 'Copied' : 'Copy' }}
+              </button>
+              <button
+                type="button"
+                class="verses__action-btn"
+                (click)="shareAyah(v)"
+                [attr.aria-label]="'Share verse ' + formatUiNum(v.ayah)"
+                title="Share"
+              >
+                Share
+              </button>
+            </div>
+          </div>
           <p class="verses__text">{{ v.ar }}</p>
-          <div
-            class="verses__translations"
-            role="group"
-            [attr.aria-label]="'verseTranslationsAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
-          >
+          @if (showTranslations()) {
+          <div class="verses__translations" role="group" [attr.aria-label]="'verseTranslationsAria' | uiTranslate: { n: formatUiNum(v.ayah) }">
+            @if (showTranslationEn()) {
             <div class="verses__tr-block verses__tr-block--en" dir="ltr" lang="en">
               <span class="verses__tr-label">{{ 'translationEnShort' | uiTranslate }}</span>
               <p class="verses__tr-text">{{ verseTr(v).en }}</p>
             </div>
+            }
+            @if (showTranslationUr()) {
             <div class="verses__tr-block verses__tr-block--ur" dir="rtl" lang="ur">
               <span class="verses__tr-label">{{ 'translationUrShort' | uiTranslate }}</span>
               <p class="verses__tr-text">{{ verseTr(v).ur }}</p>
             </div>
+            }
           </div>
+          }
         </li>
         }
       </ol>
@@ -215,119 +403,6 @@
       </footer>
     </div>
 
-    <aside class="reader__side reader__side--right" [attr.aria-label]="'toolsAria' | uiTranslate">
-      <section class="reader__panel">
-        <h2 class="reader__panel-title">{{ 'toolsAria' | uiTranslate }}</h2>
-
-        <fieldset class="reader__fieldset">
-          <legend class="reader__legend">{{ 'fontSizeLegend' | uiTranslate }}</legend>
-          <div class="reader__segment" role="group" [attr.aria-label]="'fontSizeAria' | uiTranslate">
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="font() === 's'"
-              [attr.aria-pressed]="font() === 's'"
-              (click)="setFont('s')"
-            >
-              {{ 'fontSmall' | uiTranslate }}
-            </button>
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="font() === 'm'"
-              [attr.aria-pressed]="font() === 'm'"
-              (click)="setFont('m')"
-            >
-              {{ 'fontMedium' | uiTranslate }}
-            </button>
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="font() === 'l'"
-              [attr.aria-pressed]="font() === 'l'"
-              (click)="setFont('l')"
-            >
-              {{ 'fontLarge' | uiTranslate }}
-            </button>
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="font() === 'xl'"
-              [attr.aria-pressed]="font() === 'xl'"
-              (click)="setFont('xl')"
-            >
-              {{ 'fontXL' | uiTranslate }}
-            </button>
-          </div>
-        </fieldset>
-
-        <fieldset class="reader__fieldset">
-          <legend class="reader__legend">{{ 'lineHeightLegend' | uiTranslate }}</legend>
-          <div class="reader__segment" role="group" [attr.aria-label]="'lineHeightAria' | uiTranslate">
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="line() === 'normal'"
-              [attr.aria-pressed]="line() === 'normal'"
-              (click)="setLine('normal')"
-            >
-              {{ 'lineNormal' | uiTranslate }}
-            </button>
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="line() === 'relaxed'"
-              [attr.aria-pressed]="line() === 'relaxed'"
-              (click)="setLine('relaxed')"
-            >
-              {{ 'lineRelaxed' | uiTranslate }}
-            </button>
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="line() === 'loose'"
-              [attr.aria-pressed]="line() === 'loose'"
-              (click)="setLine('loose')"
-            >
-              {{ 'lineLoose' | uiTranslate }}
-            </button>
-          </div>
-        </fieldset>
-
-        <fieldset class="reader__fieldset">
-          <legend class="reader__legend">{{ 'textWidthLegend' | uiTranslate }}</legend>
-          <div class="reader__segment" role="group" [attr.aria-label]="'textWidthAria' | uiTranslate">
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="width() === 'narrow'"
-              [attr.aria-pressed]="width() === 'narrow'"
-              (click)="setWidth('narrow')"
-            >
-              {{ 'widthNarrow' | uiTranslate }}
-            </button>
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="width() === 'medium'"
-              [attr.aria-pressed]="width() === 'medium'"
-              (click)="setWidth('medium')"
-            >
-              {{ 'widthMedium' | uiTranslate }}
-            </button>
-            <button
-              type="button"
-              class="reader__seg-btn"
-              [class.reader__seg-btn--active]="width() === 'wide'"
-              [attr.aria-pressed]="width() === 'wide'"
-              (click)="setWidth('wide')"
-            >
-              {{ 'widthWide' | uiTranslate }}
-            </button>
-          </div>
-        </fieldset>
-      </section>
-    </aside>
   </div>
 </main>
 }
