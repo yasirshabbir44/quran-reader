@@ -36,7 +36,7 @@
           (ngModelChange)="onSurahModelChange($event)"
         >
           @for (s of surahList(); track s.number) {
-            <option [value]="s.number">{{ formatUiNum(s.number) }}. {{ s.nameAr }}</option>
+            <option [ngValue]="s.number">{{ formatUiNum(s.number) }}. {{ s.nameAr }}</option>
           }
         </select>
       </div>
@@ -63,6 +63,8 @@
           id="jump-ayah"
           class="reader__select reader__select--compact"
           aria-labelledby="lbl-jump"
+          [ngModel]="jumpAyahModel"
+          [ngModelOptions]="{ standalone: true }"
           (change)="jumpToAyah($event)"
         >
           <option value="" disabled>{{ 'chooseAyah' | uiTranslate }}</option>
@@ -78,8 +80,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="font === 's'"
-            [attr.aria-pressed]="font === 's'"
+            [class.reader__seg-btn--active]="font() === 's'"
+            [attr.aria-pressed]="font() === 's'"
             (click)="setFont('s')"
           >
             {{ 'fontSmall' | uiTranslate }}
@@ -87,8 +89,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="font === 'm'"
-            [attr.aria-pressed]="font === 'm'"
+            [class.reader__seg-btn--active]="font() === 'm'"
+            [attr.aria-pressed]="font() === 'm'"
             (click)="setFont('m')"
           >
             {{ 'fontMedium' | uiTranslate }}
@@ -96,8 +98,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="font === 'l'"
-            [attr.aria-pressed]="font === 'l'"
+            [class.reader__seg-btn--active]="font() === 'l'"
+            [attr.aria-pressed]="font() === 'l'"
             (click)="setFont('l')"
           >
             {{ 'fontLarge' | uiTranslate }}
@@ -105,8 +107,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="font === 'xl'"
-            [attr.aria-pressed]="font === 'xl'"
+            [class.reader__seg-btn--active]="font() === 'xl'"
+            [attr.aria-pressed]="font() === 'xl'"
             (click)="setFont('xl')"
           >
             {{ 'fontXL' | uiTranslate }}
@@ -120,8 +122,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="line === 'normal'"
-            [attr.aria-pressed]="line === 'normal'"
+            [class.reader__seg-btn--active]="line() === 'normal'"
+            [attr.aria-pressed]="line() === 'normal'"
             (click)="setLine('normal')"
           >
             {{ 'lineNormal' | uiTranslate }}
@@ -129,8 +131,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="line === 'relaxed'"
-            [attr.aria-pressed]="line === 'relaxed'"
+            [class.reader__seg-btn--active]="line() === 'relaxed'"
+            [attr.aria-pressed]="line() === 'relaxed'"
             (click)="setLine('relaxed')"
           >
             {{ 'lineRelaxed' | uiTranslate }}
@@ -138,8 +140,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="line === 'loose'"
-            [attr.aria-pressed]="line === 'loose'"
+            [class.reader__seg-btn--active]="line() === 'loose'"
+            [attr.aria-pressed]="line() === 'loose'"
             (click)="setLine('loose')"
           >
             {{ 'lineLoose' | uiTranslate }}
@@ -153,8 +155,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="width === 'narrow'"
-            [attr.aria-pressed]="width === 'narrow'"
+            [class.reader__seg-btn--active]="width() === 'narrow'"
+            [attr.aria-pressed]="width() === 'narrow'"
             (click)="setWidth('narrow')"
           >
             {{ 'widthNarrow' | uiTranslate }}
@@ -162,8 +164,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="width === 'medium'"
-            [attr.aria-pressed]="width === 'medium'"
+            [class.reader__seg-btn--active]="width() === 'medium'"
+            [attr.aria-pressed]="width() === 'medium'"
             (click)="setWidth('medium')"
           >
             {{ 'widthMedium' | uiTranslate }}
@@ -171,8 +173,8 @@
           <button
             type="button"
             class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="width === 'wide'"
-            [attr.aria-pressed]="width === 'wide'"
+            [class.reader__seg-btn--active]="width() === 'wide'"
+            [attr.aria-pressed]="width() === 'wide'"
             (click)="setWidth('wide')"
           >
             {{ 'widthWide' | uiTranslate }}
@@ -207,7 +209,7 @@
     class="reader"
     dir="rtl"
     lang="ar"
-    [ngClass]="['reader--font-' + font, 'reader--line-' + line, 'reader--measure-' + width]"
+    [ngClass]="['reader--font-' + font(), 'reader--line-' + line(), 'reader--measure-' + width()]"
   >
     <div class="reader__layout">
       <div class="reader__shell">
