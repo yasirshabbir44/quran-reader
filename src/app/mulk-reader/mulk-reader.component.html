@@ -1,314 +1,333 @@
 @if (corpusError()) {
-  <main class="reader reader--state-msg" dir="ltr" lang="en">
-    <p class="reader__state-text">{{ 'loadError' | uiTranslate }}</p>
-  </main>
+<main class="reader reader--state-msg" dir="ltr" lang="en">
+  <p class="reader__state-text">{{ 'loadError' | uiTranslate }}</p>
+</main>
 } @else if (corpusLoading() || !surah()) {
-  <main class="reader reader--state-msg" dir="ltr" lang="en">
-    <p class="reader__state-text">{{ 'loadingCorpus' | uiTranslate }}</p>
-  </main>
+<main class="reader reader--state-msg" dir="ltr" lang="en">
+  <p class="reader__state-text">{{ 'loadingCorpus' | uiTranslate }}</p>
+</main>
 } @else {
-  <a class="skip-link" href="#verses-start">{{ 'skipToVerses' | uiTranslate }}</a>
+<a class="skip-link" href="#verses-start">{{ 'skipToVerses' | uiTranslate }}</a>
 
-  <div
-    class="reader__progress"
-    role="progressbar"
-    [attr.aria-valuenow]="scrollProgress"
-    aria-valuemin="0"
-    aria-valuemax="100"
-    [attr.aria-label]="'readProgressAria' | uiTranslate: { pct: scrollProgress }"
-    [style.--read-progress]="scrollProgress + '%'"
-  ></div>
+<div
+  class="reader__progress"
+  role="progressbar"
+  [attr.aria-valuenow]="scrollProgress"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  [attr.aria-label]="'readProgressAria' | uiTranslate: { pct: scrollProgress }"
+  [style.--read-progress]="scrollProgress + '%'"
+></div>
 
-  <nav class="reader__topbar" [attr.aria-label]="'toolsAria' | uiTranslate">
-    <div class="reader__topbar-brand">
-      <span class="reader__topbar-surah">{{ surah()!.nameAr }}</span>
-      <span class="reader__topbar-badge">{{ formatUiNum(surah()!.number) }}</span>
+<nav class="reader__topbar" [attr.aria-label]="'toolsAria' | uiTranslate">
+  <div class="reader__topbar-brand">
+    <span class="reader__topbar-surah">{{ surah()!.nameAr }}</span>
+    <span class="reader__topbar-badge">{{ formatUiNum(surah()!.number) }}</span>
+  </div>
+
+  <div class="reader__topbar-menu">
+    <div class="reader__topbar-cluster reader__topbar-cluster--surah">
+      <label class="reader__tool-label reader__tool-label--compact" for="pick-surah">{{ 'surahLabel' | uiTranslate }}</label>
+      <select
+        id="pick-surah"
+        class="reader__select reader__select--compact reader__select--surah"
+        [ngModel]="surahNumber()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onSurahModelChange($event)"
+      >
+        @for (s of surahList(); track s.number) {
+        <option [ngValue]="s.number">{{ formatUiNum(s.number) }}. {{ s.nameAr }}</option>
+        }
+      </select>
     </div>
 
-    <div class="reader__topbar-menu">
-      <div class="reader__topbar-cluster reader__topbar-cluster--surah">
-        <label class="reader__tool-label reader__tool-label--compact" for="pick-surah">{{ 'surahLabel' | uiTranslate }}</label>
-        <select
-          id="pick-surah"
-          class="reader__select reader__select--compact reader__select--surah"
-          [ngModel]="surahNumber()"
-          [ngModelOptions]="{ standalone: true }"
-          (ngModelChange)="onSurahModelChange($event)"
-        >
-          @for (s of surahList(); track s.number) {
-            <option [ngValue]="s.number">{{ formatUiNum(s.number) }}. {{ s.nameAr }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="reader__topbar-cluster reader__topbar-cluster--lang">
-        <label class="reader__tool-label reader__tool-label--compact" for="ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
-        <select
-          id="ui-locale"
-          class="reader__select reader__select--compact"
-          [ngModel]="ui.locale()"
-          [ngModelOptions]="{ standalone: true }"
-          (ngModelChange)="onLocaleModelChange($event)"
-        >
-          @for (opt of ui.availableLocales; track opt.code) {
-            <option [value]="opt.code">{{ opt.label }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="reader__topbar-cluster reader__topbar-cluster--jump">
-        <span class="reader__tool-label reader__tool-label--compact" id="lbl-jump">{{ 'jumpQuick' | uiTranslate }}</span>
-        <label class="reader__visually-hidden" for="jump-ayah">{{ 'jumpAyahHiddenLabel' | uiTranslate }}</label>
-        <select
-          id="jump-ayah"
-          class="reader__select reader__select--compact"
-          aria-labelledby="lbl-jump"
-          [ngModel]="jumpAyahModel"
-          [ngModelOptions]="{ standalone: true }"
-          (change)="jumpToAyah($event)"
-        >
-          <option value="" disabled>{{ 'chooseAyah' | uiTranslate }}</option>
-          @for (v of verses(); track v.ayah) {
-            <option [value]="v.ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(v.ayah) }}</option>
-          }
-        </select>
-      </div>
-
-      <fieldset class="reader__fieldset reader__fieldset--inline">
-        <legend class="reader__legend reader__legend--compact">{{ 'fontSizeLegend' | uiTranslate }}</legend>
-        <div class="reader__segment reader__segment--compact" role="group" [attr.aria-label]="'fontSizeAria' | uiTranslate">
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="font() === 's'"
-            [attr.aria-pressed]="font() === 's'"
-            (click)="setFont('s')"
-          >
-            {{ 'fontSmall' | uiTranslate }}
-          </button>
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="font() === 'm'"
-            [attr.aria-pressed]="font() === 'm'"
-            (click)="setFont('m')"
-          >
-            {{ 'fontMedium' | uiTranslate }}
-          </button>
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="font() === 'l'"
-            [attr.aria-pressed]="font() === 'l'"
-            (click)="setFont('l')"
-          >
-            {{ 'fontLarge' | uiTranslate }}
-          </button>
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="font() === 'xl'"
-            [attr.aria-pressed]="font() === 'xl'"
-            (click)="setFont('xl')"
-          >
-            {{ 'fontXL' | uiTranslate }}
-          </button>
-        </div>
-      </fieldset>
-
-      <fieldset class="reader__fieldset reader__fieldset--inline">
-        <legend class="reader__legend reader__legend--compact">{{ 'lineHeightLegend' | uiTranslate }}</legend>
-        <div class="reader__segment reader__segment--compact" role="group" [attr.aria-label]="'lineHeightAria' | uiTranslate">
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="line() === 'normal'"
-            [attr.aria-pressed]="line() === 'normal'"
-            (click)="setLine('normal')"
-          >
-            {{ 'lineNormal' | uiTranslate }}
-          </button>
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="line() === 'relaxed'"
-            [attr.aria-pressed]="line() === 'relaxed'"
-            (click)="setLine('relaxed')"
-          >
-            {{ 'lineRelaxed' | uiTranslate }}
-          </button>
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="line() === 'loose'"
-            [attr.aria-pressed]="line() === 'loose'"
-            (click)="setLine('loose')"
-          >
-            {{ 'lineLoose' | uiTranslate }}
-          </button>
-        </div>
-      </fieldset>
-
-      <fieldset class="reader__fieldset reader__fieldset--inline">
-        <legend class="reader__legend reader__legend--compact">{{ 'textWidthLegend' | uiTranslate }}</legend>
-        <div class="reader__segment reader__segment--compact" role="group" [attr.aria-label]="'textWidthAria' | uiTranslate">
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="width() === 'narrow'"
-            [attr.aria-pressed]="width() === 'narrow'"
-            (click)="setWidth('narrow')"
-          >
-            {{ 'widthNarrow' | uiTranslate }}
-          </button>
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="width() === 'medium'"
-            [attr.aria-pressed]="width() === 'medium'"
-            (click)="setWidth('medium')"
-          >
-            {{ 'widthMedium' | uiTranslate }}
-          </button>
-          <button
-            type="button"
-            class="reader__seg-btn reader__seg-btn--compact"
-            [class.reader__seg-btn--active]="width() === 'wide'"
-            [attr.aria-pressed]="width() === 'wide'"
-            (click)="setWidth('wide')"
-          >
-            {{ 'widthWide' | uiTranslate }}
-          </button>
-        </div>
-      </fieldset>
+    <div class="reader__topbar-cluster reader__topbar-cluster--lang">
+      <label class="reader__tool-label reader__tool-label--compact" for="ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="ui-locale"
+        class="reader__select reader__select--compact"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleModelChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
     </div>
-  </nav>
 
-  <header
-    class="reader__sticky"
-    [class.reader__sticky--visible]="stickyHeaderVisible"
-    [attr.aria-label]="'stickyHeaderAria' | uiTranslate"
-  >
-    <span class="reader__sticky-title">{{ surah()!.nameAr }}</span>
-    <span class="reader__sticky-badge">{{ formatUiNum(surah()!.number) }}</span>
-    <span class="reader__sticky-dot" aria-hidden="true">·</span>
-    <span class="reader__sticky-ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(activeAyah) }}</span>
-  </header>
+    <div class="reader__topbar-cluster reader__topbar-cluster--jump">
+      <span class="reader__tool-label reader__tool-label--compact" id="lbl-jump">{{ 'jumpQuick' | uiTranslate }}</span>
+      <label class="reader__visually-hidden" for="jump-ayah">{{ 'jumpAyahHiddenLabel' | uiTranslate }}</label>
+      <select
+        id="jump-ayah"
+        class="reader__select reader__select--compact"
+        aria-labelledby="lbl-jump"
+        [ngModel]="jumpAyahModel"
+        [ngModelOptions]="{ standalone: true }"
+        (change)="jumpToAyah($event)"
+      >
+        <option value="" disabled>{{ 'chooseAyah' | uiTranslate }}</option>
+        @for (v of verses(); track v.ayah) {
+        <option [value]="v.ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(v.ayah) }}</option>
+        }
+      </select>
+    </div>
 
-  <button
-    type="button"
-    class="reader__to-top"
-    [class.reader__to-top--visible]="scrollTopVisible"
-    (click)="scrollToTop()"
-    [attr.aria-label]="'backToTopAria' | uiTranslate"
-  >
-    <span class="reader__to-top-icon" aria-hidden="true">↑</span>
-  </button>
+  </div>
+</nav>
 
-  <main
-    class="reader"
-    dir="rtl"
-    lang="ar"
-    [ngClass]="['reader--font-' + font(), 'reader--line-' + line(), 'reader--measure-' + width()]"
-  >
-    <div class="reader__layout">
-      <div class="reader__shell">
-        <header class="reader__header">
-          <p class="reader__meta">
-            {{ 'surahWord' | uiTranslate }} {{ formatUiNum(surah()!.number) }} — {{ formatUiNum(surah()!.versesCount) }}
-            {{ 'versesWord' | uiTranslate }}
-          </p>
-          <h1 class="reader__title">{{ surah()!.nameAr }}</h1>
-          <p class="reader__subtitle">{{ 'subtitle' | uiTranslate }}</p>
+<header
+  class="reader__sticky"
+  [class.reader__sticky--visible]="stickyHeaderVisible"
+  [attr.aria-label]="'stickyHeaderAria' | uiTranslate"
+>
+  <span class="reader__sticky-title">{{ surah()!.nameAr }}</span>
+  <span class="reader__sticky-badge">{{ formatUiNum(surah()!.number) }}</span>
+  <span class="reader__sticky-dot" aria-hidden="true">·</span>
+  <span class="reader__sticky-ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(activeAyah) }}</span>
+</header>
 
-          <dl class="reader__facts" [attr.aria-label]="'factsAria' | uiTranslate">
-            @if (isMulk()) {
-              <div class="reader__fact">
-                <dt>{{ 'factJuz' | uiTranslate }}</dt>
-                <dd>{{ formatUiNum(mulkMeta.juz) }}</dd>
-              </div>
-            }
-            <div class="reader__fact">
-              <dt>{{ 'factType' | uiTranslate }}</dt>
-              <dd>
-                @if (surah()!.revelationType === 'meccan') {
-                  {{ 'factTypeMeccan' | uiTranslate }}
-                } @else {
-                  {{ 'factTypeMedinan' | uiTranslate }}
-                }
-              </dd>
-            </div>
-            @if (isMulk()) {
-              <div class="reader__fact">
-                <dt>{{ 'factRevelationOrder' | uiTranslate }}</dt>
-                <dd>{{ formatUiNum(mulkMeta.revelationOrder) }}</dd>
-              </div>
-              <div class="reader__fact">
-                <dt>{{ 'factPageStart' | uiTranslate }}</dt>
-                <dd>≈ {{ formatUiNum(mulkMeta.mushafPageStart) }}</dd>
-              </div>
-            }
-          </dl>
+<button
+  type="button"
+  class="reader__to-top"
+  [class.reader__to-top--visible]="scrollTopVisible"
+  (click)="scrollToTop()"
+  [attr.aria-label]="'backToTopAria' | uiTranslate"
+>
+  <span class="reader__to-top-icon" aria-hidden="true">↑</span>
+</button>
 
+<main
+  class="reader"
+  dir="rtl"
+  lang="ar"
+  [ngClass]="['reader--font-' + font(), 'reader--line-' + line(), 'reader--measure-' + width()]"
+>
+  <div class="reader__layout">
+    <aside class="reader__side reader__side--left" [attr.aria-label]="'factsAria' | uiTranslate">
+      <section class="reader__panel">
+        <h2 class="reader__panel-title">{{ 'aboutSummary' | uiTranslate }}</h2>
+        <p class="reader__panel-line">
+          {{ 'surahWord' | uiTranslate }} {{ formatUiNum(surah()!.number) }} - {{ surah()!.nameAr }}
+        </p>
+        <p class="reader__panel-line">
+          {{ formatUiNum(surah()!.versesCount) }} {{ 'versesWord' | uiTranslate }}
+        </p>
+      </section>
+    </aside>
+
+    <div class="reader__shell">
+      <header class="reader__header">
+        <p class="reader__meta">
+          {{ 'surahWord' | uiTranslate }} {{ formatUiNum(surah()!.number) }} — {{ formatUiNum(surah()!.versesCount) }}
+          {{ 'versesWord' | uiTranslate }}
+        </p>
+        <h1 class="reader__title">{{ surah()!.nameAr }}</h1>
+        <p class="reader__subtitle">{{ 'subtitle' | uiTranslate }}</p>
+
+        <dl class="reader__facts" [attr.aria-label]="'factsAria' | uiTranslate">
           @if (isMulk()) {
-            <details class="reader__about" open>
-              <summary class="reader__about-summary">{{ 'aboutSummary' | uiTranslate }}</summary>
-              <p class="reader__about-body">{{ mulkMeta.themes }}</p>
-              <p class="reader__about-note">
-                {{ 'aboutNote' | uiTranslate }}
-              </p>
-            </details>
-          } @else {
-            <details class="reader__about" open>
-              <summary class="reader__about-summary">{{ 'aboutSummaryGeneric' | uiTranslate }}</summary>
-              <p class="reader__about-body">{{ 'aboutBodyGeneric' | uiTranslate }}</p>
-            </details>
+          <div class="reader__fact">
+            <dt>{{ 'factJuz' | uiTranslate }}</dt>
+            <dd>{{ formatUiNum(mulkMeta.juz) }}</dd>
+          </div>
           }
-        </header>
-
-        <p class="reader__settings-hint">{{ 'toolsHint' | uiTranslate }}</p>
-
-        <ol id="verses-start" class="verses" start="1" tabindex="-1">
-          @for (v of verses(); track v.ayah) {
-            <li
-              class="verses__item"
-              [class.verses__item--active]="v.ayah === activeAyah"
-              [id]="'ayah-' + v.ayah"
-              [attr.data-ayah]="v.ayah"
-              [attr.aria-current]="v.ayah === activeAyah ? 'true' : null"
-            >
-              <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
-              <p class="verses__text">{{ v.ar }}</p>
-              <div
-                class="verses__translations"
-                role="group"
-                [attr.aria-label]="'verseTranslationsAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
-              >
-                <div class="verses__tr-block verses__tr-block--en" dir="ltr" lang="en">
-                  <span class="verses__tr-label">{{ 'translationEnShort' | uiTranslate }}</span>
-                  <p class="verses__tr-text">{{ verseTr(v).en }}</p>
-                </div>
-                <div class="verses__tr-block verses__tr-block--ur" dir="rtl" lang="ur">
-                  <span class="verses__tr-label">{{ 'translationUrShort' | uiTranslate }}</span>
-                  <p class="verses__tr-text">{{ verseTr(v).ur }}</p>
-                </div>
-              </div>
-            </li>
+          <div class="reader__fact">
+            <dt>{{ 'factType' | uiTranslate }}</dt>
+            <dd>
+              @if (surah()!.revelationType === 'meccan') {
+              {{ 'factTypeMeccan' | uiTranslate }}
+              } @else {
+              {{ 'factTypeMedinan' | uiTranslate }}
+              }
+            </dd>
+          </div>
+          @if (isMulk()) {
+          <div class="reader__fact">
+            <dt>{{ 'factRevelationOrder' | uiTranslate }}</dt>
+            <dd>{{ formatUiNum(mulkMeta.revelationOrder) }}</dd>
+          </div>
+          <div class="reader__fact">
+            <dt>{{ 'factPageStart' | uiTranslate }}</dt>
+            <dd>≈ {{ formatUiNum(mulkMeta.mushafPageStart) }}</dd>
+          </div>
           }
-        </ol>
+        </dl>
 
-        <footer class="reader__footer">
-          <p class="reader__footer-line">
-            {{ 'footerAttributionBefore' | uiTranslate }}<a href="https://github.com/risan/quran-json" rel="noopener noreferrer" target="_blank">quran-json</a>{{ 'footerAttributionAfter' | uiTranslate }}
+        @if (isMulk()) {
+        <details class="reader__about" open>
+          <summary class="reader__about-summary">{{ 'aboutSummary' | uiTranslate }}</summary>
+          <p class="reader__about-body">{{ mulkMeta.themes }}</p>
+          <p class="reader__about-note">
+            {{ 'aboutNote' | uiTranslate }}
           </p>
-          <p class="reader__footer-line reader__footer-line--muted">
-            {{ 'footerPrintNote' | uiTranslate }}
-          </p>
-          <p class="reader__footer-line reader__footer-line--muted">
-            {{ 'footerTranslationAttribution' | uiTranslate }}
-          </p>
-        </footer>
-      </div>
+        </details>
+        } @else {
+        <details class="reader__about" open>
+          <summary class="reader__about-summary">{{ 'aboutSummaryGeneric' | uiTranslate }}</summary>
+          <p class="reader__about-body">{{ 'aboutBodyGeneric' | uiTranslate }}</p>
+        </details>
+        }
+      </header>
+
+      <p class="reader__settings-hint">{{ 'toolsHint' | uiTranslate }}</p>
+
+      <ol id="verses-start" class="verses" start="1" tabindex="-1">
+        @for (v of verses(); track v.ayah) {
+        <li
+          class="verses__item"
+          [class.verses__item--active]="v.ayah === activeAyah"
+          [id]="'ayah-' + v.ayah"
+          [attr.data-ayah]="v.ayah"
+          [attr.aria-current]="v.ayah === activeAyah ? 'true' : null"
+        >
+          <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
+          <p class="verses__text">{{ v.ar }}</p>
+          <div
+            class="verses__translations"
+            role="group"
+            [attr.aria-label]="'verseTranslationsAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+          >
+            <div class="verses__tr-block verses__tr-block--en" dir="ltr" lang="en">
+              <span class="verses__tr-label">{{ 'translationEnShort' | uiTranslate }}</span>
+              <p class="verses__tr-text">{{ verseTr(v).en }}</p>
+            </div>
+            <div class="verses__tr-block verses__tr-block--ur" dir="rtl" lang="ur">
+              <span class="verses__tr-label">{{ 'translationUrShort' | uiTranslate }}</span>
+              <p class="verses__tr-text">{{ verseTr(v).ur }}</p>
+            </div>
+          </div>
+        </li>
+        }
+      </ol>
+
+      <footer class="reader__footer">
+        <p class="reader__footer-line">
+          {{ 'footerAttributionBefore' | uiTranslate }}<a href="https://github.com/risan/quran-json" rel="noopener noreferrer" target="_blank">quran-json</a>{{ 'footerAttributionAfter' | uiTranslate }}
+        </p>
+        <p class="reader__footer-line reader__footer-line--muted">
+          {{ 'footerPrintNote' | uiTranslate }}
+        </p>
+        <p class="reader__footer-line reader__footer-line--muted">
+          {{ 'footerTranslationAttribution' | uiTranslate }}
+        </p>
+      </footer>
     </div>
-  </main>
+
+    <aside class="reader__side reader__side--right" [attr.aria-label]="'toolsAria' | uiTranslate">
+      <section class="reader__panel">
+        <h2 class="reader__panel-title">{{ 'toolsAria' | uiTranslate }}</h2>
+
+        <fieldset class="reader__fieldset">
+          <legend class="reader__legend">{{ 'fontSizeLegend' | uiTranslate }}</legend>
+          <div class="reader__segment" role="group" [attr.aria-label]="'fontSizeAria' | uiTranslate">
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="font() === 's'"
+              [attr.aria-pressed]="font() === 's'"
+              (click)="setFont('s')"
+            >
+              {{ 'fontSmall' | uiTranslate }}
+            </button>
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="font() === 'm'"
+              [attr.aria-pressed]="font() === 'm'"
+              (click)="setFont('m')"
+            >
+              {{ 'fontMedium' | uiTranslate }}
+            </button>
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="font() === 'l'"
+              [attr.aria-pressed]="font() === 'l'"
+              (click)="setFont('l')"
+            >
+              {{ 'fontLarge' | uiTranslate }}
+            </button>
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="font() === 'xl'"
+              [attr.aria-pressed]="font() === 'xl'"
+              (click)="setFont('xl')"
+            >
+              {{ 'fontXL' | uiTranslate }}
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset class="reader__fieldset">
+          <legend class="reader__legend">{{ 'lineHeightLegend' | uiTranslate }}</legend>
+          <div class="reader__segment" role="group" [attr.aria-label]="'lineHeightAria' | uiTranslate">
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="line() === 'normal'"
+              [attr.aria-pressed]="line() === 'normal'"
+              (click)="setLine('normal')"
+            >
+              {{ 'lineNormal' | uiTranslate }}
+            </button>
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="line() === 'relaxed'"
+              [attr.aria-pressed]="line() === 'relaxed'"
+              (click)="setLine('relaxed')"
+            >
+              {{ 'lineRelaxed' | uiTranslate }}
+            </button>
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="line() === 'loose'"
+              [attr.aria-pressed]="line() === 'loose'"
+              (click)="setLine('loose')"
+            >
+              {{ 'lineLoose' | uiTranslate }}
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset class="reader__fieldset">
+          <legend class="reader__legend">{{ 'textWidthLegend' | uiTranslate }}</legend>
+          <div class="reader__segment" role="group" [attr.aria-label]="'textWidthAria' | uiTranslate">
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="width() === 'narrow'"
+              [attr.aria-pressed]="width() === 'narrow'"
+              (click)="setWidth('narrow')"
+            >
+              {{ 'widthNarrow' | uiTranslate }}
+            </button>
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="width() === 'medium'"
+              [attr.aria-pressed]="width() === 'medium'"
+              (click)="setWidth('medium')"
+            >
+              {{ 'widthMedium' | uiTranslate }}
+            </button>
+            <button
+              type="button"
+              class="reader__seg-btn"
+              [class.reader__seg-btn--active]="width() === 'wide'"
+              [attr.aria-pressed]="width() === 'wide'"
+              (click)="setWidth('wide')"
+            >
+              {{ 'widthWide' | uiTranslate }}
+            </button>
+          </div>
+        </fieldset>
+      </section>
+    </aside>
+  </div>
+</main>
 }
