@@ -8,22 +8,27 @@ import { SURAH_MULK_META } from '../data/surah-mulk-meta';
 import { MULK_VERSE_TRANSLATION_BY_AYAH } from '../data/surah-mulk-translations';
 import { SURAH_MULK_VERSES } from '../data/surah-mulk';
 
-const LS_FONT = 'mulk-reader-font';
-const LS_LINE = 'mulk-reader-line';
-const LS_WIDTH = 'mulk-reader-width';
+const LS_FONT = 'surah-reader-font';
+const LS_LINE = 'surah-reader-line';
+const LS_WIDTH = 'surah-reader-width';
 
 type ReaderFont = 's' | 'm' | 'l' | 'xl';
 type ReaderLine = 'normal' | 'relaxed' | 'loose';
 type ReaderWidth = 'narrow' | 'medium' | 'wide';
+type ReaderSetting = ReaderFont | ReaderLine | ReaderWidth;
+
+const FONT_OPTIONS: readonly ReaderFont[] = ['s', 'm', 'l', 'xl'];
+const LINE_OPTIONS: readonly ReaderLine[] = ['normal', 'relaxed', 'loose'];
+const WIDTH_OPTIONS: readonly ReaderWidth[] = ['narrow', 'medium', 'wide'];
 
 @Component({
-  selector: 'app-mulk-reader',
+  selector: 'app-surah-reader',
   standalone: true,
   imports: [NgClass, FormsModule, UiTranslatePipe],
   templateUrl: './mulk-reader.component.html',
   styleUrl: './mulk-reader.component.scss',
 })
-export class MulkReaderComponent implements OnInit {
+export class SurahReaderComponent implements OnInit {
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly title = inject(Title);
@@ -58,22 +63,9 @@ export class MulkReaderComponent implements OnInit {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    try {
-      const f = localStorage.getItem(LS_FONT) as ReaderFont | null;
-      const l = localStorage.getItem(LS_LINE) as ReaderLine | null;
-      const w = localStorage.getItem(LS_WIDTH) as ReaderWidth | null;
-      if (f && ['s', 'm', 'l', 'xl'].includes(f)) {
-        this.font = f;
-      }
-      if (l && ['normal', 'relaxed', 'loose'].includes(l)) {
-        this.line = l;
-      }
-      if (w && ['narrow', 'medium', 'wide'].includes(w)) {
-        this.width = w;
-      }
-    } catch {
-      /* ignore */
-    }
+    this.font = this.readSetting(LS_FONT, FONT_OPTIONS, this.font);
+    this.line = this.readSetting(LS_LINE, LINE_OPTIONS, this.line);
+    this.width = this.readSetting(LS_WIDTH, WIDTH_OPTIONS, this.width);
     this.syncDocumentTitle();
   }
 
@@ -182,5 +174,21 @@ export class MulkReaderComponent implements OnInit {
     } catch {
       /* private mode / quota */
     }
+  }
+
+  private readSetting<T extends ReaderSetting>(key: string, allowed: readonly T[], fallback: T): T {
+    try {
+      const value = localStorage.getItem(key);
+      if (value && this.isAllowedOption(value, allowed)) {
+        return value;
+      }
+    } catch {
+      /* ignore localStorage access errors */
+    }
+    return fallback;
+  }
+
+  private isAllowedOption<T extends string>(value: string, allowed: readonly T[]): value is T {
+    return allowed.includes(value as T);
   }
 }
