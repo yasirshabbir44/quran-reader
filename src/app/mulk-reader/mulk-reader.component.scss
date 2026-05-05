@@ -7,6 +7,10 @@ $surface: rgba(22, 24, 28, 0.72);
 $border: rgba(255, 255, 255, 0.06);
 $focus: rgba(201, 162, 39, 0.45);
 
+:host {
+  --reader-topbar-h: 5.75rem;
+}
+
 .skip-link {
   position: absolute;
   inset-inline-start: 1rem;
@@ -106,7 +110,7 @@ $focus: rgba(201, 162, 39, 0.45);
 .reader__sticky {
   position: fixed;
   inset-inline: 0;
-  top: calc(3px + 5.75rem);
+  top: calc(3px + var(--reader-topbar-h));
   z-index: 90;
   display: flex;
   flex-wrap: wrap;
@@ -222,7 +226,7 @@ $focus: rgba(201, 162, 39, 0.45);
   --shell-max: min(40rem, 100% - 2rem);
   min-height: 100vh;
   padding: 2rem 0 4.5rem;
-  padding-top: calc(3px + 6.5rem);
+  padding-top: calc(3px + var(--reader-topbar-h) + 0.75rem);
 }
 
 .reader__layout {
@@ -428,21 +432,10 @@ $focus: rgba(201, 162, 39, 0.45);
 
   @media (max-width: 719px) {
     flex: 1 1 auto;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: flex-start;
-    overflow-x: auto;
-    padding-bottom: 0.15rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-
-    &::-webkit-scrollbar {
-      height: 4px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.12);
-      border-radius: 4px;
-    }
+    overflow: visible;
+    padding-bottom: 0;
   }
 }
 
@@ -451,6 +444,10 @@ $focus: rgba(201, 162, 39, 0.45);
   flex-direction: column;
   gap: 0.2rem;
   flex: 0 0 auto;
+
+  @media (max-width: 719px) {
+    flex: 1 1 11rem;
+  }
 
   &--lang {
     min-width: 7.25rem;
@@ -467,6 +464,10 @@ $focus: rgba(201, 162, 39, 0.45);
   border: none;
   flex: 0 1 auto;
   min-width: 0;
+
+  @media (max-width: 719px) {
+    flex: 1 1 100%;
+  }
 }
 
 .reader__tool-label--compact {
@@ -482,6 +483,10 @@ $focus: rgba(201, 162, 39, 0.45);
 .reader__segment--compact {
   flex-wrap: nowrap;
   gap: 0.2rem;
+
+  @media (max-width: 719px) {
+    flex-wrap: wrap;
+  }
 }
 
 .reader__seg-btn--compact {
@@ -607,6 +612,7 @@ $focus: rgba(201, 162, 39, 0.45);
   background: $surface;
   border: 1px solid $border;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  scroll-margin-top: calc(3px + var(--reader-topbar-h) + 4.5rem);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -761,6 +767,10 @@ $focus: rgba(201, 162, 39, 0.45);
 }
 
 @media (max-width: 480px) {
+  :host {
+    --reader-topbar-h: 12.5rem;
+  }
+
   .reader__shell {
     max-width: min(var(--shell-max), 100% - 1.25rem);
     margin-inline: auto;
@@ -770,5 +780,16 @@ $focus: rgba(201, 162, 39, 0.45);
   .verses__item {
     padding-inline: 1rem;
     border-radius: 0.85rem;
+  }
+
+  .reader__topbar {
+    padding-top: 0.45rem;
+    gap: 0.45rem 0.75rem;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 719px) {
+  :host {
+    --reader-topbar-h: 10.6rem;
   }
 }
