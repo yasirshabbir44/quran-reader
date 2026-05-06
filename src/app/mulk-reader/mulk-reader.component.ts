@@ -249,6 +249,23 @@ export class SurahReaderComponent implements OnInit {
     };
   }
 
+  protected introSummary(): string {
+    const s = this.surah();
+    if (!s) {
+      return '';
+    }
+    if (this.isMulk()) {
+      return this.mulkMeta.themes;
+    }
+    return this.ui.translate('surahIntroGeneric', {
+      name: s.nameAr,
+      translit: s.nameTranslit,
+      num: this.formatUiNum(s.number),
+      verses: this.formatUiNum(s.versesCount),
+      type: this.ui.translate(s.revelationType === 'meccan' ? 'factTypeMeccan' : 'factTypeMedinan'),
+    });
+  }
+
   protected jumpToAyah(event: Event): void {
     const select = event.target as HTMLSelectElement;
     const n = Number(select.value || this.jumpAyahModel);
