@@ -272,6 +272,28 @@
 
     <div class="reader__shell">
       <header class="reader__header">
+        <section class="reader__intro" [attr.aria-label]="'introAria' | uiTranslate">
+          <p class="reader__intro-kicker">{{ 'introKicker' | uiTranslate }}</p>
+          <h2 class="reader__intro-title">{{ 'introTitle' | uiTranslate: { name: surah()!.nameAr } }}</h2>
+          <p class="reader__intro-body">{{ introSummary() }}</p>
+          <div class="reader__intro-tags">
+            <span class="reader__intro-tag">
+              {{ 'introTagTranslit' | uiTranslate }}: {{ surah()!.nameTranslit }}
+            </span>
+            <span class="reader__intro-tag">
+              {{ 'introTagType' | uiTranslate }}:
+              @if (surah()!.revelationType === 'meccan') {
+              {{ 'factTypeMeccan' | uiTranslate }}
+              } @else {
+              {{ 'factTypeMedinan' | uiTranslate }}
+              }
+            </span>
+            <span class="reader__intro-tag">
+              {{ 'introTagVerses' | uiTranslate }}: {{ formatUiNum(surah()!.versesCount) }}
+            </span>
+          </div>
+        </section>
+
         <p class="reader__meta">
           {{ 'surahWord' | uiTranslate }} {{ formatUiNum(surah()!.number) }} — {{ formatUiNum(surah()!.versesCount) }}
           {{ 'versesWord' | uiTranslate }}
@@ -308,20 +330,15 @@
           }
         </dl>
 
-        @if (isMulk()) {
         <details class="reader__about" open>
           <summary class="reader__about-summary">{{ 'aboutSummary' | uiTranslate }}</summary>
-          <p class="reader__about-body">{{ mulkMeta.themes }}</p>
+          <p class="reader__about-body">{{ introSummary() }}</p>
+          @if (isMulk()) {
           <p class="reader__about-note">
             {{ 'aboutNote' | uiTranslate }}
           </p>
+          }
         </details>
-        } @else {
-        <details class="reader__about" open>
-          <summary class="reader__about-summary">{{ 'aboutSummaryGeneric' | uiTranslate }}</summary>
-          <p class="reader__about-body">{{ 'aboutBodyGeneric' | uiTranslate }}</p>
-        </details>
-        }
       </header>
 
       <ol id="verses-start" class="verses" start="1" tabindex="-1">
