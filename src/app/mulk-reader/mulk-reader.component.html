@@ -301,44 +301,7 @@
         <h1 class="reader__title">{{ surah()!.nameAr }}</h1>
         <p class="reader__subtitle">{{ 'subtitle' | uiTranslate }}</p>
 
-        <dl class="reader__facts" [attr.aria-label]="'factsAria' | uiTranslate">
-          @if (isMulk()) {
-          <div class="reader__fact">
-            <dt>{{ 'factJuz' | uiTranslate }}</dt>
-            <dd>{{ formatUiNum(mulkMeta.juz) }}</dd>
-          </div>
-          }
-          <div class="reader__fact">
-            <dt>{{ 'factType' | uiTranslate }}</dt>
-            <dd>
-              @if (surah()!.revelationType === 'meccan') {
-              {{ 'factTypeMeccan' | uiTranslate }}
-              } @else {
-              {{ 'factTypeMedinan' | uiTranslate }}
-              }
-            </dd>
-          </div>
-          @if (isMulk()) {
-          <div class="reader__fact">
-            <dt>{{ 'factRevelationOrder' | uiTranslate }}</dt>
-            <dd>{{ formatUiNum(mulkMeta.revelationOrder) }}</dd>
-          </div>
-          <div class="reader__fact">
-            <dt>{{ 'factPageStart' | uiTranslate }}</dt>
-            <dd>≈ {{ formatUiNum(mulkMeta.mushafPageStart) }}</dd>
-          </div>
-          }
-        </dl>
 
-        <details class="reader__about" open>
-          <summary class="reader__about-summary">{{ 'aboutSummary' | uiTranslate }}</summary>
-          <p class="reader__about-body">{{ introSummary() }}</p>
-          @if (isMulk()) {
-          <p class="reader__about-note">
-            {{ 'aboutNote' | uiTranslate }}
-          </p>
-          }
-        </details>
       </header>
 
       <ol id="verses-start" class="verses" start="1" tabindex="-1">
