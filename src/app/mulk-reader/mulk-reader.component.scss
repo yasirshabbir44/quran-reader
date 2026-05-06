@@ -858,6 +858,7 @@ $focus: rgba(201, 162, 39, 0.45);
 }
 
 .verses__item {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -886,12 +887,14 @@ $focus: rgba(201, 162, 39, 0.45);
   }
 
   &--active {
-    border-color: rgba(201, 162, 39, 0.45);
-    background: rgba(28, 32, 40, 0.88);
+    border-color: #f2cf5a;
+    background: rgba(36, 32, 18, 0.9);
+    outline: 2px solid #f2cf5a;
+    outline-offset: 0;
     box-shadow:
-      0 0 0 1px rgba(201, 162, 39, 0.22),
+      0 0 0 2px rgba(242, 207, 90, 0.45),
       0 6px 28px rgba(0, 0, 0, 0.22),
-      0 0 40px rgba(201, 162, 39, 0.08);
+      0 0 42px rgba(242, 207, 90, 0.18);
 
     .verses__num {
       color: #1a1510;
