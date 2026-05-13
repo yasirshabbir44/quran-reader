@@ -43,6 +43,34 @@
         />
       </svg>
     </button>
+
+    <div class="reader__topbar-bookmark-row" role="region" [attr.aria-label]="'bookmarkToolsGroup' | uiTranslate">
+      <span class="reader__topbar-bookmark-label">{{ 'bookmarkToolsGroup' | uiTranslate }}</span>
+      <div class="reader__topbar-bookmark-actions">
+        <button
+          type="button"
+          class="reader__topbar-bookmark-btn"
+          (click)="saveBookmarkAtCurrentLine()"
+          [attr.aria-label]="'bookmarkSaveAria' | uiTranslate"
+        >
+          {{ 'bookmarkSaveTitle' | uiTranslate }}
+        </button>
+        @if (savedPlace(); as bm) {
+        <button
+          type="button"
+          class="reader__topbar-bookmark-btn reader__topbar-bookmark-btn--go"
+          (click)="goToSavedBookmark()"
+          [attr.aria-label]="'bookmarkGoAria' | uiTranslate"
+        >
+          {{ 'bookmarkGoTop' | uiTranslate }}
+          <span class="reader__topbar-bookmark-ref" aria-hidden="true">{{ formatUiNum(bm.surah) }}:{{ formatUiNum(bm.ayah) }}</span>
+        </button>
+        }
+      </div>
+      @if (!savedPlace()) {
+      <p class="reader__topbar-bookmark-hint">{{ 'bookmarkNoneYet' | uiTranslate }}</p>
+      }
+    </div>
   </div>
 
   <div class="reader__topbar-menu">
@@ -93,34 +121,6 @@
         <option [value]="v.ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(v.ayah) }}</option>
         }
       </select>
-    </div>
-
-    <div class="reader__topbar-bookmark-row" role="region" [attr.aria-label]="'bookmarkToolsGroup' | uiTranslate">
-      <span class="reader__topbar-bookmark-label">{{ 'bookmarkToolsGroup' | uiTranslate }}</span>
-      <div class="reader__topbar-bookmark-actions">
-        <button
-          type="button"
-          class="reader__topbar-bookmark-btn"
-          (click)="saveBookmarkAtCurrentLine()"
-          [attr.aria-label]="'bookmarkSaveAria' | uiTranslate"
-        >
-          {{ 'bookmarkSaveTitle' | uiTranslate }}
-        </button>
-        @if (savedPlace(); as bm) {
-        <button
-          type="button"
-          class="reader__topbar-bookmark-btn reader__topbar-bookmark-btn--go"
-          (click)="goToSavedBookmark()"
-          [attr.aria-label]="'bookmarkGoAria' | uiTranslate"
-        >
-          {{ 'bookmarkGoTop' | uiTranslate }}
-          <span class="reader__topbar-bookmark-ref" aria-hidden="true">{{ formatUiNum(bm.surah) }}:{{ formatUiNum(bm.ayah) }}</span>
-        </button>
-        }
-      </div>
-      @if (!savedPlace()) {
-      <p class="reader__topbar-bookmark-hint">{{ 'bookmarkNoneYet' | uiTranslate }}</p>
-      }
     </div>
 
   </div>
