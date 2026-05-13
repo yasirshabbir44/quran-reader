@@ -5,30 +5,30 @@ import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { catchError, combineLatest, filter, finalize, map, of, tap } from 'rxjs';
-import { UiLocaleService, type UiLocaleCode } from '../core/ui-locale.service';
-import { UiTranslatePipe } from '../core/ui-translate.pipe';
+import type { ReadingBookmark } from '../core/bookmark/reading-bookmark.repository';
+import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
+import { QURAN_CORPUS_SOURCE } from '../core/quran/quran-corpus.source';
 import {
-  QuranDataService,
   type QuranFullPayload,
   type QuranSurahPayload,
   type QuranVerseRow,
-} from '../core/quran-data.service';
-import { ReadingBookmarkService, type ReadingBookmark } from '../core/reading-bookmark.service';
+} from '../core/quran/quran-data.service';
+import {
+  ReaderLayoutPreferencesService,
+  type ReaderFont,
+  type ReaderLine,
+  type ReaderWidth,
+} from '../core/reader-layout/reader-layout-preferences.service';
+import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
+import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
+import {
+  normalizeVerseTranslations,
+  VERSE_PRESENTATION_STRATEGY,
+  type VersePresentationContext,
+} from '../core/verse-presentation/verse-presentation.strategy';
 import { SURAH_MULK_META } from '../data/surah-mulk-meta';
 
-const LS_FONT = 'surah-reader-font';
-const LS_LINE = 'surah-reader-line';
-const LS_WIDTH = 'surah-reader-width';
-
-type ReaderFont = 's' | 'm' | 'l' | 'xl';
-type ReaderLine = 'normal' | 'relaxed' | 'loose';
-type ReaderWidth = 'narrow' | 'medium' | 'wide';
-type ReaderSetting = ReaderFont | ReaderLine | ReaderWidth;
 type ReaderMode = 'verse-by-verse' | 'reading';
-
-const FONT_OPTIONS: readonly ReaderFont[] = ['s', 'm', 'l', 'xl'];
-const LINE_OPTIONS: readonly ReaderLine[] = ['normal', 'relaxed', 'loose'];
-const WIDTH_OPTIONS: readonly ReaderWidth[] = ['narrow', 'medium', 'wide'];
 
 function ayahElementId(ayah: number): string {
   return `ayah-${ayah}`;
@@ -48,8 +48,10 @@ export class SurahReaderComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly quranData = inject(QuranDataService);
-  private readonly readingBookmark = inject(ReadingBookmarkService);
+  private readonly corpusSource = inject(QURAN_CORPUS_SOURCE);
+  private readonly readingBookmark = inject(READING_BOOKMARK_REPOSITORY);
+  private readonly versePresentation = inject(VERSE_PRESENTATION_STRATEGY);
+  private readonly readerLayout = inject(ReaderLayoutPreferencesService);
   protected readonly ui = inject(UiLocaleService);
 
   protected readonly mulkMeta = SURAH_MULK_META;
@@ -59,9 +61,9 @@ export class SurahReaderComponent implements OnInit {
   protected readonly surah = signal<QuranSurahPayload | null>(null);
   protected readonly surahList = signal<readonly { number: number; nameAr: string }[]>([]);
 
-  protected readonly font = signal<ReaderFont>('m');
-  protected readonly line = signal<ReaderLine>('normal');
-  protected readonly width = signal<ReaderWidth>('medium');
+  protected readonly font = this.readerLayout.font;
+  protected readonly line = this.readerLayout.line;
+  protected readonly width = this.readerLayout.width;
   protected readonly readingMode = signal<ReaderMode>('verse-by-verse');
   protected readonly showTranslationEn = signal(true);
   protected readonly showTranslationUr = signal(true);
@@ -85,7 +87,7 @@ export class SurahReaderComponent implements OnInit {
   private lastConsumedStartKey = '';
 
   constructor() {
-    const corpus$ = this.quranData.load().pipe(
+    const corpus$ = this.corpusSource.load().pipe(
       catchError(() => {
         this.corpusError.set(true);
         return of(null as QuranFullPayload | null);
@@ -164,10 +166,6 @@ export class SurahReaderComponent implements OnInit {
       this.readingBookmark.flushPending(this.surahNumber(), this.activeAyah());
       this.savedPlace.set(this.readingBookmark.read());
     });
-    this.font.set(this.readSetting(LS_FONT, FONT_OPTIONS, this.font()));
-    this.line.set(this.readSetting(LS_LINE, LINE_OPTIONS, this.line()));
-    this.width.set(this.readSetting(LS_WIDTH, WIDTH_OPTIONS, this.width()));
-    this.refreshSavedPlaceFromStorage();
     this.syncDocumentTitle();
   }
 
@@ -347,25 +345,19 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected setFont(f: ReaderFont): void {
-    this.font.set(f);
-    this.persist(LS_FONT, f);
+    this.readerLayout.setFont(f);
   }
 
   protected setLine(l: ReaderLine): void {
-    this.line.set(l);
-    this.persist(LS_LINE, l);
+    this.readerLayout.setLine(l);
   }
 
   protected setWidth(w: ReaderWidth): void {
-    this.width.set(w);
-    this.persist(LS_WIDTH, w);
+    this.readerLayout.setWidth(w);
   }
 
   protected verseTr(v: QuranVerseRow): { en: string; ur: string } {
-    return {
-      en: v.en.replace(/\s+-\s*$/, '').trim(),
-      ur: v.ur.trim(),
-    };
+    return normalizeVerseTranslations(v);
   }
 
   protected introSummary(): string {
@@ -403,10 +395,7 @@ export class SurahReaderComponent implements OnInit {
     if (!isPlatformBrowser(this.platformId) || !navigator.clipboard?.writeText) {
       return;
     }
-    const tr = this.verseTr(v);
-    const surahName = this.surah()?.nameAr ?? '';
-    const ref = `${this.formatUiNum(this.surahNumber())}:${this.formatUiNum(v.ayah)}`;
-    const text = `${v.ar}\n\n${tr.en}\n\n${tr.ur}\n\n${surahName} ${ref}`;
+    const text = this.versePresentation.buildCopyText(v, this.versePresentationContext());
     void navigator.clipboard.writeText(text).then(() => {
       this.copiedAyah = v.ayah;
       setTimeout(() => {
@@ -421,15 +410,17 @@ export class SurahReaderComponent implements OnInit {
     if (!isPlatformBrowser(this.platformId) || typeof navigator.share !== 'function') {
       return;
     }
-    const tr = this.verseTr(v);
-    const surahName = this.surah()?.nameAr ?? 'Quran';
-    const ref = `${this.formatUiNum(this.surahNumber())}:${this.formatUiNum(v.ayah)}`;
-    const sharePayload: ShareData = {
-      title: `${surahName} ${v.ayah}`,
-      text: `${v.ar}\n\n${tr.en}\n\n${surahName} ${ref}`,
-      url: `${this.document.location.origin}/surah/${this.surahNumber()}?startingVerse=${v.ayah}`,
-    };
+    const sharePayload = this.versePresentation.buildShareData(v, this.versePresentationContext());
     void navigator.share(sharePayload);
+  }
+
+  private versePresentationContext(): VersePresentationContext {
+    return {
+      surahNumber: this.surahNumber(),
+      surahNameAr: this.surah()?.nameAr ?? '',
+      origin: this.document.location.origin,
+      formatUiNum: (n: number) => this.formatUiNum(n),
+    };
   }
 
   private applySurah(n: number, payload: { surahs: readonly QuranSurahPayload[] }): void {
@@ -534,33 +525,6 @@ export class SurahReaderComponent implements OnInit {
     } else {
       this.title.setTitle(this.ui.translate('documentTitle'));
     }
-  }
-
-  private persist(key: string, value: string): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-    try {
-      localStorage.setItem(key, value);
-    } catch {
-      /* private mode / quota */
-    }
-  }
-
-  private readSetting<T extends ReaderSetting>(key: string, allowed: readonly T[], fallback: T): T {
-    try {
-      const value = localStorage.getItem(key);
-      if (value && this.isAllowedOption(value, allowed)) {
-        return value;
-      }
-    } catch {
-      /* ignore localStorage access errors */
-    }
-    return fallback;
-  }
-
-  private isAllowedOption<T extends string>(value: string, allowed: readonly T[]): value is T {
-    return allowed.includes(value as T);
   }
 
   private parseTranslationSelection(raw: string | null): { en: boolean; ur: boolean } {

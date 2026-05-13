@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable, shareReplay } from 'rxjs';
+import type { QuranCorpusSource } from './quran-corpus.source';
 
 export interface QuranVerseRow {
   readonly ayah: number;
@@ -23,7 +24,7 @@ export interface QuranFullPayload {
 }
 
 @Injectable({ providedIn: 'root' })
-export class QuranDataService {
+export class QuranDataService implements QuranCorpusSource {
   private readonly http = inject(HttpClient);
 
   private readonly corpus$ = this.http.get<QuranFullPayload>('/quran-full.json').pipe(
