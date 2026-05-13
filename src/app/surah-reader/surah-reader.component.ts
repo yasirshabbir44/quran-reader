@@ -1,5 +1,15 @@
 import { DOCUMENT, isPlatformBrowser, NgClass } from '@angular/common';
-import { Component, DestroyRef, HostListener, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
+import {
+  afterNextRender,
+  Component,
+  DestroyRef,
+  HostListener,
+  inject,
+  Injector,
+  OnInit,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -48,6 +58,7 @@ export class SurahReaderComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
   private readonly corpusSource = inject(QURAN_CORPUS_SOURCE);
   private readonly readingBookmark = inject(READING_BOOKMARK_REPOSITORY);
   private readonly versePresentation = inject(VERSE_PRESENTATION_STRATEGY);
@@ -88,6 +99,7 @@ export class SurahReaderComponent implements OnInit {
 
   constructor() {
     const corpus$ = this.corpusSource.load().pipe(
+      tap(() => this.corpusLoading.set(false)),
       catchError(() => {
         this.corpusError.set(true);
         return of(null as QuranFullPayload | null);
@@ -256,6 +268,7 @@ export class SurahReaderComponent implements OnInit {
     }
     this.scrollToAyah(ayah, true);
     this.jumpAyahModel = String(ayah);
+    this.activeAyah.set(ayah);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -386,6 +399,7 @@ export class SurahReaderComponent implements OnInit {
     }
     this.scrollToAyah(n);
     this.jumpAyahModel = String(n);
+    this.activeAyah.set(n);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -436,7 +450,9 @@ export class SurahReaderComponent implements OnInit {
     if (isPlatformBrowser(this.platformId) && resetViewport) {
       this.document.defaultView?.scrollTo({ top: 0, behavior: 'auto' });
     }
-    queueMicrotask(() => this.bindAyahElements());
+    if (isPlatformBrowser(this.platformId)) {
+      afterNextRender(() => this.bindAyahElements(), { injector: this.injector });
+    }
   }
 
   private bindAyahElements(): void {
@@ -489,7 +505,9 @@ export class SurahReaderComponent implements OnInit {
     let next = 1;
     const list = this.verses();
     const els = this.ayahElements;
-    if (els?.length && els.length === list.length) {
+    const useCachedRefs =
+      !!els && els.length === list.length && els.some((el) => el !== null);
+    if (useCachedRefs) {
       for (let i = 0; i < els.length; i++) {
         const el = els[i];
         const verse = list[i];
