@@ -1,6 +1,6 @@
 import { provideHttpClient } from '@angular/common/http';
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 import { READING_BOOKMARK_REPOSITORY } from './core/bookmark/reading-bookmark.repository';
 import { ReadingBookmarkService } from './core/bookmark/reading-bookmark.service';
@@ -14,7 +14,13 @@ import {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+        anchorScrolling: 'enabled',
+      }),
+    ),
     provideHttpClient(),
     { provide: QURAN_CORPUS_SOURCE, useExisting: QuranDataService },
     { provide: READING_BOOKMARK_REPOSITORY, useExisting: ReadingBookmarkService },
