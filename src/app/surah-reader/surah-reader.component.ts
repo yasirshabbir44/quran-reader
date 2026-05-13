@@ -2,6 +2,7 @@ import { DOCUMENT, isPlatformBrowser, NgClass } from '@angular/common';
 import {
   afterNextRender,
   Component,
+  computed,
   DestroyRef,
   HostListener,
   inject,
@@ -88,6 +89,29 @@ export class SurahReaderComponent implements OnInit {
   protected copiedAyah: number | null = null;
   protected readonly savedPlace = signal<ReadingBookmark | null>(null);
   protected showBookmarkSavedToast = false;
+
+  /** Text search within the loaded surah (Arabic + English + Urdu). */
+  protected readonly surahSearchQuery = signal('');
+  /** Index into `surahSearchMatches`; -1 means no match focused yet. */
+  protected readonly surahSearchMatchIndex = signal(-1);
+  protected readonly surahSearchMatches = computed(() => {
+    const s = this.surah();
+    const raw = this.surahSearchQuery().trim().normalize('NFKC');
+    if (!s || !raw) {
+      return [] as readonly number[];
+    }
+    const needle = raw.toLowerCase();
+    const hits: number[] = [];
+    for (const v of s.verses) {
+      const tr = normalizeVerseTranslations(v);
+      const haystack = `${v.ar}\n${tr.en}\n${tr.ur}`.normalize('NFKC').toLowerCase();
+      if (haystack.includes(needle)) {
+        hits.push(v.ayah);
+      }
+    }
+    return hits;
+  });
+  private readonly surahSearchMatchSet = computed(() => new Set(this.surahSearchMatches()));
 
   private scrollRaf = 0;
   private ayahElements: Array<HTMLElement | null> | null = null;
@@ -405,6 +429,69 @@ export class SurahReaderComponent implements OnInit {
     });
   }
 
+  protected onSurahSearchChange(value: string): void {
+    this.surahSearchQuery.set(value);
+    this.surahSearchMatchIndex.set(-1);
+  }
+
+  protected clearSurahSearch(): void {
+    this.surahSearchQuery.set('');
+    this.surahSearchMatchIndex.set(-1);
+  }
+
+  protected nextSurahSearchMatch(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const m = this.surahSearchMatches();
+    if (!m.length) {
+      return;
+    }
+    const i = (this.surahSearchMatchIndex() + 1 + m.length) % m.length;
+    this.focusSurahSearchMatchAt(i);
+  }
+
+  protected prevSurahSearchMatch(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const m = this.surahSearchMatches();
+    if (!m.length) {
+      return;
+    }
+    const cur = this.surahSearchMatchIndex();
+    const i = cur < 0 ? m.length - 1 : (cur - 1 + m.length) % m.length;
+    this.focusSurahSearchMatchAt(i);
+  }
+
+  protected isVerseSurahSearchHit(v: QuranVerseRow): boolean {
+    return this.surahSearchMatchSet().has(v.ayah);
+  }
+
+  protected isVerseSurahSearchActive(v: QuranVerseRow): boolean {
+    const m = this.surahSearchMatches();
+    const i = this.surahSearchMatchIndex();
+    if (i < 0 || i >= m.length) {
+      return false;
+    }
+    return m[i] === v.ayah;
+  }
+
+  private focusSurahSearchMatchAt(i: number): void {
+    const m = this.surahSearchMatches();
+    if (i < 0 || i >= m.length) {
+      return;
+    }
+    const ayah = m[i]!;
+    this.surahSearchMatchIndex.set(i);
+    this.scrollToAyah(ayah, true);
+    this.jumpAyahModel = String(ayah);
+    this.activeAyah.set(ayah);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.updateActiveAyah());
+    });
+  }
+
   protected jumpToAyah(event: Event): void {
     const select = event.target as HTMLSelectElement;
     const n = Number(select.value || this.jumpAyahModel);
@@ -452,6 +539,11 @@ export class SurahReaderComponent implements OnInit {
   }
 
   private applySurah(n: number, payload: { surahs: readonly QuranSurahPayload[] }): void {
+    const prevN = this.surahNumber();
+    if (n !== prevN) {
+      this.surahSearchQuery.set('');
+      this.surahSearchMatchIndex.set(-1);
+    }
     const s = payload.surahs[n - 1] ?? null;
     const resetViewport = n !== this.surahNumber() || this.surah() === null;
     this.surahNumber.set(n);

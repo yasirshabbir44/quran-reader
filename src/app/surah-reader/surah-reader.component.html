@@ -128,6 +128,63 @@
       </select>
     </div>
 
+    <div class="reader__topbar-cluster reader__topbar-cluster--search" role="search" [attr.aria-label]="'searchInSurahAria' | uiTranslate">
+      <label class="reader__tool-label reader__tool-label--compact" for="surah-search">{{ 'searchInSurahLabel' | uiTranslate }}</label>
+      <div class="reader__search-wrap">
+        <input
+          id="surah-search"
+          type="search"
+          class="reader__search-input"
+          autocomplete="off"
+          spellcheck="false"
+          [ngModel]="surahSearchQuery()"
+          [ngModelOptions]="{ standalone: true }"
+          (ngModelChange)="onSurahSearchChange($event)"
+          [placeholder]="'searchInSurahPlaceholder' | uiTranslate"
+        />
+        @if (surahSearchQuery().trim()) {
+        <button
+          type="button"
+          class="reader__search-clear"
+          (click)="clearSurahSearch()"
+          [attr.aria-label]="'searchClearAria' | uiTranslate"
+        >
+          ×
+        </button>
+        }
+      </div>
+      @if (surahSearchQuery().trim()) {
+      <div class="reader__search-meta">
+        @if (surahSearchMatches().length === 0) {
+        <span class="reader__search-status">{{ 'searchNoResults' | uiTranslate }}</span>
+        } @else {
+        <span class="reader__search-count" aria-live="polite">
+          @if (surahSearchMatchIndex() >= 0) {
+          {{
+            'searchPosition'
+              | uiTranslate
+                : {
+                    current: formatUiNum(surahSearchMatchIndex() + 1),
+                    total: formatUiNum(surahSearchMatches().length),
+                  }
+          }}
+          } @else {
+          {{ 'searchMatchesCount' | uiTranslate: { n: formatUiNum(surahSearchMatches().length) } }}
+          }
+        </span>
+        <div class="reader__search-nav" role="group" [attr.aria-label]="'searchStepperAria' | uiTranslate">
+          <button type="button" class="reader__search-step" (click)="prevSurahSearchMatch()" [attr.aria-label]="'searchPrevAria' | uiTranslate">
+            ‹
+          </button>
+          <button type="button" class="reader__search-step" (click)="nextSurahSearchMatch()" [attr.aria-label]="'searchNextAria' | uiTranslate">
+            ›
+          </button>
+        </div>
+        }
+      </div>
+      }
+    </div>
+
   </div>
 </nav>
 
@@ -376,6 +433,8 @@
           class="verses__item"
           [class.verses__item--active]="v.ayah === activeAyah()"
           [class.verses__item--bookmarked]="isVerseSavedBookmark(v)"
+          [class.verses__item--search-hit]="isVerseSurahSearchHit(v)"
+          [class.verses__item--search-active]="isVerseSurahSearchActive(v)"
           [id]="verseElementId(v.ayah)"
           [attr.data-ayah]="v.ayah"
           [attr.aria-current]="v.ayah === activeAyah() ? 'true' : null"
