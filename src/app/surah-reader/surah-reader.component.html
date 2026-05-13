@@ -1,9 +1,14 @@
 @if (corpusError()) {
-<main class="reader reader--state-msg" dir="ltr" lang="en">
-  <p class="reader__state-text">{{ 'loadError' | uiTranslate }}</p>
+<main class="reader reader--state-msg reader--state-msg--error" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="reader__state-stack">
+    <p class="reader__state-text">{{ 'loadError' | uiTranslate }}</p>
+    <button type="button" class="reader__retry-btn" (click)="retryCorpusLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+  </div>
 </main>
 } @else if (corpusLoading() || !surah()) {
-<main class="reader reader--state-msg" dir="ltr" lang="en">
+<main class="reader reader--state-msg" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
   <p class="reader__state-text">{{ 'loadingCorpus' | uiTranslate }}</p>
 </main>
 } @else {
@@ -33,7 +38,7 @@
       class="reader__settings-btn"
       [class.reader__settings-btn--active]="settingsOpen"
       [attr.aria-expanded]="settingsOpen"
-      aria-label="Settings"
+      [attr.aria-label]="'settingsOpenAria' | uiTranslate"
       aria-controls="reader-settings-panel"
       (click)="toggleSettingsPanel()"
     >
@@ -131,13 +136,21 @@
   class="reader__settings-panel"
   [class.reader__settings-panel--open]="settingsOpen"
   [attr.aria-hidden]="!settingsOpen"
+  [attr.aria-label]="'settingsTitle' | uiTranslate"
 >
   <div class="reader__settings-head">
-    <h2 class="reader__settings-title">Reading Settings</h2>
-    <button type="button" class="reader__settings-close" (click)="closeSettingsPanel()" aria-label="Close settings">✕</button>
+    <h2 class="reader__settings-title">{{ 'settingsTitle' | uiTranslate }}</h2>
+    <button
+      type="button"
+      class="reader__settings-close"
+      (click)="closeSettingsPanel()"
+      [attr.aria-label]="'settingsCloseAria' | uiTranslate"
+    >
+      ✕
+    </button>
   </div>
   <div class="reader__settings-grid">
-    <label class="reader__tool-label reader__tool-label--compact" for="reader-mode">Mode</label>
+    <label class="reader__tool-label reader__tool-label--compact" for="reader-mode">{{ 'readingModeLabel' | uiTranslate }}</label>
     <select
       id="reader-mode"
       class="reader__select reader__select--compact"
@@ -145,19 +158,19 @@
       [ngModelOptions]="{ standalone: true }"
       (ngModelChange)="setReadingMode($event)"
     >
-      <option value="verse-by-verse">Verse by Verse</option>
-      <option value="reading">Reading</option>
+      <option value="verse-by-verse">{{ 'modeVerseByVerse' | uiTranslate }}</option>
+      <option value="reading">{{ 'modeReading' | uiTranslate }}</option>
     </select>
 
-    <label class="reader__tool-label reader__tool-label--compact">Translations</label>
+    <label class="reader__tool-label reader__tool-label--compact">{{ 'translationsLabel' | uiTranslate }}</label>
     <div class="reader__settings-checks">
       <label class="reader__check">
         <input type="checkbox" [checked]="showTranslationEn()" (change)="onTranslationCheckboxChange('en', $event)" />
-        <span>English (ID 131)</span>
+        <span>{{ 'translationEnOption' | uiTranslate }}</span>
       </label>
       <label class="reader__check">
         <input type="checkbox" [checked]="showTranslationUr()" (change)="onTranslationCheckboxChange('ur', $event)" />
-        <span>Urdu (ID 95)</span>
+        <span>{{ 'translationUrOption' | uiTranslate }}</span>
       </label>
     </div>
   </div>
@@ -285,7 +298,7 @@
     <p class="reader__settings-hint reader__settings-hint--bookmark">{{ 'bookmarkHint' | uiTranslate }}</p>
   </div>
   <div class="reader__settings-actions">
-    <button type="button" class="reader__action-link" (click)="resetReaderViewSettings()">Reset</button>
+    <button type="button" class="reader__action-link" (click)="resetReaderViewSettings()">{{ 'resetViewSettings' | uiTranslate }}</button>
   </div>
 </section>
 
@@ -374,19 +387,19 @@
                 type="button"
                 class="verses__action-btn"
                 (click)="copyAyah(v)"
-                [attr.aria-label]="'Copy verse ' + formatUiNum(v.ayah)"
-                [attr.title]="copiedAyah === v.ayah ? 'Copied' : 'Copy'"
+                [attr.aria-label]="'copyVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                [attr.title]="copiedAyah === v.ayah ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate)"
               >
-                {{ copiedAyah === v.ayah ? 'Copied' : 'Copy' }}
+                {{ copiedAyah === v.ayah ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate) }}
               </button>
               <button
                 type="button"
                 class="verses__action-btn"
                 (click)="shareAyah(v)"
-                [attr.aria-label]="'Share verse ' + formatUiNum(v.ayah)"
-                title="Share"
+                [attr.aria-label]="'shareVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                [attr.title]="'shareLabel' | uiTranslate"
               >
-                Share
+                {{ 'shareLabel' | uiTranslate }}
               </button>
               <button
                 type="button"
