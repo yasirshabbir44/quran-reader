@@ -1,14 +1,5 @@
 import { DOCUMENT, isPlatformBrowser, NgClass } from '@angular/common';
-import {
-  afterNextRender,
-  Component,
-  DestroyRef,
-  HostListener,
-  inject,
-  OnInit,
-  PLATFORM_ID,
-  signal,
-} from '@angular/core';
+import { Component, DestroyRef, HostListener, inject, OnInit, PLATFORM_ID, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -22,6 +13,7 @@ import {
   type QuranSurahPayload,
   type QuranVerseRow,
 } from '../core/quran-data.service';
+import { ReadingBookmarkService, type ReadingBookmark } from '../core/reading-bookmark.service';
 import { SURAH_MULK_META } from '../data/surah-mulk-meta';
 
 const LS_FONT = 'surah-reader-font';
@@ -53,6 +45,7 @@ export class SurahReaderComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly quranData = inject(QuranDataService);
+  private readonly readingBookmark = inject(ReadingBookmarkService);
   protected readonly ui = inject(UiLocaleService);
 
   protected readonly mulkMeta = SURAH_MULK_META;
@@ -73,13 +66,19 @@ export class SurahReaderComponent implements OnInit {
   protected scrollProgress = 0;
   protected stickyHeaderVisible = false;
   protected scrollTopVisible = false;
-  protected activeAyah = 1;
+  /** Verse at the reading line (scroll-driven); signal so the highlight updates reliably. */
+  protected readonly activeAyah = signal(1);
   protected jumpAyahModel = '';
   protected copiedAyah: number | null = null;
+  protected readonly savedPlace = signal<ReadingBookmark | null>(null);
+  protected showBookmarkSavedToast = false;
 
   private scrollRaf = 0;
   private ayahElements: (HTMLElement | null)[] | null = null;
-  private pendingStartAyah: number | null = 1;
+  private pendingStartAyah: number | null = null;
+  private bookmarkToastTimer: ReturnType<typeof setTimeout> | null = null;
+  /** Avoid re-scrolling to the same ?startingVerse= on every unrelated query update. */
+  private lastConsumedStartKey = '';
 
   constructor() {
     const corpus$ = this.quranData.load().pipe(
@@ -105,9 +104,27 @@ export class SurahReaderComponent implements OnInit {
         this.surahList.set(payload.surahs.map((s) => ({ number: s.number, nameAr: s.nameAr })));
         const raw = Number(pm.get('n'));
         const n = Number.isFinite(raw) && raw >= 1 && raw <= 114 ? Math.floor(raw) : 67;
-        const startingVerseRaw = Number(qm.get('startingVerse'));
-        this.pendingStartAyah =
-          Number.isFinite(startingVerseRaw) && startingVerseRaw >= 1 ? Math.floor(startingVerseRaw) : 1;
+        const startParam = qm.get('startingVerse');
+        const hasExplicitStart = startParam !== null && startParam !== '';
+        const treatAsFreshNavigation = n !== this.surahNumber() || this.surah() === null;
+        let pendingAyah: number | null = null;
+        if (hasExplicitStart) {
+          const startingVerseRaw = Number(startParam);
+          const parsed =
+            Number.isFinite(startingVerseRaw) && startingVerseRaw >= 1 ? Math.floor(startingVerseRaw) : 1;
+          const startKey = `${n}:${startParam}`;
+          if (treatAsFreshNavigation || startKey !== this.lastConsumedStartKey) {
+            pendingAyah = parsed;
+            this.lastConsumedStartKey = startKey;
+          }
+        } else {
+          this.lastConsumedStartKey = '';
+          if (treatAsFreshNavigation) {
+            const b = this.readingBookmark.read();
+            pendingAyah = b !== null && b.surah === n ? b.ayah : 1;
+          }
+        }
+        this.pendingStartAyah = pendingAyah;
         const queryMode = qm.get('readingMode') === 'reading' ? 'reading' : 'verse-by-verse';
         this.readingMode.set(queryMode);
         const translationState = this.parseTranslationSelection(qm.get('translations'));
@@ -118,23 +135,28 @@ export class SurahReaderComponent implements OnInit {
           return;
         }
         this.applySurah(n, payload);
+        this.refreshSavedPlaceFromStorage();
       });
-
-    afterNextRender(() => {
-      if (!isPlatformBrowser(this.platformId)) {
-        return;
-      }
-      this.bindAyahElements();
-    });
   }
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+    this.document.defaultView?.addEventListener('visibilitychange', this.onVisibilityChange);
+    this.destroyRef.onDestroy(() => {
+      this.document.defaultView?.removeEventListener('visibilitychange', this.onVisibilityChange);
+      if (this.bookmarkToastTimer !== null) {
+        clearTimeout(this.bookmarkToastTimer);
+        this.bookmarkToastTimer = null;
+      }
+      this.readingBookmark.flushPending(this.surahNumber(), this.activeAyah());
+      this.savedPlace.set(this.readingBookmark.read());
+    });
     this.font.set(this.readSetting(LS_FONT, FONT_OPTIONS, this.font()));
     this.line.set(this.readSetting(LS_LINE, LINE_OPTIONS, this.line()));
     this.width.set(this.readSetting(LS_WIDTH, WIDTH_OPTIONS, this.width()));
+    this.refreshSavedPlaceFromStorage();
     this.syncDocumentTitle();
   }
 
@@ -144,6 +166,14 @@ export class SurahReaderComponent implements OnInit {
 
   protected verses(): readonly QuranVerseRow[] {
     return this.surah()?.verses ?? [];
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.updateActiveAyah();
   }
 
   @HostListener('window:scroll')
@@ -172,6 +202,72 @@ export class SurahReaderComponent implements OnInit {
 
   protected scrollToTop(): void {
     this.document.defaultView?.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  protected saveBookmarkAtCurrentLine(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.updateActiveAyah();
+    const s = this.surahNumber();
+    const a = this.activeAyah();
+    this.readingBookmark.saveNow(s, a);
+    this.savedPlace.set({ surah: s, ayah: a });
+    this.flashBookmarkSaved();
+  }
+
+  protected saveBookmarkForVerse(v: QuranVerseRow): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const s = this.surahNumber();
+    this.readingBookmark.saveNow(s, v.ayah);
+    this.savedPlace.set({ surah: s, ayah: v.ayah });
+    this.flashBookmarkSaved();
+  }
+
+  protected goToSavedBookmark(): void {
+    this.refreshSavedPlaceFromStorage();
+    const b = this.savedPlace() ?? this.readingBookmark.read();
+    if (!b) {
+      return;
+    }
+    const maxAyah = this.surah()?.versesCount ?? b.ayah;
+    const ayah = Math.min(Math.max(b.ayah, 1), maxAyah);
+    if (b.surah !== this.surahNumber()) {
+      void this.router.navigate(['/surah', b.surah], {
+        queryParams: { startingVerse: ayah },
+        queryParamsHandling: 'merge',
+      });
+      return;
+    }
+    this.scrollToAyah(ayah, true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.updateActiveAyah());
+    });
+  }
+
+  protected isVerseSavedBookmark(v: QuranVerseRow): boolean {
+    const b = this.savedPlace();
+    return b !== null && b.surah === this.surahNumber() && b.ayah === v.ayah;
+  }
+
+  private flashBookmarkSaved(): void {
+    if (this.bookmarkToastTimer !== null) {
+      clearTimeout(this.bookmarkToastTimer);
+    }
+    this.showBookmarkSavedToast = true;
+    this.bookmarkToastTimer = setTimeout(() => {
+      this.showBookmarkSavedToast = false;
+      this.bookmarkToastTimer = null;
+    }, 2200);
+  }
+
+  private refreshSavedPlaceFromStorage(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.savedPlace.set(this.readingBookmark.read());
   }
 
   protected formatUiNum(n: number): string {
@@ -275,6 +371,9 @@ export class SurahReaderComponent implements OnInit {
     this.scrollToAyah(n);
     this.jumpAyahModel = '';
     select.value = '';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.updateActiveAyah());
+    });
   }
 
   protected copyAyah(v: QuranVerseRow): void {
@@ -306,11 +405,12 @@ export class SurahReaderComponent implements OnInit {
 
   private applySurah(n: number, payload: { surahs: readonly QuranSurahPayload[] }): void {
     const s = payload.surahs[n - 1] ?? null;
+    const resetViewport = n !== this.surahNumber() || this.surah() === null;
     this.surahNumber.set(n);
     this.surah.set(s);
-    this.activeAyah = 1;
+    this.activeAyah.set(1);
     this.syncDocumentTitle();
-    if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId) && resetViewport) {
       this.document.defaultView?.scrollTo({ top: 0, behavior: 'auto' });
     }
     queueMicrotask(() => this.bindAyahElements());
@@ -322,24 +422,46 @@ export class SurahReaderComponent implements OnInit {
     }
     const list = this.verses();
     this.ayahElements = list.map((v) => this.document.getElementById(`ayah-${v.ayah}`));
-    if (this.pendingStartAyah !== null) {
-      const safeAyah = Math.min(Math.max(this.pendingStartAyah, 1), list.length || 1);
+    const pending = this.pendingStartAyah;
+    if (pending !== null) {
+      const lastAyah = list.length ? list[list.length - 1]!.ayah : 1;
+      const safeAyah = Math.min(Math.max(pending, 1), lastAyah);
       this.scrollToAyah(safeAyah, false);
-      this.activeAyah = safeAyah;
+      this.activeAyah.set(safeAyah);
       this.pendingStartAyah = null;
     }
     this.updateActiveAyah();
   }
 
   private scrollToAyah(ayah: number, smooth = true): void {
-    this.document.getElementById(`ayah-${ayah}`)?.scrollIntoView({
+    const el = this.document.getElementById(`ayah-${ayah}`);
+    if (!el) {
+      return;
+    }
+    void el.offsetHeight;
+    el.scrollIntoView({
       behavior: smooth ? 'smooth' : 'auto',
       block: 'start',
     });
   }
 
+  private readingLineViewportY(): number {
+    if (!isPlatformBrowser(this.platformId)) {
+      return 168;
+    }
+    const topbar = this.document.querySelector('.reader__topbar');
+    let y = (topbar instanceof HTMLElement ? topbar.getBoundingClientRect().bottom : 100) + 12;
+    if (this.stickyHeaderVisible) {
+      const sticky = this.document.querySelector('.reader__sticky.reader__sticky--visible');
+      if (sticky instanceof HTMLElement) {
+        y = Math.max(y, sticky.getBoundingClientRect().bottom + 8);
+      }
+    }
+    return Math.min(Math.max(y, 64), 360);
+  }
+
   private updateActiveAyah(): void {
-    const lineY = this.stickyHeaderVisible ? 200 : 168;
+    const lineY = this.readingLineViewportY();
     let next = 1;
     const list = this.verses();
     const els = this.ayahElements;
@@ -359,8 +481,18 @@ export class SurahReaderComponent implements OnInit {
         }
       }
     }
-    this.activeAyah = next;
+    if (next !== this.activeAyah()) {
+      this.activeAyah.set(next);
+    }
   }
+
+  private readonly onVisibilityChange = (): void => {
+    if (!isPlatformBrowser(this.platformId) || this.document.visibilityState !== 'hidden') {
+      return;
+    }
+    this.readingBookmark.flushPending(this.surahNumber(), this.activeAyah());
+    this.savedPlace.set(this.readingBookmark.read());
+  };
 
   private syncDocumentTitle(): void {
     const s = this.surah();
