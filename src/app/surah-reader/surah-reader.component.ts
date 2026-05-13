@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   DestroyRef,
+  effect,
   HostListener,
   inject,
   Injector,
@@ -16,6 +17,8 @@ import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { combineLatest, filter, map, tap } from 'rxjs';
+import { GoogleAuthService } from '../core/auth/google-auth.service';
+import { CompositeReadingBookmarkRepository } from '../core/bookmark/composite-bookmark.repository';
 import type { ReadingBookmark } from '../core/bookmark/reading-bookmark.repository';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import { QURAN_CORPUS_SOURCE } from '../core/quran/quran-corpus.source';
@@ -64,6 +67,16 @@ export class SurahReaderComponent implements OnInit {
   private readonly versePresentation = inject(VERSE_PRESENTATION_STRATEGY);
   private readonly readerLayout = inject(ReaderLayoutPreferencesService);
   protected readonly ui = inject(UiLocaleService);
+  protected readonly auth = inject(GoogleAuthService);
+  /**
+   * The bookmark repository token resolves to the composite implementation, but
+   * we also need its concrete signals (remoteSyncTick) to refresh the saved
+   * place chip after a Drive AppData sync completes. Inject the class directly
+   * for that read-only signal access; this is safe because the same instance
+   * backs the token (see app.config.ts).
+   */
+  private readonly bookmarkRepo = inject(CompositeReadingBookmarkRepository);
+  protected readonly accountMenuOpen = signal(false);
 
   protected readonly mulkMeta = SURAH_MULK_META;
   protected readonly corpusLoading = signal(true);
@@ -114,6 +127,9 @@ export class SurahReaderComponent implements OnInit {
   private readonly surahSearchMatchSet = computed(() => new Set(this.surahSearchMatches()));
 
   private scrollRaf = 0;
+  /** Ayah whose bookmark icon plays a one-shot pulse after save; cleared then set on rAF so repeat taps replay CSS. */
+  protected readonly bookmarkPulseAyah = signal<number | null>(null);
+  private bookmarkPulseRaf = 0;
   private ayahElements: Array<HTMLElement | null> | null = null;
   private pendingStartAyah: number | null = null;
   private bookmarkToastTimer: ReturnType<typeof setTimeout> | null = null;
@@ -143,6 +159,13 @@ export class SurahReaderComponent implements OnInit {
         map(([payload, pm, qm]) => ({ payload: payload as QuranFullPayload, pm, qm })),
       )
       .subscribe(({ payload, pm, qm }) => this.applyCorpusAndRoute(payload, pm, qm));
+
+    // When the Drive sync (or sign-in/out) changes the underlying bookmark,
+    // re-read it so the "Go to bookmark" chip + verse highlight stay in sync.
+    effect(() => {
+      this.bookmarkRepo.remoteSyncTick();
+      this.savedPlace.set(this.readingBookmark.read());
+    });
   }
 
   private applyCorpusAndRoute(payload: QuranFullPayload, pm: ParamMap, qm: ParamMap): void {
@@ -195,6 +218,10 @@ export class SurahReaderComponent implements OnInit {
     this.document.defaultView?.addEventListener('visibilitychange', this.onVisibilityChange);
     this.destroyRef.onDestroy(() => {
       this.document.defaultView?.removeEventListener('visibilitychange', this.onVisibilityChange);
+      if (this.bookmarkPulseRaf !== 0) {
+        this.document.defaultView?.cancelAnimationFrame(this.bookmarkPulseRaf);
+        this.bookmarkPulseRaf = 0;
+      }
       if (this.bookmarkToastTimer !== null) {
         clearTimeout(this.bookmarkToastTimer);
         this.bookmarkToastTimer = null;
@@ -262,7 +289,7 @@ export class SurahReaderComponent implements OnInit {
     const a = this.activeAyah();
     this.readingBookmark.saveNow(s, a);
     this.savedPlace.set({ surah: s, ayah: a });
-    this.flashBookmarkSaved();
+    this.flashBookmarkSaved(a);
   }
 
   protected saveBookmarkForVerse(v: QuranVerseRow): void {
@@ -272,7 +299,7 @@ export class SurahReaderComponent implements OnInit {
     const s = this.surahNumber();
     this.readingBookmark.saveNow(s, v.ayah);
     this.savedPlace.set({ surah: s, ayah: v.ayah });
-    this.flashBookmarkSaved();
+    this.flashBookmarkSaved(v.ayah);
   }
 
   protected goToSavedBookmark(): void {
@@ -303,15 +330,32 @@ export class SurahReaderComponent implements OnInit {
     return b !== null && b.surah === this.surahNumber() && b.ayah === v.ayah;
   }
 
-  private flashBookmarkSaved(): void {
+  private flashBookmarkSaved(pulseAyah: number): void {
     if (this.bookmarkToastTimer !== null) {
       clearTimeout(this.bookmarkToastTimer);
     }
+    this.armBookmarkIconPulse(pulseAyah);
     this.showBookmarkSavedToast = true;
     this.bookmarkToastTimer = setTimeout(() => {
       this.showBookmarkSavedToast = false;
       this.bookmarkToastTimer = null;
     }, 2200);
+  }
+
+  private armBookmarkIconPulse(ayah: number): void {
+    const win = this.document.defaultView;
+    if (!win) {
+      return;
+    }
+    if (this.bookmarkPulseRaf !== 0) {
+      win.cancelAnimationFrame(this.bookmarkPulseRaf);
+      this.bookmarkPulseRaf = 0;
+    }
+    this.bookmarkPulseAyah.set(null);
+    this.bookmarkPulseRaf = win.requestAnimationFrame(() => {
+      this.bookmarkPulseRaf = 0;
+      this.bookmarkPulseAyah.set(ayah);
+    });
   }
 
   private refreshSavedPlaceFromStorage(): void {
@@ -344,10 +388,52 @@ export class SurahReaderComponent implements OnInit {
 
   @HostListener('document:keydown.escape')
   protected onEscapeCloseSettings(): void {
+    if (this.accountMenuOpen()) {
+      this.accountMenuOpen.set(false);
+      return;
+    }
     if (!this.settingsOpen) {
       return;
     }
     this.closeSettingsPanel();
+  }
+
+  protected toggleAccountMenu(): void {
+    this.accountMenuOpen.update((v) => !v);
+  }
+
+  protected closeAccountMenu(): void {
+    this.accountMenuOpen.set(false);
+  }
+
+  protected async signInWithGoogle(): Promise<void> {
+    if (this.auth.authInProgress() || !this.auth.available()) {
+      return;
+    }
+    this.closeAccountMenu();
+    await this.auth.signIn();
+  }
+
+  protected signOutFromGoogle(): void {
+    this.closeAccountMenu();
+    this.auth.signOut();
+  }
+
+  protected accountInitial(): string {
+    const u = this.auth.user();
+    if (!u) {
+      return '';
+    }
+    const source = u.name || u.email;
+    return source ? source.trim().charAt(0).toUpperCase() : 'G';
+  }
+
+  protected accountDisplayName(): string {
+    const u = this.auth.user();
+    if (!u) {
+      return '';
+    }
+    return u.name || u.email || '';
   }
 
   protected retryCorpusLoad(): void {

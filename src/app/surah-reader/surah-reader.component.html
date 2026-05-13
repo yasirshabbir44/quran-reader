@@ -80,6 +80,87 @@
 
   <div class="reader__topbar-menu">
 
+    @if (auth.available()) {
+    <div class="reader__topbar-cluster reader__topbar-cluster--account">
+      <span class="reader__tool-label reader__tool-label--compact">{{ 'accountLabel' | uiTranslate }}</span>
+      @if (auth.isSignedIn()) {
+      <div class="reader__account">
+        <button
+          type="button"
+          class="reader__account-chip"
+          [class.reader__account-chip--open]="accountMenuOpen()"
+          (click)="toggleAccountMenu()"
+          [attr.aria-expanded]="accountMenuOpen()"
+          aria-haspopup="menu"
+          [attr.aria-label]="'accountOpenMenuAria' | uiTranslate: { name: accountDisplayName() }"
+        >
+          @if (auth.user()?.picture) {
+          <img
+            class="reader__account-avatar"
+            [src]="auth.user()!.picture!"
+            alt=""
+            referrerpolicy="no-referrer"
+          />
+          } @else {
+          <span class="reader__account-avatar reader__account-avatar--fallback" aria-hidden="true">
+            {{ accountInitial() }}
+          </span>
+          }
+          <span class="reader__account-name">{{ accountDisplayName() }}</span>
+          <svg class="reader__account-caret" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+            <path d="M2 4.5 6 8.5 10 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        @if (accountMenuOpen()) {
+        <div class="reader__account-menu" role="menu">
+          <p class="reader__account-menu-name">{{ accountDisplayName() }}</p>
+          @if (auth.user()?.email; as em) {
+          <p class="reader__account-menu-email">{{ em }}</p>
+          }
+          <p class="reader__account-menu-hint">{{ 'accountSyncHint' | uiTranslate }}</p>
+          <button
+            type="button"
+            class="reader__account-menu-action"
+            role="menuitem"
+            (click)="signOutFromGoogle()"
+          >
+            {{ 'accountSignOut' | uiTranslate }}
+          </button>
+        </div>
+        }
+      </div>
+      } @else {
+      <button
+        type="button"
+        class="reader__signin-btn"
+        (click)="signInWithGoogle()"
+        [disabled]="auth.authInProgress() || auth.initializing()"
+      >
+        <svg class="reader__signin-icon" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+          <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.49h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.7-1.57 2.68-3.88 2.68-6.63Z" />
+          <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.17l-2.92-2.26c-.8.54-1.84.86-3.04.86-2.33 0-4.31-1.57-5.02-3.69H.92v2.32A9 9 0 0 0 9 18Z" />
+          <path fill="#FBBC05" d="M3.98 10.74A5.4 5.4 0 0 1 3.68 9c0-.6.1-1.18.27-1.74V4.94H.92A9 9 0 0 0 0 9c0 1.45.35 2.83.92 4.06l3.06-2.32Z" />
+          <path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.43 1.34l2.57-2.57C13.46.89 11.42 0 9 0A9 9 0 0 0 .92 4.94l3.06 2.32C4.69 5.15 6.67 3.58 9 3.58Z" />
+        </svg>
+        <span>
+          @if (auth.authInProgress()) {
+          {{ 'accountSigningIn' | uiTranslate }}
+          } @else {
+          {{ 'accountSignInGoogle' | uiTranslate }}
+          }
+        </span>
+      </button>
+      @if (auth.lastError() === 'popup-closed') {
+      <p class="reader__signin-error">{{ 'accountErrorPopupClosed' | uiTranslate }}</p>
+      } @else if (auth.lastError() === 'token-failed' || auth.lastError() === 'profile-failed') {
+      <p class="reader__signin-error">{{ 'accountErrorGeneric' | uiTranslate }}</p>
+      } @else if (auth.lastError() === 'script-load-failed') {
+      <p class="reader__signin-error">{{ 'accountErrorOffline' | uiTranslate }}</p>
+      }
+      }
+    </div>
+    }
+
     <div class="reader__topbar-cluster reader__topbar-cluster--surah">
       <label class="reader__tool-label reader__tool-label--compact" for="pick-surah">{{ 'surahLabel' | uiTranslate }}</label>
       <select
@@ -464,6 +545,7 @@
                 type="button"
                 class="verses__action-btn verses__action-btn--bookmark"
                 [class.verses__action-btn--bookmark-active]="isVerseSavedBookmark(v)"
+                [class.verses__action-btn--bookmark-pulse]="bookmarkPulseAyah() === v.ayah"
                 (click)="saveBookmarkForVerse(v)"
                 [attr.aria-label]="'bookmarkVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
                 [attr.title]="'bookmarkVerseTitle' | uiTranslate"
