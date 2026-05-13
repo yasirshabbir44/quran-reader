@@ -8,7 +8,7 @@ $border: rgba(255, 255, 255, 0.06);
 $focus: rgba(201, 162, 39, 0.45);
 
 :host {
-  --reader-topbar-h: 8.5rem;
+  --reader-topbar-h: 5.75rem;
 }
 
 .skip-link {
@@ -484,12 +484,14 @@ $focus: rgba(201, 162, 39, 0.45);
 
 .reader__topbar-brand {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.85rem;
+  flex: 0 1 auto;
+  min-width: 0;
 
   @media (max-width: 719px) {
-    justify-content: space-between;
+    justify-content: flex-start;
   }
 }
 
@@ -686,14 +688,19 @@ $focus: rgba(201, 162, 39, 0.45);
 }
 
 .reader__topbar-bookmark-row {
-  flex: 1 1 100%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem 0.65rem;
-  padding-top: 0.4rem;
-  margin-top: 0.15rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  align-content: flex-end;
+  gap: 0.3rem 0.55rem;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: min(22rem, 100%);
+
+  @media (max-width: 719px) {
+    flex: 1 1 12rem;
+    max-width: none;
+  }
 }
 
 .reader__topbar-bookmark-label {
@@ -1203,7 +1210,7 @@ $focus: rgba(201, 162, 39, 0.45);
 
 @media (max-width: 480px) {
   :host {
-    --reader-topbar-h: 15.25rem;
+    --reader-topbar-h: 12.5rem;
   }
 
   .reader__shell {
@@ -1225,7 +1232,7 @@ $focus: rgba(201, 162, 39, 0.45);
 
 @media (min-width: 481px) and (max-width: 719px) {
   :host {
-    --reader-topbar-h: 13.25rem;
+    --reader-topbar-h: 10.5rem;
   }
 }
 
