@@ -78,9 +78,11 @@ UI locale packs live in:
 ## Project Structure (Key Files)
 
 - `src/app/surah-reader/surah-reader.component.ts` - main reader logic and interactions
-- `src/app/core/quran-data.service.ts` - data loading service
-- `src/app/core/ui-locale.service.ts` - locale state and translation helpers
-- `src/app/core/ui-translate.pipe.ts` - template translation pipe
+- `src/app/core/quran/` - corpus types, `QuranDataService`, `QuranCorpusSource` token
+- `src/app/core/bookmark/` - reading place repository + `localStorage` service
+- `src/app/core/reader-layout/` - font / line / width preferences
+- `src/app/core/verse-presentation/` - copy/share strategy + share payload builder
+- `src/app/core/ui/` - `UiLocaleService` and `UiTranslatePipe`
 - `src/app/app.routes.ts` - route definitions
 - `scripts/build-quran-data.mjs` - corpus build/merge script
 

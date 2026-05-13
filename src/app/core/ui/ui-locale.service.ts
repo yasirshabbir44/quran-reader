@@ -1,8 +1,8 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
-import ar from '../i18n/ar.json';
-import en from '../i18n/en.json';
-import ur from '../i18n/ur.json';
+import ar from '../../i18n/ar.json';
+import en from '../../i18n/en.json';
+import ur from '../../i18n/ur.json';
 
 const LS_KEY = 'surah-reader-ui-locale';
 /** Previous key; still read so existing users keep their language choice. */

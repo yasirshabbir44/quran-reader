@@ -1,12 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import type { ReadingBookmark, ReadingBookmarkRepository } from './reading-bookmark.repository';
 
 const LS_KEY = 'surah-reader-bookmark';
 
-export type ReadingBookmark = { readonly surah: number; readonly ayah: number };
+export type { ReadingBookmark } from './reading-bookmark.repository';
 
 @Injectable({ providedIn: 'root' })
-export class ReadingBookmarkService {
+export class ReadingBookmarkService implements ReadingBookmarkRepository {
   private readonly platformId = inject(PLATFORM_ID);
   private saveTimer: ReturnType<typeof setTimeout> | null = null;
   private readonly debounceMs = 450;

@@ -1,7 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { ReadingBookmarkService } from './core/reading-bookmark.service';
+import { READING_BOOKMARK_REPOSITORY } from './core/bookmark/reading-bookmark.repository';
 
 @Component({
   selector: 'app-home-redirect',
@@ -11,7 +11,7 @@ import { ReadingBookmarkService } from './core/reading-bookmark.service';
 export class HomeRedirectComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly bookmark = inject(ReadingBookmarkService);
+  private readonly bookmark = inject(READING_BOOKMARK_REPOSITORY);
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {
