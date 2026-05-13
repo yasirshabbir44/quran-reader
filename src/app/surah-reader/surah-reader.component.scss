@@ -680,6 +680,16 @@ $focus: rgba(201, 162, 39, 0.45);
     min-width: 8.25rem;
   }
 
+  &--search {
+    flex: 1 1 100%;
+    min-width: 0;
+
+    @media (min-width: 720px) {
+      flex: 1 1 15rem;
+      max-width: 22rem;
+    }
+  }
+
   &--surah {
     min-width: 10.5rem;
     flex: 1 1 12rem;
@@ -718,6 +728,120 @@ $focus: rgba(201, 162, 39, 0.45);
   gap: 0.4rem;
   flex: 1 1 auto;
   min-width: 0;
+}
+
+.reader__search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.reader__search-input {
+  width: 100%;
+  min-height: 2.05rem;
+  padding: 0.32rem 2.1rem 0.32rem 0.65rem;
+  border-radius: 0.55rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e8e3d8;
+  font-family: 'Amiri', serif;
+  font-size: 0.8rem;
+  line-height: 1.35;
+
+  &::placeholder {
+    color: #8a8578;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: rgba(201, 162, 39, 0.45);
+    box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.2);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
+}
+
+.reader__search-clear {
+  position: absolute;
+  inset-inline-end: 0.2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 1.65rem;
+  height: 1.65rem;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #c9c3b6;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    color: $ink;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: 1px;
+  }
+}
+
+.reader__search-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.reader__search-status {
+  font-family: 'Amiri', serif;
+  font-size: 0.72rem;
+  color: #a8a298;
+}
+
+.reader__search-count {
+  font-family: 'Amiri', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: $ink-muted;
+  font-variant-numeric: tabular-nums;
+}
+
+.reader__search-nav {
+  display: inline-flex;
+  gap: 0.2rem;
+}
+
+.reader__search-step {
+  min-width: 2rem;
+  min-height: 1.85rem;
+  padding: 0 0.35rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e0dacd;
+  font-family: 'Amiri', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba(201, 162, 39, 0.4);
+    color: $ink;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $focus;
+    outline-offset: 2px;
+  }
 }
 
 .reader__topbar-bookmark-btn {
@@ -1077,6 +1201,27 @@ $focus: rgba(201, 162, 39, 0.45);
       0 0 0 4px rgba(100, 170, 255, 0.28),
       0 6px 28px rgba(0, 0, 0, 0.22);
   }
+
+  &--search-hit:not(&--active) {
+    border-color: rgba(201, 162, 39, 0.22);
+    box-shadow:
+      0 0 0 1px rgba(201, 162, 39, 0.18),
+      0 4px 22px rgba(0, 0, 0, 0.14);
+  }
+
+  &--search-active {
+    border-color: rgba(201, 162, 39, 0.52);
+    box-shadow:
+      0 0 0 2px rgba(201, 162, 39, 0.38),
+      0 6px 26px rgba(0, 0, 0, 0.2);
+  }
+
+  &--search-hit#{&}--search-active:not(&--active) {
+    border-color: rgba(201, 162, 39, 0.55);
+    box-shadow:
+      0 0 0 2px rgba(201, 162, 39, 0.42),
+      0 6px 28px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .verses__head {
@@ -1247,7 +1392,7 @@ $focus: rgba(201, 162, 39, 0.45);
 
 @media (max-width: 480px) {
   :host {
-    --reader-topbar-h: 12.5rem;
+    --reader-topbar-h: 15.5rem;
   }
 
   .reader__shell {
@@ -1269,7 +1414,7 @@ $focus: rgba(201, 162, 39, 0.45);
 
 @media (min-width: 481px) and (max-width: 719px) {
   :host {
-    --reader-topbar-h: 10.5rem;
+    --reader-topbar-h: 13.5rem;
   }
 }
 
