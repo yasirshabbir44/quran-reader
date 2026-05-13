@@ -4,7 +4,9 @@ import ar from '../i18n/ar.json';
 import en from '../i18n/en.json';
 import ur from '../i18n/ur.json';
 
-const LS_KEY = 'mulk-reader-ui-locale';
+const LS_KEY = 'surah-reader-ui-locale';
+/** Previous key; still read so existing users keep their language choice. */
+const LEGACY_LS_KEY = 'mulk-reader-ui-locale';
 
 export type UiLocaleCode = 'en' | 'ar' | 'ur';
 
@@ -32,7 +34,9 @@ export class UiLocaleService {
     let initial: UiLocaleCode = 'en';
     if (isPlatformBrowser(this.platformId)) {
       try {
-        const saved = localStorage.getItem(LS_KEY) as UiLocaleCode | null;
+        const saved =
+          (localStorage.getItem(LS_KEY) as UiLocaleCode | null) ??
+          (localStorage.getItem(LEGACY_LS_KEY) as UiLocaleCode | null);
         if (saved && saved in PACKS) {
           initial = saved;
         }
@@ -75,6 +79,11 @@ export class UiLocaleService {
     if (persist && isPlatformBrowser(this.platformId)) {
       try {
         localStorage.setItem(LS_KEY, code);
+        try {
+          localStorage.removeItem(LEGACY_LS_KEY);
+        } catch {
+          /* ignore */
+        }
       } catch {
         /* ignore */
       }
