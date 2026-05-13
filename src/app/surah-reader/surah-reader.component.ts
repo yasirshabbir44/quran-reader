@@ -255,6 +255,7 @@ export class SurahReaderComponent implements OnInit {
       return;
     }
     this.scrollToAyah(ayah, true);
+    this.jumpAyahModel = String(ayah);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -384,8 +385,7 @@ export class SurahReaderComponent implements OnInit {
       return;
     }
     this.scrollToAyah(n);
-    this.jumpAyahModel = '';
-    select.value = '';
+    this.jumpAyahModel = String(n);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -429,6 +429,9 @@ export class SurahReaderComponent implements OnInit {
     this.surahNumber.set(n);
     this.surah.set(s);
     this.activeAyah.set(1);
+    if (resetViewport) {
+      this.jumpAyahModel = '';
+    }
     this.syncDocumentTitle();
     if (isPlatformBrowser(this.platformId) && resetViewport) {
       this.document.defaultView?.scrollTo({ top: 0, behavior: 'auto' });
@@ -448,6 +451,7 @@ export class SurahReaderComponent implements OnInit {
       const safeAyah = Math.min(Math.max(pending, 1), lastAyah);
       this.scrollToAyah(safeAyah, false);
       this.activeAyah.set(safeAyah);
+      this.jumpAyahModel = String(safeAyah);
       this.pendingStartAyah = null;
     }
     this.updateActiveAyah();
