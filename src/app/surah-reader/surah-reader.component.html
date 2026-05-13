@@ -464,6 +464,7 @@
                 type="button"
                 class="verses__action-btn verses__action-btn--bookmark"
                 [class.verses__action-btn--bookmark-active]="isVerseSavedBookmark(v)"
+                [class.verses__action-btn--bookmark-pulse]="bookmarkPulseAyah() === v.ayah"
                 (click)="saveBookmarkForVerse(v)"
                 [attr.aria-label]="'bookmarkVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
                 [attr.title]="'bookmarkVerseTitle' | uiTranslate"

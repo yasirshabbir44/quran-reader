@@ -114,6 +114,9 @@ export class SurahReaderComponent implements OnInit {
   private readonly surahSearchMatchSet = computed(() => new Set(this.surahSearchMatches()));
 
   private scrollRaf = 0;
+  /** Ayah whose bookmark icon plays a one-shot pulse after save; cleared then set on rAF so repeat taps replay CSS. */
+  protected readonly bookmarkPulseAyah = signal<number | null>(null);
+  private bookmarkPulseRaf = 0;
   private ayahElements: Array<HTMLElement | null> | null = null;
   private pendingStartAyah: number | null = null;
   private bookmarkToastTimer: ReturnType<typeof setTimeout> | null = null;
@@ -195,6 +198,10 @@ export class SurahReaderComponent implements OnInit {
     this.document.defaultView?.addEventListener('visibilitychange', this.onVisibilityChange);
     this.destroyRef.onDestroy(() => {
       this.document.defaultView?.removeEventListener('visibilitychange', this.onVisibilityChange);
+      if (this.bookmarkPulseRaf !== 0) {
+        this.document.defaultView?.cancelAnimationFrame(this.bookmarkPulseRaf);
+        this.bookmarkPulseRaf = 0;
+      }
       if (this.bookmarkToastTimer !== null) {
         clearTimeout(this.bookmarkToastTimer);
         this.bookmarkToastTimer = null;
@@ -262,7 +269,7 @@ export class SurahReaderComponent implements OnInit {
     const a = this.activeAyah();
     this.readingBookmark.saveNow(s, a);
     this.savedPlace.set({ surah: s, ayah: a });
-    this.flashBookmarkSaved();
+    this.flashBookmarkSaved(a);
   }
 
   protected saveBookmarkForVerse(v: QuranVerseRow): void {
@@ -272,7 +279,7 @@ export class SurahReaderComponent implements OnInit {
     const s = this.surahNumber();
     this.readingBookmark.saveNow(s, v.ayah);
     this.savedPlace.set({ surah: s, ayah: v.ayah });
-    this.flashBookmarkSaved();
+    this.flashBookmarkSaved(v.ayah);
   }
 
   protected goToSavedBookmark(): void {
@@ -303,15 +310,32 @@ export class SurahReaderComponent implements OnInit {
     return b !== null && b.surah === this.surahNumber() && b.ayah === v.ayah;
   }
 
-  private flashBookmarkSaved(): void {
+  private flashBookmarkSaved(pulseAyah: number): void {
     if (this.bookmarkToastTimer !== null) {
       clearTimeout(this.bookmarkToastTimer);
     }
+    this.armBookmarkIconPulse(pulseAyah);
     this.showBookmarkSavedToast = true;
     this.bookmarkToastTimer = setTimeout(() => {
       this.showBookmarkSavedToast = false;
       this.bookmarkToastTimer = null;
     }, 2200);
+  }
+
+  private armBookmarkIconPulse(ayah: number): void {
+    const win = this.document.defaultView;
+    if (!win) {
+      return;
+    }
+    if (this.bookmarkPulseRaf !== 0) {
+      win.cancelAnimationFrame(this.bookmarkPulseRaf);
+      this.bookmarkPulseRaf = 0;
+    }
+    this.bookmarkPulseAyah.set(null);
+    this.bookmarkPulseRaf = win.requestAnimationFrame(() => {
+      this.bookmarkPulseRaf = 0;
+      this.bookmarkPulseAyah.set(ayah);
+    });
   }
 
   private refreshSavedPlaceFromStorage(): void {
