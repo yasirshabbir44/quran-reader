@@ -19,6 +19,12 @@
   [style.--read-progress]="scrollProgress + '%'"
 ></div>
 
+@if (showBookmarkSavedToast && savedPlace(); as bm) {
+<div class="reader__toast" role="status" aria-live="polite">
+  {{ 'bookmarkSavedToast' | uiTranslate: { surah: formatUiNum(bm.surah), ayah: formatUiNum(bm.ayah) } }}
+</div>
+}
+
 <nav class="reader__topbar" [attr.aria-label]="'toolsAria' | uiTranslate">
   <div class="reader__topbar-brand">
 
@@ -87,6 +93,34 @@
         <option [value]="v.ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(v.ayah) }}</option>
         }
       </select>
+    </div>
+
+    <div class="reader__topbar-bookmark-row" role="region" [attr.aria-label]="'bookmarkToolsGroup' | uiTranslate">
+      <span class="reader__topbar-bookmark-label">{{ 'bookmarkToolsGroup' | uiTranslate }}</span>
+      <div class="reader__topbar-bookmark-actions">
+        <button
+          type="button"
+          class="reader__topbar-bookmark-btn"
+          (click)="saveBookmarkAtCurrentLine()"
+          [attr.aria-label]="'bookmarkSaveAria' | uiTranslate"
+        >
+          {{ 'bookmarkSaveTitle' | uiTranslate }}
+        </button>
+        @if (savedPlace(); as bm) {
+        <button
+          type="button"
+          class="reader__topbar-bookmark-btn reader__topbar-bookmark-btn--go"
+          (click)="goToSavedBookmark()"
+          [attr.aria-label]="'bookmarkGoAria' | uiTranslate"
+        >
+          {{ 'bookmarkGoTop' | uiTranslate }}
+          <span class="reader__topbar-bookmark-ref" aria-hidden="true">{{ formatUiNum(bm.surah) }}:{{ formatUiNum(bm.ayah) }}</span>
+        </button>
+        }
+      </div>
+      @if (!savedPlace()) {
+      <p class="reader__topbar-bookmark-hint">{{ 'bookmarkNoneYet' | uiTranslate }}</p>
+      }
     </div>
 
   </div>
@@ -236,6 +270,20 @@
       </div>
     </fieldset>
   </div>
+  <div class="reader__settings-bookmark">
+    <p class="reader__tool-label reader__tool-label--compact">{{ 'bookmarkToolsGroup' | uiTranslate }}</p>
+    <div class="reader__settings-bookmark-actions">
+      <button type="button" class="reader__seg-btn" (click)="saveBookmarkAtCurrentLine()">
+        {{ 'bookmarkSaveTitle' | uiTranslate }}
+      </button>
+      @if (savedPlace()) {
+      <button type="button" class="reader__seg-btn" (click)="goToSavedBookmark()">
+        {{ 'bookmarkGoTitle' | uiTranslate }}
+      </button>
+      }
+    </div>
+    <p class="reader__settings-hint reader__settings-hint--bookmark">{{ 'bookmarkHint' | uiTranslate }}</p>
+  </div>
   <div class="reader__settings-actions">
     <button type="button" class="reader__action-link" (click)="resetReaderViewSettings()">Reset</button>
   </div>
@@ -249,7 +297,7 @@
   <span class="reader__sticky-title">{{ surah()!.nameAr }}</span>
   <span class="reader__sticky-badge">{{ formatUiNum(surah()!.number) }}</span>
   <span class="reader__sticky-dot" aria-hidden="true">·</span>
-  <span class="reader__sticky-ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(activeAyah) }}</span>
+  <span class="reader__sticky-ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(activeAyah()) }}</span>
 </header>
 
 <button
@@ -313,10 +361,11 @@
         @for (v of verses(); track v.ayah) {
         <li
           class="verses__item"
-          [class.verses__item--active]="v.ayah === activeAyah"
+          [class.verses__item--active]="v.ayah === activeAyah()"
+          [class.verses__item--bookmarked]="isVerseSavedBookmark(v)"
           [id]="'ayah-' + v.ayah"
           [attr.data-ayah]="v.ayah"
-          [attr.aria-current]="v.ayah === activeAyah ? 'true' : null"
+          [attr.aria-current]="v.ayah === activeAyah() ? 'true' : null"
         >
           <div class="verses__head">
             <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
@@ -338,6 +387,24 @@
                 title="Share"
               >
                 Share
+              </button>
+              <button
+                type="button"
+                class="verses__action-btn verses__action-btn--bookmark"
+                [class.verses__action-btn--bookmark-active]="isVerseSavedBookmark(v)"
+                (click)="saveBookmarkForVerse(v)"
+                [attr.aria-label]="'bookmarkVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                [attr.title]="'bookmarkVerseTitle' | uiTranslate"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path
+                    d="M6 4.75C6 3.78 6.78 3 7.75 3h8.5c.97 0 1.75.78 1.75 1.75v15.5L12 16.4 6 20.25V4.75Z"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.75"
+                    stroke-linejoin="round"
+                  />
+                </svg>
               </button>
             </div>
           </div>
