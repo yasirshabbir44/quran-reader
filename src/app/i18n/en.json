@@ -100,5 +100,14 @@
   "documentTitleNotFound": "Page not found — Quran reader",
   "notFoundTitle": "This page does not exist",
   "notFoundDescription": "The address may be mistyped, or the link may be out of date. You can return to the reader from the home page.",
-  "notFoundBackHome": "Back to reader"
+  "notFoundBackHome": "Back to reader",
+  "accountLabel": "Account",
+  "accountSignInGoogle": "Sign in with Google",
+  "accountSigningIn": "Signing in…",
+  "accountSignOut": "Sign out",
+  "accountSyncHint": "Your bookmark syncs to this Google account across devices.",
+  "accountOpenMenuAria": "Open account menu for {{name}}",
+  "accountErrorPopupClosed": "Sign-in was cancelled.",
+  "accountErrorGeneric": "Could not finish signing in. Please try again.",
+  "accountErrorOffline": "Google sign-in is unavailable right now."
 }
