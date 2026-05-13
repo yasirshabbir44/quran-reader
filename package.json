@@ -1,32 +1,38 @@
 {
   "name": "surah-mulk-reader",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.19.0 || >=22.12.0"
+  },
   "scripts": {
     "ng": "ng",
+    "prestart": "node scripts/ensure-node-for-angular.mjs",
     "start": "ng serve",
+    "prebuild": "node scripts/ensure-node-for-angular.mjs",
     "build": "ng build",
+    "prewatch": "node scripts/ensure-node-for-angular.mjs",
     "watch": "ng build --watch --configuration development",
     "build-quran-data": "node scripts/build-quran-data.mjs"
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "^19.2.22",
-    "@angular/common": "^19.2.22",
-    "@angular/compiler": "^19.2.22",
-    "@angular/core": "^19.2.22",
-    "@angular/forms": "^19.2.22",
-    "@angular/platform-browser": "^19.2.22",
-    "@angular/platform-browser-dynamic": "^19.2.22",
-    "@angular/router": "^19.2.22",
+    "@angular/animations": "^20.3.21",
+    "@angular/common": "^20.3.21",
+    "@angular/compiler": "^20.3.21",
+    "@angular/core": "^20.3.21",
+    "@angular/forms": "^20.3.21",
+    "@angular/platform-browser": "^20.3.21",
+    "@angular/platform-browser-dynamic": "^20.3.21",
+    "@angular/router": "^20.3.21",
     "@vercel/analytics": "^2.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^19.2.26",
-    "@angular/cli": "^19.2.26",
-    "@angular/compiler-cli": "^19.2.22",
-    "typescript": "~5.5.2"
+    "@angular-devkit/build-angular": "^20.3.26",
+    "@angular/cli": "^20.3.26",
+    "@angular/compiler-cli": "^20.3.21",
+    "typescript": "~5.9.3"
   }
 }
