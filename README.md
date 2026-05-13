@@ -77,7 +77,7 @@ UI locale packs live in:
 
 ## Project Structure (Key Files)
 
-- `src/app/mulk-reader/mulk-reader.component.ts` - main reader logic and interactions
+- `src/app/surah-reader/surah-reader.component.ts` - main reader logic and interactions
 - `src/app/core/quran-data.service.ts` - data loading service
 - `src/app/core/ui-locale.service.ts` - locale state and translation helpers
 - `src/app/core/ui-translate.pipe.ts` - template translation pipe
