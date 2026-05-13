@@ -14,7 +14,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { catchError, combineLatest, filter, finalize, map, of, tap } from 'rxjs';
+import { combineLatest, filter, map, tap } from 'rxjs';
 import type { ReadingBookmark } from '../core/bookmark/reading-bookmark.repository';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import { QURAN_CORPUS_SOURCE } from '../core/quran/quran-corpus.source';
@@ -45,11 +45,10 @@ function ayahElementId(ayah: number): string {
 }
 
 @Component({
-  selector: 'app-surah-reader',
-  standalone: true,
-  imports: [NgClass, FormsModule, UiTranslatePipe],
-  templateUrl: './surah-reader.component.html',
-  styleUrl: './surah-reader.component.scss',
+    selector: 'app-surah-reader',
+    imports: [NgClass, FormsModule, UiTranslatePipe],
+    templateUrl: './surah-reader.component.html',
+    styleUrl: './surah-reader.component.scss'
 })
 export class SurahReaderComponent implements OnInit {
   private readonly document = inject(DOCUMENT);
@@ -99,12 +98,13 @@ export class SurahReaderComponent implements OnInit {
 
   constructor() {
     const corpus$ = this.corpusSource.load().pipe(
-      tap(() => this.corpusLoading.set(false)),
-      catchError(() => {
-        this.corpusError.set(true);
-        return of(null as QuranFullPayload | null);
+      tap((payload) => {
+        this.corpusLoading.set(false);
+        this.corpusError.set(payload === null);
+        if (payload === null) {
+          this.syncDocumentTitle();
+        }
       }),
-      finalize(() => this.corpusLoading.set(false)),
     );
 
     combineLatest([corpus$, this.route.paramMap, this.route.queryParamMap])
@@ -316,6 +316,20 @@ export class SurahReaderComponent implements OnInit {
 
   protected closeSettingsPanel(): void {
     this.settingsOpen = false;
+  }
+
+  @HostListener('document:keydown.escape')
+  protected onEscapeCloseSettings(): void {
+    if (!this.settingsOpen) {
+      return;
+    }
+    this.closeSettingsPanel();
+  }
+
+  protected retryCorpusLoad(): void {
+    this.corpusError.set(false);
+    this.corpusLoading.set(true);
+    this.corpusSource.retryLoad();
   }
 
   protected setReadingMode(mode: ReaderMode): void {
