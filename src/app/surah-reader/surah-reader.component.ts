@@ -138,6 +138,8 @@ export class SurahReaderComponent implements OnInit {
   /** After initial scroll, keep the URL fragment aligned with the reading line. */
   private verseFragmentSyncEnabled = false;
   private fragmentSyncTimer: ReturnType<typeof setTimeout> | null = null;
+  /** Router-driven fragment updates we triggered (must not re-scroll). */
+  private fragmentScrollSuppressKey: string | null = null;
 
   constructor() {
     const corpus$ = this.corpusSource.load().pipe(
@@ -195,8 +197,14 @@ export class SurahReaderComponent implements OnInit {
     let pendingAyah: number | null = null;
     if (fragmentAyah !== null) {
       const startKey = `${n}#${fragmentAyah}`;
-      if (treatAsFreshNavigation || startKey !== this.lastConsumedStartKey) {
-        pendingAyah = fragmentAyah;
+      if (this.consumeFragmentScrollSuppression(n, fragmentAyah)) {
+        this.lastConsumedStartKey = startKey;
+      } else if (treatAsFreshNavigation || startKey !== this.lastConsumedStartKey) {
+        const alreadyAtVerse =
+          !treatAsFreshNavigation && fragmentAyah === this.activeAyah();
+        if (!alreadyAtVerse) {
+          pendingAyah = fragmentAyah;
+        }
         this.lastConsumedStartKey = startKey;
       }
     } else if (hasExplicitStart) {
@@ -359,7 +367,7 @@ export class SurahReaderComponent implements OnInit {
     this.scrollToAyah(ayah, true);
     this.jumpAyahModel = String(ayah);
     this.activeAyah.set(ayah);
-    this.syncVerseFragmentToUrl(ayah);
+    this.replaceVerseFragmentInUrl(ayah);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -579,7 +587,7 @@ export class SurahReaderComponent implements OnInit {
     this.scrollToAyah(ayah, true);
     this.jumpAyahModel = String(ayah);
     this.activeAyah.set(ayah);
-    this.syncVerseFragmentToUrl(ayah);
+    this.replaceVerseFragmentInUrl(ayah);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -594,7 +602,7 @@ export class SurahReaderComponent implements OnInit {
     this.scrollToAyah(n);
     this.jumpAyahModel = String(n);
     this.activeAyah.set(n);
-    this.syncVerseFragmentToUrl(n);
+    this.replaceVerseFragmentInUrl(n);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -654,7 +662,7 @@ export class SurahReaderComponent implements OnInit {
       this.topbarFullRevealed = true;
       this.lastScrollY = 0;
     }
-    if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId) && resetViewport) {
       afterNextRender(() => this.bindAyahElements(), { injector: this.injector });
     }
   }
@@ -674,7 +682,7 @@ export class SurahReaderComponent implements OnInit {
       this.activeAyah.set(safeAyah);
       this.jumpAyahModel = String(safeAyah);
       this.pendingStartAyah = null;
-      this.syncVerseFragmentToUrl(safeAyah);
+      this.replaceVerseFragmentInUrl(safeAyah);
     }
     this.verseFragmentSyncEnabled = true;
     const y = this.document.defaultView?.scrollY ?? 0;
@@ -692,7 +700,7 @@ export class SurahReaderComponent implements OnInit {
           this.scrollToAyah(safeAyah, false);
           this.activeAyah.set(safeAyah);
           this.jumpAyahModel = String(safeAyah);
-          this.syncVerseFragmentToUrl(safeAyah);
+          this.replaceVerseFragmentInUrl(safeAyah);
           this.ayahElements = list.map((v) => this.document.getElementById(verseElementId(v.ayah)));
           requestAnimationFrame(() => this.updateActiveAyah());
         },
@@ -806,10 +814,41 @@ export class SurahReaderComponent implements OnInit {
     }
   }
 
+  private markFragmentScrollSuppressed(surah: number, ayah: number): void {
+    this.fragmentScrollSuppressKey = `${surah}#${verseFragment(ayah)}`;
+  }
+
+  private consumeFragmentScrollSuppression(surah: number, ayah: number): boolean {
+    const key = `${surah}#${verseFragment(ayah)}`;
+    if (this.fragmentScrollSuppressKey === key) {
+      this.fragmentScrollSuppressKey = null;
+      return true;
+    }
+    return false;
+  }
+
+  /** Update the hash without a router navigation (avoids anchor re-scroll loops). */
+  private replaceVerseFragmentInUrl(ayah: number): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const win = this.document.defaultView;
+    if (!win) {
+      return;
+    }
+    const fragment = verseFragment(ayah);
+    if (win.location.hash === `#${fragment}`) {
+      return;
+    }
+    const path = `${win.location.pathname}${win.location.search}`;
+    win.history.replaceState(win.history.state, '', `${path}#${fragment}`);
+  }
+
   private normalizeVerseUrl(surah: number, ayah: number): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+    this.markFragmentScrollSuppressed(surah, ayah);
     void this.router.navigate(['/', surah], {
       fragment: verseFragment(ayah),
       queryParams: { startingVerse: null },
@@ -827,24 +866,8 @@ export class SurahReaderComponent implements OnInit {
     }
     this.fragmentSyncTimer = setTimeout(() => {
       this.fragmentSyncTimer = null;
-      this.syncVerseFragmentToUrl(ayah);
-    }, 200);
-  }
-
-  private syncVerseFragmentToUrl(ayah: number): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-    const target = verseFragment(ayah);
-    if (this.route.snapshot.fragment === target) {
-      return;
-    }
-    void this.router.navigate([], {
-      relativeTo: this.route,
-      fragment: target,
-      queryParamsHandling: 'preserve',
-      replaceUrl: true,
-    });
+      this.replaceVerseFragmentInUrl(ayah);
+    }, 400);
   }
 
   private readonly onVisibilityChange = (): void => {
