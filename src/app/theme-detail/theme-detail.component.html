@@ -1,0 +1,103 @@
+@if (loadError()) {
+<main class="theme-detail theme-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="theme-detail__state-card">
+    <p class="theme-detail__state-text">{{ 'themesLoadError' | uiTranslate }}</p>
+    <button type="button" class="theme-detail__btn" (click)="retryLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+  </div>
+</main>
+} @else if (loading()) {
+<main class="theme-detail theme-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <p class="theme-detail__state-text">{{ 'themesDetailLoading' | uiTranslate }}</p>
+</main>
+} @else if (notFound()) {
+<main class="theme-detail theme-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="theme-detail__state-card">
+    <h1 class="theme-detail__state-title">{{ 'themesNotFoundTitle' | uiTranslate }}</h1>
+    <p class="theme-detail__state-text">{{ 'themesNotFoundBody' | uiTranslate }}</p>
+    <a class="theme-detail__btn theme-detail__btn--primary" routerLink="/themes">
+      {{ 'themesBackToDirectory' | uiTranslate }}
+    </a>
+  </div>
+</main>
+} @else if (result(); as data) {
+<div class="theme-detail" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <header class="theme-detail__header">
+    <a class="theme-detail__back" routerLink="/themes" [attr.aria-label]="'themesBackToDirectory' | uiTranslate">
+      ←
+    </a>
+    <div class="theme-detail__intro">
+      <p class="theme-detail__category">{{ data.categoryName }}</p>
+      <h1 class="theme-detail__title">{{ data.theme.name }}</h1>
+      @if (data.theme.description) {
+      <p class="theme-detail__desc">{{ data.theme.description }}</p>
+      }
+      <p class="theme-detail__meta">
+        {{
+          'themesDetailVerseCount'
+            | uiTranslate: { count: formatUiNum(data.verses.length) }
+        }}
+      </p>
+    </div>
+  </header>
+
+  <ol class="theme-detail__list">
+    @for (v of data.verses; track v.surah + '-' + v.ayah) {
+    <li class="theme-detail__card">
+      <div class="theme-detail__card-head">
+        <a
+          class="theme-detail__ref"
+          [routerLink]="verseLink(v.surah, v.ayah)"
+          [fragment]="verseFragment(v.ayah)"
+        >
+          <span dir="rtl" lang="ar">{{ v.surahNameAr }}</span>
+          <span class="theme-detail__ref-num" dir="ltr" lang="en">{{ verseRefLabel(v) }}</span>
+        </a>
+        <div class="theme-detail__actions">
+          <button
+            type="button"
+            class="theme-detail__action"
+            (click)="copyVerse(v)"
+            [attr.aria-label]="'copyVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+          >
+            {{ isCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate) }}
+          </button>
+          <button
+            type="button"
+            class="theme-detail__action"
+            (click)="shareVerse(v)"
+            [attr.aria-label]="'shareVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+          >
+            {{ 'shareLabel' | uiTranslate }}
+          </button>
+          <button
+            type="button"
+            class="theme-detail__action theme-detail__action--bookmark"
+            [class.theme-detail__action--bookmark-active]="isBookmarked(v)"
+            (click)="saveBookmark(v)"
+            [attr.aria-label]="'bookmarkVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+          >
+            {{ 'bookmarkVerseTitle' | uiTranslate }}
+          </button>
+          <a
+            class="theme-detail__action theme-detail__action--read"
+            [routerLink]="verseLink(v.surah, v.ayah)"
+            [fragment]="verseFragment(v.ayah)"
+          >
+            {{ 'themesReadInReader' | uiTranslate }}
+          </a>
+        </div>
+      </div>
+      <p class="theme-detail__ar" dir="rtl" lang="ar">{{ v.verse.ar }}</p>
+      <p class="theme-detail__tr" [attr.dir]="ui.locale() === 'ur' ? 'rtl' : 'ltr'" [attr.lang]="ui.locale()">
+        {{ translationPrimary(v) }}
+      </p>
+      @if (translationSecondary(v); as secondary) {
+      <p class="theme-detail__tr theme-detail__tr--secondary" dir="ltr" lang="en">{{ secondary }}</p>
+      }
+    </li>
+    }
+  </ol>
+</div>
+}
