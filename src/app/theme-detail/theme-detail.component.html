@@ -33,17 +33,55 @@
       @if (data.theme.description) {
       <p class="theme-detail__desc">{{ data.theme.description }}</p>
       }
-      <p class="theme-detail__meta">
-        {{
-          'themesDetailVerseCount'
-            | uiTranslate: { count: formatUiNum(data.verses.length) }
-        }}
-      </p>
     </div>
   </header>
 
+  <section class="theme-detail__verses" aria-labelledby="theme-verses-heading">
+    <div class="theme-detail__verses-head">
+      <div>
+        <h2 id="theme-verses-heading" class="theme-detail__verses-title">
+          {{ 'themesDetailVersesTitle' | uiTranslate }}
+        </h2>
+        <p class="theme-detail__meta">
+          {{
+            'themesDetailVerseCount'
+              | uiTranslate: { count: formatUiNum(data.verses.length) }
+          }}
+        </p>
+      </div>
+      <p class="theme-detail__count" aria-live="polite">
+        {{
+          'themesDetailCount'
+            | uiTranslate: {
+                shown: formatUiNum(filteredVerses().length),
+                total: formatUiNum(data.verses.length),
+              }
+        }}
+      </p>
+    </div>
+
+    <div class="theme-detail__search" role="search">
+      <label class="theme-detail__tool-label" for="theme-verses-search">
+        {{ 'themesDetailSearchLabel' | uiTranslate }}
+      </label>
+      <input
+        id="theme-verses-search"
+        class="theme-detail__search-input"
+        type="search"
+        autocomplete="off"
+        spellcheck="false"
+        [attr.placeholder]="'themesDetailSearchPlaceholder' | uiTranslate"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+      />
+    </div>
+  </section>
+
+  @if (filteredVerses().length === 0) {
+  <p class="theme-detail__empty">{{ 'themesDetailEmpty' | uiTranslate }}</p>
+  } @else {
   <ol class="theme-detail__list">
-    @for (v of data.verses; track v.surah + '-' + v.ayah) {
+    @for (v of filteredVerses(); track v.surah + '-' + v.ayah) {
     <li class="theme-detail__card">
       <div class="theme-detail__card-head">
         <a
@@ -99,5 +137,6 @@
     </li>
     }
   </ol>
+  }
 </div>
 }
