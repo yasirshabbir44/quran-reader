@@ -52,6 +52,14 @@ import { SURAH_MULK_META } from '../data/surah-mulk-meta';
 
 type ReaderMode = 'verse-by-verse' | 'reading';
 
+type SurahNavItem = {
+  readonly number: number;
+  readonly nameAr: string;
+  readonly nameTranslit: string;
+  readonly versesCount: number;
+  readonly revelationType: 'meccan' | 'medinan';
+};
+
 @Component({
     selector: 'app-surah-reader',
     imports: [NgClass, FormsModule, RouterLink, UiTranslatePipe],
@@ -84,7 +92,32 @@ export class SurahReaderComponent implements OnInit {
   protected readonly corpusError = signal(false);
   protected readonly surahNumber = signal(67);
   protected readonly surah = signal<QuranSurahPayload | null>(null);
-  protected readonly surahList = signal<readonly { number: number; nameAr: string }[]>([]);
+  protected readonly surahList = signal<readonly SurahNavItem[]>([]);
+  protected readonly surahNavQuery = signal('');
+  protected readonly filteredSurahList = computed(() => {
+    const items = this.surahList();
+    const raw = this.surahNavQuery().trim().normalize('NFKC');
+    if (!raw) {
+      return items;
+    }
+    const q = raw.toLowerCase();
+    const qDigits = raw.replace(/\D/g, '');
+    const qLatin = q.replace(/[^a-z0-9]/gi, '');
+    return items.filter((s) => {
+      if (qDigits && String(s.number).includes(qDigits)) {
+        return true;
+      }
+      if (s.nameAr.includes(raw)) {
+        return true;
+      }
+      const translit = s.nameTranslit.normalize('NFKC').toLowerCase();
+      if (translit.includes(q)) {
+        return true;
+      }
+      const translitCompact = translit.replace(/[^a-z0-9]/g, '');
+      return qLatin.length > 0 && translitCompact.includes(qLatin);
+    });
+  });
 
   protected readonly font = this.readerLayout.font;
   protected readonly line = this.readerLayout.line;
@@ -94,6 +127,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly showTranslationEn = signal(true);
   protected readonly showTranslationUr = signal(true);
   protected settingsOpen = false;
+  protected surahNavOpen = false;
 
   protected scrollProgress = 0;
   protected scrollTopVisible = false;
@@ -193,7 +227,15 @@ export class SurahReaderComponent implements OnInit {
     fragment: string | null,
   ): void {
     this.loadedCorpus = payload;
-    this.surahList.set(payload.surahs.map((s) => ({ number: s.number, nameAr: s.nameAr })));
+    this.surahList.set(
+      payload.surahs.map((s) => ({
+        number: s.number,
+        nameAr: s.nameAr,
+        nameTranslit: s.nameTranslit,
+        versesCount: s.versesCount,
+        revelationType: s.revelationType,
+      })),
+    );
 
     const raw = Number(pm.get('n'));
     const n = Number.isFinite(raw) && raw >= 1 && raw <= 114 ? Math.floor(raw) : 67;
@@ -433,12 +475,64 @@ export class SurahReaderComponent implements OnInit {
     return n.toLocaleString(this.ui.numberLocaleTag());
   }
 
-  protected onSurahModelChange(value: string | number): void {
-    const n = typeof value === 'number' ? value : Number(value);
-    if (!Number.isFinite(n) || n < 1 || n > 114 || n === this.surahNumber()) {
+  protected toggleSurahNav(): void {
+    if (this.surahNavOpen) {
+      this.closeSurahNav();
+      return;
+    }
+    this.openSurahNav();
+  }
+
+  protected openSurahNav(): void {
+    this.settingsOpen = false;
+    this.surahNavOpen = true;
+    this.surahNavQuery.set('');
+    this.topbarFullRevealed = true;
+    this.syncTopbarHeightFromDom();
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    afterNextRender(
+      () => {
+        const input = this.document.getElementById('surah-nav-search');
+        if (input instanceof HTMLInputElement) {
+          input.focus();
+        }
+        this.document
+          .querySelector('.reader__surah-nav-btn--active')
+          ?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+      },
+      { injector: this.injector },
+    );
+  }
+
+  protected closeSurahNav(): void {
+    this.surahNavOpen = false;
+    this.surahNavQuery.set('');
+    this.syncTopbarHeightFromDom();
+  }
+
+  protected onSurahNavQueryChange(value: string): void {
+    this.surahNavQuery.set(value);
+  }
+
+  protected clearSurahNavQuery(): void {
+    this.surahNavQuery.set('');
+  }
+
+  protected selectSurahFromNav(n: number): void {
+    if (!Number.isFinite(n) || n < 1 || n > 114) {
+      return;
+    }
+    this.closeSurahNav();
+    if (n === this.surahNumber()) {
       return;
     }
     void this.router.navigate(['/', n]);
+  }
+
+  protected surahNavTypeLabel(item: SurahNavItem): string {
+    return this.ui.translate(item.revelationType === 'meccan' ? 'factTypeMeccan' : 'factTypeMedinan');
   }
 
   protected reminderTimeValue(): string {
@@ -491,6 +585,7 @@ export class SurahReaderComponent implements OnInit {
   protected toggleSettingsPanel(): void {
     this.settingsOpen = !this.settingsOpen;
     if (this.settingsOpen) {
+      this.surahNavOpen = false;
       this.topbarFullRevealed = true;
     }
     this.syncTopbarHeightFromDom();
@@ -501,11 +596,14 @@ export class SurahReaderComponent implements OnInit {
   }
 
   @HostListener('document:keydown.escape')
-  protected onEscapeCloseSettings(): void {
-    if (!this.settingsOpen) {
+  protected onEscapeClosePanels(): void {
+    if (this.surahNavOpen) {
+      this.closeSurahNav();
       return;
     }
-    this.closeSettingsPanel();
+    if (this.settingsOpen) {
+      this.closeSettingsPanel();
+    }
   }
 
   protected retryCorpusLoad(): void {
@@ -785,7 +883,7 @@ export class SurahReaderComponent implements OnInit {
 
   private updateTopbarScrollState(y: number): void {
     const compactThreshold = 72;
-    if (this.settingsOpen) {
+    if (this.settingsOpen || this.surahNavOpen) {
       this.topbarCompact = y > compactThreshold;
       this.topbarFullRevealed = true;
     } else if (y <= compactThreshold) {
