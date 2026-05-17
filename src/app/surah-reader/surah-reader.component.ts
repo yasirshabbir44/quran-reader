@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   DestroyRef,
+  ElementRef,
   HostListener,
   inject,
   Injector,
@@ -49,9 +50,14 @@ function ayahElementId(ayah: number): string {
     selector: 'app-surah-reader',
     imports: [NgClass, FormsModule, UiTranslatePipe],
     templateUrl: './surah-reader.component.html',
-    styleUrl: './surah-reader.component.scss'
+    styleUrl: './surah-reader.component.scss',
+    host: {
+        '[class.reader--topbar-compact]': 'topbarCompact && !topbarFullRevealed',
+        '[class.reader--topbar-expanded]': 'topbarFullRevealed || !topbarCompact',
+    },
 })
 export class SurahReaderComponent implements OnInit {
+  private readonly hostEl = inject(ElementRef<HTMLElement>);
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly title = inject(Title);
@@ -81,8 +87,10 @@ export class SurahReaderComponent implements OnInit {
   protected settingsOpen = false;
 
   protected scrollProgress = 0;
-  protected stickyHeaderVisible = false;
   protected scrollTopVisible = false;
+  /** Slim top bar with essentials while scrolled; full bar returns near top or on scroll up. */
+  protected topbarCompact = false;
+  protected topbarFullRevealed = true;
   /** Verse at the reading line (scroll-driven); signal so the highlight updates reliably. */
   protected readonly activeAyah = signal(1);
   protected jumpAyahModel = '';
@@ -114,6 +122,8 @@ export class SurahReaderComponent implements OnInit {
   private readonly surahSearchMatchSet = computed(() => new Set(this.surahSearchMatches()));
 
   private scrollRaf = 0;
+  private lastScrollY = 0;
+  private topbarResizeObserver: ResizeObserver | null = null;
   /** Ayah whose bookmark icon plays a one-shot pulse after save; cleared then set on rAF so repeat taps replay CSS. */
   protected readonly bookmarkPulseAyah = signal<number | null>(null);
   private bookmarkPulseRaf = 0;
@@ -230,6 +240,7 @@ export class SurahReaderComponent implements OnInit {
       return;
     }
     this.updateActiveAyah();
+    this.syncTopbarHeightFromDom();
   }
 
   @HostListener('window:scroll')
@@ -243,7 +254,7 @@ export class SurahReaderComponent implements OnInit {
       const y = this.document.defaultView?.scrollY ?? 0;
       const max = root.scrollHeight - root.clientHeight;
       this.scrollProgress = max > 0 ? Math.min(100, Math.round((y / max) * 100)) : 0;
-      this.stickyHeaderVisible = y > 100;
+      this.updateTopbarScrollState(y);
       this.scrollTopVisible = y > 360;
       this.updateActiveAyah();
     });
@@ -258,6 +269,8 @@ export class SurahReaderComponent implements OnInit {
 
   protected scrollToTop(): void {
     this.document.defaultView?.scrollTo({ top: 0, behavior: 'smooth' });
+    this.topbarCompact = false;
+    this.topbarFullRevealed = true;
   }
 
   protected saveBookmarkAtCurrentLine(): void {
@@ -360,6 +373,10 @@ export class SurahReaderComponent implements OnInit {
 
   protected toggleSettingsPanel(): void {
     this.settingsOpen = !this.settingsOpen;
+    if (this.settingsOpen) {
+      this.topbarFullRevealed = true;
+    }
+    this.syncTopbarHeightFromDom();
   }
 
   protected closeSettingsPanel(): void {
@@ -579,6 +596,9 @@ export class SurahReaderComponent implements OnInit {
     this.syncDocumentTitle();
     if (isPlatformBrowser(this.platformId) && resetViewport) {
       this.document.defaultView?.scrollTo({ top: 0, behavior: 'auto' });
+      this.topbarCompact = false;
+      this.topbarFullRevealed = true;
+      this.lastScrollY = 0;
     }
     if (isPlatformBrowser(this.platformId)) {
       afterNextRender(() => this.bindAyahElements(), { injector: this.injector });
@@ -589,6 +609,7 @@ export class SurahReaderComponent implements OnInit {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+    this.bindTopbarHeightSync();
     const list = this.verses();
     this.ayahElements = list.map((v) => this.document.getElementById(ayahElementId(v.ayah)));
     const pending = this.pendingStartAyah;
@@ -600,6 +621,8 @@ export class SurahReaderComponent implements OnInit {
       this.jumpAyahModel = String(safeAyah);
       this.pendingStartAyah = null;
     }
+    const y = this.document.defaultView?.scrollY ?? 0;
+    this.updateTopbarScrollState(y);
     this.updateActiveAyah();
   }
 
@@ -615,18 +638,67 @@ export class SurahReaderComponent implements OnInit {
     });
   }
 
+  private updateTopbarScrollState(y: number): void {
+    const compactThreshold = 72;
+    if (this.settingsOpen) {
+      this.topbarCompact = y > compactThreshold;
+      this.topbarFullRevealed = true;
+    } else if (y <= compactThreshold) {
+      this.topbarCompact = false;
+      this.topbarFullRevealed = true;
+    } else {
+      this.topbarCompact = true;
+      const delta = y - this.lastScrollY;
+      if (delta < -12) {
+        this.topbarFullRevealed = true;
+      } else if (delta > 12) {
+        this.topbarFullRevealed = false;
+      }
+    }
+    this.lastScrollY = y;
+    this.syncTopbarHeightFromDom();
+  }
+
+  private bindTopbarHeightSync(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const topbar = this.document.querySelector('.reader__topbar');
+    if (!(topbar instanceof HTMLElement)) {
+      return;
+    }
+    this.syncTopbarHeightFromDom();
+    if (this.topbarResizeObserver) {
+      return;
+    }
+    this.topbarResizeObserver = new ResizeObserver(() => this.syncTopbarHeightFromDom());
+    this.topbarResizeObserver.observe(topbar);
+    this.destroyRef.onDestroy(() => {
+      this.topbarResizeObserver?.disconnect();
+      this.topbarResizeObserver = null;
+    });
+  }
+
+  private syncTopbarHeightFromDom(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const topbar = this.document.querySelector('.reader__topbar');
+    if (!(topbar instanceof HTMLElement)) {
+      return;
+    }
+    const h = topbar.getBoundingClientRect().height;
+    if (h > 0) {
+      this.hostEl.nativeElement.style.setProperty('--reader-topbar-h', `${h}px`);
+    }
+  }
+
   private readingLineViewportY(): number {
     if (!isPlatformBrowser(this.platformId)) {
       return 168;
     }
     const topbar = this.document.querySelector('.reader__topbar');
-    let y = (topbar instanceof HTMLElement ? topbar.getBoundingClientRect().bottom : 100) + 12;
-    if (this.stickyHeaderVisible) {
-      const sticky = this.document.querySelector('.reader__sticky.reader__sticky--visible');
-      if (sticky instanceof HTMLElement) {
-        y = Math.max(y, sticky.getBoundingClientRect().bottom + 8);
-      }
-    }
+    const y = (topbar instanceof HTMLElement ? topbar.getBoundingClientRect().bottom : 100) + 12;
     return Math.min(Math.max(y, 64), 360);
   }
 
