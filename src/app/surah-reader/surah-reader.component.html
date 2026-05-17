@@ -213,6 +213,7 @@
       ✕
     </button>
   </div>
+  <div class="reader__settings-scroll">
   <fieldset class="reader__fieldset reader__fieldset--theme">
     <legend class="reader__legend">{{ 'colorThemeLegend' | uiTranslate }}</legend>
     <div class="reader__segment reader__segment--theme" role="group" [attr.aria-label]="'colorThemeAria' | uiTranslate">
@@ -393,8 +394,69 @@
     </div>
     <p class="reader__settings-hint reader__settings-hint--bookmark">{{ 'bookmarkHint' | uiTranslate }}</p>
   </div>
+  <fieldset class="reader__settings-reminders reader__fieldset">
+    <legend class="reader__legend">{{ 'dailyRemindersLegend' | uiTranslate }}</legend>
+    <label class="reader__check reader__check--reminder">
+      <input
+        type="checkbox"
+        [checked]="notifyPrefs.enabled()"
+        [disabled]="notificationsUnsupported()"
+        (change)="onDailyReminderToggle($event)"
+      />
+      <span>{{ 'dailyRemindersEnable' | uiTranslate }}</span>
+    </label>
+    @if (notifyPermissionError(); as err) {
+    <p class="reader__settings-hint reader__settings-hint--notify-error">
+      @if (err === 'denied') {
+      {{ 'dailyRemindersPermissionDenied' | uiTranslate }}
+      } @else {
+      {{ 'dailyRemindersPermissionUnsupported' | uiTranslate }}
+      }
+    </p>
+    }
+    @if (notifyPrefs.enabled()) {
+    <div class="reader__settings-reminder-time">
+      <label class="reader__tool-label reader__tool-label--compact" for="daily-reminder-time">
+        {{ 'dailyRemindersTimeLabel' | uiTranslate }}
+      </label>
+      <input
+        id="daily-reminder-time"
+        type="time"
+        class="reader__time-input"
+        [value]="reminderTimeValue()"
+        (change)="onReminderTimeChange($event)"
+      />
+    </div>
+    <p class="reader__tool-label reader__tool-label--compact">{{ 'dailyRemindersKindLegend' | uiTranslate }}</p>
+    <div class="reader__segment" role="group" [attr.aria-label]="'dailyRemindersKindLegend' | uiTranslate">
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="notifyPrefs.kind() === 'verse-of-day'"
+        [attr.aria-pressed]="notifyPrefs.kind() === 'verse-of-day'"
+        (click)="setReminderKind('verse-of-day')"
+      >
+        {{ 'dailyRemindersKindVerse' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="notifyPrefs.kind() === 'saved-place'"
+        [attr.aria-pressed]="notifyPrefs.kind() === 'saved-place'"
+        (click)="setReminderKind('saved-place')"
+      >
+        {{ 'dailyRemindersKindSaved' | uiTranslate }}
+      </button>
+    </div>
+    <button type="button" class="reader__action-link reader__settings-reminder-test" (click)="checkReminderNow()">
+      {{ 'dailyRemindersTest' | uiTranslate }}
+    </button>
+    }
+    <p class="reader__settings-hint reader__settings-hint--reminders">{{ 'dailyRemindersHint' | uiTranslate }}</p>
+  </fieldset>
   <div class="reader__settings-actions">
     <button type="button" class="reader__action-link" (click)="resetReaderViewSettings()">{{ 'resetViewSettings' | uiTranslate }}</button>
+  </div>
   </div>
 </section>
 
