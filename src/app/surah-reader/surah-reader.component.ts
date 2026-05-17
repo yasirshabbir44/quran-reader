@@ -45,6 +45,7 @@ import { NotificationPreferencesService } from '../core/notifications/notificati
 import type { DailyReminderKind } from '../core/notifications/notification-storage';
 import {
   parseVerseFragment,
+  parseVerseFragmentFromHash,
   verseElementId,
   verseFragment,
 } from '../core/routing/verse-deep-link.util';
@@ -216,6 +217,7 @@ export class SurahReaderComponent implements OnInit {
   private fragmentSyncTimer: ReturnType<typeof setTimeout> | null = null;
   /** Router-driven fragment updates we triggered (must not re-scroll). */
   private fragmentScrollSuppressKey: string | null = null;
+  private pendingScrollTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     this.tafsirEditionSlug.set(this.readStoredTafsirEdition());
@@ -277,34 +279,26 @@ export class SurahReaderComponent implements OnInit {
 
     const raw = Number(pm.get('n'));
     const n = Number.isFinite(raw) && raw >= 1 && raw <= 114 ? Math.floor(raw) : 67;
-    const fragmentAyah = parseVerseFragment(fragment);
+    const targetAyah = this.resolveRouteTargetAyah(fragment, qm);
     const startParam = qm.get('startingVerse');
-    const hasExplicitStart = startParam !== null && startParam !== '';
+    const hasLegacyStartParam = startParam !== null && startParam !== '';
     const treatAsFreshNavigation = n !== this.surahNumber() || this.surah() === null;
     let shouldNormalizeLegacyQuery = false;
 
     let pendingAyah: number | null = null;
-    if (fragmentAyah !== null) {
-      const startKey = `${n}#${fragmentAyah}`;
-      if (this.consumeFragmentScrollSuppression(n, fragmentAyah)) {
+    if (targetAyah !== null) {
+      const startKey = `${n}#${targetAyah}`;
+      if (this.consumeFragmentScrollSuppression(n, targetAyah)) {
         this.lastConsumedStartKey = startKey;
       } else if (treatAsFreshNavigation || startKey !== this.lastConsumedStartKey) {
-        const alreadyAtVerse =
-          !treatAsFreshNavigation && fragmentAyah === this.activeAyah();
+        const alreadyAtVerse = !treatAsFreshNavigation && targetAyah === this.activeAyah();
         if (!alreadyAtVerse) {
-          pendingAyah = fragmentAyah;
+          pendingAyah = targetAyah;
         }
         this.lastConsumedStartKey = startKey;
-      }
-    } else if (hasExplicitStart) {
-      const startingVerseRaw = Number(startParam);
-      const parsed =
-        Number.isFinite(startingVerseRaw) && startingVerseRaw >= 1 ? Math.floor(startingVerseRaw) : 1;
-      const startKey = `${n}?${startParam}`;
-      if (treatAsFreshNavigation || startKey !== this.lastConsumedStartKey) {
-        pendingAyah = parsed;
-        this.lastConsumedStartKey = startKey;
-        shouldNormalizeLegacyQuery = true;
+        if (hasLegacyStartParam) {
+          shouldNormalizeLegacyQuery = true;
+        }
       }
     } else {
       this.lastConsumedStartKey = '';
@@ -315,7 +309,9 @@ export class SurahReaderComponent implements OnInit {
       }
     }
 
-    this.pendingStartAyah = pendingAyah;
+    if (pendingAyah !== null) {
+      this.pendingStartAyah = pendingAyah;
+    }
     this.readingMode.set(qm.get('readingMode') === 'reading' ? 'reading' : 'verse-by-verse');
 
     const translationState = this.parseTranslationSelection(qm.get('translations'));
@@ -335,9 +331,8 @@ export class SurahReaderComponent implements OnInit {
       this.normalizeVerseUrl(n, pendingAyah);
     }
 
-    if (pendingAyah !== null && !treatAsFreshNavigation && this.surah() !== null) {
-      this.scrollToPendingAyah(pendingAyah);
-      this.pendingStartAyah = null;
+    if (this.pendingStartAyah !== null) {
+      this.scheduleFulfillPendingStart();
     }
   }
 
@@ -359,6 +354,10 @@ export class SurahReaderComponent implements OnInit {
       if (this.fragmentSyncTimer !== null) {
         clearTimeout(this.fragmentSyncTimer);
         this.fragmentSyncTimer = null;
+      }
+      if (this.pendingScrollTimer !== null) {
+        clearTimeout(this.pendingScrollTimer);
+        this.pendingScrollTimer = null;
       }
       this.readingBookmark.flushPending(this.surahNumber(), this.activeAyah());
       this.savedPlace.set(this.readingBookmark.read());
@@ -1075,15 +1074,59 @@ export class SurahReaderComponent implements OnInit {
     this.bindTopbarHeightSync();
     const list = this.verses();
     this.ayahElements = list.map((v) => this.document.getElementById(verseElementId(v.ayah)));
+    if (this.pendingStartAyah !== null) {
+      this.fulfillPendingStartAyah();
+      return;
+    }
+    this.finishAyahBinding();
+  }
+
+  private scheduleFulfillPendingStart(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.verseFragmentSyncEnabled = false;
+    afterNextRender(() => this.fulfillPendingStartAyah(), { injector: this.injector });
+  }
+
+  private fulfillPendingStartAyah(attempt = 0): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     const pending = this.pendingStartAyah;
-    if (pending !== null) {
-      const lastAyah = list.length ? list[list.length - 1]!.ayah : 1;
-      const safeAyah = Math.min(Math.max(pending, 1), lastAyah);
-      this.scrollToAyah(safeAyah, false);
-      this.activeAyah.set(safeAyah);
-      this.jumpAyahModel = String(safeAyah);
-      this.pendingStartAyah = null;
-      this.replaceVerseFragmentInUrl(safeAyah);
+    if (pending === null) {
+      this.finishAyahBinding();
+      return;
+    }
+    const list = this.verses();
+    if (list.length === 0 || this.surah() === null) {
+      if (attempt < 24) {
+        this.pendingScrollTimer = setTimeout(() => this.fulfillPendingStartAyah(attempt + 1), 50);
+      }
+      return;
+    }
+    const lastAyah = list[list.length - 1]!.ayah;
+    const safeAyah = Math.min(Math.max(pending, 1), lastAyah);
+    const el = this.document.getElementById(verseElementId(safeAyah));
+    if (!el) {
+      if (attempt < 24) {
+        this.pendingScrollTimer = setTimeout(() => this.fulfillPendingStartAyah(attempt + 1), 50);
+      }
+      return;
+    }
+    this.scrollToAyah(safeAyah, false);
+    this.activeAyah.set(safeAyah);
+    this.jumpAyahModel = String(safeAyah);
+    this.pendingStartAyah = null;
+    this.markFragmentScrollSuppressed(this.surahNumber(), safeAyah);
+    this.replaceVerseFragmentInUrl(safeAyah);
+    this.ayahElements = list.map((v) => this.document.getElementById(verseElementId(v.ayah)));
+    this.finishAyahBinding();
+  }
+
+  private finishAyahBinding(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
     }
     this.verseFragmentSyncEnabled = true;
     const y = this.document.defaultView?.scrollY ?? 0;
@@ -1091,23 +1134,23 @@ export class SurahReaderComponent implements OnInit {
     this.updateActiveAyah();
   }
 
-  private scrollToPendingAyah(ayah: number): void {
-    const list = this.verses();
-    const lastAyah = list.length ? list[list.length - 1]!.ayah : 1;
-    const safeAyah = Math.min(Math.max(ayah, 1), lastAyah);
-    if (isPlatformBrowser(this.platformId)) {
-      afterNextRender(
-        () => {
-          this.scrollToAyah(safeAyah, false);
-          this.activeAyah.set(safeAyah);
-          this.jumpAyahModel = String(safeAyah);
-          this.replaceVerseFragmentInUrl(safeAyah);
-          this.ayahElements = list.map((v) => this.document.getElementById(verseElementId(v.ayah)));
-          requestAnimationFrame(() => this.updateActiveAyah());
-        },
-        { injector: this.injector },
-      );
+  private resolveRouteTargetAyah(fragment: string | null, qm: ParamMap): number | null {
+    const hashAyah = isPlatformBrowser(this.platformId)
+      ? parseVerseFragmentFromHash(this.document.defaultView?.location.hash ?? '')
+      : null;
+    const fromFragment = parseVerseFragment(fragment) ?? hashAyah;
+    if (fromFragment !== null) {
+      return fromFragment;
     }
+    const startParam = qm.get('startingVerse');
+    if (startParam === null || startParam === '') {
+      return null;
+    }
+    const parsed = Number(startParam);
+    if (!Number.isFinite(parsed) || parsed < 1) {
+      return null;
+    }
+    return Math.floor(parsed);
   }
 
   private scrollToAyah(ayah: number, smooth = true): void {

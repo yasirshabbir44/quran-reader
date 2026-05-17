@@ -11,7 +11,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { combineLatest, map, switchMap } from 'rxjs';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import {
@@ -20,7 +20,7 @@ import {
   type ThemeVersesResult,
 } from '../core/thematic-index/thematic-index.service';
 import { verseFragment } from '../core/routing/verse-deep-link.util';
-import { UiLocaleService } from '../core/ui/ui-locale.service';
+import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 import {
   VERSE_PRESENTATION_STRATEGY,
@@ -38,6 +38,7 @@ import {
 export class ThemeDetailComponent implements OnInit {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly title = inject(Title);
   private readonly destroyRef = inject(DestroyRef);
   private readonly thematicIndex = inject(ThematicIndexService);
@@ -143,6 +144,23 @@ export class ThemeDetailComponent implements OnInit {
 
   protected verseFragment(ayah: number): string {
     return verseFragment(ayah);
+  }
+
+  protected onLocaleChange(code: string): void {
+    this.ui.setLocale(code as UiLocaleCode);
+    const data = this.result();
+    if (data) {
+      this.title.setTitle(
+        this.ui.translate('themesDetailDocumentTitle', { name: data.theme.name }),
+      );
+    }
+  }
+
+  protected openInReader(v: ThematicVerseDetail): void {
+    void this.router.navigate(['/', v.surah], {
+      fragment: verseFragment(v.ayah),
+      queryParams: { startingVerse: v.ayah },
+    });
   }
 
   protected isBookmarked(v: ThematicVerseDetail): boolean {
