@@ -1,0 +1,19 @@
+<fieldset class="quote-translation-options">
+  <legend class="quote-translation-options__legend">{{ 'quoteSheetIncludeLabel' | uiTranslate }}</legend>
+  <label class="quote-translation-options__check">
+    <input
+      type="checkbox"
+      [ngModel]="includeEn()"
+      (ngModelChange)="onIncludeEnChange($event)"
+    />
+    <span>{{ 'quoteSheetIncludeEn' | uiTranslate }}</span>
+  </label>
+  <label class="quote-translation-options__check">
+    <input
+      type="checkbox"
+      [ngModel]="includeUr()"
+      (ngModelChange)="onIncludeUrChange($event)"
+    />
+    <span>{{ 'quoteSheetIncludeUr' | uiTranslate }}</span>
+  </label>
+</fieldset>

@@ -18,84 +18,27 @@
       </button>
     </header>
 
-    <div class="quote-sheet__preview-wrap">
-      @if (previewUrl(); as src) {
-      <img
-        class="quote-sheet__preview"
-        [class.quote-sheet__preview--story]="format() === 'story'"
-        [src]="src"
-        [attr.alt]="'quoteSheetPreviewAlt' | uiTranslate: { n: formatUiNum()(verse().ayah) }"
-      />
-      } @else {
-      <p class="quote-sheet__preview-placeholder" aria-live="polite">
-        {{ 'quoteSheetGenerating' | uiTranslate }}
-      </p>
-      }
-    </div>
+    <app-quote-preview
+      [previewUrl]="preview.previewUrl()"
+      [generating]="preview.generating()"
+      [format]="format()"
+      [ayahLabel]="ayahLabel()"
+    />
 
-    <fieldset class="quote-sheet__fieldset">
-      <legend class="quote-sheet__legend">{{ 'quoteSheetFormatLabel' | uiTranslate }}</legend>
-      <div class="quote-sheet__format-row">
-        @for (f of formats; track f) {
-        <button
-          type="button"
-          class="quote-sheet__chip"
-          [class.quote-sheet__chip--active]="format() === f"
-          (click)="setFormat(f)"
-        >
-          @switch (f) {
-            @case ('instagram') {
-              {{ 'quoteSheetFormatInstagram' | uiTranslate }}
-            }
-            @case ('story') {
-              {{ 'quoteSheetFormatStory' | uiTranslate }}
-            }
-            @case ('twitter') {
-              {{ 'quoteSheetFormatTwitter' | uiTranslate }}
-            }
-          }
-        </button>
-        }
-      </div>
-    </fieldset>
+    <app-quote-format-picker [selected]="format()" (selectedChange)="setFormat($event)" />
 
-    <fieldset class="quote-sheet__fieldset">
-      <legend class="quote-sheet__legend">{{ 'quoteSheetIncludeLabel' | uiTranslate }}</legend>
-      <label class="quote-sheet__check">
-        <input
-          type="checkbox"
-          [ngModel]="includeEn()"
-          (ngModelChange)="onIncludeEnChange($event)"
-        />
-        <span>{{ 'quoteSheetIncludeEn' | uiTranslate }}</span>
-      </label>
-      <label class="quote-sheet__check">
-        <input
-          type="checkbox"
-          [ngModel]="includeUr()"
-          (ngModelChange)="onIncludeUrChange($event)"
-        />
-        <span>{{ 'quoteSheetIncludeUr' | uiTranslate }}</span>
-      </label>
-    </fieldset>
+    <app-quote-translation-options
+      [includeEn]="includeEn()"
+      [includeUr]="includeUr()"
+      (includeEnChange)="onIncludeEnChange($event)"
+      (includeUrChange)="onIncludeUrChange($event)"
+    />
 
-    <div class="quote-sheet__actions">
-      <button
-        type="button"
-        class="quote-sheet__btn quote-sheet__btn--primary"
-        [disabled]="busy() || generating() || !previewUrl()"
-        (click)="downloadImage()"
-      >
-        {{ 'quoteSheetDownload' | uiTranslate }}
-      </button>
-      <button
-        type="button"
-        class="quote-sheet__btn"
-        [disabled]="busy() || generating() || !previewUrl()"
-        (click)="shareImage()"
-      >
-        {{ 'quoteSheetShare' | uiTranslate }}
-      </button>
-    </div>
+    <app-quote-export-actions
+      [busy]="busy()"
+      [disabled]="preview.generating() || !preview.previewUrl()"
+      (download)="downloadImage()"
+      (share)="shareImage()"
+    />
   </section>
 </div>
