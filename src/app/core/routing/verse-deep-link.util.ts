@@ -11,11 +11,20 @@ export function parseVerseFragment(fragment: string | null | undefined): number 
   if (fragment === null || fragment === undefined || fragment === '') {
     return null;
   }
-  const n = Number(fragment);
+  const raw = fragment.startsWith('#') ? fragment.slice(1) : fragment;
+  const n = Number(raw);
   if (!Number.isFinite(n) || n < 1) {
     return null;
   }
   return Math.floor(n);
+}
+
+/** Read `#ayah` from the browser location when the router fragment lags behind. */
+export function parseVerseFragmentFromHash(hash: string | null | undefined): number | null {
+  if (hash === null || hash === undefined || hash === '') {
+    return null;
+  }
+  return parseVerseFragment(hash.startsWith('#') ? hash.slice(1) : hash);
 }
 
 export function buildSurahPath(surahNumber: number): string {
