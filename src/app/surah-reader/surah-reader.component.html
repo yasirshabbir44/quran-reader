@@ -100,18 +100,23 @@
   <div class="reader__topbar-menu">
 
     <div class="reader__topbar-cluster reader__topbar-cluster--surah">
-      <label class="reader__tool-label reader__tool-label--compact" for="pick-surah">{{ 'surahLabel' | uiTranslate }}</label>
-      <select
+      <span class="reader__tool-label reader__tool-label--compact" id="lbl-surah-picker">{{ 'surahLabel' | uiTranslate }}</span>
+      <button
+        type="button"
         id="pick-surah"
-        class="reader__select reader__select--compact reader__select--surah"
-        [ngModel]="surahNumber()"
-        [ngModelOptions]="{ standalone: true }"
-        (ngModelChange)="onSurahModelChange($event)"
+        class="reader__surah-picker"
+        [class.reader__surah-picker--active]="surahNavOpen"
+        [attr.aria-expanded]="surahNavOpen"
+        [attr.aria-labelledby]="'lbl-surah-picker'"
+        aria-controls="surah-nav-panel"
+        (click)="toggleSurahNav()"
       >
-        @for (s of surahList(); track s.number) {
-        <option [ngValue]="s.number">{{ formatUiNum(s.number) }}. {{ s.nameAr }}</option>
-        }
-      </select>
+        <span class="reader__surah-picker-num" aria-hidden="true">{{ formatUiNum(surahNumber()) }}</span>
+        <span class="reader__surah-picker-name">{{ surah()!.nameAr }}</span>
+        <svg class="reader__surah-picker-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
     </div>
 
     <div class="reader__topbar-cluster reader__topbar-cluster--lang">
@@ -206,6 +211,102 @@
 
   </div>
 </nav>
+
+@if (surahNavOpen) {
+<button
+  type="button"
+  class="reader__nav-backdrop"
+  [attr.aria-label]="'surahNavCloseAria' | uiTranslate"
+  (click)="closeSurahNav()"
+></button>
+}
+
+<aside
+  id="surah-nav-panel"
+  class="reader__surah-nav"
+  [class.reader__surah-nav--open]="surahNavOpen"
+  [attr.aria-hidden]="!surahNavOpen"
+  [attr.aria-label]="'surahNavTitle' | uiTranslate"
+>
+  <header class="reader__settings-head">
+    <h2 class="reader__settings-title">{{ 'surahNavTitle' | uiTranslate }}</h2>
+    <button
+      type="button"
+      class="reader__settings-close"
+      (click)="closeSurahNav()"
+      [attr.aria-label]="'surahNavCloseAria' | uiTranslate"
+    >
+      ✕
+    </button>
+  </header>
+
+  <div class="reader__surah-nav-search" role="search" [attr.aria-label]="'surahNavSearchAria' | uiTranslate">
+    <div class="reader__search-wrap">
+      <input
+        id="surah-nav-search"
+        type="search"
+        class="reader__search-input reader__search-input--nav"
+        autocomplete="off"
+        spellcheck="false"
+        enterkeyhint="search"
+        [ngModel]="surahNavQuery()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onSurahNavQueryChange($event)"
+        [placeholder]="'surahNavSearchPlaceholder' | uiTranslate"
+      />
+      @if (surahNavQuery().trim()) {
+      <button
+        type="button"
+        class="reader__search-clear"
+        (click)="clearSurahNavQuery()"
+        [attr.aria-label]="'searchClearAria' | uiTranslate"
+      >
+        ×
+      </button>
+      }
+    </div>
+    @if (surahNavQuery().trim()) {
+    <p class="reader__surah-nav-meta" aria-live="polite">
+      @if (filteredSurahList().length === 0) {
+      {{ 'surahNavNoResults' | uiTranslate }}
+      } @else {
+      {{ 'surahNavResultsCount' | uiTranslate: { n: formatUiNum(filteredSurahList().length) } }}
+      }
+    </p>
+    }
+  </div>
+
+  <ul class="reader__surah-nav-list reader__settings-scroll" role="listbox" [attr.aria-label]="'surahNavListAria' | uiTranslate">
+    @for (s of filteredSurahList(); track s.number) {
+    <li class="reader__surah-nav-item" role="presentation">
+      <button
+        type="button"
+        class="reader__surah-nav-btn"
+        role="option"
+        [class.reader__surah-nav-btn--active]="s.number === surahNumber()"
+        [attr.aria-selected]="s.number === surahNumber()"
+        (click)="selectSurahFromNav(s.number)"
+        [attr.aria-label]="
+          'surahNavSelectAria'
+            | uiTranslate: { n: formatUiNum(s.number), name: s.nameAr, translit: s.nameTranslit }
+        "
+      >
+        <span class="reader__surah-nav-num">{{ formatUiNum(s.number) }}</span>
+        <span class="reader__surah-nav-text">
+          <span class="reader__surah-nav-name">{{ s.nameAr }}</span>
+          <span class="reader__surah-nav-sub">
+            <span class="reader__surah-nav-translit">{{ s.nameTranslit }}</span>
+            <span class="reader__surah-nav-dot" aria-hidden="true">·</span>
+            <span class="reader__surah-nav-meta-inline">
+              {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }} · {{ surahNavTypeLabel(s) }}
+            </span>
+          </span>
+        </span>
+      </button>
+    </li>
+    }
+  </ul>
+</aside>
 
 <section
   id="reader-settings-panel"
