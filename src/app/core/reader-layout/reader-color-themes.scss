@@ -1,0 +1,229 @@
+// Shared reading-theme tokens (applied on `html[data-reader-theme]` in styles.scss).
+
+@mixin reader-theme-twilight {
+  color-scheme: dark;
+
+  --reader-body-ink: #ebe6dc;
+  --reader-body-bg-base: #0c0e12;
+  --reader-body-bg-mid: #141820;
+  --reader-body-bg-end: #0f1419;
+  --reader-body-glow-gold: rgba(201, 162, 39, 0.08);
+  --reader-body-glow-blue: rgba(59, 91, 120, 0.12);
+
+  --reader-ink: #f4f1ea;
+  --reader-ink-muted: #b8b3a8;
+  --reader-ink-subtle: #9d988c;
+  --reader-ink-faint: #8a8578;
+  --reader-ink-soft: #cec9be;
+  --reader-ink-dim: #c4bfb4;
+  --reader-ink-ui: #ded8cb;
+  --reader-ink-ui-hover: #f2ede1;
+  --reader-ink-action: #d6d0c5;
+  --reader-ink-action-hover: #f1ecde;
+  --reader-ink-bismillah: #ece5d4;
+  --reader-ink-intro-kicker: #dbc879;
+  --reader-ink-intro-title: #f6f1e5;
+  --reader-ink-intro-body: #e0d9cb;
+  --reader-ink-intro-tag: #eadfbc;
+  --reader-ink-panel: #d2cdc2;
+
+  --reader-accent: #c9a227;
+  --reader-accent-soft: rgba(201, 162, 39, 0.14);
+  --reader-accent-border: rgba(201, 162, 39, 0.22);
+  --reader-accent-border-strong: rgba(201, 162, 39, 0.55);
+  --reader-accent-glow: rgba(201, 162, 39, 0.45);
+  --reader-accent-fill-hover: rgba(201, 162, 39, 0.35);
+  --reader-accent-fill-mid: rgba(201, 162, 39, 0.18);
+  --reader-accent-fill-soft: rgba(201, 162, 39, 0.14);
+  --reader-accent-gradient-start: #e4c45c;
+  --reader-accent-gradient-end: #c9a227;
+
+  --reader-surface: rgba(22, 24, 28, 0.72);
+  --reader-surface-inset: rgba(0, 0, 0, 0.12);
+  --reader-surface-muted: rgba(255, 255, 255, 0.03);
+  --reader-chrome-bg: rgba(12, 14, 18, 0.94);
+  --reader-chrome-bg-solid: rgba(12, 14, 18, 0.96);
+  --reader-chrome-bg-panel: rgba(12, 14, 18, 0.85);
+  --reader-chrome-bg-segment: rgba(12, 14, 18, 0.55);
+  --reader-elevated: rgba(18, 20, 24, 0.88);
+  --reader-elevated-hover: rgba(28, 30, 36, 0.95);
+  --reader-panel-deep: rgba(12, 14, 18, 0.72);
+  --reader-bismillah-bg: rgba(16, 18, 24, 0.78);
+  --reader-intro-bg: linear-gradient(160deg, rgba(201, 162, 39, 0.12), rgba(12, 14, 18, 0.58));
+  --reader-intro-tag-bg: rgba(11, 13, 17, 0.5);
+
+  --reader-border: rgba(255, 255, 255, 0.06);
+  --reader-border-strong: rgba(255, 255, 255, 0.12);
+  --reader-border-stronger: rgba(255, 255, 255, 0.08);
+  --reader-overlay: rgba(255, 255, 255, 0.04);
+  --reader-overlay-hover: rgba(255, 255, 255, 0.03);
+  --reader-focus: rgba(201, 162, 39, 0.45);
+  --reader-progress-track: rgba(255, 255, 255, 0.06);
+  --reader-shadow: rgba(0, 0, 0, 0.35);
+  --reader-shadow-soft: rgba(0, 0, 0, 0.28);
+  --reader-shadow-card: rgba(0, 0, 0, 0.12);
+  --reader-shadow-card-hover: rgba(0, 0, 0, 0.18);
+  --reader-title-shadow: rgba(0, 0, 0, 0.25);
+
+  --reader-verse-active-bg: rgba(36, 32, 18, 0.9);
+  --reader-verse-active-border: #f2cf5a;
+  --reader-verse-active-text: #faf7ef;
+  --reader-verse-active-glow: rgba(242, 207, 90, 0.18);
+  --reader-verse-active-ring: rgba(242, 207, 90, 0.45);
+  --reader-btn-on-accent: #1a1510;
+  --reader-bookmark-accent: rgba(100, 170, 255, 0.42);
+  --reader-bookmark-ring: rgba(100, 170, 255, 0.28);
+  --reader-meta-color: #a8a298;
+}
+
+@mixin reader-theme-night {
+  color-scheme: dark;
+
+  --reader-body-ink: #d6d2c9;
+  --reader-body-bg-base: #030304;
+  --reader-body-bg-mid: #08090c;
+  --reader-body-bg-end: #050608;
+  --reader-body-glow-gold: rgba(201, 162, 39, 0.035);
+  --reader-body-glow-blue: rgba(59, 91, 120, 0.04);
+
+  --reader-ink: #ddd9d0;
+  --reader-ink-muted: #a8a49a;
+  --reader-ink-subtle: #949088;
+  --reader-ink-faint: #807c74;
+  --reader-ink-soft: #b8b4aa;
+  --reader-ink-dim: #aeaaa2;
+  --reader-ink-ui: #c8c4bb;
+  --reader-ink-ui-hover: #e0dcd3;
+  --reader-ink-action: #beb9b0;
+  --reader-ink-action-hover: #d8d4cb;
+  --reader-ink-bismillah: #d8d4cb;
+  --reader-ink-intro-kicker: #c4ad5a;
+  --reader-ink-intro-title: #ebe7de;
+  --reader-ink-intro-body: #ccc7bc;
+  --reader-ink-intro-tag: #d4cdb8;
+  --reader-ink-panel: #b8b4aa;
+
+  --reader-accent: #b8941f;
+  --reader-accent-soft: rgba(184, 148, 31, 0.12);
+  --reader-accent-border: rgba(184, 148, 31, 0.2);
+  --reader-accent-border-strong: rgba(184, 148, 31, 0.48);
+  --reader-accent-glow: rgba(184, 148, 31, 0.38);
+  --reader-accent-fill-hover: rgba(184, 148, 31, 0.3);
+  --reader-accent-fill-mid: rgba(184, 148, 31, 0.14);
+  --reader-accent-fill-soft: rgba(184, 148, 31, 0.1);
+  --reader-accent-gradient-start: #d4b84a;
+  --reader-accent-gradient-end: #b8941f;
+
+  --reader-surface: rgba(8, 9, 12, 0.88);
+  --reader-surface-inset: rgba(0, 0, 0, 0.28);
+  --reader-surface-muted: rgba(255, 255, 255, 0.02);
+  --reader-chrome-bg: rgba(5, 6, 8, 0.97);
+  --reader-chrome-bg-solid: rgba(5, 6, 8, 0.98);
+  --reader-chrome-bg-panel: rgba(5, 6, 8, 0.92);
+  --reader-chrome-bg-segment: rgba(5, 6, 8, 0.72);
+  --reader-elevated: rgba(10, 11, 14, 0.92);
+  --reader-elevated-hover: rgba(16, 17, 20, 0.96);
+  --reader-panel-deep: rgba(5, 6, 8, 0.82);
+  --reader-bismillah-bg: rgba(8, 9, 12, 0.9);
+  --reader-intro-bg: linear-gradient(160deg, rgba(184, 148, 31, 0.08), rgba(5, 6, 8, 0.72));
+  --reader-intro-tag-bg: rgba(3, 4, 6, 0.65);
+
+  --reader-border: rgba(255, 255, 255, 0.04);
+  --reader-border-strong: rgba(255, 255, 255, 0.08);
+  --reader-border-stronger: rgba(255, 255, 255, 0.05);
+  --reader-overlay: rgba(255, 255, 255, 0.025);
+  --reader-overlay-hover: rgba(255, 255, 255, 0.02);
+  --reader-focus: rgba(184, 148, 31, 0.4);
+  --reader-progress-track: rgba(255, 255, 255, 0.04);
+  --reader-shadow: rgba(0, 0, 0, 0.55);
+  --reader-shadow-soft: rgba(0, 0, 0, 0.42);
+  --reader-shadow-card: rgba(0, 0, 0, 0.22);
+  --reader-shadow-card-hover: rgba(0, 0, 0, 0.32);
+  --reader-title-shadow: rgba(0, 0, 0, 0.45);
+
+  --reader-verse-active-bg: rgba(24, 20, 10, 0.95);
+  --reader-verse-active-border: #d4b84a;
+  --reader-verse-active-text: #f0ece3;
+  --reader-verse-active-glow: rgba(212, 184, 74, 0.12);
+  --reader-verse-active-ring: rgba(212, 184, 74, 0.38);
+  --reader-btn-on-accent: #120f08;
+  --reader-bookmark-accent: rgba(80, 140, 210, 0.38);
+  --reader-bookmark-ring: rgba(80, 140, 210, 0.22);
+  --reader-meta-color: #949088;
+}
+
+@mixin reader-theme-sepia {
+  color-scheme: light;
+
+  --reader-body-ink: #3d3428;
+  --reader-body-bg-base: #f4ecd8;
+  --reader-body-bg-mid: #efe4cc;
+  --reader-body-bg-end: #e8dcc4;
+  --reader-body-glow-gold: rgba(139, 105, 20, 0.1);
+  --reader-body-glow-blue: rgba(120, 90, 60, 0.06);
+
+  --reader-ink: #3d3428;
+  --reader-ink-muted: #6b5f4f;
+  --reader-ink-subtle: #7a6e5c;
+  --reader-ink-faint: #8f8270;
+  --reader-ink-soft: #5c5244;
+  --reader-ink-dim: #6b6152;
+  --reader-ink-ui: #4a4034;
+  --reader-ink-ui-hover: #2f281f;
+  --reader-ink-action: #5c5244;
+  --reader-ink-action-hover: #3d3428;
+  --reader-ink-bismillah: #2f281f;
+  --reader-ink-intro-kicker: #8b6914;
+  --reader-ink-intro-title: #2f281f;
+  --reader-ink-intro-body: #4a4034;
+  --reader-ink-intro-tag: #5c5244;
+  --reader-ink-panel: #5c5244;
+
+  --reader-accent: #8b6914;
+  --reader-accent-soft: rgba(139, 105, 20, 0.12);
+  --reader-accent-border: rgba(139, 105, 20, 0.28);
+  --reader-accent-border-strong: rgba(139, 105, 20, 0.55);
+  --reader-accent-glow: rgba(139, 105, 20, 0.42);
+  --reader-accent-fill-hover: rgba(139, 105, 20, 0.32);
+  --reader-accent-fill-mid: rgba(139, 105, 20, 0.16);
+  --reader-accent-fill-soft: rgba(139, 105, 20, 0.1);
+  --reader-accent-gradient-start: #d4b84a;
+  --reader-accent-gradient-end: #a67c1a;
+
+  --reader-surface: rgba(255, 252, 245, 0.94);
+  --reader-surface-inset: rgba(61, 52, 40, 0.06);
+  --reader-surface-muted: rgba(61, 52, 40, 0.04);
+  --reader-chrome-bg: rgba(244, 236, 216, 0.96);
+  --reader-chrome-bg-solid: rgba(244, 236, 216, 0.98);
+  --reader-chrome-bg-panel: rgba(250, 246, 235, 0.96);
+  --reader-chrome-bg-segment: rgba(255, 252, 245, 0.88);
+  --reader-elevated: rgba(250, 246, 235, 0.96);
+  --reader-elevated-hover: rgba(255, 252, 245, 1);
+  --reader-panel-deep: rgba(255, 252, 245, 0.92);
+  --reader-bismillah-bg: rgba(255, 252, 245, 0.88);
+  --reader-intro-bg: linear-gradient(160deg, rgba(139, 105, 20, 0.1), rgba(255, 252, 245, 0.82));
+  --reader-intro-tag-bg: rgba(255, 252, 245, 0.75);
+
+  --reader-border: rgba(61, 52, 40, 0.12);
+  --reader-border-strong: rgba(61, 52, 40, 0.18);
+  --reader-border-stronger: rgba(61, 52, 40, 0.14);
+  --reader-overlay: rgba(61, 52, 40, 0.05);
+  --reader-overlay-hover: rgba(61, 52, 40, 0.04);
+  --reader-focus: rgba(139, 105, 20, 0.45);
+  --reader-progress-track: rgba(61, 52, 40, 0.12);
+  --reader-shadow: rgba(61, 52, 40, 0.14);
+  --reader-shadow-soft: rgba(61, 52, 40, 0.1);
+  --reader-shadow-card: rgba(61, 52, 40, 0.08);
+  --reader-shadow-card-hover: rgba(61, 52, 40, 0.12);
+  --reader-title-shadow: rgba(61, 52, 40, 0.08);
+
+  --reader-verse-active-bg: rgba(255, 248, 230, 0.98);
+  --reader-verse-active-border: #c9a227;
+  --reader-verse-active-text: #2a2318;
+  --reader-verse-active-glow: rgba(201, 162, 39, 0.14);
+  --reader-verse-active-ring: rgba(201, 162, 39, 0.35);
+  --reader-btn-on-accent: #faf6eb;
+  --reader-bookmark-accent: rgba(70, 120, 180, 0.45);
+  --reader-bookmark-ring: rgba(70, 120, 180, 0.28);
+  --reader-meta-color: #8f8270;
+}
