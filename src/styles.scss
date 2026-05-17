@@ -1,3 +1,5 @@
+@use './app/core/reader-layout/reader-color-themes' as themes;
+
 *,
 *::before,
 *::after {
@@ -6,6 +8,15 @@
 
 html {
   scroll-behavior: smooth;
+  @include themes.reader-theme-twilight;
+}
+
+html[data-reader-theme='night'] {
+  @include themes.reader-theme-night;
+}
+
+html[data-reader-theme='sepia'] {
+  @include themes.reader-theme-sepia;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -23,11 +34,46 @@ body {
 body {
   font-family: 'Amiri', 'Amiri Quran', serif;
   background:
-    radial-gradient(120% 80% at 50% -10%, rgba(201, 162, 39, 0.08), transparent 55%),
-    radial-gradient(90% 60% at 100% 40%, rgba(59, 91, 120, 0.12), transparent 50%),
-    linear-gradient(168deg, #0c0e12 0%, #141820 42%, #0f1419 100%);
+    radial-gradient(120% 80% at 50% -10%, var(--reader-body-glow-gold), transparent 55%),
+    radial-gradient(90% 60% at 100% 40%, var(--reader-body-glow-blue), transparent 50%),
+    linear-gradient(168deg, var(--reader-body-bg-base) 0%, var(--reader-body-bg-mid) 42%, var(--reader-body-bg-end) 100%);
   background-attachment: fixed;
-  color: #ebe6dc;
+  color: var(--reader-body-ink);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  transition:
+    background 0.35s ease,
+    color 0.25s ease;
+}
+
+html[data-reader-theme='sepia'] .not-found {
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--reader-body-glow-gold), transparent 55%),
+    linear-gradient(168deg, var(--reader-body-bg-base) 0%, var(--reader-body-bg-mid) 42%, var(--reader-body-bg-end) 100%);
+  color: var(--reader-body-ink);
+
+  .not-found__card {
+    border-color: var(--reader-border);
+    background: var(--reader-chrome-bg-panel);
+    box-shadow: 0 16px 48px var(--reader-shadow);
+  }
+
+  .not-found__code {
+    color: var(--reader-accent);
+    opacity: 0.75;
+  }
+
+  .not-found__title {
+    color: var(--reader-ink);
+  }
+
+  .not-found__body {
+    color: var(--reader-ink-muted);
+  }
+}
+
+html[data-reader-theme='night'] .not-found {
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--reader-body-glow-gold), transparent 55%),
+    linear-gradient(168deg, var(--reader-body-bg-base) 0%, var(--reader-body-bg-mid) 42%, var(--reader-body-bg-end) 100%);
 }
