@@ -35,6 +35,25 @@
         "maxAge": "365d",
         "strategy": "performance"
       }
+    },
+    {
+      "name": "tafsir-cdn",
+      "urls": ["https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/**"],
+      "cacheConfig": {
+        "maxSize": 120,
+        "maxAge": "30d",
+        "strategy": "performance",
+        "timeout": "10s"
+      }
+    },
+    {
+      "name": "tafsir-local",
+      "urls": ["/tafsir/**"],
+      "cacheConfig": {
+        "maxSize": 120,
+        "maxAge": "365d",
+        "strategy": "performance"
+      }
     }
   ]
 }
