@@ -1,21 +1,12 @@
 {
   "version": 1,
   "categories": [
-    {
-      "id": "ethics",
-      "name": "Ethics & Character",
-      "sortOrder": 1
-    },
-    {
-      "id": "history",
-      "name": "Stories & History",
-      "sortOrder": 2
-    },
-    {
-      "id": "social-financial",
-      "name": "Social & Financial",
-      "sortOrder": 3
-    }
+    { "id": "ethics", "name": "Ethics & Character", "sortOrder": 1 },
+    { "id": "worship", "name": "Worship & Spirituality", "sortOrder": 2 },
+    { "id": "history", "name": "Stories & History", "sortOrder": 3 },
+    { "id": "social-financial", "name": "Social & Financial", "sortOrder": 4 },
+    { "id": "family", "name": "Family & Community", "sortOrder": 5 },
+    { "id": "life", "name": "Life & Wellbeing", "sortOrder": 6 }
   ],
   "themes": [
     {
@@ -23,7 +14,56 @@
       "name": "Patience",
       "categoryId": "ethics",
       "icon": "hourglass",
-      "description": "Verses on sabr, perseverance, and trusting Allah through hardship and loss."
+      "description": "Sabr, perseverance, and trusting Allah through hardship, loss, and trials."
+    },
+    {
+      "id": "gratitude",
+      "name": "Gratitude",
+      "categoryId": "ethics",
+      "icon": "heart",
+      "description": "Shukr, remembering blessings, and turning thankfulness into steadfast worship."
+    },
+    {
+      "id": "honesty-truth",
+      "name": "Honesty & Truth",
+      "categoryId": "ethics",
+      "icon": "handshake",
+      "description": "Sidq, keeping promises, fair speech, and standing firmly for what is right."
+    },
+    {
+      "id": "forgiveness",
+      "name": "Forgiveness",
+      "categoryId": "ethics",
+      "icon": "dove",
+      "description": "Pardoning others, restraining anger, and seeking Allah's mercy for ourselves."
+    },
+    {
+      "id": "humility",
+      "name": "Humility",
+      "categoryId": "ethics",
+      "icon": "seed",
+      "description": "Gentleness, avoiding arrogance, and walking humbly on the earth."
+    },
+    {
+      "id": "prayer-salah",
+      "name": "Prayer",
+      "categoryId": "worship",
+      "icon": "prayer",
+      "description": "Salah, guarding the prayer, and making worship the anchor of daily life."
+    },
+    {
+      "id": "repentance-tawbah",
+      "name": "Repentance",
+      "categoryId": "worship",
+      "icon": "droplet",
+      "description": "Tawbah, returning to Allah, and hope in His vast forgiveness."
+    },
+    {
+      "id": "remembrance-dhikr",
+      "name": "Remembrance of Allah",
+      "categoryId": "worship",
+      "icon": "sparkles",
+      "description": "Dhikr, hearts finding rest in remembering Allah throughout the day."
     },
     {
       "id": "prophet-stories",
@@ -37,24 +77,188 @@
       "name": "Finance & Trade",
       "categoryId": "social-financial",
       "icon": "scales",
-      "description": "Guidance on fair trade, debt, contracts, and prohibitions around unjust gain."
+      "description": "Fair trade, debt, contracts, and prohibitions around unjust gain."
+    },
+    {
+      "id": "charity-zakat",
+      "name": "Charity & Zakat",
+      "categoryId": "social-financial",
+      "icon": "gift",
+      "description": "Spending in Allah's cause, supporting the needy, and purifying wealth."
+    },
+    {
+      "id": "justice",
+      "name": "Justice",
+      "categoryId": "social-financial",
+      "icon": "gavel",
+      "description": "Uprightness, fairness, and bearing witness even against oneself."
+    },
+    {
+      "id": "parents",
+      "name": "Parents",
+      "categoryId": "family",
+      "icon": "parents",
+      "description": "Honoring parents, kindness to them, and dua for their mercy."
+    },
+    {
+      "id": "marriage",
+      "name": "Marriage & Spouses",
+      "categoryId": "family",
+      "icon": "rings",
+      "description": "Tranquility between spouses, mercy, and building a righteous home."
+    },
+    {
+      "id": "neighbors",
+      "name": "Neighbors & Kin",
+      "categoryId": "family",
+      "icon": "house",
+      "description": "Good treatment of neighbors, relatives, and the wider community."
+    },
+    {
+      "id": "hope-anxiety",
+      "name": "Hope & Ease",
+      "categoryId": "life",
+      "icon": "sun",
+      "description": "Relief after hardship, trust in Allah, and courage when anxious."
+    },
+    {
+      "id": "death-afterlife",
+      "name": "Death & the Hereafter",
+      "categoryId": "life",
+      "icon": "star",
+      "description": "The reality of death, accountability, and preparing for what follows."
+    },
+    {
+      "id": "knowledge",
+      "name": "Knowledge & Learning",
+      "categoryId": "life",
+      "icon": "book",
+      "description": "Seeking beneficial knowledge, reflection, and wisdom from revelation."
     }
   ],
   "mappings": [
     { "themeId": "patience", "surah": 2, "ayah": 153 },
     { "themeId": "patience", "surah": 2, "ayah": 155 },
     { "themeId": "patience", "surah": 3, "ayah": 200 },
+    { "themeId": "patience", "surah": 8, "ayah": 46 },
+    { "themeId": "patience", "surah": 16, "ayah": 127 },
+    { "themeId": "patience", "surah": 31, "ayah": 17 },
     { "themeId": "patience", "surah": 39, "ayah": 10 },
     { "themeId": "patience", "surah": 70, "ayah": 5 },
+
+    { "themeId": "gratitude", "surah": 2, "ayah": 152 },
+    { "themeId": "gratitude", "surah": 7, "ayah": 10 },
+    { "themeId": "gratitude", "surah": 14, "ayah": 7 },
+    { "themeId": "gratitude", "surah": 16, "ayah": 114 },
+    { "themeId": "gratitude", "surah": 31, "ayah": 12 },
+    { "themeId": "gratitude", "surah": 55, "ayah": 13 },
+
+    { "themeId": "honesty-truth", "surah": 2, "ayah": 42 },
+    { "themeId": "honesty-truth", "surah": 4, "ayah": 135 },
+    { "themeId": "honesty-truth", "surah": 5, "ayah": 1 },
+    { "themeId": "honesty-truth", "surah": 9, "ayah": 119 },
+    { "themeId": "honesty-truth", "surah": 17, "ayah": 35 },
+    { "themeId": "honesty-truth", "surah": 61, "ayah": 3 },
+
+    { "themeId": "forgiveness", "surah": 2, "ayah": 109 },
+    { "themeId": "forgiveness", "surah": 3, "ayah": 134 },
+    { "themeId": "forgiveness", "surah": 7, "ayah": 199 },
+    { "themeId": "forgiveness", "surah": 24, "ayah": 22 },
+    { "themeId": "forgiveness", "surah": 42, "ayah": 40 },
+    { "themeId": "forgiveness", "surah": 64, "ayah": 14 },
+
+    { "themeId": "humility", "surah": 17, "ayah": 37 },
+    { "themeId": "humility", "surah": 25, "ayah": 63 },
+    { "themeId": "humility", "surah": 28, "ayah": 76 },
+    { "themeId": "humility", "surah": 31, "ayah": 18 },
+    { "themeId": "humility", "surah": 57, "ayah": 23 },
+
+    { "themeId": "prayer-salah", "surah": 2, "ayah": 45 },
+    { "themeId": "prayer-salah", "surah": 2, "ayah": 238 },
+    { "themeId": "prayer-salah", "surah": 4, "ayah": 103 },
+    { "themeId": "prayer-salah", "surah": 11, "ayah": 114 },
+    { "themeId": "prayer-salah", "surah": 20, "ayah": 14 },
+    { "themeId": "prayer-salah", "surah": 29, "ayah": 45 },
+    { "themeId": "prayer-salah", "surah": 70, "ayah": 23 },
+
+    { "themeId": "repentance-tawbah", "surah": 2, "ayah": 222 },
+    { "themeId": "repentance-tawbah", "surah": 4, "ayah": 17 },
+    { "themeId": "repentance-tawbah", "surah": 7, "ayah": 156 },
+    { "themeId": "repentance-tawbah", "surah": 25, "ayah": 70 },
+    { "themeId": "repentance-tawbah", "surah": 39, "ayah": 53 },
+    { "themeId": "repentance-tawbah", "surah": 66, "ayah": 8 },
+
+    { "themeId": "remembrance-dhikr", "surah": 3, "ayah": 191 },
+    { "themeId": "remembrance-dhikr", "surah": 13, "ayah": 28 },
+    { "themeId": "remembrance-dhikr", "surah": 33, "ayah": 41 },
+    { "themeId": "remembrance-dhikr", "surah": 62, "ayah": 10 },
+    { "themeId": "remembrance-dhikr", "surah": 73, "ayah": 8 },
+
+    { "themeId": "prophet-stories", "surah": 11, "ayah": 25 },
     { "themeId": "prophet-stories", "surah": 12, "ayah": 3 },
+    { "themeId": "prophet-stories", "surah": 14, "ayah": 35 },
     { "themeId": "prophet-stories", "surah": 19, "ayah": 16 },
-    { "themeId": "prophet-stories", "surah": 28, "ayah": 3 },
     { "themeId": "prophet-stories", "surah": 21, "ayah": 51 },
+    { "themeId": "prophet-stories", "surah": 28, "ayah": 3 },
     { "themeId": "prophet-stories", "surah": 37, "ayah": 100 },
+
     { "themeId": "finance-trade", "surah": 2, "ayah": 275 },
     { "themeId": "finance-trade", "surah": 2, "ayah": 282 },
     { "themeId": "finance-trade", "surah": 4, "ayah": 29 },
     { "themeId": "finance-trade", "surah": 62, "ayah": 9 },
-    { "themeId": "finance-trade", "surah": 83, "ayah": 1 }
+    { "themeId": "finance-trade", "surah": 83, "ayah": 1 },
+
+    { "themeId": "charity-zakat", "surah": 2, "ayah": 261 },
+    { "themeId": "charity-zakat", "surah": 2, "ayah": 267 },
+    { "themeId": "charity-zakat", "surah": 2, "ayah": 274 },
+    { "themeId": "charity-zakat", "surah": 57, "ayah": 7 },
+    { "themeId": "charity-zakat", "surah": 70, "ayah": 24 },
+    { "themeId": "charity-zakat", "surah": 9, "ayah": 60 },
+
+    { "themeId": "justice", "surah": 4, "ayah": 135 },
+    { "themeId": "justice", "surah": 5, "ayah": 8 },
+    { "themeId": "justice", "surah": 6, "ayah": 152 },
+    { "themeId": "justice", "surah": 16, "ayah": 90 },
+    { "themeId": "justice", "surah": 57, "ayah": 25 },
+
+    { "themeId": "parents", "surah": 4, "ayah": 36 },
+    { "themeId": "parents", "surah": 6, "ayah": 151 },
+    { "themeId": "parents", "surah": 17, "ayah": 23 },
+    { "themeId": "parents", "surah": 29, "ayah": 8 },
+    { "themeId": "parents", "surah": 31, "ayah": 14 },
+    { "themeId": "parents", "surah": 46, "ayah": 15 },
+
+    { "themeId": "marriage", "surah": 2, "ayah": 187 },
+    { "themeId": "marriage", "surah": 4, "ayah": 1 },
+    { "themeId": "marriage", "surah": 24, "ayah": 32 },
+    { "themeId": "marriage", "surah": 25, "ayah": 74 },
+    { "themeId": "marriage", "surah": 30, "ayah": 21 },
+
+    { "themeId": "neighbors", "surah": 2, "ayah": 83 },
+    { "themeId": "neighbors", "surah": 4, "ayah": 36 },
+    { "themeId": "neighbors", "surah": 4, "ayah": 86 },
+    { "themeId": "neighbors", "surah": 17, "ayah": 26 },
+    { "themeId": "neighbors", "surah": 49, "ayah": 10 },
+
+    { "themeId": "hope-anxiety", "surah": 2, "ayah": 286 },
+    { "themeId": "hope-anxiety", "surah": 3, "ayah": 139 },
+    { "themeId": "hope-anxiety", "surah": 12, "ayah": 87 },
+    { "themeId": "hope-anxiety", "surah": 65, "ayah": 3 },
+    { "themeId": "hope-anxiety", "surah": 94, "ayah": 5 },
+    { "themeId": "hope-anxiety", "surah": 94, "ayah": 6 },
+
+    { "themeId": "death-afterlife", "surah": 2, "ayah": 156 },
+    { "themeId": "death-afterlife", "surah": 3, "ayah": 185 },
+    { "themeId": "death-afterlife", "surah": 21, "ayah": 35 },
+    { "themeId": "death-afterlife", "surah": 29, "ayah": 57 },
+    { "themeId": "death-afterlife", "surah": 31, "ayah": 34 },
+    { "themeId": "death-afterlife", "surah": 67, "ayah": 2 },
+
+    { "themeId": "knowledge", "surah": 2, "ayah": 269 },
+    { "themeId": "knowledge", "surah": 20, "ayah": 114 },
+    { "themeId": "knowledge", "surah": 39, "ayah": 9 },
+    { "themeId": "knowledge", "surah": 58, "ayah": 11 },
+    { "themeId": "knowledge", "surah": 96, "ayah": 1 },
+    { "themeId": "knowledge", "surah": 96, "ayah": 2 }
   ]
 }
