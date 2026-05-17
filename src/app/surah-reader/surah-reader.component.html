@@ -212,12 +212,12 @@
   </div>
 </nav>
 
-@if (surahNavOpen) {
+@if (surahNavOpen || settingsOpen) {
 <button
   type="button"
   class="reader__nav-backdrop"
-  [attr.aria-label]="'surahNavCloseAria' | uiTranslate"
-  (click)="closeSurahNav()"
+  [attr.aria-label]="settingsOpen ? ('settingsCloseAria' | uiTranslate) : ('surahNavCloseAria' | uiTranslate)"
+  (click)="settingsOpen ? closeSettingsPanel() : closeSurahNav()"
 ></button>
 }
 
