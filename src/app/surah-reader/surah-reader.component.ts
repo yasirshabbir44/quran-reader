@@ -27,6 +27,7 @@ import {
 } from '../core/quran/quran-data.service';
 import {
   ReaderLayoutPreferencesService,
+  type ReaderColorTheme,
   type ReaderFont,
   type ReaderLine,
   type ReaderWidth,
@@ -81,6 +82,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly font = this.readerLayout.font;
   protected readonly line = this.readerLayout.line;
   protected readonly width = this.readerLayout.width;
+  protected readonly colorTheme = this.readerLayout.colorTheme;
   protected readonly readingMode = signal<ReaderMode>('verse-by-verse');
   protected readonly showTranslationEn = signal(true);
   protected readonly showTranslationUr = signal(true);
@@ -447,6 +449,10 @@ export class SurahReaderComponent implements OnInit {
 
   protected setWidth(w: ReaderWidth): void {
     this.readerLayout.setWidth(w);
+  }
+
+  protected setColorTheme(theme: ReaderColorTheme): void {
+    this.readerLayout.setColorTheme(theme);
   }
 
   protected verseTr(v: QuranVerseRow): { en: string; ur: string } {
