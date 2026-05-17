@@ -49,6 +49,13 @@
       </svg>
     </button>
 
+    @if (topbarCompact && !topbarFullRevealed) {
+    <p class="reader__topbar-readout" aria-hidden="true">
+      <span class="reader__topbar-readout-name">{{ surah()!.nameAr }}</span>
+      <span class="reader__topbar-readout-verse">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(activeAyah()) }}</span>
+    </p>
+    }
+
     <div class="reader__topbar-bookmark-row" role="region" [attr.aria-label]="'bookmarkToolsGroup' | uiTranslate">
       <span class="reader__topbar-bookmark-label">{{ 'bookmarkToolsGroup' | uiTranslate }}</span>
       <div class="reader__topbar-bookmark-actions">
@@ -358,17 +365,6 @@
     <button type="button" class="reader__action-link" (click)="resetReaderViewSettings()">{{ 'resetViewSettings' | uiTranslate }}</button>
   </div>
 </section>
-
-<header
-  class="reader__sticky"
-  [class.reader__sticky--visible]="stickyHeaderVisible"
-  [attr.aria-label]="'stickyHeaderAria' | uiTranslate"
->
-  <span class="reader__sticky-title">{{ surah()!.nameAr }}</span>
-  <span class="reader__sticky-badge">{{ formatUiNum(surah()!.number) }}</span>
-  <span class="reader__sticky-dot" aria-hidden="true">·</span>
-  <span class="reader__sticky-ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(activeAyah()) }}</span>
-</header>
 
 <button
   type="button"
