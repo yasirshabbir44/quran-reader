@@ -105,5 +105,19 @@
   "documentTitleNotFound": "الصفحة غير موجودة — قارئ القرآن",
   "notFoundTitle": "هذه الصفحة غير موجودة",
   "notFoundDescription": "قد يكون العنوان مكتوبًا خطأ أو أن الرابط قديمًا. يمكنك العودة إلى القارئ من الصفحة الرئيسية.",
-  "notFoundBackHome": "العودة إلى القارئ"
+  "notFoundBackHome": "العودة إلى القارئ",
+  "dailyRemindersLegend": "تذكيرات يومية",
+  "dailyRemindersHint": "ثبّت التطبيق على الشاشة الرئيسية لأفضل نتيجة. يُرسل التذكير قرب الوقت الذي تختاره عندما يستطيع المتصفح إيقاظ التطبيق (كروم/إيدج على الحاسوب وأندرويد).",
+  "dailyRemindersEnable": "تفعيل التذكير اليومي",
+  "dailyRemindersTimeLabel": "وقت التذكير",
+  "dailyRemindersKindLegend": "محتوى التذكير",
+  "dailyRemindersKindVerse": "آية اليوم",
+  "dailyRemindersKindSaved": "متابعة من الموضع المحفوظ",
+  "dailyRemindersPermissionDenied": "الإشعارات محظورة. اسمح بها من إعدادات المتصفح ثم أعد المحاولة.",
+  "dailyRemindersPermissionUnsupported": "هذا المتصفح لا يدعم الإشعارات.",
+  "dailyRemindersTest": "تحقق الآن",
+  "notifyVerseOfDayTitle": "آية اليوم",
+  "notifyVerseOfDayBody": "{{surah}} · الآية {{ayah}} — {{excerpt}}",
+  "notifySavedPlaceTitle": "تابع قراءتك",
+  "notifySavedPlaceBody": "أكمل من {{surah}}، الآية {{ayah}}."
 }

@@ -105,5 +105,19 @@
   "documentTitleNotFound": "Page not found — Quran reader",
   "notFoundTitle": "This page does not exist",
   "notFoundDescription": "The address may be mistyped, or the link may be out of date. You can return to the reader from the home page.",
-  "notFoundBackHome": "Back to reader"
+  "notFoundBackHome": "Back to reader",
+  "dailyRemindersLegend": "Daily reminders",
+  "dailyRemindersHint": "Install the app to your home screen for best results. Reminders fire around your chosen time when the browser can wake the app (Chrome/Edge on desktop and Android).",
+  "dailyRemindersEnable": "Enable daily reminder",
+  "dailyRemindersTimeLabel": "Reminder time",
+  "dailyRemindersKindLegend": "Reminder content",
+  "dailyRemindersKindVerse": "Verse of the day",
+  "dailyRemindersKindSaved": "Continue from saved place",
+  "dailyRemindersPermissionDenied": "Notifications are blocked. Allow them in your browser settings, then try again.",
+  "dailyRemindersPermissionUnsupported": "This browser does not support notifications.",
+  "dailyRemindersTest": "Check now",
+  "notifyVerseOfDayTitle": "Verse of the day",
+  "notifyVerseOfDayBody": "{{surah}} · verse {{ayah}} — {{excerpt}}",
+  "notifySavedPlaceTitle": "Continue your reading",
+  "notifySavedPlaceBody": "Pick up at {{surah}}, verse {{ayah}}."
 }

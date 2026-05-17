@@ -105,5 +105,19 @@
   "documentTitleNotFound": "صفحہ نہیں ملا — قرآن ریڈر",
   "notFoundTitle": "یہ صفحہ موجود نہیں",
   "notFoundDescription": "پتہ غلط ہو سکتا ہے یا لنک پرانا ہو۔ آپ ہوم سے ریڈر پر واپس جا سکتے ہیں۔",
-  "notFoundBackHome": "ریڈر پر واپس"
+  "notFoundBackHome": "ریڈر پر واپس",
+  "dailyRemindersLegend": "روزانہ یاددہانیاں",
+  "dailyRemindersHint": "بہترین نتیجے کے لیے ایپ کو ہوم اسکرین پر شامل کریں۔ یاددہانی آپ کے منتخب وقت کے قریب بھیجی جاتی ہے جب براؤزر ایپ کو جگا سکے (ڈیسک ٹاپ اور اینڈرائیڈ پر Chrome/Edge)۔",
+  "dailyRemindersEnable": "روزانہ یاددہانی چالو کریں",
+  "dailyRemindersTimeLabel": "یاددہانی کا وقت",
+  "dailyRemindersKindLegend": "یاددہانی کا مواد",
+  "dailyRemindersKindVerse": "آج کی آیت",
+  "dailyRemindersKindSaved": "محفوظ مقام سے جاری رکھیں",
+  "dailyRemindersPermissionDenied": "اطلاعات بند ہیں۔ براؤزر کی ترتیبات میں اجازت دیں، پھر دوبارہ کوشش کریں۔",
+  "dailyRemindersPermissionUnsupported": "یہ براؤزر اطلاعات کو سپورٹ نہیں کرتا۔",
+  "dailyRemindersTest": "ابھی چیک کریں",
+  "notifyVerseOfDayTitle": "آج کی آیت",
+  "notifyVerseOfDayBody": "{{surah}} · آیت {{ayah}} — {{excerpt}}",
+  "notifySavedPlaceTitle": "پڑھائی جاری رکھیں",
+  "notifySavedPlaceBody": "{{surah}}، آیت {{ayah}} سے آگے بڑھیں۔"
 }
