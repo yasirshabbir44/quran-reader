@@ -1,26 +1,33 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
+import { renderQuoteImageToCanvas } from './canvas/quote-image-canvas.renderer';
+import { QuoteImageBlobExport } from './export/quote-image-blob.export';
+import { QuoteImageDownloadService } from './export/quote-image-download.service';
+import { quoteImageFilename } from './export/quote-image-filename.util';
+import { QuoteImageFontLoader } from './export/quote-image-font.loader';
 import {
-  quoteImageFilename,
-  renderQuoteImageToCanvas,
-} from './quote-image-renderer';
-import type { QuoteImageContent, QuoteImageFormat, QuoteImageOptions } from './quote-image.types';
+  QuoteImageShareService,
+  type QuoteImageShareResult,
+} from './export/quote-image-share.service';
+import type { QuoteImageContent, QuoteImageOptions } from './quote-image.types';
 
 @Injectable({ providedIn: 'root' })
 export class QuoteImageService {
   private readonly document = inject(DOCUMENT);
+  private readonly fonts = inject(QuoteImageFontLoader);
+  private readonly blobExport = inject(QuoteImageBlobExport);
+  private readonly downloadService = inject(QuoteImageDownloadService);
+  private readonly shareService = inject(QuoteImageShareService);
 
   async renderToBlob(
     content: QuoteImageContent,
     options: QuoteImageOptions,
   ): Promise<Blob | null> {
-    if (!this.document.defaultView) {
+    const canvas = await this.renderToCanvas(content, options);
+    if (!canvas) {
       return null;
     }
-    await this.ensureFontsLoaded();
-    const canvas = this.document.createElement('canvas');
-    renderQuoteImageToCanvas(canvas, content, options);
-    return this.canvasToBlob(canvas);
+    return this.blobExport.fromCanvas(canvas);
   }
 
   async renderToObjectUrl(
@@ -34,75 +41,38 @@ export class QuoteImageService {
     return URL.createObjectURL(blob);
   }
 
-  async download(
-    content: QuoteImageContent,
-    options: QuoteImageOptions,
-  ): Promise<boolean> {
+  async download(content: QuoteImageContent, options: QuoteImageOptions): Promise<boolean> {
     const blob = await this.renderToBlob(content, options);
     if (!blob) {
       return false;
     }
-    const url = URL.createObjectURL(blob);
-    const anchor = this.document.createElement('a');
-    anchor.href = url;
-    anchor.download = quoteImageFilename(content.surahNumber, content.ayah, options.format);
-    anchor.rel = 'noopener';
-    this.document.body?.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
-    return true;
+    const filename = quoteImageFilename(content.surahNumber, content.ayah, options.format);
+    return this.downloadService.trigger(blob, filename);
   }
 
   async share(
     content: QuoteImageContent,
     options: QuoteImageOptions,
     title: string,
-  ): Promise<'shared' | 'downloaded' | 'failed'> {
+  ): Promise<QuoteImageShareResult> {
     const blob = await this.renderToBlob(content, options);
     if (!blob) {
       return 'failed';
     }
-    const file = new File(
-      [blob],
-      quoteImageFilename(content.surahNumber, content.ayah, options.format),
-      { type: 'image/png' },
-    );
-    const nav = navigator as Navigator & {
-      canShare?: (data?: ShareData) => boolean;
-      share?: (data: ShareData) => Promise<void>;
-    };
-    if (typeof nav.share === 'function' && nav.canShare?.({ files: [file] })) {
-      try {
-        await nav.share({ files: [file], title, text: title });
-        return 'shared';
-      } catch (err) {
-        if (err instanceof DOMException && err.name === 'AbortError') {
-          return 'failed';
-        }
-      }
-    }
-    const downloaded = await this.download(content, options);
-    return downloaded ? 'downloaded' : 'failed';
+    const filename = quoteImageFilename(content.surahNumber, content.ayah, options.format);
+    return this.shareService.shareBlob(blob, filename, title);
   }
 
-  private async ensureFontsLoaded(): Promise<void> {
-    const fonts = this.document.fonts;
-    if (!fonts?.load) {
-      return;
+  private async renderToCanvas(
+    content: QuoteImageContent,
+    options: QuoteImageOptions,
+  ): Promise<HTMLCanvasElement | null> {
+    if (!this.document.defaultView) {
+      return null;
     }
-    await Promise.all([
-      fonts.load('48px "Amiri Quran"'),
-      fonts.load('48px "Amiri"'),
-      fonts.load('32px "Noto Naskh Arabic"'),
-      fonts.load('24px Georgia'),
-    ]);
-    await fonts.ready;
-  }
-
-  private canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob | null> {
-    return new Promise((resolve) => {
-      canvas.toBlob((blob) => resolve(blob), 'image/png', 1);
-    });
+    await this.fonts.ensureLoaded();
+    const canvas = this.document.createElement('canvas');
+    renderQuoteImageToCanvas(canvas, content, options);
+    return canvas;
   }
 }
