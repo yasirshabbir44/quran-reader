@@ -76,7 +76,12 @@
   --reader-bookmark-ring: rgba(100, 170, 255, 0.28);
   --reader-meta-color: #a8a298;
   --reader-translation-ink: #d4cfc4;
+  --reader-translation-bg: rgba(255, 255, 255, 0.04);
+  --reader-translation-border: rgba(201, 162, 39, 0.32);
   --reader-tafsir-ink: #b0aba0;
+  --reader-tafsir-bg: rgba(0, 0, 0, 0.22);
+  --reader-tafsir-border: rgba(201, 162, 39, 0.2);
+  --reader-tafsir-accent: rgba(201, 162, 39, 0.55);
 }
 
 @mixin reader-theme-night {
@@ -155,7 +160,12 @@
   --reader-bookmark-ring: rgba(80, 140, 210, 0.22);
   --reader-meta-color: #949088;
   --reader-translation-ink: #c4bfb4;
+  --reader-translation-bg: rgba(255, 255, 255, 0.03);
+  --reader-translation-border: rgba(184, 148, 31, 0.28);
   --reader-tafsir-ink: #9a958a;
+  --reader-tafsir-bg: rgba(0, 0, 0, 0.35);
+  --reader-tafsir-border: rgba(184, 148, 31, 0.16);
+  --reader-tafsir-accent: rgba(184, 148, 31, 0.48);
 }
 
 @mixin reader-theme-sepia {
@@ -234,5 +244,10 @@
   --reader-bookmark-ring: rgba(70, 120, 180, 0.28);
   --reader-meta-color: #8f8270;
   --reader-translation-ink: #4f463a;
+  --reader-translation-bg: rgba(139, 105, 20, 0.07);
+  --reader-translation-border: rgba(139, 105, 20, 0.35);
   --reader-tafsir-ink: #5c5348;
+  --reader-tafsir-bg: rgba(61, 52, 40, 0.06);
+  --reader-tafsir-border: rgba(139, 105, 20, 0.22);
+  --reader-tafsir-accent: rgba(139, 105, 20, 0.5);
 }
