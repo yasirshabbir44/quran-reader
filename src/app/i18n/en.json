@@ -68,7 +68,7 @@
   "widthMedium": "Medium",
   "widthWide": "Wide",
   "toolsHint": "Your settings are saved automatically on this device.",
-  "bookmarkHint": "Your place also updates while you scroll. Opening the home address resumes your saved surah and verse. A link with ?startingVerse= overrides the saved place.",
+  "bookmarkHint": "Your place also updates while you scroll. Opening the home address resumes your saved surah and verse. A link with a verse anchor (for example /67#12) or ?startingVerse= overrides the saved place.",
   "bookmarkToolsGroup": "Reading place",
   "bookmarkSaveAria": "Save reading place at the verse you see at the top of the screen",
   "bookmarkSaveTitle": "Save place",
