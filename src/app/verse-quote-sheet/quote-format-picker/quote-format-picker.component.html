@@ -1,0 +1,25 @@
+<fieldset class="quote-format-picker">
+  <legend class="quote-format-picker__legend">{{ 'quoteSheetFormatLabel' | uiTranslate }}</legend>
+  <div class="quote-format-picker__row">
+    @for (f of formats; track f) {
+    <button
+      type="button"
+      class="quote-format-picker__chip"
+      [class.quote-format-picker__chip--active]="selected() === f"
+      (click)="pick(f)"
+    >
+      @switch (f) {
+        @case ('instagram') {
+          {{ 'quoteSheetFormatInstagram' | uiTranslate }}
+        }
+        @case ('story') {
+          {{ 'quoteSheetFormatStory' | uiTranslate }}
+        }
+        @case ('twitter') {
+          {{ 'quoteSheetFormatTwitter' | uiTranslate }}
+        }
+      }
+    </button>
+    }
+  </div>
+</fieldset>

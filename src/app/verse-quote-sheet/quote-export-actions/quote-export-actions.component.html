@@ -1,0 +1,18 @@
+<div class="quote-export-actions">
+  <button
+    type="button"
+    class="quote-export-actions__btn quote-export-actions__btn--primary"
+    [disabled]="busy() || disabled()"
+    (click)="download.emit()"
+  >
+    {{ 'quoteSheetDownload' | uiTranslate }}
+  </button>
+  <button
+    type="button"
+    class="quote-export-actions__btn"
+    [disabled]="busy() || disabled()"
+    (click)="share.emit()"
+  >
+    {{ 'quoteSheetShare' | uiTranslate }}
+  </button>
+</div>
