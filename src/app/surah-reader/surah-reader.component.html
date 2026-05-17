@@ -733,23 +733,37 @@
               </button>
             </div>
           </div>
-          <p class="verses__text">{{ v.ar }}</p>
-          @if (showTranslations()) {
-          <div class="verses__translations" role="group" [attr.aria-label]="'verseTranslationsAria' | uiTranslate: { n: formatUiNum(v.ayah) }">
-            @if (showTranslationEn()) {
-            <div class="verses__tr-block verses__tr-block--en" dir="ltr" lang="en">
-              <span class="verses__tr-label">{{ 'translationEnShort' | uiTranslate }}</span>
-              <p class="verses__tr-text">{{ verseTr(v).en }}</p>
-            </div>
-            }
-            @if (showTranslationUr()) {
-            <div class="verses__tr-block verses__tr-block--ur" dir="rtl" lang="ur">
-              <span class="verses__tr-label">{{ 'translationUrShort' | uiTranslate }}</span>
-              <p class="verses__tr-text">{{ verseTr(v).ur }}</p>
-            </div>
+          <div class="verses__content">
+            <section
+              class="verses__quran"
+              [attr.aria-label]="'verseQuranAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+            >
+              <span class="verses__section-label verses__section-label--quran">{{ 'verseQuranSectionLabel' | uiTranslate }}</span>
+              <p class="verses__text">{{ v.ar }}</p>
+            </section>
+            @if (showTranslations()) {
+            <section
+              class="verses__translations"
+              [attr.aria-label]="'verseTranslationsAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+            >
+              <span class="verses__section-label verses__section-label--translation">{{
+                'verseTranslationSectionLabel' | uiTranslate
+              }}              </span>
+              @if (showTranslationEn()) {
+              <div class="verses__tr-block verses__tr-block--en" dir="ltr" lang="en">
+                <span class="verses__tr-label">{{ 'translationEnShort' | uiTranslate }}</span>
+                <p class="verses__tr-text">{{ verseTr(v).en }}</p>
+              </div>
+              }
+              @if (showTranslationUr()) {
+              <div class="verses__tr-block verses__tr-block--ur" dir="rtl" lang="ur">
+                <span class="verses__tr-label">{{ 'translationUrShort' | uiTranslate }}</span>
+                <p class="verses__tr-text">{{ verseTr(v).ur }}</p>
+              </div>
+              }
+            </section>
             }
           </div>
-          }
           @if (isTafsirOpen(v)) {
           <aside
             class="verses__tafsir"
@@ -759,6 +773,7 @@
             [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
             [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
           >
+            <span class="verses__section-label verses__section-label--tafsir">{{ 'verseTafsirSectionLabel' | uiTranslate }}</span>
             <div class="verses__tafsir-toolbar">
               <label class="verses__tafsir-label" [attr.for]="'tafsir-edition-' + v.ayah">
                 {{ 'tafsirSourceLabel' | uiTranslate }}
