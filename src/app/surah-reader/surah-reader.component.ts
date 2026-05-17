@@ -16,7 +16,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { combineLatest, filter, map, tap } from 'rxjs';
+import { combineLatest, filter, map, startWith, tap } from 'rxjs';
 import type { ReadingBookmark } from '../core/bookmark/reading-bookmark.repository';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import { QURAN_CORPUS_SOURCE } from '../core/quran/quran-corpus.source';
@@ -39,13 +39,14 @@ import {
   VERSE_PRESENTATION_STRATEGY,
   type VersePresentationContext,
 } from '../core/verse-presentation/verse-presentation.strategy';
+import {
+  parseVerseFragment,
+  verseElementId,
+  verseFragment,
+} from '../core/routing/verse-deep-link.util';
 import { SURAH_MULK_META } from '../data/surah-mulk-meta';
 
 type ReaderMode = 'verse-by-verse' | 'reading';
-
-function ayahElementId(ayah: number): string {
-  return `ayah-${ayah}`;
-}
 
 @Component({
     selector: 'app-surah-reader',
@@ -132,8 +133,11 @@ export class SurahReaderComponent implements OnInit {
   private ayahElements: Array<HTMLElement | null> | null = null;
   private pendingStartAyah: number | null = null;
   private bookmarkToastTimer: ReturnType<typeof setTimeout> | null = null;
-  /** Avoid re-scrolling to the same ?startingVerse= on every unrelated query update. */
+  /** Avoid re-scrolling to the same verse anchor on every unrelated route update. */
   private lastConsumedStartKey = '';
+  /** After initial scroll, keep the URL fragment aligned with the reading line. */
+  private verseFragmentSyncEnabled = false;
+  private fragmentSyncTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     const corpus$ = this.corpusSource.load().pipe(
@@ -146,7 +150,12 @@ export class SurahReaderComponent implements OnInit {
       }),
     );
 
-    combineLatest([corpus$, this.route.paramMap, this.route.queryParamMap])
+    combineLatest([
+      corpus$,
+      this.route.paramMap,
+      this.route.queryParamMap,
+      this.route.fragment.pipe(startWith(this.route.snapshot.fragment)),
+    ])
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         tap(([payload]) => {
@@ -155,33 +164,55 @@ export class SurahReaderComponent implements OnInit {
           }
         }),
         filter(([payload]) => payload !== null),
-        map(([payload, pm, qm]) => ({ payload: payload as QuranFullPayload, pm, qm })),
+        map(([payload, pm, qm, fragment]) => ({
+          payload: payload as QuranFullPayload,
+          pm,
+          qm,
+          fragment,
+        })),
       )
-      .subscribe(({ payload, pm, qm }) => this.applyCorpusAndRoute(payload, pm, qm));
+      .subscribe(({ payload, pm, qm, fragment }) =>
+        this.applyCorpusAndRoute(payload, pm, qm, fragment),
+      );
   }
 
-  private applyCorpusAndRoute(payload: QuranFullPayload, pm: ParamMap, qm: ParamMap): void {
+  private applyCorpusAndRoute(
+    payload: QuranFullPayload,
+    pm: ParamMap,
+    qm: ParamMap,
+    fragment: string | null,
+  ): void {
     this.surahList.set(payload.surahs.map((s) => ({ number: s.number, nameAr: s.nameAr })));
 
     const raw = Number(pm.get('n'));
     const n = Number.isFinite(raw) && raw >= 1 && raw <= 114 ? Math.floor(raw) : 67;
+    const fragmentAyah = parseVerseFragment(fragment);
     const startParam = qm.get('startingVerse');
     const hasExplicitStart = startParam !== null && startParam !== '';
     const treatAsFreshNavigation = n !== this.surahNumber() || this.surah() === null;
+    let shouldNormalizeLegacyQuery = false;
 
     let pendingAyah: number | null = null;
-    if (hasExplicitStart) {
+    if (fragmentAyah !== null) {
+      const startKey = `${n}#${fragmentAyah}`;
+      if (treatAsFreshNavigation || startKey !== this.lastConsumedStartKey) {
+        pendingAyah = fragmentAyah;
+        this.lastConsumedStartKey = startKey;
+      }
+    } else if (hasExplicitStart) {
       const startingVerseRaw = Number(startParam);
       const parsed =
         Number.isFinite(startingVerseRaw) && startingVerseRaw >= 1 ? Math.floor(startingVerseRaw) : 1;
-      const startKey = `${n}:${startParam}`;
+      const startKey = `${n}?${startParam}`;
       if (treatAsFreshNavigation || startKey !== this.lastConsumedStartKey) {
         pendingAyah = parsed;
         this.lastConsumedStartKey = startKey;
+        shouldNormalizeLegacyQuery = true;
       }
     } else {
       this.lastConsumedStartKey = '';
       if (treatAsFreshNavigation) {
+        this.verseFragmentSyncEnabled = false;
         const b = this.readingBookmark.read();
         pendingAyah = b !== null && b.surah === n ? b.ayah : 1;
       }
@@ -195,12 +226,21 @@ export class SurahReaderComponent implements OnInit {
     this.showTranslationUr.set(translationState.ur);
 
     if (n !== raw) {
-      void this.router.navigate(['/surah', n], { replaceUrl: true });
+      void this.router.navigate(['/', n], { replaceUrl: true });
       return;
     }
 
     this.applySurah(n, payload);
     this.refreshSavedPlaceFromStorage();
+
+    if (shouldNormalizeLegacyQuery && pendingAyah !== null) {
+      this.normalizeVerseUrl(n, pendingAyah);
+    }
+
+    if (pendingAyah !== null && !treatAsFreshNavigation && this.surah() !== null) {
+      this.scrollToPendingAyah(pendingAyah);
+      this.pendingStartAyah = null;
+    }
   }
 
   ngOnInit(): void {
@@ -218,6 +258,10 @@ export class SurahReaderComponent implements OnInit {
         clearTimeout(this.bookmarkToastTimer);
         this.bookmarkToastTimer = null;
       }
+      if (this.fragmentSyncTimer !== null) {
+        clearTimeout(this.fragmentSyncTimer);
+        this.fragmentSyncTimer = null;
+      }
       this.readingBookmark.flushPending(this.surahNumber(), this.activeAyah());
       this.savedPlace.set(this.readingBookmark.read());
     });
@@ -233,7 +277,7 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected verseElementId(ayah: number): string {
-    return ayahElementId(ayah);
+    return verseElementId(ayah);
   }
 
   @HostListener('window:resize')
@@ -306,8 +350,8 @@ export class SurahReaderComponent implements OnInit {
     const maxAyah = this.surah()?.versesCount ?? b.ayah;
     const ayah = Math.min(Math.max(b.ayah, 1), maxAyah);
     if (b.surah !== this.surahNumber()) {
-      void this.router.navigate(['/surah', b.surah], {
-        queryParams: { startingVerse: ayah },
+      void this.router.navigate(['/', b.surah], {
+        fragment: verseFragment(ayah),
         queryParamsHandling: 'merge',
       });
       return;
@@ -315,6 +359,7 @@ export class SurahReaderComponent implements OnInit {
     this.scrollToAyah(ayah, true);
     this.jumpAyahModel = String(ayah);
     this.activeAyah.set(ayah);
+    this.syncVerseFragmentToUrl(ayah);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -370,7 +415,7 @@ export class SurahReaderComponent implements OnInit {
     if (!Number.isFinite(n) || n < 1 || n > 114 || n === this.surahNumber()) {
       return;
     }
-    void this.router.navigate(['/surah', n]);
+    void this.router.navigate(['/', n]);
   }
 
   protected toggleSettingsPanel(): void {
@@ -534,6 +579,7 @@ export class SurahReaderComponent implements OnInit {
     this.scrollToAyah(ayah, true);
     this.jumpAyahModel = String(ayah);
     this.activeAyah.set(ayah);
+    this.syncVerseFragmentToUrl(ayah);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -548,6 +594,7 @@ export class SurahReaderComponent implements OnInit {
     this.scrollToAyah(n);
     this.jumpAyahModel = String(n);
     this.activeAyah.set(n);
+    this.syncVerseFragmentToUrl(n);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateActiveAyah());
     });
@@ -595,9 +642,10 @@ export class SurahReaderComponent implements OnInit {
     const resetViewport = n !== this.surahNumber() || this.surah() === null;
     this.surahNumber.set(n);
     this.surah.set(s);
-    this.activeAyah.set(1);
     if (resetViewport) {
+      this.activeAyah.set(1);
       this.jumpAyahModel = '';
+      this.verseFragmentSyncEnabled = false;
     }
     this.syncDocumentTitle();
     if (isPlatformBrowser(this.platformId) && resetViewport) {
@@ -617,7 +665,7 @@ export class SurahReaderComponent implements OnInit {
     }
     this.bindTopbarHeightSync();
     const list = this.verses();
-    this.ayahElements = list.map((v) => this.document.getElementById(ayahElementId(v.ayah)));
+    this.ayahElements = list.map((v) => this.document.getElementById(verseElementId(v.ayah)));
     const pending = this.pendingStartAyah;
     if (pending !== null) {
       const lastAyah = list.length ? list[list.length - 1]!.ayah : 1;
@@ -626,14 +674,35 @@ export class SurahReaderComponent implements OnInit {
       this.activeAyah.set(safeAyah);
       this.jumpAyahModel = String(safeAyah);
       this.pendingStartAyah = null;
+      this.syncVerseFragmentToUrl(safeAyah);
     }
+    this.verseFragmentSyncEnabled = true;
     const y = this.document.defaultView?.scrollY ?? 0;
     this.updateTopbarScrollState(y);
     this.updateActiveAyah();
   }
 
+  private scrollToPendingAyah(ayah: number): void {
+    const list = this.verses();
+    const lastAyah = list.length ? list[list.length - 1]!.ayah : 1;
+    const safeAyah = Math.min(Math.max(ayah, 1), lastAyah);
+    if (isPlatformBrowser(this.platformId)) {
+      afterNextRender(
+        () => {
+          this.scrollToAyah(safeAyah, false);
+          this.activeAyah.set(safeAyah);
+          this.jumpAyahModel = String(safeAyah);
+          this.syncVerseFragmentToUrl(safeAyah);
+          this.ayahElements = list.map((v) => this.document.getElementById(verseElementId(v.ayah)));
+          requestAnimationFrame(() => this.updateActiveAyah());
+        },
+        { injector: this.injector },
+      );
+    }
+  }
+
   private scrollToAyah(ayah: number, smooth = true): void {
-    const el = this.document.getElementById(ayahElementId(ayah));
+    const el = this.document.getElementById(verseElementId(ayah));
     if (!el) {
       return;
     }
@@ -725,7 +794,7 @@ export class SurahReaderComponent implements OnInit {
       }
     } else {
       for (const v of list) {
-        const el = this.document.getElementById(ayahElementId(v.ayah));
+        const el = this.document.getElementById(verseElementId(v.ayah));
         if (el && el.getBoundingClientRect().top <= lineY) {
           next = v.ayah;
         }
@@ -733,7 +802,49 @@ export class SurahReaderComponent implements OnInit {
     }
     if (next !== this.activeAyah()) {
       this.activeAyah.set(next);
+      this.scheduleVerseFragmentSync(next);
     }
+  }
+
+  private normalizeVerseUrl(surah: number, ayah: number): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    void this.router.navigate(['/', surah], {
+      fragment: verseFragment(ayah),
+      queryParams: { startingVerse: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
+  }
+
+  private scheduleVerseFragmentSync(ayah: number): void {
+    if (!this.verseFragmentSyncEnabled || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (this.fragmentSyncTimer !== null) {
+      clearTimeout(this.fragmentSyncTimer);
+    }
+    this.fragmentSyncTimer = setTimeout(() => {
+      this.fragmentSyncTimer = null;
+      this.syncVerseFragmentToUrl(ayah);
+    }, 200);
+  }
+
+  private syncVerseFragmentToUrl(ayah: number): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const target = verseFragment(ayah);
+    if (this.route.snapshot.fragment === target) {
+      return;
+    }
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      fragment: target,
+      queryParamsHandling: 'preserve',
+      replaceUrl: true,
+    });
   }
 
   private readonly onVisibilityChange = (): void => {
