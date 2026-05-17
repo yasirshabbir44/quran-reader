@@ -1,0 +1,79 @@
+@if (loadError()) {
+<main class="themes themes--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="themes__state-card">
+    <p class="themes__state-text">{{ 'themesLoadError' | uiTranslate }}</p>
+    <button type="button" class="themes__btn themes__btn--primary" (click)="retryLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+    <a class="themes__btn themes__btn--ghost" routerLink="/">{{ 'themesBackHome' | uiTranslate }}</a>
+  </div>
+</main>
+} @else if (loading()) {
+<main class="themes themes--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <p class="themes__state-text">{{ 'themesLoading' | uiTranslate }}</p>
+</main>
+} @else {
+<div class="themes" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <header class="themes__header">
+    <a class="themes__back" routerLink="/" [attr.aria-label]="'homeNavHomeAria' | uiTranslate">←</a>
+    <div class="themes__brand">
+      <p class="themes__kicker">{{ 'themesKicker' | uiTranslate }}</p>
+      <h1 class="themes__title">{{ 'themesTitle' | uiTranslate }}</h1>
+      <p class="themes__subtitle">{{ 'themesSubtitle' | uiTranslate }}</p>
+    </div>
+  </header>
+
+  <div class="themes__search" role="search">
+    <label class="themes__tool-label" for="themes-search">{{ 'themesSearchLabel' | uiTranslate }}</label>
+    <input
+      id="themes-search"
+      class="themes__search-input"
+      type="search"
+      autocomplete="off"
+      spellcheck="false"
+      [attr.placeholder]="'themesSearchPlaceholder' | uiTranslate"
+      [ngModel]="searchQuery()"
+      (ngModelChange)="searchQuery.set($event)"
+    />
+  </div>
+
+  <p class="themes__count" aria-live="polite">
+    {{
+      'themesCount'
+        | uiTranslate: { shown: formatUiNum(shownThemes()), total: formatUiNum(totalThemes()) }
+    }}
+  </p>
+
+  @if (filteredGroups().length === 0) {
+  <p class="themes__empty">{{ 'themesEmpty' | uiTranslate }}</p>
+  } @else {
+  @for (group of filteredGroups(); track group.category.id) {
+  <section class="themes__group" [attr.aria-labelledby]="'cat-' + group.category.id">
+    <h2 [id]="'cat-' + group.category.id" class="themes__group-title">{{ group.category.name }}</h2>
+    <ul class="themes__grid">
+      @for (t of group.themes; track t.id) {
+      <li>
+        <a
+          class="themes__card"
+          [routerLink]="['/themes', t.id]"
+          [attr.aria-label]="
+            'themesCardAria' | uiTranslate: { name: t.name, count: formatUiNum(t.verseCount) }
+          "
+        >
+          <span class="themes__card-icon" aria-hidden="true">{{ themeIcon(t) }}</span>
+          <span class="themes__card-name">{{ t.name }}</span>
+          @if (t.description) {
+          <span class="themes__card-desc">{{ t.description }}</span>
+          }
+          <span class="themes__card-meta">
+            {{ formatUiNum(t.verseCount) }} {{ 'themesVerseCountLabel' | uiTranslate }}
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+  }
+  }
+</div>
+}
