@@ -613,6 +613,33 @@
               {{ 'introTagVerses' | uiTranslate }}: {{ formatUiNum(surah()!.versesCount) }}
             </span>
           </div>
+
+          <details class="reader__about">
+            <summary class="reader__about-summary">{{ introDeepSummary() }}</summary>
+            @if (isMulk()) {
+            <dl class="reader__facts">
+              <div class="reader__fact">
+                <dt>{{ 'factJuz' | uiTranslate }}</dt>
+                <dd>{{ formatUiNum(mulkMeta.juz) }}</dd>
+              </div>
+              <div class="reader__fact">
+                <dt>{{ 'factType' | uiTranslate }}</dt>
+                <dd>{{ mulkMeta.revelationType }}</dd>
+              </div>
+              <div class="reader__fact">
+                <dt>{{ 'factRevelationOrder' | uiTranslate }}</dt>
+                <dd>{{ formatUiNum(mulkMeta.revelationOrder) }}</dd>
+              </div>
+              <div class="reader__fact">
+                <dt>{{ 'factPageStart' | uiTranslate }}</dt>
+                <dd>{{ formatUiNum(mulkMeta.mushafPageStart) }}</dd>
+              </div>
+            </dl>
+            <p class="reader__about-note">{{ 'aboutNote' | uiTranslate }}</p>
+            } @else {
+            <p class="reader__about-body">{{ 'aboutBodyGeneric' | uiTranslate }}</p>
+            }
+          </details>
         </section>
 
         <p class="reader__meta">
@@ -638,6 +665,7 @@
           [class.verses__item--bookmarked]="isVerseSavedBookmark(v)"
           [class.verses__item--search-hit]="isVerseSurahSearchHit(v)"
           [class.verses__item--search-active]="isVerseSurahSearchActive(v)"
+          [class.verses__item--tafsir-open]="isTafsirOpen(v)"
           [id]="verseElementId(v.ayah)"
           [attr.data-ayah]="v.ayah"
           [attr.aria-current]="v.ayah === activeAyah() ? 'true' : null"
@@ -662,6 +690,18 @@
                 [attr.title]="'shareLabel' | uiTranslate"
               >
                 {{ 'shareLabel' | uiTranslate }}
+              </button>
+              <button
+                type="button"
+                class="verses__action-btn verses__action-btn--tafsir"
+                [class.verses__action-btn--tafsir-active]="isTafsirOpen(v)"
+                (click)="toggleTafsir(v)"
+                [attr.aria-expanded]="isTafsirOpen(v)"
+                [attr.aria-controls]="'tafsir-panel-' + v.ayah"
+                [attr.aria-label]="'viewTafsirAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                [attr.title]="isTafsirOpen(v) ? ('hideTafsirLabel' | uiTranslate) : ('viewTafsirLabel' | uiTranslate)"
+              >
+                {{ isTafsirOpen(v) ? ('hideTafsirLabel' | uiTranslate) : ('viewTafsirLabel' | uiTranslate) }}
               </button>
               <button
                 type="button"
@@ -710,6 +750,46 @@
             }
           </div>
           }
+          @if (isTafsirOpen(v)) {
+          <aside
+            class="verses__tafsir"
+            [id]="'tafsir-panel-' + v.ayah"
+            role="region"
+            [attr.aria-label]="'tafsirPanelAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+            [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
+            [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
+          >
+            <div class="verses__tafsir-toolbar">
+              <label class="verses__tafsir-label" [attr.for]="'tafsir-edition-' + v.ayah">
+                {{ 'tafsirSourceLabel' | uiTranslate }}
+              </label>
+              <select
+                class="verses__tafsir-select reader__select reader__select--compact"
+                [id]="'tafsir-edition-' + v.ayah"
+                [ngModel]="tafsirEditionSlug()"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="onTafsirEditionChange($event, v)"
+              >
+                @for (ed of tafsirEditionsForLocale(); track ed.slug) {
+                <option [value]="ed.slug">{{ ed.labelKey | uiTranslate }}</option>
+                }
+              </select>
+            </div>
+            @if (tafsirLoading()) {
+            <p class="verses__tafsir-status" role="status">{{ 'tafsirLoading' | uiTranslate }}</p>
+            } @else if (tafsirError()) {
+            <div class="verses__tafsir-status verses__tafsir-status--error">
+              <p>{{ 'tafsirLoadError' | uiTranslate }}</p>
+              <button type="button" class="verses__tafsir-retry" (click)="retryTafsir(v)">
+                {{ 'tafsirRetry' | uiTranslate }}
+              </button>
+            </div>
+            } @else {
+            <div class="verses__tafsir-text">{{ tafsirText() }}</div>
+            }
+            <p class="verses__tafsir-attribution">{{ 'tafsirAttribution' | uiTranslate }}</p>
+          </aside>
+          }
         </li>
         }
       </ol>
@@ -723,6 +803,9 @@
         </p>
         <p class="reader__footer-line reader__footer-line--muted">
           {{ 'footerTranslationAttribution' | uiTranslate }}
+        </p>
+        <p class="reader__footer-line reader__footer-line--muted">
+          {{ 'tafsirAttribution' | uiTranslate }}
         </p>
       </footer>
     </div>
