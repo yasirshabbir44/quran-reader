@@ -18,7 +18,9 @@ export const appConfig: ApplicationConfig = {
       routes,
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
-        anchorScrolling: 'enabled',
+        // Verse anchors are scrolled manually after the surah loads; automatic
+        // anchor scrolling fights smooth reading and fragment URL sync.
+        anchorScrolling: 'disabled',
       }),
     ),
     provideHttpClient(),
