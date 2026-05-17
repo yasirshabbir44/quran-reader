@@ -189,12 +189,6 @@
   width: 100%;
 }
 
-.reader__side {
-  display: none;
-  width: 100%;
-  max-width: 16.5rem;
-}
-
 .reader__panel {
   position: sticky;
   top: calc(3px + var(--reader-topbar-h) + 1rem);
@@ -203,25 +197,6 @@
   background: var(--reader-panel-deep);
   border: 1px solid var(--reader-border);
   box-shadow: 0 10px 26px var(--reader-shadow-card);
-}
-
-.reader__panel-title {
-  margin: 0 0 0.85rem;
-  font-family: 'Amiri', serif;
-  font-size: 0.95rem;
-  color: var(--reader-accent);
-}
-
-.reader__panel-line {
-  margin: 0 0 0.55rem;
-  font-family: 'Amiri', serif;
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: var(--reader-ink-panel);
-
-  &:last-child {
-    margin-bottom: 0;
-  }
 }
 
 .reader__header {
@@ -1444,24 +1419,20 @@ a.reader__settings-btn {
   flex: 1 1 11rem;
 }
 
-.reader__settings-tools .reader__fieldset,
-.reader__side .reader__fieldset {
+.reader__settings-tools .reader__fieldset {
   margin-top: 1rem;
 }
 
-.reader__settings-tools .reader__fieldset:first-of-type,
-.reader__side .reader__fieldset:first-of-type {
+.reader__settings-tools .reader__fieldset:first-of-type {
   margin-top: 0;
 }
 
-.reader__settings-tools .reader__segment,
-.reader__side .reader__segment {
+.reader__settings-tools .reader__segment {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.reader__settings-tools .reader__seg-btn,
-.reader__side .reader__seg-btn {
+.reader__settings-tools .reader__seg-btn {
   min-width: 0;
 }
 
@@ -2012,18 +1983,78 @@ a.reader__settings-btn {
     padding-inline: 1rem;
   }
 
-  .reader__side {
-    display: block;
-  }
-
-  .reader__side--left {
-    grid-column: 1;
-    grid-row: 1;
-    align-self: start;
-  }
-
   .reader__shell {
     grid-column: 1;
     max-width: none;
+  }
+
+  :host(.reader--tafsir-split) .verses__content--tafsir-target {
+    cursor: pointer;
+    border-radius: 0.65rem;
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: var(--reader-surface-muted);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--reader-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  :host(.reader--tafsir-panel-open) .reader__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(20rem, 26rem);
+    width: min(72rem, 100% - 2rem);
+    max-width: none;
+    margin-inline: auto;
+    justify-content: stretch;
+  }
+
+  :host(.reader--tafsir-panel-open) .reader__shell {
+    min-width: 0;
+  }
+
+  .reader__side--tafsir {
+    display: flex;
+    flex-direction: column;
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+    position: sticky;
+    top: calc(3px + var(--reader-topbar-h) + 0.75rem);
+    max-height: calc(100dvh - var(--reader-topbar-h) - 3px - 1.5rem);
+    min-width: 0;
+  }
+
+  .reader__tafsir-side-head {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--reader-tafsir-border);
+  }
+
+  .reader__tafsir-side-title {
+    color: var(--reader-tafsir-accent);
+  }
+
+  .reader__tafsir-side-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .verses__tafsir--side {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: none;
+    margin-top: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    min-height: 12rem;
   }
 }
