@@ -2,6 +2,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, OnInit, PLATFORM_ID, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { READING_BOOKMARK_REPOSITORY } from './core/bookmark/reading-bookmark.repository';
+import { verseFragment } from './core/routing/verse-deep-link.util';
 
 @Component({
   selector: 'app-home-redirect',
@@ -15,17 +16,17 @@ export class HomeRedirectComponent implements OnInit {
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {
-      void this.router.navigate(['/surah', 67], { replaceUrl: true });
+      void this.router.navigate(['/', 67], { replaceUrl: true });
       return;
     }
     const b = this.bookmark.read();
     if (b) {
-      void this.router.navigate(['/surah', b.surah], {
-        queryParams: { startingVerse: b.ayah },
+      void this.router.navigate(['/', b.surah], {
+        fragment: verseFragment(b.ayah),
         replaceUrl: true,
       });
       return;
     }
-    void this.router.navigate(['/surah', 67], { replaceUrl: true });
+    void this.router.navigate(['/', 67], { replaceUrl: true });
   }
 }

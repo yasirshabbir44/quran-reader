@@ -1,5 +1,6 @@
 import { Injectable, InjectionToken } from '@angular/core';
 import type { QuranVerseRow } from '../quran/quran-data.service';
+import { buildVerseDeepLink } from '../routing/verse-deep-link.util';
 import { ShareDataBuilder } from './share-data.builder';
 
 export interface VersePresentationContext {
@@ -40,7 +41,7 @@ export class DefaultVersePresentationStrategy implements VersePresentationStrate
   buildShareData(verse: QuranVerseRow, ctx: VersePresentationContext): ShareData {
     const tr = normalizeVerseTranslations(verse);
     const ref = `${ctx.formatUiNum(ctx.surahNumber)}:${ctx.formatUiNum(verse.ayah)}`;
-    const shareUrl = `${ctx.origin}/surah/${ctx.surahNumber}?startingVerse=${verse.ayah}`;
+    const shareUrl = buildVerseDeepLink(ctx.origin, ctx.surahNumber, verse.ayah);
     return new ShareDataBuilder()
       .setTitle(`${ctx.surahNameAr} ${verse.ayah}`)
       .setText(`${verse.ar}\n\n${tr.en}\n\n${ctx.surahNameAr} ${ref}`)
