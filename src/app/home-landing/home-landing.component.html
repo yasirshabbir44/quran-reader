@@ -1,0 +1,181 @@
+@if (corpusError()) {
+<main class="landing landing--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="landing__state-card">
+    <p class="landing__state-text">{{ 'loadError' | uiTranslate }}</p>
+    <button type="button" class="landing__btn landing__btn--primary" (click)="retryCorpusLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+  </div>
+</main>
+} @else if (corpusLoading()) {
+<main class="landing landing--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <p class="landing__state-text">{{ 'loadingCorpus' | uiTranslate }}</p>
+</main>
+} @else {
+<div class="landing" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <header class="landing__header">
+    <div class="landing__brand">
+      <p class="landing__kicker">{{ 'homeKicker' | uiTranslate }}</p>
+      <h1 class="landing__title">{{ 'homeTitle' | uiTranslate }}</h1>
+      <p class="landing__subtitle">{{ 'homeSubtitle' | uiTranslate }}</p>
+    </div>
+    <div class="landing__header-tools">
+      <label class="landing__tool-label" for="home-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="home-ui-locale"
+        class="landing__select"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+  </header>
+
+  <div class="landing__shell">
+    <nav class="landing__nav" [attr.aria-label]="'homeNavAria' | uiTranslate">
+      <p class="landing__nav-heading">{{ 'homeNavAria' | uiTranslate }}</p>
+      <ul class="landing__nav-list">
+        @if (savedPlace(); as bm) {
+        <li>
+          <a
+            class="landing__nav-link landing__nav-link--accent"
+            [routerLink]="verseLink(bm.surah, bm.ayah)"
+            [fragment]="verseFragment(bm.ayah)"
+          >
+            <span class="landing__nav-link-title">{{ 'homeNavContinue' | uiTranslate }}</span>
+            <span class="landing__nav-link-meta">
+              {{
+                'homeNavContinueHint'
+                  | uiTranslate: { surah: formatUiNum(bm.surah), ayah: formatUiNum(bm.ayah) }
+              }}
+            </span>
+          </a>
+        </li>
+        }
+        <li>
+          <a class="landing__nav-link" href="#surah-index">
+            <span class="landing__nav-link-title">{{ 'homeNavIndex' | uiTranslate }}</span>
+          </a>
+        </li>
+        @if (daily()) {
+        <li>
+          <a class="landing__nav-link" href="#featured-today">
+            <span class="landing__nav-link-title">{{ 'homeNavFeatured' | uiTranslate }}</span>
+          </a>
+        </li>
+        }
+      </ul>
+    </nav>
+
+    <main class="landing__main">
+      @if (daily(); as dv) {
+      <section id="featured-today" class="landing__featured" aria-labelledby="featured-heading">
+        <div class="landing__featured-intro">
+          <p class="landing__featured-kicker">{{ 'homeFeaturedKicker' | uiTranslate }}</p>
+          <h2 id="featured-heading" class="landing__section-title">
+            @if (featuredSurah(); as fs) {
+            {{ fs.nameAr }}
+            <span class="landing__featured-translit" dir="ltr" lang="en">{{ fs.nameTranslit }}</span>
+            }
+          </h2>
+          @if (featuredSurah(); as fs) {
+          <p class="landing__featured-meta">
+            {{ 'surahWord' | uiTranslate }} {{ formatUiNum(fs.number) }} ·
+            {{ formatUiNum(fs.versesCount) }} {{ 'versesWord' | uiTranslate }} ·
+            {{ revelationLabel(fs.revelationType) }}
+          </p>
+          }
+        </div>
+
+        <blockquote class="landing__verse-card">
+          <p class="landing__verse-ar" dir="rtl" lang="ar">{{ dv.arabic }}</p>
+          <p class="landing__verse-ref">
+            {{ 'homeFeaturedSurahLabel' | uiTranslate }}
+            <span dir="rtl" lang="ar">{{ dv.surahNameAr }}</span>
+            · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(dv.ayah) }}
+          </p>
+          <p class="landing__verse-en" dir="ltr" lang="en">{{ dv.translationEn }}</p>
+        </blockquote>
+
+        <div class="landing__featured-actions">
+          <a
+            class="landing__btn landing__btn--primary"
+            [routerLink]="verseLink(dv.surah, dv.ayah)"
+            [fragment]="verseFragment(dv.ayah)"
+          >
+            {{ 'homeFeaturedReadVerse' | uiTranslate }}
+          </a>
+          <a class="landing__btn landing__btn--ghost" [routerLink]="['/', dv.surah]">
+            {{ 'homeFeaturedReadSurah' | uiTranslate }}
+          </a>
+        </div>
+      </section>
+      }
+
+      <section id="surah-index" class="landing__index" aria-labelledby="index-heading">
+        <div class="landing__index-head">
+          <div>
+            <h2 id="index-heading" class="landing__section-title">{{ 'homeIndexTitle' | uiTranslate }}</h2>
+            <p class="landing__index-subtitle">{{ 'homeIndexSubtitle' | uiTranslate }}</p>
+          </div>
+          <p class="landing__index-count" aria-live="polite">
+            {{
+              'homeIndexCount'
+                | uiTranslate: {
+                    shown: formatUiNum(filteredSurahs().length),
+                    total: formatUiNum(surahs().length),
+                  }
+            }}
+          </p>
+        </div>
+
+        <div class="landing__search" role="search">
+          <label class="landing__tool-label" for="surah-index-search">{{ 'homeIndexSearchLabel' | uiTranslate }}</label>
+          <input
+            id="surah-index-search"
+            class="landing__search-input"
+            type="search"
+            autocomplete="off"
+            spellcheck="false"
+            [attr.placeholder]="'homeIndexSearchPlaceholder' | uiTranslate"
+            [ngModel]="indexQuery()"
+            (ngModelChange)="indexQuery.set($event)"
+          />
+        </div>
+
+        @if (filteredSurahs().length === 0) {
+        <p class="landing__index-empty">{{ 'homeIndexEmpty' | uiTranslate }}</p>
+        } @else {
+        <ul class="landing__grid">
+          @for (s of filteredSurahs(); track s.number) {
+          <li>
+            <a
+              class="landing__surah-card"
+              [routerLink]="['/', s.number]"
+              [attr.aria-label]="
+                'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }
+              "
+            >
+              <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
+              <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+              <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
+              <span class="landing__surah-meta">
+                <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
+                <span class="landing__surah-verses">
+                  {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
+                </span>
+              </span>
+            </a>
+          </li>
+          }
+        </ul>
+        }
+      </section>
+    </main>
+  </div>
+</div>
+}
