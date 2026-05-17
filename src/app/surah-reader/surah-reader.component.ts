@@ -99,7 +99,7 @@ export class SurahReaderComponent implements OnInit {
   /** Slim top bar with essentials while scrolled; full bar returns near top or on scroll up. */
   protected topbarCompact = false;
   protected topbarFullRevealed = true;
-  /** Verse at the reading line (scroll-driven); signal so the highlight updates reliably. */
+  /** Verse nearest viewport center (scroll-driven); signal so the highlight updates reliably. */
   protected readonly activeAyah = signal(1);
   protected jumpAyahModel = '';
   protected copiedAyah: number | null = null;
@@ -837,18 +837,17 @@ export class SurahReaderComponent implements OnInit {
     }
   }
 
-  private readingLineViewportY(): number {
+  private viewportCenterY(): number {
     if (!isPlatformBrowser(this.platformId)) {
-      return 168;
+      return 400;
     }
-    const topbar = this.document.querySelector('.reader__topbar');
-    const y = (topbar instanceof HTMLElement ? topbar.getBoundingClientRect().bottom : 100) + 12;
-    return Math.min(Math.max(y, 64), 360);
+    return (this.document.defaultView?.innerHeight ?? 800) / 2;
   }
 
   private updateActiveAyah(): void {
-    const lineY = this.readingLineViewportY();
+    const centerY = this.viewportCenterY();
     let next = 1;
+    let bestDistance = Infinity;
     const list = this.verses();
     const els = this.ayahElements;
     const useCachedRefs =
@@ -857,14 +856,28 @@ export class SurahReaderComponent implements OnInit {
       for (let i = 0; i < els.length; i++) {
         const el = els[i];
         const verse = list[i];
-        if (el && verse && el.getBoundingClientRect().top <= lineY) {
+        if (!el || !verse) {
+          continue;
+        }
+        const rect = el.getBoundingClientRect();
+        const verseCenterY = rect.top + rect.height / 2;
+        const distance = Math.abs(verseCenterY - centerY);
+        if (distance < bestDistance) {
+          bestDistance = distance;
           next = verse.ayah;
         }
       }
     } else {
       for (const v of list) {
         const el = this.document.getElementById(verseElementId(v.ayah));
-        if (el && el.getBoundingClientRect().top <= lineY) {
+        if (!el) {
+          continue;
+        }
+        const rect = el.getBoundingClientRect();
+        const verseCenterY = rect.top + rect.height / 2;
+        const distance = Math.abs(verseCenterY - centerY);
+        if (distance < bestDistance) {
+          bestDistance = distance;
           next = v.ayah;
         }
       }
