@@ -1050,14 +1050,7 @@
   }
 
   .verses__item {
-    transition:
-      border-color 0.2s ease,
-      box-shadow 0.2s ease,
-      background 0.2s ease;
-
-    &::before {
-      transition: none;
-    }
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
   }
 }
 
@@ -1305,31 +1298,7 @@
   box-shadow: 0 4px 24px var(--reader-shadow-card);
   scroll-margin-top: calc(3px + var(--reader-topbar-h) + 4.5rem);
   opacity: var(--reader-verse-inactive-opacity, 0.6);
-  transition:
-    opacity 0.35s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset-inline-start: 0;
-    top: 0.75rem;
-    bottom: 0.75rem;
-    width: 3px;
-    border-radius: 0 3px 3px 0;
-    background: transparent;
-    box-shadow: none;
-    pointer-events: none;
-    transition:
-      background 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-
-  &:hover:not(&--active) {
-    opacity: calc(var(--reader-verse-inactive-opacity, 0.6) + 0.12);
-  }
+  transition: opacity 0.35s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 
   &:hover {
     border-color: var(--reader-accent-fill-mid);
@@ -1347,14 +1316,10 @@
     border-color: var(--reader-verse-active-border);
     background: var(--reader-verse-active-bg);
     box-shadow:
+      inset 3px 0 0 var(--reader-verse-active-border),
       0 0 0 1px var(--reader-verse-active-ring),
       0 6px 28px var(--reader-shadow-card-hover),
       0 0 42px var(--reader-verse-active-glow);
-
-    &::before {
-      background: var(--reader-verse-active-border);
-      box-shadow: 0 0 14px var(--reader-verse-active-glow);
-    }
 
     .verses__num {
       color: var(--reader-btn-on-accent);
