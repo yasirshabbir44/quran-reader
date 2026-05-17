@@ -9,23 +9,28 @@ import {
   PLATFORM_ID,
   signal,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import type { QuranVerseRow } from '../core/quran/quran-data.service';
-import { buildVerseDeepLink } from '../core/routing/verse-deep-link.util';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 import { UiLocaleService } from '../core/ui/ui-locale.service';
-import { normalizeVerseTranslations } from '../core/verse-presentation/verse-presentation.strategy';
+import { QuoteImageContentBuilder } from '../core/verse-quote-image/quote-image-content.builder';
 import { QuoteImageService } from '../core/verse-quote-image/quote-image.service';
-import {
-  QUOTE_IMAGE_FORMATS,
-  type QuoteImageContent,
-  type QuoteImageFormat,
-  type QuoteImageOptions,
-} from '../core/verse-quote-image/quote-image.types';
+import type { QuoteImageFormat, QuoteImageOptions } from '../core/verse-quote-image/quote-image.types';
+import { QuoteExportActionsComponent } from './quote-export-actions/quote-export-actions.component';
+import { QuoteFormatPickerComponent } from './quote-format-picker/quote-format-picker.component';
+import { QuotePreviewComponent } from './quote-preview/quote-preview.component';
+import { QuotePreviewService } from './quote-preview.service';
+import { QuoteTranslationOptionsComponent } from './quote-translation-options/quote-translation-options.component';
 
 @Component({
   selector: 'app-verse-quote-sheet',
-  imports: [FormsModule, UiTranslatePipe],
+  imports: [
+    UiTranslatePipe,
+    QuotePreviewComponent,
+    QuoteFormatPickerComponent,
+    QuoteTranslationOptionsComponent,
+    QuoteExportActionsComponent,
+  ],
+  providers: [QuotePreviewService],
   templateUrl: './verse-quote-sheet.component.html',
   styleUrl: './verse-quote-sheet.component.scss',
 })
@@ -33,6 +38,8 @@ export class VerseQuoteSheetComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly quoteImages = inject(QuoteImageService);
+  private readonly contentBuilder = inject(QuoteImageContentBuilder);
+  protected readonly preview = inject(QuotePreviewService);
   private readonly ui = inject(UiLocaleService);
 
   readonly verse = input.required<QuranVerseRow>();
@@ -45,16 +52,10 @@ export class VerseQuoteSheetComponent {
 
   readonly closed = output<void>();
 
-  protected readonly formats = QUOTE_IMAGE_FORMATS;
   protected readonly format = signal<QuoteImageFormat>('instagram');
   protected readonly includeEn = signal(true);
   protected readonly includeUr = signal(true);
-  protected readonly previewUrl = signal<string | null>(null);
-  protected readonly generating = signal(false);
   protected readonly busy = signal(false);
-
-  private renderGeneration = 0;
-  private lastObjectUrl: string | null = null;
 
   constructor() {
     effect(() => {
@@ -66,17 +67,20 @@ export class VerseQuoteSheetComponent {
     effect(() => {
       this.verse();
       this.surahNumber();
+      this.surahNameAr();
+      this.origin();
       this.format();
       this.includeEn();
       this.includeUr();
       this.ui.locale();
+      this.formatUiNum();
       if (!isPlatformBrowser(this.platformId)) {
         return;
       }
-      void this.refreshPreview();
+      void this.preview.refresh(this.buildContent(), this.buildOptions());
     });
 
-    this.destroyRef.onDestroy(() => this.revokePreviewUrl());
+    this.destroyRef.onDestroy(() => this.preview.revoke());
   }
 
   protected close(): void {
@@ -93,18 +97,12 @@ export class VerseQuoteSheetComponent {
     this.format.set(format);
   }
 
-  protected onIncludeEnChange(checked: boolean): void {
-    this.includeEn.set(checked);
-    if (!checked && !this.includeUr()) {
-      this.includeUr.set(true);
-    }
+  protected onIncludeEnChange(value: boolean): void {
+    this.includeEn.set(value);
   }
 
-  protected onIncludeUrChange(checked: boolean): void {
-    this.includeUr.set(checked);
-    if (!checked && !this.includeEn()) {
-      this.includeEn.set(true);
-    }
+  protected onIncludeUrChange(value: boolean): void {
+    this.includeUr.set(value);
   }
 
   protected async downloadImage(): Promise<void> {
@@ -132,20 +130,18 @@ export class VerseQuoteSheetComponent {
     }
   }
 
-  private buildContent(): QuoteImageContent {
-    const v = this.verse();
-    const tr = normalizeVerseTranslations(v);
-    return {
-      arabic: v.ar,
-      translationEn: tr.en,
-      translationUr: tr.ur,
-      surahNameAr: this.surahNameAr(),
+  protected ayahLabel(): string {
+    return this.formatUiNum()(this.verse().ayah);
+  }
+
+  private buildContent() {
+    return this.contentBuilder.build({
+      verse: this.verse(),
       surahNumber: this.surahNumber(),
-      ayah: v.ayah,
-      siteLabel: this.ui.translate('documentTitle'),
-      deepLink: buildVerseDeepLink(this.origin(), this.surahNumber(), v.ayah),
+      surahNameAr: this.surahNameAr(),
+      origin: this.origin(),
       formatUiNum: this.formatUiNum(),
-    };
+    });
   }
 
   private buildOptions(): QuoteImageOptions {
@@ -154,29 +150,5 @@ export class VerseQuoteSheetComponent {
       includeEn: this.includeEn(),
       includeUr: this.includeUr(),
     };
-  }
-
-  private async refreshPreview(): Promise<void> {
-    const generation = ++this.renderGeneration;
-    this.generating.set(true);
-    const url = await this.quoteImages.renderToObjectUrl(this.buildContent(), this.buildOptions());
-    if (generation !== this.renderGeneration) {
-      if (url) {
-        URL.revokeObjectURL(url);
-      }
-      return;
-    }
-    this.revokePreviewUrl();
-    this.lastObjectUrl = url;
-    this.previewUrl.set(url);
-    this.generating.set(false);
-  }
-
-  private revokePreviewUrl(): void {
-    if (this.lastObjectUrl) {
-      URL.revokeObjectURL(this.lastObjectUrl);
-      this.lastObjectUrl = null;
-    }
-    this.previewUrl.set(null);
   }
 }

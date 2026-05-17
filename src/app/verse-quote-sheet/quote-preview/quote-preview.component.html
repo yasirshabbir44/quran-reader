@@ -1,0 +1,14 @@
+<div class="quote-preview">
+  @if (previewUrl(); as src) {
+  <img
+    class="quote-preview__img"
+    [class.quote-preview__img--story]="format() === 'story'"
+    [src]="src"
+    [attr.alt]="'quoteSheetPreviewAlt' | uiTranslate: { n: ayahLabel() }"
+  />
+  } @else {
+  <p class="quote-preview__placeholder" aria-live="polite">
+    {{ 'quoteSheetGenerating' | uiTranslate }}
+  </p>
+  }
+</div>
