@@ -32,6 +32,18 @@
 
 <nav class="reader__topbar" [attr.aria-label]="'toolsAria' | uiTranslate">
   <div class="reader__topbar-brand">
+    <a
+      routerLink="/"
+      class="reader__settings-btn"
+      [attr.aria-label]="'homeNavHomeAria' | uiTranslate"
+      [attr.title]="'homeNavHomeAria' | uiTranslate"
+    >
+      <svg class="reader__settings-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          d="M12 3.25 4.5 9.5v10.25h5.25v-6h4.5v6H19.5V9.5L12 3.25Zm0 1.55 5.75 4.85v8.1h-2.25v-6h-7v6H6.25v-8.1L12 4.8Z"
+        />
+      </svg>
+    </a>
 
     <button
       type="button"
