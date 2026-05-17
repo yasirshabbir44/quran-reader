@@ -39,6 +39,9 @@ import {
   VERSE_PRESENTATION_STRATEGY,
   type VersePresentationContext,
 } from '../core/verse-presentation/verse-presentation.strategy';
+import { DailyReminderService } from '../core/notifications/daily-reminder.service';
+import { NotificationPreferencesService } from '../core/notifications/notification-preferences.service';
+import type { DailyReminderKind } from '../core/notifications/notification-storage';
 import {
   parseVerseFragment,
   verseElementId,
@@ -71,6 +74,8 @@ export class SurahReaderComponent implements OnInit {
   private readonly readingBookmark = inject(READING_BOOKMARK_REPOSITORY);
   private readonly versePresentation = inject(VERSE_PRESENTATION_STRATEGY);
   private readonly readerLayout = inject(ReaderLayoutPreferencesService);
+  private readonly dailyReminder = inject(DailyReminderService);
+  protected readonly notifyPrefs = inject(NotificationPreferencesService);
   protected readonly ui = inject(UiLocaleService);
 
   protected readonly mulkMeta = SURAH_MULK_META;
@@ -100,6 +105,7 @@ export class SurahReaderComponent implements OnInit {
   protected copiedAyah: number | null = null;
   protected readonly savedPlace = signal<ReadingBookmark | null>(null);
   protected showBookmarkSavedToast = false;
+  protected readonly notifyPermissionError = signal<'denied' | 'unsupported' | null>(null);
 
   /** Text search within the loaded surah (Arabic + English + Urdu). */
   protected readonly surahSearchQuery = signal('');
@@ -131,6 +137,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly bookmarkPulseAyah = signal<number | null>(null);
   private bookmarkPulseRaf = 0;
   private ayahElements: Array<HTMLElement | null> | null = null;
+  private loadedCorpus: QuranFullPayload | null = null;
   private pendingStartAyah: number | null = null;
   private bookmarkToastTimer: ReturnType<typeof setTimeout> | null = null;
   /** Avoid re-scrolling to the same verse anchor on every unrelated route update. */
@@ -184,6 +191,7 @@ export class SurahReaderComponent implements OnInit {
     qm: ParamMap,
     fragment: string | null,
   ): void {
+    this.loadedCorpus = payload;
     this.surahList.set(payload.surahs.map((s) => ({ number: s.number, nameAr: s.nameAr })));
 
     const raw = Number(pm.get('n'));
@@ -240,6 +248,7 @@ export class SurahReaderComponent implements OnInit {
 
     this.applySurah(n, payload);
     this.refreshSavedPlaceFromStorage();
+    void this.dailyReminder.syncFromCorpus(payload, this.readingBookmark.read());
 
     if (shouldNormalizeLegacyQuery && pendingAyah !== null) {
       this.normalizeVerseUrl(n, pendingAyah);
@@ -318,6 +327,9 @@ export class SurahReaderComponent implements OnInit {
     if (value === 'en' || value === 'ar' || value === 'ur') {
       this.ui.setLocale(value as UiLocaleCode);
       this.syncDocumentTitle();
+      if (this.loadedCorpus) {
+        void this.dailyReminder.syncFromCorpus(this.loadedCorpus, this.readingBookmark.read());
+      }
     }
   }
 
@@ -337,6 +349,7 @@ export class SurahReaderComponent implements OnInit {
     this.readingBookmark.saveNow(s, a);
     this.savedPlace.set({ surah: s, ayah: a });
     this.flashBookmarkSaved(a);
+    void this.dailyReminder.onBookmarkChanged();
   }
 
   protected saveBookmarkForVerse(v: QuranVerseRow): void {
@@ -347,6 +360,7 @@ export class SurahReaderComponent implements OnInit {
     this.readingBookmark.saveNow(s, v.ayah);
     this.savedPlace.set({ surah: s, ayah: v.ayah });
     this.flashBookmarkSaved(v.ayah);
+    void this.dailyReminder.onBookmarkChanged();
   }
 
   protected goToSavedBookmark(): void {
@@ -424,6 +438,53 @@ export class SurahReaderComponent implements OnInit {
       return;
     }
     void this.router.navigate(['/', n]);
+  }
+
+  protected reminderTimeValue(): string {
+    const h = String(this.notifyPrefs.hour()).padStart(2, '0');
+    const m = String(this.notifyPrefs.minute()).padStart(2, '0');
+    return `${h}:${m}`;
+  }
+
+  protected async onDailyReminderToggle(event: Event): Promise<void> {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement)) {
+      return;
+    }
+    this.notifyPermissionError.set(null);
+    if (input.checked) {
+      const result = await this.dailyReminder.enableReminders();
+      if (result === 'denied') {
+        this.notifyPermissionError.set('denied');
+        input.checked = false;
+      } else if (result === 'unsupported') {
+        this.notifyPermissionError.set('unsupported');
+        input.checked = false;
+      }
+      return;
+    }
+    this.dailyReminder.disableReminders();
+  }
+
+  protected onReminderTimeChange(event: Event): void {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement) || !input.value) {
+      return;
+    }
+    const [hourRaw, minuteRaw] = input.value.split(':');
+    void this.dailyReminder.setReminderTime(Number(hourRaw), Number(minuteRaw));
+  }
+
+  protected setReminderKind(kind: DailyReminderKind): void {
+    void this.dailyReminder.setReminderKind(kind);
+  }
+
+  protected checkReminderNow(): void {
+    void this.dailyReminder.checkNow();
+  }
+
+  protected notificationsUnsupported(): boolean {
+    return this.dailyReminder.notificationPermission() === 'unsupported';
   }
 
   protected toggleSettingsPanel(): void {

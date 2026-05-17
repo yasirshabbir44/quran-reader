@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, isDevMode, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app.routes';
 import { READING_BOOKMARK_REPOSITORY } from './core/bookmark/reading-bookmark.repository';
 import { ReadingBookmarkService } from './core/bookmark/reading-bookmark.service';
@@ -27,5 +28,9 @@ export const appConfig: ApplicationConfig = {
     { provide: QURAN_CORPUS_SOURCE, useExisting: QuranDataService },
     { provide: READING_BOOKMARK_REPOSITORY, useExisting: ReadingBookmarkService },
     { provide: VERSE_PRESENTATION_STRATEGY, useExisting: DefaultVersePresentationStrategy },
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
 };

@@ -1,0 +1,24 @@
+{
+  "name": "QuranDaily — Quran Reader",
+  "short_name": "QuranDaily",
+  "description": "Read the Quran with daily verse reminders and saved reading place.",
+  "theme_color": "#0c0e12",
+  "background_color": "#0c0e12",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
