@@ -49,6 +49,7 @@ import {
   verseFragment,
 } from '../core/routing/verse-deep-link.util';
 import { SURAH_MULK_META } from '../data/surah-mulk-meta';
+import { VerseQuoteSheetComponent } from '../verse-quote-sheet/verse-quote-sheet.component';
 
 type ReaderMode = 'verse-by-verse' | 'reading';
 
@@ -62,7 +63,7 @@ type SurahNavItem = {
 
 @Component({
     selector: 'app-surah-reader',
-    imports: [NgClass, FormsModule, RouterLink, UiTranslatePipe],
+    imports: [NgClass, FormsModule, RouterLink, UiTranslatePipe, VerseQuoteSheetComponent],
     templateUrl: './surah-reader.component.html',
     styleUrl: './surah-reader.component.scss',
     host: {
@@ -127,6 +128,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly showTranslationEn = signal(true);
   protected readonly showTranslationUr = signal(true);
   protected settingsOpen = false;
+  protected readonly quoteSheetVerse = signal<QuranVerseRow | null>(null);
   protected surahNavOpen = false;
 
   protected scrollProgress = 0;
@@ -470,6 +472,8 @@ export class SurahReaderComponent implements OnInit {
     this.savedPlace.set(this.readingBookmark.read());
   }
 
+  protected readonly formatUiNumForQuote = (n: number): string => this.formatUiNum(n);
+
   protected formatUiNum(n: number): string {
     this.ui.locale();
     return n.toLocaleString(this.ui.numberLocaleTag());
@@ -597,6 +601,10 @@ export class SurahReaderComponent implements OnInit {
 
   @HostListener('document:keydown.escape')
   protected onEscapeClosePanels(): void {
+    if (this.quoteSheetVerse()) {
+      this.closeQuoteSheet();
+      return;
+    }
     if (this.surahNavOpen) {
       this.closeSurahNav();
       return;
@@ -791,6 +799,23 @@ export class SurahReaderComponent implements OnInit {
     void navigator.share(sharePayload);
   }
 
+  protected openQuoteImage(v: QuranVerseRow): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.quoteSheetVerse.set(v);
+    this.settingsOpen = false;
+    this.surahNavOpen = false;
+  }
+
+  protected closeQuoteSheet(): void {
+    this.quoteSheetVerse.set(null);
+  }
+
+  protected readerOrigin(): string {
+    return isPlatformBrowser(this.platformId) ? this.document.location.origin : '';
+  }
+
   private versePresentationContext(): VersePresentationContext {
     return {
       surahNumber: this.surahNumber(),
@@ -883,7 +908,7 @@ export class SurahReaderComponent implements OnInit {
 
   private updateTopbarScrollState(y: number): void {
     const compactThreshold = 72;
-    if (this.settingsOpen || this.surahNavOpen) {
+    if (this.settingsOpen || this.surahNavOpen || this.quoteSheetVerse()) {
       this.topbarCompact = y > compactThreshold;
       this.topbarFullRevealed = true;
     } else if (y <= compactThreshold) {

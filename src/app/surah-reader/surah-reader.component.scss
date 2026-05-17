@@ -1675,6 +1675,12 @@ a.reader__settings-btn {
     color: var(--reader-accent);
     background: rgba(201, 162, 39, 0.12);
   }
+
+  &--image {
+    border-color: rgba(201, 162, 39, 0.28);
+    color: var(--reader-accent);
+    background: rgba(201, 162, 39, 0.08);
+  }
 }
 
 @keyframes verses-bookmark-pop {

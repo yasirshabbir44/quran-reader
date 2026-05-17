@@ -665,6 +665,15 @@
               </button>
               <button
                 type="button"
+                class="verses__action-btn verses__action-btn--image"
+                (click)="openQuoteImage(v)"
+                [attr.aria-label]="'quoteImageVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                [attr.title]="'quoteImageLabel' | uiTranslate"
+              >
+                {{ 'quoteImageLabel' | uiTranslate }}
+              </button>
+              <button
+                type="button"
                 class="verses__action-btn verses__action-btn--bookmark"
                 [class.verses__action-btn--bookmark-active]="isVerseSavedBookmark(v)"
                 [class.verses__action-btn--bookmark-pulse]="bookmarkPulseAyah() === v.ayah"
@@ -720,4 +729,17 @@
 
   </div>
 </main>
+}
+
+@if (quoteSheetVerse(); as quoteVerse) {
+<app-verse-quote-sheet
+  [verse]="quoteVerse"
+  [surahNumber]="surahNumber()"
+  [surahNameAr]="surah()?.nameAr ?? ''"
+  [origin]="readerOrigin()"
+  [showEnDefault]="showTranslationEn()"
+  [showUrDefault]="showTranslationUr()"
+  [formatUiNum]="formatUiNumForQuote"
+  (closed)="closeQuoteSheet()"
+/>
 }
