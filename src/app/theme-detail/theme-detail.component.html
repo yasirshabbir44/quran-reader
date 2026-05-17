@@ -34,6 +34,20 @@
       <p class="theme-detail__desc">{{ data.theme.description }}</p>
       }
     </div>
+    <div class="theme-detail__header-tools">
+      <label class="theme-detail__tool-label" for="theme-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="theme-ui-locale"
+        class="theme-detail__select"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
   </header>
 
   <section class="theme-detail__verses" aria-labelledby="theme-verses-heading">
@@ -88,6 +102,7 @@
           class="theme-detail__ref"
           [routerLink]="verseLink(v.surah, v.ayah)"
           [fragment]="verseFragment(v.ayah)"
+          [queryParams]="{ startingVerse: v.ayah }"
         >
           <span dir="rtl" lang="ar">{{ v.surahNameAr }}</span>
           <span class="theme-detail__ref-num" dir="ltr" lang="en">{{ verseRefLabel(v) }}</span>
@@ -118,13 +133,9 @@
           >
             {{ 'bookmarkVerseTitle' | uiTranslate }}
           </button>
-          <a
-            class="theme-detail__action theme-detail__action--read"
-            [routerLink]="verseLink(v.surah, v.ayah)"
-            [fragment]="verseFragment(v.ayah)"
-          >
+          <button type="button" class="theme-detail__btn theme-detail__btn--primary" (click)="openInReader(v)">
             {{ 'themesReadInReader' | uiTranslate }}
-          </a>
+          </button>
         </div>
       </div>
       <p class="theme-detail__ar" dir="rtl" lang="ar">{{ v.verse.ar }}</p>
