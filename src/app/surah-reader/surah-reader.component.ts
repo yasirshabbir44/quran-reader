@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { combineLatest, filter, map, startWith, tap } from 'rxjs';
@@ -53,7 +54,7 @@ type ReaderMode = 'verse-by-verse' | 'reading';
 
 @Component({
     selector: 'app-surah-reader',
-    imports: [NgClass, FormsModule, UiTranslatePipe],
+    imports: [NgClass, FormsModule, RouterLink, UiTranslatePipe],
     templateUrl: './surah-reader.component.html',
     styleUrl: './surah-reader.component.scss',
     host: {
