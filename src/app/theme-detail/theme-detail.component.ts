@@ -9,6 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { combineLatest, map, switchMap } from 'rxjs';
@@ -30,7 +31,7 @@ import {
 @Component({
   selector: 'app-theme-detail',
   standalone: true,
-  imports: [RouterLink, UiTranslatePipe],
+  imports: [RouterLink, FormsModule, UiTranslatePipe],
   templateUrl: './theme-detail.component.html',
   styleUrl: './theme-detail.component.scss',
 })
@@ -53,6 +54,19 @@ export class ThemeDetailComponent implements OnInit {
   protected readonly copiedKey = signal<string | null>(null);
 
   protected readonly themeId = computed(() => this.route.snapshot.paramMap.get('id') ?? '');
+  protected readonly searchQuery = signal('');
+
+  protected readonly filteredVerses = computed(() => {
+    const data = this.result();
+    if (!data) {
+      return [];
+    }
+    const raw = this.searchQuery().trim().normalize('NFKC').toLowerCase();
+    if (!raw) {
+      return data.verses;
+    }
+    return data.verses.filter((v) => this.verseMatchesQuery(v, raw));
+  });
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -66,6 +80,7 @@ export class ThemeDetailComponent implements OnInit {
           this.loading.set(true);
           this.loadError.set(false);
           this.notFound.set(false);
+          this.searchQuery.set('');
           return combineLatest([
             this.thematicIndex.load(),
             this.thematicIndex.getVersesByTheme(id),
@@ -192,6 +207,26 @@ export class ThemeDetailComponent implements OnInit {
 
   private verseKey(v: ThematicVerseDetail): string {
     return `${v.surah}:${v.ayah}`;
+  }
+
+  private verseMatchesQuery(v: ThematicVerseDetail, needle: string): boolean {
+    if (this.verseRefLabel(v).toLowerCase().includes(needle)) {
+      return true;
+    }
+    if (v.surahNameAr.includes(needle)) {
+      return true;
+    }
+    if (v.surahNameTranslit.toLowerCase().includes(needle)) {
+      return true;
+    }
+    if (v.verse.ar.includes(needle)) {
+      return true;
+    }
+    const tr = normalizeVerseTranslations(v.verse);
+    if (tr.en.toLowerCase().includes(needle) || tr.ur.includes(needle)) {
+      return true;
+    }
+    return false;
   }
 
   private presentationContext(v: ThematicVerseDetail): VersePresentationContext {
