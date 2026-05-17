@@ -56,6 +56,7 @@ import {
   type TafsirEdition,
 } from '../core/tafsir/tafsir-editions';
 import { TafsirService } from '../core/tafsir/tafsir.service';
+import { formatTafsirParagraphs } from '../core/tafsir/tafsir-text';
 
 type ReaderMode = 'verse-by-verse' | 'reading';
 
@@ -158,6 +159,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly tafsirLoading = signal(false);
   protected readonly tafsirError = signal(false);
   protected readonly tafsirText = signal('');
+  protected readonly tafsirParagraphs = computed(() => formatTafsirParagraphs(this.tafsirText()));
   private tafsirLoadGeneration = 0;
 
   /** Text search within the loaded surah (Arabic + English + Urdu). */
