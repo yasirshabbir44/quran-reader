@@ -697,7 +697,7 @@
                 [class.verses__action-btn--tafsir-active]="isTafsirOpen(v)"
                 (click)="toggleTafsir(v)"
                 [attr.aria-expanded]="isTafsirOpen(v)"
-                [attr.aria-controls]="'tafsir-panel-' + v.ayah"
+                [attr.aria-controls]="tafsirSplitLayout() ? 'tafsir-side-panel' : 'tafsir-panel-' + v.ayah"
                 [attr.aria-label]="'viewTafsirAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
                 [attr.title]="isTafsirOpen(v) ? ('hideTafsirLabel' | uiTranslate) : ('viewTafsirLabel' | uiTranslate)"
               >
@@ -733,7 +733,20 @@
               </button>
             </div>
           </div>
-          <div class="verses__content">
+          <div
+            class="verses__content"
+            [class.verses__content--tafsir-target]="tafsirSplitLayout()"
+            [attr.role]="tafsirSplitLayout() ? 'button' : null"
+            [attr.tabindex]="tafsirSplitLayout() ? 0 : null"
+            [attr.aria-label]="
+              tafsirSplitLayout()
+                ? ('openVerseTafsirAria' | uiTranslate: { n: formatUiNum(v.ayah) })
+                : null
+            "
+            (click)="onVerseContentClick(v, $event)"
+            (keydown.enter)="onVerseContentKeyActivate(v, $event)"
+            (keydown.space)="onVerseContentKeyActivate(v, $event)"
+          >
             <section
               class="verses__quran"
               [attr.aria-label]="'verseQuranAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
@@ -764,49 +777,21 @@
             </section>
             }
           </div>
-          @if (isTafsirOpen(v)) {
+          @if (isTafsirOpen(v) && !tafsirSplitLayout()) {
           <aside
-            class="verses__tafsir"
+            class="verses__tafsir verses__tafsir--inline"
             [id]="'tafsir-panel-' + v.ayah"
             role="region"
             [attr.aria-label]="'tafsirPanelAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
             [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
             [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
           >
-            <span class="verses__section-label verses__section-label--tafsir">{{ 'verseTafsirSectionLabel' | uiTranslate }}</span>
-            <div class="verses__tafsir-toolbar">
-              <label class="verses__tafsir-label" [attr.for]="'tafsir-edition-' + v.ayah">
-                {{ 'tafsirSourceLabel' | uiTranslate }}
-              </label>
-              <select
-                class="verses__tafsir-select reader__select reader__select--compact"
-                [id]="'tafsir-edition-' + v.ayah"
-                [ngModel]="tafsirEditionSlug()"
-                [ngModelOptions]="{ standalone: true }"
-                (ngModelChange)="onTafsirEditionChange($event, v)"
-              >
-                @for (ed of tafsirEditionsForLocale(); track ed.slug) {
-                <option [value]="ed.slug">{{ ed.labelKey | uiTranslate }}</option>
-                }
-              </select>
-            </div>
-            @if (tafsirLoading()) {
-            <p class="verses__tafsir-status" role="status">{{ 'tafsirLoading' | uiTranslate }}</p>
-            } @else if (tafsirError()) {
-            <div class="verses__tafsir-status verses__tafsir-status--error">
-              <p>{{ 'tafsirLoadError' | uiTranslate }}</p>
-              <button type="button" class="verses__tafsir-retry" (click)="retryTafsir(v)">
-                {{ 'tafsirRetry' | uiTranslate }}
-              </button>
-            </div>
-            } @else {
-            <div class="verses__tafsir-body">
-              @for (para of tafsirParagraphs(); track $index) {
-              <p class="verses__tafsir-p">{{ para }}</p>
-              }
-            </div>
-            }
-            <p class="verses__tafsir-attribution">{{ 'tafsirAttribution' | uiTranslate }}</p>
+            <ng-container
+              *ngTemplateOutlet="
+                tafsirPanelBody;
+                context: { $implicit: v, editionId: 'tafsir-edition-' + v.ayah }
+              "
+            ></ng-container>
           </aside>
           }
         </li>
@@ -829,8 +814,80 @@
       </footer>
     </div>
 
+    @if (verseForTafsir(); as tafsirVerse) {
+    @if (tafsirSplitLayout()) {
+    <aside
+      id="tafsir-side-panel"
+      class="reader__side reader__side--tafsir reader__panel verses__tafsir verses__tafsir--side"
+      role="region"
+      [attr.aria-label]="'tafsirPanelAria' | uiTranslate: { n: formatUiNum(tafsirVerse.ayah) }"
+      [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
+      [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
+    >
+      <header class="reader__settings-head reader__tafsir-side-head">
+        <h2 class="reader__settings-title reader__tafsir-side-title">
+          {{ 'tafsirSidePanelTitle' | uiTranslate: { n: formatUiNum(tafsirVerse.ayah) } }}
+        </h2>
+        <button
+          type="button"
+          class="reader__settings-close"
+          (click)="closeTafsirPanel()"
+          [attr.aria-label]="'closeTafsirPanelAria' | uiTranslate"
+        >
+          ✕
+        </button>
+      </header>
+      <div class="reader__tafsir-side-scroll">
+        <ng-container
+          *ngTemplateOutlet="
+            tafsirPanelBody;
+            context: { $implicit: tafsirVerse, editionId: 'tafsir-edition-side' }
+          "
+        ></ng-container>
+      </div>
+    </aside>
+    }
+    }
+
   </div>
 </main>
+
+<ng-template #tafsirPanelBody let-v let-editionId="editionId">
+  <span class="verses__section-label verses__section-label--tafsir">{{ 'verseTafsirSectionLabel' | uiTranslate }}</span>
+  <div class="verses__tafsir-toolbar">
+    <label class="verses__tafsir-label" [attr.for]="editionId">
+      {{ 'tafsirSourceLabel' | uiTranslate }}
+    </label>
+    <select
+      class="verses__tafsir-select reader__select reader__select--compact"
+      [id]="editionId"
+      [ngModel]="tafsirEditionSlug()"
+      [ngModelOptions]="{ standalone: true }"
+      (ngModelChange)="onTafsirEditionChange($event, v)"
+    >
+      @for (ed of tafsirEditionsForLocale(); track ed.slug) {
+      <option [value]="ed.slug">{{ ed.labelKey | uiTranslate }}</option>
+      }
+    </select>
+  </div>
+  @if (tafsirLoading()) {
+  <p class="verses__tafsir-status" role="status">{{ 'tafsirLoading' | uiTranslate }}</p>
+  } @else if (tafsirError()) {
+  <div class="verses__tafsir-status verses__tafsir-status--error">
+    <p>{{ 'tafsirLoadError' | uiTranslate }}</p>
+    <button type="button" class="verses__tafsir-retry" (click)="retryTafsir(v)">
+      {{ 'tafsirRetry' | uiTranslate }}
+    </button>
+  </div>
+  } @else {
+  <div class="verses__tafsir-body">
+    @for (para of tafsirParagraphs(); track $index) {
+    <p class="verses__tafsir-p">{{ para }}</p>
+    }
+  </div>
+  }
+  <p class="verses__tafsir-attribution">{{ 'tafsirAttribution' | uiTranslate }}</p>
+</ng-template>
 }
 
 @if (quoteSheetVerse(); as quoteVerse) {
