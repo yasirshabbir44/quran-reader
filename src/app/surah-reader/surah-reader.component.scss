@@ -50,30 +50,41 @@
 
 .reader.reader--font-s {
   --verse-fs: clamp(1.22rem, 3.1vw, 1.48rem);
+  --tr-fs: 1rem;
+  --tafsir-fs: 1rem;
 }
 
 .reader.reader--font-m {
   --verse-fs: clamp(1.38rem, 3.6vw, 1.72rem);
+  --tr-fs: 1.0625rem;
+  --tafsir-fs: 1rem;
 }
 
 .reader.reader--font-l {
   --verse-fs: clamp(1.52rem, 3.9vw, 1.95rem);
+  --tr-fs: 1.125rem;
+  --tafsir-fs: 1.0625rem;
 }
 
 .reader.reader--font-xl {
   --verse-fs: clamp(1.68rem, 4.2vw, 2.15rem);
+  --tr-fs: 1.1875rem;
+  --tafsir-fs: 1.125rem;
 }
 
 .reader.reader--line-normal {
   --verse-lh: 2.1;
+  --tafsir-lh: 1.65;
 }
 
 .reader.reader--line-relaxed {
   --verse-lh: 2.38;
+  --tafsir-lh: 1.75;
 }
 
 .reader.reader--line-loose {
   --verse-lh: 2.62;
+  --tafsir-lh: 1.85;
 }
 
 .reader.reader--measure-narrow {
@@ -154,6 +165,9 @@
 .reader {
   --verse-fs: clamp(1.38rem, 3.6vw, 1.72rem);
   --verse-lh: 2.15;
+  --tr-fs: 1.0625rem;
+  --tafsir-fs: 1rem;
+  --tafsir-lh: 1.7;
   --shell-max: min(40rem, 100% - 2rem);
   min-height: 100vh;
   padding: 2rem 0 4.5rem;
@@ -1697,11 +1711,12 @@ a.reader__settings-btn {
 .verses__tafsir {
   width: 100%;
   margin-top: 0.85rem;
-  padding: 0.9rem 1rem 1rem;
+  padding: 1rem 1.05rem 1.05rem;
   border-radius: 0.75rem;
   border: 1px solid var(--reader-accent-border);
   background: var(--reader-surface-inset);
   text-align: start;
+  border-inline-start: 3px solid var(--reader-accent-border-strong);
 }
 
 .verses__tafsir-toolbar {
@@ -1762,13 +1777,25 @@ a.reader__settings-btn {
   }
 }
 
-.verses__tafsir-text {
+.verses__tafsir-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.verses__tafsir-p {
   margin: 0;
-  font-family: 'Amiri', Georgia, serif;
-  font-size: clamp(0.88rem, 2.35vw, 1rem);
-  line-height: 1.72;
-  color: var(--reader-ink-soft);
-  white-space: pre-wrap;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: max(1rem, var(--tafsir-fs));
+  font-weight: 400;
+  line-height: var(--tafsir-lh);
+  color: var(--reader-tafsir-ink);
+  text-wrap: pretty;
+}
+
+.verses__tafsir[dir='rtl'] .verses__tafsir-p {
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+  line-height: calc(var(--tafsir-lh) + 0.12);
 }
 
 .verses__tafsir-attribution {
@@ -1805,18 +1832,21 @@ a.reader__settings-btn {
   line-height: var(--verse-lh);
   text-align: center;
   color: var(--reader-ink);
-  word-spacing: 0.05em;
-  letter-spacing: 0.01em;
+  font-weight: 400;
+  word-spacing: 0.06em;
+  letter-spacing: 0.015em;
+  text-wrap: pretty;
 }
 
 .verses__translations {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.95rem;
-  margin-top: 0.35rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  gap: 1rem;
+  margin-top: 0.15rem;
+  padding: 1.05rem 0 0.15rem 0.85rem;
+  border-top: 1px solid var(--reader-border);
+  border-inline-start: 2px solid var(--reader-accent-border);
 }
 
 .verses__tr-block {
@@ -1836,23 +1866,24 @@ a.reader__settings-btn {
 }
 
 .verses__tr-block--en .verses__tr-text {
-  font-family: 'Amiri', Georgia, serif;
-  font-size: clamp(0.88rem, 2.4vw, 1.02rem);
-  line-height: 1.65;
-  color: #d8d3c8;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: max(1rem, var(--tr-fs));
+  line-height: 1.62;
+  color: var(--reader-translation-ink);
 }
 
 .verses__tr-block--ur .verses__tr-text {
   font-family: 'Noto Naskh Arabic', 'Amiri', serif;
-  font-size: clamp(0.95rem, 2.6vw, 1.08rem);
-  line-height: 1.85;
-  color: #cfcabf;
+  font-size: max(1rem, var(--tr-fs));
+  line-height: 1.78;
+  color: var(--reader-translation-ink);
 }
 
 .verses__tr-text {
   margin: 0;
   text-align: start;
   font-weight: 400;
+  text-wrap: pretty;
 }
 
 .reader__footer {
