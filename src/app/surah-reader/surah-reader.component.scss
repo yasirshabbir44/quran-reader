@@ -1,11 +1,4 @@
-// Refined reading surface: warm ink on deep twilight
-$ink: #f4f1ea;
-$ink-muted: #b8b3a8;
-$accent: #c9a227;
-$accent-soft: rgba(201, 162, 39, 0.14);
-$surface: rgba(22, 24, 28, 0.72);
-$border: rgba(255, 255, 255, 0.06);
-$focus: rgba(201, 162, 39, 0.45);
+// Colors follow `html[data-reader-theme]` tokens (see reader-color-themes.scss).
 
 :host {
   --reader-topbar-h: 5.75rem;
@@ -19,8 +12,8 @@ $focus: rgba(201, 162, 39, 0.45);
   padding: 0.5rem 1rem;
   font-size: 0.9rem;
   font-family: 'Amiri', serif;
-  color: #0f1419;
-  background: $accent;
+  color: var(--reader-btn-on-accent);
+  background: var(--reader-accent);
   border-radius: 0.5rem;
   text-decoration: none;
   transform: translateY(-160%);
@@ -40,7 +33,7 @@ $focus: rgba(201, 162, 39, 0.45);
   z-index: 100;
   height: 3px;
   pointer-events: none;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--reader-progress-track);
 
   &::after {
     content: '';
@@ -48,8 +41,8 @@ $focus: rgba(201, 162, 39, 0.45);
     height: 100%;
     width: var(--read-progress);
     pointer-events: none;
-    background: linear-gradient(90deg, #a67c1a, #e4c45c);
-    box-shadow: 0 0 12px rgba(228, 196, 92, 0.35);
+    background: linear-gradient(90deg, var(--reader-accent-gradient-end), var(--reader-accent-gradient-start));
+    box-shadow: 0 0 12px var(--reader-verse-active-glow);
     transition: width 0.12s ease-out;
   }
 }
@@ -117,14 +110,14 @@ $focus: rgba(201, 162, 39, 0.45);
   display: grid;
   place-items: center;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--reader-border-strong);
   border-radius: 999px;
-  background: rgba(18, 20, 24, 0.88);
+  background: var(--reader-elevated);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: $accent;
+  color: var(--reader-accent);
   cursor: pointer;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 28px var(--reader-shadow);
   opacity: 0;
   visibility: hidden;
   transform: translateY(0.5rem) scale(0.94);
@@ -142,12 +135,12 @@ $focus: rgba(201, 162, 39, 0.45);
   }
 
   &:hover {
-    background: rgba(28, 30, 36, 0.95);
-    border-color: rgba(201, 162, 39, 0.35);
+    background: var(--reader-elevated-hover);
+    border-color: var(--reader-accent-fill-hover);
   }
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 3px;
   }
 }
@@ -193,16 +186,16 @@ $focus: rgba(201, 162, 39, 0.45);
   top: calc(3px + var(--reader-topbar-h) + 1rem);
   padding: 1rem;
   border-radius: 0.9rem;
-  background: rgba(12, 14, 18, 0.72);
-  border: 1px solid $border;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+  background: var(--reader-panel-deep);
+  border: 1px solid var(--reader-border);
+  box-shadow: 0 10px 26px var(--reader-shadow-card);
 }
 
 .reader__panel-title {
   margin: 0 0 0.85rem;
   font-family: 'Amiri', serif;
   font-size: 0.95rem;
-  color: $accent;
+  color: var(--reader-accent);
 }
 
 .reader__panel-line {
@@ -210,7 +203,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 0.85rem;
   line-height: 1.5;
-  color: #d2cdc2;
+  color: var(--reader-ink-panel);
 
   &:last-child {
     margin-bottom: 0;
@@ -221,15 +214,15 @@ $focus: rgba(201, 162, 39, 0.45);
   text-align: center;
   margin-bottom: 2.75rem;
   padding: 0 0.5rem 2rem;
-  border-bottom: 1px solid $border;
+  border-bottom: 1px solid var(--reader-border);
 }
 
 .reader__intro {
   margin-bottom: 1.6rem;
   padding: 1rem 1rem 1.1rem;
   border-radius: 0.9rem;
-  border: 1px solid rgba(201, 162, 39, 0.2);
-  background: linear-gradient(160deg, rgba(201, 162, 39, 0.12), rgba(12, 14, 18, 0.58));
+  border: 1px solid var(--reader-accent-border);
+  background: var(--reader-intro-bg);
 }
 
 .reader__intro-kicker {
@@ -238,14 +231,14 @@ $focus: rgba(201, 162, 39, 0.45);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #dbc879;
+  color: var(--reader-ink-intro-kicker);
 }
 
 .reader__intro-title {
   margin: 0.35rem 0 0;
   font-family: 'Amiri', serif;
   font-size: clamp(1.05rem, 2.8vw, 1.3rem);
-  color: #f6f1e5;
+  color: var(--reader-ink-intro-title);
 }
 
 .reader__intro-body {
@@ -253,7 +246,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 0.96rem;
   line-height: 1.7;
-  color: #e0d9cb;
+  color: var(--reader-ink-intro-body);
 }
 
 .reader__intro-tags {
@@ -270,18 +263,18 @@ $focus: rgba(201, 162, 39, 0.45);
   min-height: 1.7rem;
   padding: 0.18rem 0.6rem;
   border-radius: 999px;
-  border: 1px solid rgba(201, 162, 39, 0.26);
-  background: rgba(11, 13, 17, 0.5);
+  border: 1px solid var(--reader-accent-border);
+  background: var(--reader-intro-tag-bg);
   font-family: 'Amiri', serif;
   font-size: 0.74rem;
-  color: #eadfbc;
+  color: var(--reader-ink-intro-tag);
 }
 
 .reader__meta {
   margin: 0 0 0.6rem;
   font-family: 'Amiri', serif;
   font-size: 0.92rem;
-  color: $ink-muted;
+  color: var(--reader-ink-muted);
   letter-spacing: 0.04em;
 }
 
@@ -290,16 +283,16 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri Quran', 'Amiri', serif;
   font-size: clamp(2.1rem, 5.5vw, 2.85rem);
   font-weight: 400;
-  color: $ink;
+  color: var(--reader-ink);
   line-height: 1.38;
-  text-shadow: 0 1px 24px rgba(0, 0, 0, 0.25);
+  text-shadow: 0 1px 24px var(--reader-title-shadow);
 }
 
 .reader__subtitle {
   margin: 0.85rem 0 0;
   font-family: 'Amiri', serif;
   font-size: 1.02rem;
-  color: #9d988c;
+  color: var(--reader-ink-subtle);
   line-height: 1.5;
 }
 
@@ -310,8 +303,8 @@ $focus: rgba(201, 162, 39, 0.45);
   margin: 1.75rem 0 0;
   padding: 1rem 1.1rem;
   text-align: center;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid $border;
+  background: var(--reader-surface-muted);
+  border: 1px solid var(--reader-border);
   border-radius: 0.85rem;
 }
 
@@ -324,14 +317,14 @@ $focus: rgba(201, 162, 39, 0.45);
     font-weight: 700;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    color: #8a8578;
+    color: var(--reader-ink-faint);
   }
 
   dd {
     margin: 0;
     font-family: 'Amiri', serif;
     font-size: 1.05rem;
-    color: $ink;
+    color: var(--reader-ink);
     font-variant-numeric: tabular-nums;
   }
 }
@@ -345,9 +338,9 @@ $focus: rgba(201, 162, 39, 0.45);
 .reader__about {
   margin: 1.25rem 0 0;
   padding: 0;
-  border: 1px solid $border;
+  border: 1px solid var(--reader-border);
   border-radius: 0.85rem;
-  background: rgba(0, 0, 0, 0.12);
+  background: var(--reader-surface-inset);
   text-align: center;
 }
 
@@ -358,7 +351,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 1rem;
   font-weight: 700;
-  color: $accent;
+  color: var(--reader-accent);
   text-align: center;
 
   &::-webkit-details-marker {
@@ -370,7 +363,7 @@ $focus: rgba(201, 162, 39, 0.45);
     display: inline-block;
     margin-inline-start: 0.5rem;
     transition: transform 0.2s ease;
-    color: $ink-muted;
+    color: var(--reader-ink-muted);
     vertical-align: middle;
   }
 }
@@ -385,7 +378,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 0.98rem;
   line-height: 1.75;
-  color: #cec9be;
+  color: var(--reader-ink-soft);
 }
 
 .reader__about-note {
@@ -394,7 +387,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 0.82rem;
   line-height: 1.55;
-  color: $ink-muted;
+  color: var(--reader-ink-muted);
 }
 
 .reader__topbar {
@@ -408,11 +401,12 @@ $focus: rgba(201, 162, 39, 0.45);
   justify-content: space-between;
   gap: 0.5rem 1rem;
   padding: 0.5rem max(1rem, env(safe-area-inset-left)) 0.55rem max(1rem, env(safe-area-inset-right));
-  background: rgba(12, 14, 18, 0.94);
+  background: var(--reader-chrome-bg);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid $border;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+  border-bottom: 1px solid var(--reader-border);
+  box-shadow: 0 8px 28px var(--reader-shadow-soft);
+  transition: background 0.35s ease, border-color 0.25s ease, box-shadow 0.35s ease;
 
   @media (max-width: 719px) {
     flex-direction: column;
@@ -498,7 +492,7 @@ $focus: rgba(201, 162, 39, 0.45);
 
   .reader__topbar-readout-name {
     font-size: 0.95rem;
-    color: $ink;
+    color: var(--reader-ink);
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -507,7 +501,7 @@ $focus: rgba(201, 162, 39, 0.45);
     flex: 0 0 auto;
     font-family: 'Amiri', serif;
     font-size: 0.72rem;
-    color: #c4bfb4;
+    color: var(--reader-ink-dim);
     font-variant-numeric: tabular-nums;
   }
 }
@@ -536,25 +530,25 @@ $focus: rgba(201, 162, 39, 0.45);
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
-  color: #ded8cb;
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-overlay);
+  color: var(--reader-ink-ui);
   cursor: pointer;
 
   &:hover {
-    border-color: rgba(201, 162, 39, 0.45);
-    color: #f2ede1;
+    border-color: var(--reader-accent-glow);
+    color: var(--reader-ink-ui-hover);
   }
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 2px;
   }
 
   &--active {
-    border-color: rgba(201, 162, 39, 0.55);
-    background: rgba(201, 162, 39, 0.14);
-    color: $accent;
+    border-color: var(--reader-accent-border-strong);
+    background: var(--reader-accent-fill-soft);
+    color: var(--reader-accent);
   }
 }
 
@@ -572,9 +566,10 @@ $focus: rgba(201, 162, 39, 0.45);
   width: min(24rem, calc(100vw - 2rem));
   padding: 0.8rem;
   border-radius: 0.75rem;
-  border: 1px solid $border;
-  background: rgba(12, 14, 18, 0.96);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.34);
+  border: 1px solid var(--reader-border);
+  background: var(--reader-chrome-bg-solid);
+  box-shadow: 0 10px 26px var(--reader-shadow);
+  transition: background 0.35s ease, border-color 0.25s ease, box-shadow 0.35s ease;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-0.25rem);
@@ -600,7 +595,7 @@ $focus: rgba(201, 162, 39, 0.45);
   margin: 0;
   font-family: 'Amiri', serif;
   font-size: 1rem;
-  color: $ink;
+  color: var(--reader-ink);
 }
 
 .reader__settings-close {
@@ -609,7 +604,7 @@ $focus: rgba(201, 162, 39, 0.45);
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.04);
-  color: $ink-muted;
+  color: var(--reader-ink-muted);
   cursor: pointer;
 }
 
@@ -632,7 +627,7 @@ $focus: rgba(201, 162, 39, 0.45);
   color: #ddd7ca;
 
   input {
-    accent-color: #c9a227;
+    accent-color: var(--reader-accent);
   }
 }
 
@@ -663,7 +658,7 @@ $focus: rgba(201, 162, 39, 0.45);
 .reader__topbar-surah {
   font-family: 'Amiri Quran', 'Amiri', serif;
   font-size: 1.05rem;
-  color: $ink;
+  color: var(--reader-ink);
   line-height: 1.2;
 }
 
@@ -672,8 +667,8 @@ $focus: rgba(201, 162, 39, 0.45);
   font-weight: 700;
   padding: 0.15rem 0.45rem;
   border-radius: 999px;
-  color: $accent;
-  background: $accent-soft;
+  color: var(--reader-accent);
+  background: var(--reader-accent-soft);
   border: 1px solid rgba(201, 162, 39, 0.25);
   font-variant-numeric: tabular-nums;
 }
@@ -753,7 +748,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 0.68rem;
   font-weight: 700;
-  color: #a8a298;
+  color: var(--reader-meta-color);
 }
 
 .reader__topbar-bookmark-actions {
@@ -784,7 +779,7 @@ $focus: rgba(201, 162, 39, 0.45);
   line-height: 1.35;
 
   &::placeholder {
-    color: #8a8578;
+    color: var(--reader-ink-faint);
   }
 
   &:focus {
@@ -794,7 +789,7 @@ $focus: rgba(201, 162, 39, 0.45);
   }
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 2px;
   }
 }
@@ -809,19 +804,19 @@ $focus: rgba(201, 162, 39, 0.45);
   padding: 0;
   border: none;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--reader-progress-track);
   color: #c9c3b6;
   font-size: 1.1rem;
   line-height: 1;
   cursor: pointer;
 
   &:hover {
-    color: $ink;
+    color: var(--reader-ink);
     background: rgba(255, 255, 255, 0.1);
   }
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 1px;
   }
 }
@@ -837,14 +832,14 @@ $focus: rgba(201, 162, 39, 0.45);
 .reader__search-status {
   font-family: 'Amiri', serif;
   font-size: 0.72rem;
-  color: #a8a298;
+  color: var(--reader-meta-color);
 }
 
 .reader__search-count {
   font-family: 'Amiri', serif;
   font-size: 0.72rem;
   font-weight: 700;
-  color: $ink-muted;
+  color: var(--reader-ink-muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -869,11 +864,11 @@ $focus: rgba(201, 162, 39, 0.45);
 
   &:hover {
     border-color: rgba(201, 162, 39, 0.4);
-    color: $ink;
+    color: var(--reader-ink);
   }
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 2px;
   }
 }
@@ -896,18 +891,18 @@ $focus: rgba(201, 162, 39, 0.45);
 
   &:hover {
     border-color: rgba(201, 162, 39, 0.4);
-    color: $ink;
+    color: var(--reader-ink);
   }
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 2px;
   }
 
   &--go {
     border-color: rgba(201, 162, 39, 0.35);
     background: rgba(201, 162, 39, 0.12);
-    color: $accent;
+    color: var(--reader-accent);
   }
 }
 
@@ -939,7 +934,7 @@ $focus: rgba(201, 162, 39, 0.45);
   justify-content: center;
   padding: 2rem;
   background: #12151c;
-  color: $ink-muted;
+  color: var(--reader-ink-muted);
 }
 
 .reader__state-text {
@@ -949,7 +944,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 1.05rem;
   line-height: 1.55;
-  color: $ink;
+  color: var(--reader-ink);
 }
 
 .reader__state-stack {
@@ -984,7 +979,7 @@ $focus: rgba(201, 162, 39, 0.45);
   }
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 3px;
   }
 }
@@ -1061,7 +1056,7 @@ $focus: rgba(201, 162, 39, 0.45);
   padding: 0 0.5rem;
   font-family: 'Amiri', serif;
   font-size: 0.78rem;
-  color: $ink-muted;
+  color: var(--reader-ink-muted);
   line-height: 1.45;
   text-align: center;
 
@@ -1074,7 +1069,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #a8a298;
+  color: var(--reader-meta-color);
 }
 
 .reader__select {
@@ -1083,16 +1078,26 @@ $focus: rgba(201, 162, 39, 0.45);
   padding: 0.45rem 0.85rem;
   font-family: 'Amiri', serif;
   font-size: 1rem;
-  color: $ink;
+  color: var(--reader-ink);
   background: rgba(12, 14, 18, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.65rem;
   cursor: pointer;
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 2px;
   }
+}
+
+.reader__fieldset--theme {
+  margin: 0 0 0.85rem;
+  flex: 1 1 100%;
+}
+
+.reader__segment--theme {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .reader__fieldset {
@@ -1130,7 +1135,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 0.78rem;
   font-weight: 700;
-  color: #a8a298;
+  color: var(--reader-meta-color);
 }
 
 .reader__segment {
@@ -1146,9 +1151,9 @@ $focus: rgba(201, 162, 39, 0.45);
   padding: 0.35rem 0.55rem;
   font-family: 'Amiri', serif;
   font-size: 0.88rem;
-  color: #c9c4b8;
-  background: rgba(12, 14, 18, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--reader-ink-dim);
+  background: var(--reader-chrome-bg-segment);
+  border: 1px solid var(--reader-border-stronger);
   border-radius: 0.55rem;
   cursor: pointer;
   transition:
@@ -1157,19 +1162,19 @@ $focus: rgba(201, 162, 39, 0.45);
     border-color 0.15s ease;
 
   &:hover {
-    border-color: rgba(201, 162, 39, 0.22);
-    color: $ink;
+    border-color: var(--reader-accent-border);
+    color: var(--reader-ink);
   }
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 2px;
   }
 
   &--active {
-    color: #1a1510;
-    background: linear-gradient(180deg, #e4c45c, #c9a227);
-    border-color: rgba(201, 162, 39, 0.55);
+    color: var(--reader-btn-on-accent);
+    background: linear-gradient(180deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
+    border-color: var(--reader-accent-border-strong);
     font-weight: 700;
   }
 }
@@ -1184,7 +1189,7 @@ $focus: rgba(201, 162, 39, 0.45);
   margin-bottom: 1.1rem;
   padding: 1.15rem 1rem;
   border-radius: 0.9rem;
-  background: rgba(16, 18, 24, 0.78);
+  background: var(--reader-bismillah-bg);
 }
 
 .verses__bismillah-text {
@@ -1192,7 +1197,7 @@ $focus: rgba(201, 162, 39, 0.45);
   text-align: center;
   font-family: 'Amiri Quran', 'Amiri', serif;
   font-size: clamp(1.4rem, 4.2vw, 1.85rem);
-  color: #ece5d4;
+  color: var(--reader-ink-bismillah);
 }
 
 .verses__item {
@@ -1204,9 +1209,9 @@ $focus: rgba(201, 162, 39, 0.45);
   margin-bottom: 1.25rem;
   padding: 1.15rem 1.2rem 1.3rem;
   border-radius: 1rem;
-  background: $surface;
-  border: 1px solid $border;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  background: var(--reader-surface);
+  border: 1px solid var(--reader-border);
+  box-shadow: 0 4px 24px var(--reader-shadow-card);
   scroll-margin-top: calc(3px + var(--reader-topbar-h) + 4.5rem);
   transition:
     border-color 0.2s ease,
@@ -1214,70 +1219,70 @@ $focus: rgba(201, 162, 39, 0.45);
     background 0.2s ease;
 
   &:hover {
-    border-color: rgba(201, 162, 39, 0.18);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    border-color: var(--reader-accent-fill-mid);
+    box-shadow: 0 8px 32px var(--reader-shadow-card-hover);
   }
 
   &:focus-within {
     outline: none;
-    border-color: rgba(201, 162, 39, 0.28);
-    box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.15), 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-color: var(--reader-accent-fill-hover);
+    box-shadow: 0 0 0 1px var(--reader-accent-fill-soft), 0 8px 32px var(--reader-shadow-card-hover);
   }
 
   &--active {
-    border-color: #f2cf5a;
-    background: rgba(36, 32, 18, 0.9);
-    outline: 2px solid #f2cf5a;
+    border-color: var(--reader-verse-active-border);
+    background: var(--reader-verse-active-bg);
+    outline: 2px solid var(--reader-verse-active-border);
     outline-offset: 0;
     box-shadow:
-      0 0 0 2px rgba(242, 207, 90, 0.45),
-      0 6px 28px rgba(0, 0, 0, 0.22),
-      0 0 42px rgba(242, 207, 90, 0.18);
+      0 0 0 2px var(--reader-verse-active-ring),
+      0 6px 28px var(--reader-shadow-card-hover),
+      0 0 42px var(--reader-verse-active-glow);
 
     .verses__num {
-      color: #1a1510;
-      background: linear-gradient(180deg, #e4c45c, #c9a227);
-      border-color: rgba(201, 162, 39, 0.55);
+      color: var(--reader-btn-on-accent);
+      background: linear-gradient(180deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
+      border-color: var(--reader-accent-border-strong);
     }
 
     .verses__text {
-      color: #faf7ef;
+      color: var(--reader-verse-active-text);
     }
   }
 
   &--bookmarked:not(&--active) {
-    border-color: rgba(100, 170, 255, 0.42);
+    border-color: var(--reader-bookmark-accent);
     box-shadow:
-      0 0 0 1px rgba(100, 170, 255, 0.28),
-      0 4px 22px rgba(0, 0, 0, 0.16);
+      0 0 0 1px var(--reader-bookmark-ring),
+      0 4px 22px var(--reader-shadow-card);
   }
 
   &--bookmarked#{&}--active {
     box-shadow:
-      0 0 0 2px rgba(242, 207, 90, 0.55),
-      0 0 0 4px rgba(100, 170, 255, 0.28),
-      0 6px 28px rgba(0, 0, 0, 0.22);
+      0 0 0 2px var(--reader-verse-active-ring),
+      0 0 0 4px var(--reader-bookmark-ring),
+      0 6px 28px var(--reader-shadow-card-hover);
   }
 
   &--search-hit:not(&--active) {
-    border-color: rgba(201, 162, 39, 0.22);
+    border-color: var(--reader-accent-border);
     box-shadow:
-      0 0 0 1px rgba(201, 162, 39, 0.18),
-      0 4px 22px rgba(0, 0, 0, 0.14);
+      0 0 0 1px var(--reader-accent-fill-mid),
+      0 4px 22px var(--reader-shadow-card);
   }
 
   &--search-active {
-    border-color: rgba(201, 162, 39, 0.52);
+    border-color: var(--reader-accent-border-strong);
     box-shadow:
-      0 0 0 2px rgba(201, 162, 39, 0.38),
-      0 6px 26px rgba(0, 0, 0, 0.2);
+      0 0 0 2px var(--reader-accent-glow),
+      0 6px 26px var(--reader-shadow-card-hover);
   }
 
   &--search-hit#{&}--search-active:not(&--active) {
-    border-color: rgba(201, 162, 39, 0.55);
+    border-color: var(--reader-accent-border-strong);
     box-shadow:
-      0 0 0 2px rgba(201, 162, 39, 0.42),
-      0 6px 28px rgba(0, 0, 0, 0.2);
+      0 0 0 2px var(--reader-accent-glow),
+      0 6px 28px var(--reader-shadow-card-hover);
   }
 }
 
@@ -1299,9 +1304,9 @@ $focus: rgba(201, 162, 39, 0.45);
   font-family: 'Amiri', serif;
   font-size: 0.78rem;
   font-weight: 700;
-  color: $accent;
-  background: $accent-soft;
-  border: 1px solid rgba(201, 162, 39, 0.22);
+  color: var(--reader-accent);
+  background: var(--reader-accent-soft);
+  border: 1px solid var(--reader-accent-border);
   border-radius: 999px;
   font-variant-numeric: tabular-nums;
 }
@@ -1317,18 +1322,18 @@ $focus: rgba(201, 162, 39, 0.45);
   padding: 0.2rem 0.62rem;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  color: #d6d0c5;
+  background: var(--reader-surface-muted);
+  color: var(--reader-ink-action);
   font-size: 0.73rem;
   cursor: pointer;
 
   &:hover {
     border-color: rgba(201, 162, 39, 0.35);
-    color: #f1ecde;
+    color: var(--reader-ink-action-hover);
   }
 
   &:focus-visible {
-    outline: 2px solid $focus;
+    outline: 2px solid var(--reader-focus);
     outline-offset: 2px;
   }
 
@@ -1347,7 +1352,7 @@ $focus: rgba(201, 162, 39, 0.45);
 
   &--bookmark-active {
     border-color: rgba(201, 162, 39, 0.55);
-    color: $accent;
+    color: var(--reader-accent);
     background: rgba(201, 162, 39, 0.12);
   }
 }
@@ -1377,7 +1382,7 @@ $focus: rgba(201, 162, 39, 0.45);
   font-size: var(--verse-fs);
   line-height: var(--verse-lh);
   text-align: center;
-  color: $ink;
+  color: var(--reader-ink);
   word-spacing: 0.05em;
   letter-spacing: 0.01em;
 }
@@ -1431,11 +1436,11 @@ $focus: rgba(201, 162, 39, 0.45);
 .reader__footer {
   margin-top: 3.25rem;
   padding: 1.75rem 0.5rem 0;
-  border-top: 1px solid $border;
+  border-top: 1px solid var(--reader-border);
   text-align: center;
   font-family: 'Amiri', serif;
   font-size: 0.88rem;
-  color: $ink-muted;
+  color: var(--reader-ink-muted);
   line-height: 1.65;
 
   a {
@@ -1450,7 +1455,7 @@ $focus: rgba(201, 162, 39, 0.45);
     }
 
     &:focus-visible {
-      outline: 2px solid $focus;
+      outline: 2px solid var(--reader-focus);
       outline-offset: 2px;
       border-radius: 2px;
     }

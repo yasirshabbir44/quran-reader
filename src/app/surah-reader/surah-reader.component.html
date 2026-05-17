@@ -213,6 +213,38 @@
       ✕
     </button>
   </div>
+  <fieldset class="reader__fieldset reader__fieldset--theme">
+    <legend class="reader__legend">{{ 'colorThemeLegend' | uiTranslate }}</legend>
+    <div class="reader__segment reader__segment--theme" role="group" [attr.aria-label]="'colorThemeAria' | uiTranslate">
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="colorTheme() === 'twilight'"
+        [attr.aria-pressed]="colorTheme() === 'twilight'"
+        (click)="setColorTheme('twilight')"
+      >
+        {{ 'themeTwilight' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="colorTheme() === 'night'"
+        [attr.aria-pressed]="colorTheme() === 'night'"
+        (click)="setColorTheme('night')"
+      >
+        {{ 'themeNight' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="colorTheme() === 'sepia'"
+        [attr.aria-pressed]="colorTheme() === 'sepia'"
+        (click)="setColorTheme('sepia')"
+      >
+        {{ 'themeSepia' | uiTranslate }}
+      </button>
+    </div>
+  </fieldset>
   <div class="reader__settings-grid">
     <label class="reader__tool-label reader__tool-label--compact" for="reader-mode">{{ 'readingModeLabel' | uiTranslate }}</label>
     <select
