@@ -23,6 +23,19 @@
     </div>
   </header>
 
+  <div class="themes__index-head">
+    <div>
+      <h2 class="themes__index-title">{{ 'themesIndexTitle' | uiTranslate }}</h2>
+      <p class="themes__index-subtitle">{{ 'themesIndexSubtitle' | uiTranslate }}</p>
+    </div>
+    <p class="themes__count" aria-live="polite">
+      {{
+        'themesCount'
+          | uiTranslate: { shown: formatUiNum(shownThemes()), total: formatUiNum(totalThemes()) }
+      }}
+    </p>
+  </div>
+
   <div class="themes__search" role="search">
     <label class="themes__tool-label" for="themes-search">{{ 'themesSearchLabel' | uiTranslate }}</label>
     <input
@@ -36,13 +49,6 @@
       (ngModelChange)="searchQuery.set($event)"
     />
   </div>
-
-  <p class="themes__count" aria-live="polite">
-    {{
-      'themesCount'
-        | uiTranslate: { shown: formatUiNum(shownThemes()), total: formatUiNum(totalThemes()) }
-    }}
-  </p>
 
   @if (filteredGroups().length === 0) {
   <p class="themes__empty">{{ 'themesEmpty' | uiTranslate }}</p>

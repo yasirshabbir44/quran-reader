@@ -20,8 +20,23 @@ import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 
 const THEME_ICONS: Record<string, string> = {
   hourglass: '⏳',
+  heart: '💚',
+  handshake: '🤝',
+  dove: '🕊️',
+  seed: '🌱',
+  prayer: '🕌',
+  droplet: '💧',
+  sparkles: '✨',
   scroll: '📜',
   scales: '⚖️',
+  gift: '🎁',
+  gavel: '⚖️',
+  parents: '👨‍👩‍👧',
+  rings: '💍',
+  house: '🏠',
+  sun: '☀️',
+  star: '⭐',
+  book: '📖',
 };
 
 @Component({
