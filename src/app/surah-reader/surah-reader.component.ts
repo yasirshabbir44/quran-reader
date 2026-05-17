@@ -641,6 +641,7 @@ export class SurahReaderComponent implements OnInit {
 
   protected closeSettingsPanel(): void {
     this.settingsOpen = false;
+    this.syncTopbarHeightFromDom();
   }
 
   @HostListener('document:keydown.escape')
