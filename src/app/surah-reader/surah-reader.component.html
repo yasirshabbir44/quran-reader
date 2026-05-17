@@ -785,7 +785,11 @@
               </button>
             </div>
             } @else {
-            <div class="verses__tafsir-text">{{ tafsirText() }}</div>
+            <div class="verses__tafsir-body">
+              @for (para of tafsirParagraphs(); track $index) {
+              <p class="verses__tafsir-p">{{ para }}</p>
+              }
+            </div>
             }
             <p class="verses__tafsir-attribution">{{ 'tafsirAttribution' | uiTranslate }}</p>
           </aside>

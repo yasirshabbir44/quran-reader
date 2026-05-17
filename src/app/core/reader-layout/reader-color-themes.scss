@@ -75,6 +75,8 @@
   --reader-bookmark-accent: rgba(100, 170, 255, 0.42);
   --reader-bookmark-ring: rgba(100, 170, 255, 0.28);
   --reader-meta-color: #a8a298;
+  --reader-translation-ink: #d4cfc4;
+  --reader-tafsir-ink: #b0aba0;
 }
 
 @mixin reader-theme-night {
@@ -152,6 +154,8 @@
   --reader-bookmark-accent: rgba(80, 140, 210, 0.38);
   --reader-bookmark-ring: rgba(80, 140, 210, 0.22);
   --reader-meta-color: #949088;
+  --reader-translation-ink: #c4bfb4;
+  --reader-tafsir-ink: #9a958a;
 }
 
 @mixin reader-theme-sepia {
@@ -229,4 +233,6 @@
   --reader-bookmark-accent: rgba(70, 120, 180, 0.45);
   --reader-bookmark-ring: rgba(70, 120, 180, 0.28);
   --reader-meta-color: #8f8270;
+  --reader-translation-ink: #4f463a;
+  --reader-tafsir-ink: #5c5348;
 }
