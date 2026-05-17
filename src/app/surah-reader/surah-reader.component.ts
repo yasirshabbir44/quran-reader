@@ -1,4 +1,4 @@
-import { DOCUMENT, isPlatformBrowser, NgClass } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   afterNextRender,
   Component,
@@ -70,12 +70,14 @@ type SurahNavItem = {
 
 @Component({
     selector: 'app-surah-reader',
-    imports: [NgClass, FormsModule, RouterLink, UiTranslatePipe, VerseQuoteSheetComponent],
+    imports: [NgClass, NgTemplateOutlet, FormsModule, RouterLink, UiTranslatePipe, VerseQuoteSheetComponent],
     templateUrl: './surah-reader.component.html',
     styleUrl: './surah-reader.component.scss',
     host: {
         '[class.reader--topbar-compact]': 'topbarCompact && !topbarFullRevealed',
         '[class.reader--topbar-expanded]': 'topbarFullRevealed || !topbarCompact',
+        '[class.reader--tafsir-split]': 'tafsirSplitLayout()',
+        '[class.reader--tafsir-panel-open]': 'tafsirSplitLayout() && expandedTafsirAyah() !== null',
     },
 })
 export class SurahReaderComponent implements OnInit {
@@ -160,7 +162,19 @@ export class SurahReaderComponent implements OnInit {
   protected readonly tafsirError = signal(false);
   protected readonly tafsirText = signal('');
   protected readonly tafsirParagraphs = computed(() => formatTafsirParagraphs(this.tafsirText()));
+  /** Desktop/tablet: Quran left, tafsir in a dedicated right column (≥1160px). */
+  protected readonly tafsirSplitLayout = signal(false);
+  protected readonly verseForTafsir = computed(() => {
+    const ayah = this.expandedTafsirAyah();
+    const s = this.surah();
+    if (ayah == null || !s) {
+      return null;
+    }
+    return s.verses.find((v) => v.ayah === ayah) ?? null;
+  });
   private tafsirLoadGeneration = 0;
+  private tafsirSplitMql: MediaQueryList | null = null;
+  private tafsirSplitMqlListener: ((e: MediaQueryListEvent) => void) | null = null;
 
   /** Text search within the loaded surah (Arabic + English + Urdu). */
   protected readonly surahSearchQuery = signal('');
@@ -205,6 +219,9 @@ export class SurahReaderComponent implements OnInit {
 
   constructor() {
     this.tafsirEditionSlug.set(this.readStoredTafsirEdition());
+    if (isPlatformBrowser(this.platformId)) {
+      afterNextRender(() => this.bindTafsirSplitLayout(), { injector: this.injector });
+    }
     const corpus$ = this.corpusSource.load().pipe(
       tap((payload) => {
         this.corpusLoading.set(false);
@@ -747,8 +764,36 @@ export class SurahReaderComponent implements OnInit {
       this.closeTafsir();
       return;
     }
-    this.expandedTafsirAyah.set(v.ayah);
-    this.fetchTafsirForVerse(v.ayah);
+    this.openTafsirForVerse(v.ayah);
+  }
+
+  protected onVerseContentKeyActivate(v: QuranVerseRow, event: Event): void {
+    if (!this.tafsirSplitLayout() || !(event instanceof KeyboardEvent)) {
+      return;
+    }
+    event.preventDefault();
+    if (this.expandedTafsirAyah() === v.ayah) {
+      return;
+    }
+    this.openTafsirForVerse(v.ayah);
+  }
+
+  protected onVerseContentClick(v: QuranVerseRow, event: MouseEvent): void {
+    if (!this.tafsirSplitLayout() || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const target = event.target;
+    if (!(target instanceof Element) || target.closest('button, a, select, input, textarea, label')) {
+      return;
+    }
+    if (this.expandedTafsirAyah() === v.ayah) {
+      return;
+    }
+    this.openTafsirForVerse(v.ayah);
+  }
+
+  protected closeTafsirPanel(): void {
+    this.closeTafsir();
   }
 
   protected onTafsirEditionChange(slug: string, v: QuranVerseRow): void {
@@ -770,12 +815,42 @@ export class SurahReaderComponent implements OnInit {
     this.fetchTafsirForVerse(v.ayah);
   }
 
+  private openTafsirForVerse(ayah: number): void {
+    this.expandedTafsirAyah.set(ayah);
+    this.fetchTafsirForVerse(ayah);
+    if (this.tafsirSplitLayout()) {
+      this.scrollVerseIntoViewForTafsir(ayah);
+    }
+  }
+
   private closeTafsir(): void {
     this.expandedTafsirAyah.set(null);
     this.tafsirLoading.set(false);
     this.tafsirError.set(false);
     this.tafsirText.set('');
     this.tafsirLoadGeneration += 1;
+  }
+
+  private scrollVerseIntoViewForTafsir(ayah: number): void {
+    const el = this.document.getElementById(verseElementId(ayah));
+    el?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
+
+  private bindTafsirSplitLayout(): void {
+    const mql = this.document.defaultView?.matchMedia('(min-width: 1160px)');
+    if (!mql) {
+      return;
+    }
+    this.tafsirSplitMql = mql;
+    this.tafsirSplitLayout.set(mql.matches);
+    const onChange = (e: MediaQueryListEvent) => this.tafsirSplitLayout.set(e.matches);
+    this.tafsirSplitMqlListener = onChange;
+    mql.addEventListener('change', onChange);
+    this.destroyRef.onDestroy(() => {
+      mql.removeEventListener('change', onChange);
+      this.tafsirSplitMql = null;
+      this.tafsirSplitMqlListener = null;
+    });
   }
 
   private fetchTafsirForVerse(ayah: number): void {
