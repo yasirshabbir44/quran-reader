@@ -50,6 +50,12 @@ import {
 } from '../core/routing/verse-deep-link.util';
 import { SURAH_MULK_META } from '../data/surah-mulk-meta';
 import { VerseQuoteSheetComponent } from '../verse-quote-sheet/verse-quote-sheet.component';
+import {
+  defaultTafsirSlug,
+  tafsirEditionsForLocale,
+  type TafsirEdition,
+} from '../core/tafsir/tafsir-editions';
+import { TafsirService } from '../core/tafsir/tafsir.service';
 
 type ReaderMode = 'verse-by-verse' | 'reading';
 
@@ -85,6 +91,7 @@ export class SurahReaderComponent implements OnInit {
   private readonly versePresentation = inject(VERSE_PRESENTATION_STRATEGY);
   private readonly readerLayout = inject(ReaderLayoutPreferencesService);
   private readonly dailyReminder = inject(DailyReminderService);
+  private readonly tafsirService = inject(TafsirService);
   protected readonly notifyPrefs = inject(NotificationPreferencesService);
   protected readonly ui = inject(UiLocaleService);
 
@@ -144,6 +151,15 @@ export class SurahReaderComponent implements OnInit {
   protected showBookmarkSavedToast = false;
   protected readonly notifyPermissionError = signal<'denied' | 'unsupported' | null>(null);
 
+  private static readonly TAFSIR_EDITION_LS_KEY = 'surah-reader-tafsir-edition';
+
+  protected readonly expandedTafsirAyah = signal<number | null>(null);
+  protected readonly tafsirEditionSlug = signal('');
+  protected readonly tafsirLoading = signal(false);
+  protected readonly tafsirError = signal(false);
+  protected readonly tafsirText = signal('');
+  private tafsirLoadGeneration = 0;
+
   /** Text search within the loaded surah (Arabic + English + Urdu). */
   protected readonly surahSearchQuery = signal('');
   /** Index into `surahSearchMatches`; -1 means no match focused yet. */
@@ -186,6 +202,7 @@ export class SurahReaderComponent implements OnInit {
   private fragmentScrollSuppressKey: string | null = null;
 
   constructor() {
+    this.tafsirEditionSlug.set(this.readStoredTafsirEdition());
     const corpus$ = this.corpusSource.load().pipe(
       tap((payload) => {
         this.corpusLoading.set(false);
@@ -372,6 +389,15 @@ export class SurahReaderComponent implements OnInit {
     if (value === 'en' || value === 'ar' || value === 'ur') {
       this.ui.setLocale(value as UiLocaleCode);
       this.syncDocumentTitle();
+      const prevSlug = this.tafsirEditionSlug();
+      const nextSlug = this.resolveTafsirEditionSlug();
+      if (prevSlug !== nextSlug) {
+        this.persistTafsirEdition(nextSlug);
+      }
+      const openAyah = this.expandedTafsirAyah();
+      if (openAyah !== null) {
+        this.fetchTafsirForVerse(openAyah);
+      }
       if (this.loadedCorpus) {
         void this.dailyReminder.syncFromCorpus(this.loadedCorpus, this.readingBookmark.read());
       }
@@ -697,6 +723,118 @@ export class SurahReaderComponent implements OnInit {
     });
   }
 
+  protected introDeepSummary(): string {
+    return this.isMulk()
+      ? this.ui.translate('aboutSummary')
+      : this.ui.translate('aboutSummaryGeneric');
+  }
+
+  protected tafsirEditionsForLocale(): readonly TafsirEdition[] {
+    return tafsirEditionsForLocale(this.ui.locale());
+  }
+
+  protected isTafsirOpen(v: QuranVerseRow): boolean {
+    return this.expandedTafsirAyah() === v.ayah;
+  }
+
+  protected toggleTafsir(v: QuranVerseRow): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (this.expandedTafsirAyah() === v.ayah) {
+      this.closeTafsir();
+      return;
+    }
+    this.expandedTafsirAyah.set(v.ayah);
+    this.fetchTafsirForVerse(v.ayah);
+  }
+
+  protected onTafsirEditionChange(slug: string, v: QuranVerseRow): void {
+    if (!slug || slug === this.tafsirEditionSlug()) {
+      return;
+    }
+    this.tafsirEditionSlug.set(slug);
+    this.persistTafsirEdition(slug);
+    if (this.expandedTafsirAyah() === v.ayah) {
+      this.fetchTafsirForVerse(v.ayah);
+    }
+  }
+
+  protected retryTafsir(v: QuranVerseRow): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.tafsirService.invalidateVerse(this.tafsirEditionSlug(), this.surahNumber(), v.ayah);
+    this.fetchTafsirForVerse(v.ayah);
+  }
+
+  private closeTafsir(): void {
+    this.expandedTafsirAyah.set(null);
+    this.tafsirLoading.set(false);
+    this.tafsirError.set(false);
+    this.tafsirText.set('');
+    this.tafsirLoadGeneration += 1;
+  }
+
+  private fetchTafsirForVerse(ayah: number): void {
+    const slug = this.resolveTafsirEditionSlug();
+    const gen = ++this.tafsirLoadGeneration;
+    this.tafsirLoading.set(true);
+    this.tafsirError.set(false);
+    this.tafsirText.set('');
+    this.tafsirService
+      .loadVerse(slug, this.surahNumber(), ayah)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((payload) => {
+        if (gen !== this.tafsirLoadGeneration || this.expandedTafsirAyah() !== ayah) {
+          return;
+        }
+        this.tafsirLoading.set(false);
+        if (!payload?.text?.trim()) {
+          this.tafsirError.set(true);
+          return;
+        }
+        this.tafsirText.set(payload.text.trim());
+      });
+  }
+
+  private resolveTafsirEditionSlug(): string {
+    const slug = this.tafsirEditionSlug();
+    const allowed = this.tafsirEditionsForLocale();
+    if (allowed.some((e) => e.slug === slug)) {
+      return slug;
+    }
+    const fallback = defaultTafsirSlug(this.ui.locale());
+    this.tafsirEditionSlug.set(fallback);
+    return fallback;
+  }
+
+  private readStoredTafsirEdition(): string {
+    if (!isPlatformBrowser(this.platformId)) {
+      return defaultTafsirSlug('en');
+    }
+    try {
+      const saved = localStorage.getItem(SurahReaderComponent.TAFSIR_EDITION_LS_KEY);
+      if (saved) {
+        return saved;
+      }
+    } catch {
+      /* ignore */
+    }
+    return defaultTafsirSlug(this.ui.locale());
+  }
+
+  private persistTafsirEdition(slug: string): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    try {
+      localStorage.setItem(SurahReaderComponent.TAFSIR_EDITION_LS_KEY, slug);
+    } catch {
+      /* ignore */
+    }
+  }
+
   protected onSurahSearchChange(value: string): void {
     this.surahSearchQuery.set(value);
     this.surahSearchMatchIndex.set(-1);
@@ -830,6 +968,7 @@ export class SurahReaderComponent implements OnInit {
     if (n !== prevN) {
       this.surahSearchQuery.set('');
       this.surahSearchMatchIndex.set(-1);
+      this.closeTafsir();
     }
     const s = payload.surahs[n - 1] ?? null;
     const resetViewport = n !== this.surahNumber() || this.surah() === null;
