@@ -1702,6 +1702,30 @@ a.reader__settings-btn {
   border-bottom: 1px solid var(--reader-border);
 }
 
+.verses__translit-block {
+  margin: 0.85rem 0 0;
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.55rem;
+  background: var(--reader-accent-soft);
+  border: 1px solid var(--reader-accent-border);
+}
+
+.verses__translit-label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font: 700 0.68rem/1.2 'Amiri', serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--reader-ink-faint);
+}
+
+.verses__translit-text {
+  margin: 0;
+  font: italic 400 max(0.92rem, calc(var(--reader-ar-fs) * 0.42)) / 1.65 'Inter', system-ui, sans-serif;
+  color: var(--reader-ink-muted);
+  text-wrap: pretty;
+}
+
 .verses__tafsir {
   width: 100%;
   margin-top: 0.35rem;
