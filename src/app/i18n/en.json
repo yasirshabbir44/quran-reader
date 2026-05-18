@@ -59,6 +59,7 @@
   "loadError": "Could not load the local Quran file (quran-full.json). Rebuild with npm run build-quran-data, then refresh.",
   "surahLabel": "Surah",
   "surahNavTitle": "Browse surahs",
+  "surahNavSubtitle": "All 114 chapters — Arabic & transliteration",
   "surahNavOpenAria": "Open surah list",
   "surahNavCloseAria": "Close surah list",
   "surahNavSearchAria": "Filter surahs",

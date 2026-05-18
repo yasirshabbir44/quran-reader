@@ -59,6 +59,7 @@
   "loadError": "مقامی قرآن فائل (quran-full.json) لوڈ نہیں ہو سکی۔ npm run build-quran-data چلائیں، پھر صفحہ تازہ کریں۔",
   "surahLabel": "سورۃ",
   "surahNavTitle": "سورتیں دیکھیں",
+  "surahNavSubtitle": "تمام ١١٤ سورتیں — عربی اور تلفظ",
   "surahNavOpenAria": "سورتوں کی فہرست کھولیں",
   "surahNavCloseAria": "سورتوں کی فہرست بند کریں",
   "surahNavSearchAria": "سورتیں چھانیں",

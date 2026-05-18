@@ -112,7 +112,11 @@
         (click)="toggleSurahNav()"
       >
         <span class="reader__surah-picker-num" aria-hidden="true">{{ formatUiNum(surahNumber()) }}</span>
-        <span class="reader__surah-picker-name">{{ surah()!.nameAr }}</span>
+        <span class="reader__surah-picker-label">
+          <span class="reader__surah-picker-translit" dir="ltr" lang="en">{{ surah()!.nameTranslit }}</span>
+          <span class="reader__surah-picker-sep" aria-hidden="true">/</span>
+          <span class="reader__surah-picker-name" dir="rtl" lang="ar">{{ surah()!.nameAr }}</span>
+        </span>
         <svg class="reader__surah-picker-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
         </svg>
@@ -228,8 +232,11 @@
   [attr.aria-hidden]="!surahNavOpen"
   [attr.aria-label]="'surahNavTitle' | uiTranslate"
 >
-  <header class="reader__settings-head">
-    <h2 class="reader__settings-title">{{ 'surahNavTitle' | uiTranslate }}</h2>
+  <header class="reader__surah-nav-head">
+    <div class="reader__surah-nav-head-text">
+      <h2 class="reader__settings-title">{{ 'surahNavTitle' | uiTranslate }}</h2>
+      <p class="reader__surah-nav-subtitle">{{ 'surahNavSubtitle' | uiTranslate }}</p>
+    </div>
     <button
       type="button"
       class="reader__settings-close"
@@ -265,47 +272,54 @@
       </button>
       }
     </div>
-    @if (surahNavQuery().trim()) {
-    <p class="reader__surah-nav-meta" aria-live="polite">
-      @if (filteredSurahList().length === 0) {
-      {{ 'surahNavNoResults' | uiTranslate }}
-      } @else {
-      {{ 'surahNavResultsCount' | uiTranslate: { n: formatUiNum(filteredSurahList().length) } }}
-      }
+    <p class="reader__surah-nav-count" aria-live="polite">
+      {{
+        'homeIndexCount'
+          | uiTranslate: {
+              shown: formatUiNum(filteredSurahList().length),
+              total: formatUiNum(surahList().length),
+            }
+      }}
     </p>
-    }
   </div>
 
-  <ul class="reader__surah-nav-list reader__settings-scroll" role="listbox" [attr.aria-label]="'surahNavListAria' | uiTranslate">
-    @for (s of filteredSurahList(); track s.number) {
-    <li class="reader__surah-nav-item" role="presentation">
-      <button
-        type="button"
-        class="reader__surah-nav-btn"
-        role="option"
-        [class.reader__surah-nav-btn--active]="s.number === surahNumber()"
-        [attr.aria-selected]="s.number === surahNumber()"
-        (click)="selectSurahFromNav(s.number)"
-        [attr.aria-label]="
-          'surahNavSelectAria'
-            | uiTranslate: { n: formatUiNum(s.number), name: s.nameAr, translit: s.nameTranslit }
-        "
-      >
-        <span class="reader__surah-nav-num">{{ formatUiNum(s.number) }}</span>
-        <span class="reader__surah-nav-text">
-          <span class="reader__surah-nav-name">{{ s.nameAr }}</span>
-          <span class="reader__surah-nav-sub">
-            <span class="reader__surah-nav-translit">{{ s.nameTranslit }}</span>
-            <span class="reader__surah-nav-dot" aria-hidden="true">·</span>
-            <span class="reader__surah-nav-meta-inline">
-              {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }} · {{ surahNavTypeLabel(s) }}
+  <div class="reader__surah-nav-body reader__settings-scroll">
+    @if (filteredSurahList().length === 0 && surahNavQuery().trim()) {
+    <p class="reader__surah-nav-empty">{{ 'surahNavNoResults' | uiTranslate }}</p>
+    } @else {
+    <ul class="reader__surah-nav-grid" role="listbox" [attr.aria-label]="'surahNavListAria' | uiTranslate">
+      @for (s of filteredSurahList(); track s.number) {
+      <li role="presentation">
+        <button
+          type="button"
+          class="reader__surah-nav-card"
+          role="option"
+          [class.reader__surah-nav-card--active]="s.number === surahNumber()"
+          [attr.aria-selected]="s.number === surahNumber()"
+          (click)="selectSurahFromNav(s.number)"
+          [attr.aria-label]="
+            'surahNavSelectAria'
+              | uiTranslate: { n: formatUiNum(s.number), name: s.nameAr, translit: s.nameTranslit }
+          "
+        >
+          <span class="reader__surah-nav-card-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
+          <span class="reader__surah-nav-card-title">
+            <span class="reader__surah-nav-card-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
+            <span class="reader__surah-nav-card-sep" aria-hidden="true">/</span>
+            <span class="reader__surah-nav-card-ar" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+          </span>
+          <span class="reader__surah-nav-card-meta">
+            <span class="reader__surah-nav-chip">{{ surahNavTypeLabel(s) }}</span>
+            <span class="reader__surah-nav-card-verses">
+              {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
             </span>
           </span>
-        </span>
-      </button>
-    </li>
+        </button>
+      </li>
+      }
+    </ul>
     }
-  </ul>
+  </div>
 </aside>
 
 <section
