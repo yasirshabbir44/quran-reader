@@ -48,10 +48,22 @@
           >
             <span class="landing__nav-link-title">{{ 'homeNavContinue' | uiTranslate }}</span>
             <span class="landing__nav-link-meta">
+              @if (continueReadingSurah(); as cs) {
+              {{
+                'homeNavContinueDetail'
+                  | uiTranslate
+                    : {
+                        name: cs.nameAr,
+                        ayah: formatUiNum(bm.ayah),
+                        total: formatUiNum(cs.versesCount),
+                      }
+              }}
+              } @else {
               {{
                 'homeNavContinueHint'
                   | uiTranslate: { surah: formatUiNum(bm.surah), ayah: formatUiNum(bm.ayah) }
               }}
+              }
             </span>
           </a>
         </li>

@@ -591,6 +591,119 @@
   </div>
 </section>
 
+@if (mobileChrome()) {
+<nav
+  class="reader__mobile-bar"
+  [attr.aria-label]="'mobileBarAria' | uiTranslate"
+>
+  <p class="reader__mobile-progress-label">
+    <span class="reader__mobile-progress-surah" dir="rtl" lang="ar">{{ surah()!.nameAr }}</span>
+    <span class="reader__mobile-progress-verse">
+      {{
+        'surahProgressLabel'
+          | uiTranslate
+            : {
+                current: formatUiNum(surahAyahProgress().current),
+                total: formatUiNum(surahAyahProgress().total),
+                pct: surahAyahProgress().percent,
+              }
+      }}
+    </span>
+  </p>
+  <div
+    class="reader__mobile-progress"
+    role="progressbar"
+    [attr.aria-valuenow]="surahAyahProgress().percent"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    [attr.aria-label]="
+      'surahProgressAria'
+        | uiTranslate
+          : {
+              current: formatUiNum(surahAyahProgress().current),
+              total: formatUiNum(surahAyahProgress().total),
+              pct: surahAyahProgress().percent,
+            }
+    "
+  >
+    <span
+      class="reader__mobile-progress-fill"
+      [style.width.%]="surahAyahProgress().percent"
+    ></span>
+  </div>
+  <div class="reader__mobile-actions">
+    <button
+      type="button"
+      class="reader__mobile-btn"
+      (click)="goToPrevAyah()"
+      [disabled]="!canGoPrevAyah()"
+      [attr.aria-label]="'prevAyahAria' | uiTranslate"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M14.5 6.5 9 12l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="reader__mobile-btn reader__mobile-btn--bookmark"
+      [class.reader__mobile-btn--bookmark-active]="isActiveAyahBookmarked()"
+      (click)="saveBookmarkForActiveAyah()"
+      [attr.aria-label]="'bookmarkVerseAria' | uiTranslate: { n: formatUiNum(activeAyah()) }"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          d="M6 4.75C6 3.78 6.78 3 7.75 3h8.5c.97 0 1.75.78 1.75 1.75v15.5L12 16.4 6 20.25V4.75Z"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.75"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="reader__mobile-btn reader__mobile-btn--tafsir"
+      [class.reader__mobile-btn--tafsir-active]="isActiveAyahTafsirOpen()"
+      (click)="toggleTafsirForActiveAyah()"
+      [attr.aria-expanded]="isActiveAyahTafsirOpen()"
+      [attr.aria-label]="'viewTafsirAria' | uiTranslate: { n: formatUiNum(activeAyah()) }"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          d="M5 5.5h14v2H5v-2Zm0 5h10v2H5v-2Zm0 5h14v2H5v-2Z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="reader__mobile-btn reader__mobile-btn--audio"
+      disabled
+      [attr.aria-label]="'audioComingSoonAria' | uiTranslate"
+      [attr.title]="'audioComingSoonTitle' | uiTranslate"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          d="M8 9.5v5l4.5 3V6.5L8 9.5ZM18 12a6 6 0 0 0-3-5.2v10.4A6 6 0 0 0 18 12Z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+    <button
+      type="button"
+      class="reader__mobile-btn"
+      (click)="goToNextAyah()"
+      [disabled]="!canGoNextAyah()"
+      [attr.aria-label]="'nextAyahAria' | uiTranslate"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M9.5 6.5 15 12l-5.5 5.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+</nav>
+}
+
 <button
   type="button"
   class="reader__to-top"
@@ -801,7 +914,7 @@
             </section>
             }
           </div>
-          @if (isTafsirOpen(v) && !tafsirSplitLayout()) {
+          @if (showTafsirInline(v)) {
           <aside
             class="verses__tafsir verses__tafsir--inline"
             [id]="'tafsir-panel-' + v.ayah"
@@ -876,7 +989,7 @@
   </div>
 </main>
 
-<ng-template #tafsirPanelBody let-v let-editionId="editionId">
+<ng-template #tafsirPanelBody let-v let-editionId="editionId" let-accordion="accordion">
   <span class="verses__section-label verses__section-label--tafsir">{{ 'verseTafsirSectionLabel' | uiTranslate }}</span>
   <div class="verses__tafsir-toolbar">
     <label class="verses__tafsir-label" [attr.for]="editionId">
@@ -903,6 +1016,42 @@
       {{ 'tafsirRetry' | uiTranslate }}
     </button>
   </div>
+  } @else if (accordion && tafsirBlocks().length > 1) {
+  <div class="verses__tafsir-body verses__tafsir-body--accordion">
+    @for (block of tafsirBlocks(); track block.type) {
+      @if ($index === 0) {
+      <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId + '-block-' + block.type">
+        <span class="verses__section-label verses__section-label--tafsir-block" [id]="editionId + '-block-' + block.type">
+          {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
+        </span>
+        <div class="verses__tafsir-block-body">
+          @for (para of block.paragraphs; track $index) {
+          <p class="verses__tafsir-p">{{ para }}</p>
+          }
+        </div>
+      </section>
+      }
+    }
+    <details class="verses__tafsir-more">
+      <summary class="verses__tafsir-more-summary">{{ 'tafsirReadMore' | uiTranslate }}</summary>
+      <div class="verses__tafsir-more-body">
+        @for (block of tafsirBlocks(); track block.type) {
+          @if ($index > 0) {
+          <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId + '-block-more-' + block.type">
+            <span class="verses__section-label verses__section-label--tafsir-block" [id]="editionId + '-block-more-' + block.type">
+              {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
+            </span>
+            <div class="verses__tafsir-block-body">
+              @for (para of block.paragraphs; track $index) {
+              <p class="verses__tafsir-p">{{ para }}</p>
+              }
+            </div>
+          </section>
+          }
+        }
+      </div>
+    </details>
+  </div>
   } @else if (tafsirBlocks().length) {
   <div class="verses__tafsir-body">
     @for (block of tafsirBlocks(); track block.type) {
@@ -925,6 +1074,45 @@
   }
   <p class="verses__tafsir-attribution">{{ 'tafsirAttribution' | uiTranslate }}</p>
 </ng-template>
+
+@if (tafsirMobileSheetOpen() && verseForTafsir(); as tafsirVerse) {
+<button
+  type="button"
+  class="reader__tafsir-sheet-backdrop"
+  [attr.aria-label]="'closeTafsirPanelAria' | uiTranslate"
+  (click)="closeTafsirMobileSheet()"
+></button>
+<aside
+  class="reader__tafsir-sheet"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-label]="'tafsirPanelAria' | uiTranslate: { n: formatUiNum(tafsirVerse.ayah) }"
+  [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
+  [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
+>
+  <header class="reader__tafsir-sheet-head">
+    <h2 class="reader__tafsir-sheet-title">
+      {{ 'tafsirSidePanelTitle' | uiTranslate: { n: formatUiNum(tafsirVerse.ayah) } }}
+    </h2>
+    <button
+      type="button"
+      class="reader__settings-close"
+      (click)="closeTafsirMobileSheet()"
+      [attr.aria-label]="'closeTafsirPanelAria' | uiTranslate"
+    >
+      ✕
+    </button>
+  </header>
+  <div class="reader__tafsir-sheet-scroll">
+    <ng-container
+      *ngTemplateOutlet="
+        tafsirPanelBody;
+        context: { $implicit: tafsirVerse, editionId: 'tafsir-edition-sheet', accordion: true }
+      "
+    ></ng-container>
+  </div>
+</aside>
+}
 }
 
 @if (quoteSheetVerse(); as quoteVerse) {
