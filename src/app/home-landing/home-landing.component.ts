@@ -22,7 +22,11 @@ import {
   type QuranSurahPayload,
 } from '../core/quran/quran-data.service';
 import { verseFragment } from '../core/routing/verse-deep-link.util';
-import { ThematicIndexService } from '../core/thematic-index/thematic-index.service';
+import {
+  ThematicIndexService,
+  type DailyThemeInspiration,
+} from '../core/thematic-index/thematic-index.service';
+import { normalizeVerseTranslations } from '../core/verse-presentation/verse-presentation.strategy';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 
@@ -52,6 +56,7 @@ export class HomeLandingComponent implements OnInit {
   protected readonly savedPlace = signal<ReadingBookmark | null>(null);
   protected readonly indexQuery = signal('');
   protected readonly themeCount = signal(0);
+  protected readonly dailyTopic = signal<DailyThemeInspiration | null>(null);
 
   protected readonly filteredSurahs = computed(() => {
     const list = this.surahs();
@@ -97,6 +102,13 @@ export class HomeLandingComponent implements OnInit {
           this.themeCount.set(payload.themes.length);
         }
       });
+
+    this.thematicIndex
+      .getDailyInspiration()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((inspiration) => {
+        this.dailyTopic.set(inspiration);
+      });
   }
 
   protected formatUiNum(n: number): string {
@@ -119,6 +131,11 @@ export class HomeLandingComponent implements OnInit {
 
   protected verseFragment(ayah: number): string {
     return verseFragment(ayah);
+  }
+
+  protected dailyTopicTranslation(inspiration: DailyThemeInspiration): string {
+    const tr = normalizeVerseTranslations(inspiration.verse.verse);
+    return this.ui.locale() === 'ur' ? tr.ur : tr.en;
   }
 
   protected retryCorpusLoad(): void {

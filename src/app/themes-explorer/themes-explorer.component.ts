@@ -49,6 +49,7 @@ const THEME_ICONS: Record<string, string> = {
   child: '👶',
   wheat: '🌾',
   healing: '💚',
+  garden: '🌴',
 };
 
 @Component({
