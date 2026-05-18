@@ -65,7 +65,11 @@ export class ReaderTafsirPanelService {
   }
 
   showInline(v: QuranVerseRow): boolean {
-    return this.isOpen(v) && !this.useMobileSheet();
+    return (
+      this.isOpen(v) &&
+      !this.useMobileSheet() &&
+      !this.breakpoints.tafsirSplitLayout()
+    );
   }
 
   toggle(v: QuranVerseRow): void {
