@@ -12,7 +12,9 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import type { QuranVerseRow } from '../core/quran/quran-data.service';
+import { verseElementId as verseElementIdForLocation } from '../core/routing/verse-location.util';
+import type { ReaderDisplayVerse } from './models/reader-display-verse.model';
+import type { ReaderViewKind } from './models/reader-view-kind.model';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import { DailyReminderService } from '../core/notifications/daily-reminder.service';
 import { NotificationPreferencesService } from '../core/notifications/notification-preferences.service';
@@ -23,7 +25,6 @@ import {
 } from '../core/verse-presentation/verse-presentation.strategy';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
-import { verseElementId } from '../core/routing/verse-deep-link.util';
 import { VerseQuoteSheetComponent } from '../verse-quote-sheet/verse-quote-sheet.component';
 import { READER_FEATURE_PROVIDERS } from './reader.providers';
 import {
@@ -37,6 +38,7 @@ import {
   ReaderRouteCoordinatorService,
   ReaderScrollStateService,
   ReaderSurahNavService,
+  ReaderMushafNavService,
   ReaderSurahSearchService,
   ReaderSwipeNavigationService,
   ReaderTafsirPanelService,
@@ -95,6 +97,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly scroll = inject(ReaderScrollStateService);
   protected readonly search = inject(ReaderSurahSearchService);
   protected readonly surahNav = inject(ReaderSurahNavService);
+  protected readonly mushafNav = inject(ReaderMushafNavService);
   protected readonly panels = inject(ReaderPanelCoordinatorService);
   protected readonly bookmarkUi = inject(ReaderBookmarkUiService);
   protected readonly tafsir = inject(ReaderTafsirPanelService);
@@ -144,12 +147,42 @@ export class SurahReaderComponent implements OnInit {
   protected formatUiNum = (n: number): string => this.intro.formatUiNum(n);
   protected readonly formatUiNumForQuote = this.formatUiNum;
 
-  protected verses(): readonly QuranVerseRow[] {
-    return this.corpus.verses();
+  protected verses(): readonly ReaderDisplayVerse[] {
+    return this.corpus.displayVerses();
   }
 
-  protected verseElementId(ayah: number): string {
-    return verseElementId(ayah);
+  protected viewKind(): ReaderViewKind {
+    return this.corpus.viewKind();
+  }
+
+  protected verseElementId(v: ReaderDisplayVerse): string {
+    return verseElementIdForLocation(
+      { surah: v.surah, ayah: v.ayah },
+      this.corpus.viewKind(),
+    );
+  }
+
+  protected isActiveVerse(v: ReaderDisplayVerse): boolean {
+    const ref = this.activeAyah.activeVerse();
+    return ref.surah === v.surah && ref.ayah === v.ayah;
+  }
+
+  protected showSurahHeading(v: ReaderDisplayVerse, index: number): boolean {
+    if (this.corpus.viewKind() === 'surah') {
+      return false;
+    }
+    if (index === 0) {
+      return true;
+    }
+    const prev = this.verses()[index - 1];
+    return prev ? prev.surah !== v.surah : false;
+  }
+
+  protected showBismillah(v: ReaderDisplayVerse, index: number): boolean {
+    if (v.surah === 9 || v.ayah !== 1) {
+      return false;
+    }
+    return this.showSurahHeading(v, index);
   }
 
   protected isMulk(): boolean {
@@ -164,11 +197,11 @@ export class SurahReaderComponent implements OnInit {
     return this.intro.deepSummary();
   }
 
-  protected verseTr(v: QuranVerseRow): { en: string; ur: string } {
+  protected verseTr(v: ReaderDisplayVerse): { en: string; ur: string } {
     return normalizeVerseTranslations(v);
   }
 
-  protected verseTranslit(v: QuranVerseRow): string {
+  protected verseTranslit(v: ReaderDisplayVerse): string {
     return normalizeVerseTransliteration(v);
   }
 
@@ -205,6 +238,10 @@ export class SurahReaderComponent implements OnInit {
     }
     if (this.surahNav.open()) {
       this.surahNav.close();
+      return;
+    }
+    if (this.mushafNav.open()) {
+      this.mushafNav.close();
       return;
     }
     if (this.panels.settingsOpen()) {
@@ -288,15 +325,78 @@ export class SurahReaderComponent implements OnInit {
       return;
     }
     this.closeSurahNav();
-    if (n === this.corpus.surahNumber()) {
+    if (this.corpus.viewKind() === 'surah' && n === this.corpus.surahNumber()) {
       return;
     }
     void this.router.navigate(['/', n]);
   }
 
+  protected selectPageFromNav(page: number): void {
+    if (!Number.isFinite(page) || page < 1 || page > 604) {
+      return;
+    }
+    this.mushafNav.close();
+    if (this.corpus.viewKind() === 'page' && page === this.corpus.pageNumber()) {
+      return;
+    }
+    void this.router.navigate(['/page', page]);
+  }
+
+  protected selectJuzFromNav(juz: number): void {
+    if (!Number.isFinite(juz) || juz < 1 || juz > 30) {
+      return;
+    }
+    this.mushafNav.close();
+    if (this.corpus.viewKind() === 'juz' && juz === this.corpus.juzNumber()) {
+      return;
+    }
+    void this.router.navigate(['/juz', juz]);
+  }
+
+  protected switchView(kind: ReaderViewKind): void {
+    if (kind === this.corpus.viewKind()) {
+      return;
+    }
+    const ref = this.activeAyah.activeVerse();
+    if (kind === 'surah') {
+      void this.router.navigate(['/', ref.surah], {
+        fragment: String(ref.ayah),
+        queryParamsHandling: 'merge',
+      });
+      return;
+    }
+    if (kind === 'page') {
+      const page = this.corpus.mushafIndex()?.versePage[`${ref.surah}:${ref.ayah}`] ?? 1;
+      void this.router.navigate(['/page', page], {
+        fragment: `${ref.surah}:${ref.ayah}`,
+        queryParamsHandling: 'merge',
+      });
+      return;
+    }
+    const juz = this.corpus.mushafIndex()?.verseJuz[`${ref.surah}:${ref.ayah}`] ?? 1;
+    void this.router.navigate(['/juz', juz], {
+      fragment: `${ref.surah}:${ref.ayah}`,
+      queryParamsHandling: 'merge',
+    });
+  }
+
+  protected toggleMushafNav(kind: 'page' | 'juz'): void {
+    this.panels.toggleMushafNav(kind);
+    if (this.mushafNav.open()) {
+      this.scroll.topbarFullRevealed.set(true);
+      this.scroll.syncTopbarHeightFromDom();
+    }
+  }
+
+  protected closeMushafNav(): void {
+    this.mushafNav.close();
+    this.scroll.syncTopbarHeightFromDom();
+  }
+
   protected saveBookmarkAtCurrentLine(): void {
     this.activeAyah.updateFromScroll();
-    this.bookmarkUi.saveAtAyah(this.activeAyah.activeAyah());
+    const ref = this.activeAyah.activeVerse();
+    this.bookmarkUi.saveAtAyah(ref.surah, ref.ayah);
   }
 
   protected goToSavedBookmark(): void {
@@ -307,11 +407,11 @@ export class SurahReaderComponent implements OnInit {
     }
     const maxAyah = this.corpus.surah()?.versesCount ?? b.ayah;
     const ayah = Math.min(Math.max(b.ayah, 1), maxAyah);
-    if (b.surah !== this.corpus.surahNumber()) {
+    if (this.corpus.viewKind() !== 'surah' || b.surah !== this.corpus.surahNumber()) {
       this.fragments.navigateWithFragment(b.surah, ayah);
       return;
     }
-    this.activeAyah.navigateToAyah(ayah);
+    this.activeAyah.navigateToVerse({ surah: b.surah, ayah });
   }
 
   protected onTranslationCheckboxChange(key: 'en' | 'ur', event: Event): void {
@@ -363,40 +463,46 @@ export class SurahReaderComponent implements OnInit {
   protected nextSurahSearchMatch(): void {
     const ayah = this.search.nextMatch();
     if (ayah !== null) {
-      this.activeAyah.navigateToAyah(ayah);
+      this.activeAyah.navigateToVerse({ surah: this.corpus.surahNumber(), ayah });
     }
   }
 
   protected prevSurahSearchMatch(): void {
     const ayah = this.search.prevMatch();
     if (ayah !== null) {
-      this.activeAyah.navigateToAyah(ayah);
+      this.activeAyah.navigateToVerse({ surah: this.corpus.surahNumber(), ayah });
     }
   }
 
-  protected isVerseSurahSearchHit(v: QuranVerseRow): boolean {
+  protected isVerseSurahSearchHit(v: ReaderDisplayVerse): boolean {
     return this.search.isHit(v.ayah);
   }
 
-  protected isVerseSurahSearchActive(v: QuranVerseRow): boolean {
+  protected isVerseSurahSearchActive(v: ReaderDisplayVerse): boolean {
     return this.search.isActive(v.ayah);
   }
 
   protected jumpToAyah(event: Event): void {
     const select = event.target as HTMLSelectElement;
-    const n = Number(select.value || this.activeAyah.jumpModel());
-    this.activeAyah.jumpToAyahFromSelect(n);
+    const value = select.value || this.activeAyah.jumpModel();
+    this.activeAyah.jumpToAyahFromSelect(value);
   }
 
-  protected copyAyah(v: QuranVerseRow): void {
-    this.verseActions.copyAyah(v, this.verseActions.presentationContext(this.formatUiNum));
+  protected copyAyah(v: ReaderDisplayVerse): void {
+    this.verseActions.copyAyah(
+      v,
+      this.verseActions.presentationContext(this.formatUiNum, v),
+    );
   }
 
-  protected shareAyah(v: QuranVerseRow): void {
-    this.verseActions.shareAyah(v, this.verseActions.presentationContext(this.formatUiNum));
+  protected shareAyah(v: ReaderDisplayVerse): void {
+    this.verseActions.shareAyah(
+      v,
+      this.verseActions.presentationContext(this.formatUiNum, v),
+    );
   }
 
-  protected openQuoteImage(v: QuranVerseRow): void {
+  protected openQuoteImage(v: ReaderDisplayVerse): void {
     this.verseActions.openQuoteImage(v);
     this.panels.closeSettings();
     this.surahNav.close();
@@ -410,11 +516,11 @@ export class SurahReaderComponent implements OnInit {
     return this.verseActions.readerOrigin();
   }
 
-  protected toggleTafsir(v: QuranVerseRow): void {
+  protected toggleTafsir(v: ReaderDisplayVerse): void {
     this.tafsir.toggle(v);
   }
 
-  protected onVerseContentClick(v: QuranVerseRow, event: MouseEvent): void {
+  protected onVerseContentClick(v: ReaderDisplayVerse, event: MouseEvent): void {
     if (!this.breakpoints.tafsirSplitLayout() || !isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -422,21 +528,21 @@ export class SurahReaderComponent implements OnInit {
     if (!(target instanceof Element) || target.closest('button, a, select, input, textarea, label')) {
       return;
     }
-    if (this.tafsir.expandedAyah() === v.ayah) {
+    if (this.tafsir.isOpen(v)) {
       return;
     }
-    this.tafsir.open(v.ayah);
+    this.tafsir.open({ surah: v.surah, ayah: v.ayah });
   }
 
-  protected onVerseContentKeyActivate(v: QuranVerseRow, event: Event): void {
+  protected onVerseContentKeyActivate(v: ReaderDisplayVerse, event: Event): void {
     if (!this.breakpoints.tafsirSplitLayout() || !(event instanceof KeyboardEvent)) {
       return;
     }
     event.preventDefault();
-    if (this.tafsir.expandedAyah() === v.ayah) {
+    if (this.tafsir.isOpen(v)) {
       return;
     }
-    this.tafsir.open(v.ayah);
+    this.tafsir.open({ surah: v.surah, ayah: v.ayah });
   }
 
   protected reminderTimeValue(): string {
@@ -498,27 +604,30 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected toggleTafsirForActiveAyah(): void {
-    const ayah = this.activeAyah.activeAyah();
-    const v = this.corpus.surah()?.verses.find((row) => row.ayah === ayah);
+    const ref = this.activeAyah.activeVerse();
+    const v = this.verses().find((row) => row.surah === ref.surah && row.ayah === ref.ayah);
     if (v) {
       this.tafsir.toggle(v);
     }
   }
 
   protected saveBookmarkForActiveAyah(): void {
-    const ayah = this.activeAyah.activeAyah();
-    const v = this.corpus.surah()?.verses.find((row) => row.ayah === ayah);
+    const ref = this.activeAyah.activeVerse();
+    const v = this.verses().find((row) => row.surah === ref.surah && row.ayah === ref.ayah);
     if (v) {
       this.bookmarkUi.saveForVerse(v);
     }
   }
 
   protected isActiveAyahBookmarked(): boolean {
-    return this.bookmarkUi.isAyahBookmarked(this.activeAyah.activeAyah());
+    const ref = this.activeAyah.activeVerse();
+    return this.bookmarkUi.isAyahBookmarked(ref.surah, ref.ayah);
   }
 
   protected isActiveAyahTafsirOpen(): boolean {
-    return this.tafsir.expandedAyah() === this.activeAyah.activeAyah();
+    const ref = this.activeAyah.activeVerse();
+    const open = this.tafsir.expandedVerse();
+    return open !== null && open.surah === ref.surah && open.ayah === ref.ayah;
   }
 
   protected closeTafsirPanel(): void {
@@ -529,11 +638,11 @@ export class SurahReaderComponent implements OnInit {
     this.tafsir.close();
   }
 
-  protected isTafsirOpen(v: QuranVerseRow): boolean {
+  protected isTafsirOpen(v: ReaderDisplayVerse): boolean {
     return this.tafsir.isOpen(v);
   }
 
-  protected showTafsirInline(v: QuranVerseRow): boolean {
+  protected showTafsirInline(v: ReaderDisplayVerse): boolean {
     return this.tafsir.showInline(v);
   }
 
@@ -541,12 +650,16 @@ export class SurahReaderComponent implements OnInit {
     return this.tafsir.useMobileSheet();
   }
 
-  protected isVerseSavedBookmark(v: QuranVerseRow): boolean {
+  protected isVerseSavedBookmark(v: ReaderDisplayVerse): boolean {
     return this.bookmarkUi.isVerseBookmarked(v);
   }
 
-  protected saveBookmarkForVerse(v: QuranVerseRow): void {
+  protected saveBookmarkForVerse(v: ReaderDisplayVerse): void {
     this.bookmarkUi.saveForVerse(v);
+  }
+
+  protected verseCopied(v: ReaderDisplayVerse): boolean {
+    return this.verseActions.copiedAyah() === `${v.surah}:${v.ayah}`;
   }
 
   protected showTranslations(): boolean {
@@ -561,6 +674,7 @@ export class SurahReaderComponent implements OnInit {
     return (
       this.panels.settingsOpen() ||
       this.surahNav.open() ||
+      this.mushafNav.open() ||
       !!this.verseActions.quoteSheetVerse()
     );
   }
@@ -569,6 +683,7 @@ export class SurahReaderComponent implements OnInit {
     return (
       this.panels.settingsOpen() ||
       this.surahNav.open() ||
+      this.mushafNav.open() ||
       !!this.verseActions.quoteSheetVerse() ||
       this.tafsir.mobileSheetOpen()
     );
@@ -600,6 +715,7 @@ export class SurahReaderComponent implements OnInit {
     if (this.document.visibilityState !== 'hidden') {
       return;
     }
-    this.bookmarkUi.flushOnHide(this.corpus.surahNumber(), this.activeAyah.activeAyah());
+    const ref = this.activeAyah.activeVerse();
+    this.bookmarkUi.flushOnHide(ref.surah, ref.ayah);
   };
 }

@@ -1,6 +1,7 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
-import { verseElementId } from '../../../core/routing/verse-deep-link.util';
+import type { VerseRef } from '../../../core/mushaf/mushaf-index.types';
+import { verseElementId } from '../../../core/routing/verse-location.util';
 import { ReaderBookmarkUiService } from '../bookmark/reader-bookmark-ui.service';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
 import { ReaderScrollStateService } from './reader-scroll-state.service';
@@ -15,79 +16,106 @@ export class ReaderActiveAyahService {
   private readonly fragments = inject(ReaderVerseFragmentService);
   private readonly bookmarkUi = inject(ReaderBookmarkUiService);
 
-  readonly activeAyah = signal(1);
+  readonly activeVerse = signal<VerseRef>({ surah: 67, ayah: 1 });
   readonly jumpModel = signal('');
 
+  /** Ayah number within the active surah context (bookmark compat). */
+  readonly activeAyah = computed(() => this.activeVerse().ayah);
+
   readonly surahProgress = computed(() => {
-    const total = this.corpus.surah()?.versesCount ?? 0;
-    if (total <= 0) {
+    const list = this.corpus.displayVerses();
+    if (list.length <= 0) {
       return { current: 0, total: 0, percent: 0 };
     }
-    const current = this.activeAyah();
+    const ref = this.activeVerse();
+    const idx = list.findIndex((v) => v.surah === ref.surah && v.ayah === ref.ayah);
+    const current = idx >= 0 ? idx + 1 : 1;
     return {
       current,
-      total,
-      percent: Math.min(100, Math.round((current / total) * 100)),
+      total: list.length,
+      percent: Math.min(100, Math.round((current / list.length) * 100)),
     };
   });
 
-  readonly canGoPrev = computed(() => this.activeAyah() > 1);
+  readonly canGoPrev = computed(() => {
+    const list = this.corpus.displayVerses();
+    const ref = this.activeVerse();
+    const idx = list.findIndex((v) => v.surah === ref.surah && v.ayah === ref.ayah);
+    return idx > 0;
+  });
+
   readonly canGoNext = computed(() => {
-    const total = this.corpus.surah()?.versesCount ?? 0;
-    return total > 0 && this.activeAyah() < total;
+    const list = this.corpus.displayVerses();
+    const ref = this.activeVerse();
+    const idx = list.findIndex((v) => v.surah === ref.surah && v.ayah === ref.ayah);
+    return idx >= 0 && idx < list.length - 1;
   });
 
   private ayahElements: Array<HTMLElement | null> | null = null;
-  pendingStartAyah: number | null = null;
+  pendingStartVerse: VerseRef | null = null;
   private pendingScrollTimer: ReturnType<typeof setTimeout> | null = null;
 
-  resetOnSurahChange(): void {
-    this.activeAyah.set(1);
+  resetOnViewChange(): void {
+    const first = this.corpus.displayVerses()[0];
+    this.activeVerse.set(first ? { surah: first.surah, ayah: first.ayah } : { surah: 67, ayah: 1 });
     this.jumpModel.set('');
     this.fragments.verseFragmentSyncEnabled = false;
   }
 
-  setActiveAyah(ayah: number, syncFragment = true): void {
-    this.activeAyah.set(ayah);
+  setActiveVerse(ref: VerseRef, syncFragment = true): void {
+    this.activeVerse.set(ref);
     if (syncFragment) {
-      this.fragments.scheduleFragmentSync(ayah);
+      this.fragments.scheduleFragmentSync(ref);
     }
-    this.bookmarkUi.scheduleScrollSave(this.corpus.surahNumber(), ayah);
+    this.bookmarkUi.scheduleScrollSave(ref.surah, ref.ayah);
   }
 
-  navigateToAyah(ayah: number): void {
+  navigateToVerse(ref: VerseRef): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    this.scroll.scrollToAyah(ayah, true);
-    this.jumpModel.set(String(ayah));
-    this.setActiveAyah(ayah, true);
-    this.fragments.replaceFragmentInUrl(ayah);
+    this.scroll.scrollToVerse(ref);
+    this.jumpModel.set(this.jumpValueFor(ref));
+    this.setActiveVerse(ref, true);
+    this.fragments.replaceFragmentInUrl(ref);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateFromScroll());
     });
   }
 
   goPrev(): void {
-    if (this.canGoPrev()) {
-      this.navigateToAyah(this.activeAyah() - 1);
+    const list = this.corpus.displayVerses();
+    const ref = this.activeVerse();
+    const idx = list.findIndex((v) => v.surah === ref.surah && v.ayah === ref.ayah);
+    if (idx > 0) {
+      const prev = list[idx - 1]!;
+      this.navigateToVerse({ surah: prev.surah, ayah: prev.ayah });
     }
   }
 
   goNext(): void {
-    if (this.canGoNext()) {
-      this.navigateToAyah(this.activeAyah() + 1);
+    const list = this.corpus.displayVerses();
+    const ref = this.activeVerse();
+    const idx = list.findIndex((v) => v.surah === ref.surah && v.ayah === ref.ayah);
+    if (idx >= 0 && idx < list.length - 1) {
+      const next = list[idx + 1]!;
+      this.navigateToVerse({ surah: next.surah, ayah: next.ayah });
     }
   }
 
-  jumpToAyahFromSelect(ayah: number): void {
-    if (!isPlatformBrowser(this.platformId) || !ayah) {
+  jumpToAyahFromSelect(value: string): void {
+    if (!isPlatformBrowser(this.platformId) || !value) {
       return;
     }
-    this.scroll.scrollToAyah(ayah);
-    this.jumpModel.set(String(ayah));
-    this.setActiveAyah(ayah, true);
-    this.fragments.replaceFragmentInUrl(ayah);
+    const list = this.corpus.displayVerses();
+    const ref = this.parseJumpValue(value, list);
+    if (!ref) {
+      return;
+    }
+    this.scroll.scrollToVerse(ref);
+    this.jumpModel.set(value);
+    this.setActiveVerse(ref, true);
+    this.fragments.replaceFragmentInUrl(ref);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => this.updateFromScroll());
     });
@@ -98,9 +126,12 @@ export class ReaderActiveAyahService {
       return;
     }
     this.scroll.bindTopbarHeightSync();
-    const list = this.corpus.verses();
-    this.ayahElements = list.map((v) => this.document.getElementById(verseElementId(v.ayah)));
-    if (this.pendingStartAyah !== null) {
+    const list = this.corpus.displayVerses();
+    const kind = this.corpus.viewKind();
+    this.ayahElements = list.map((v) =>
+      this.document.getElementById(verseElementId({ surah: v.surah, ayah: v.ayah }, kind)),
+    );
+    if (this.pendingStartVerse !== null) {
       this.fulfillPendingStart();
       return;
     }
@@ -111,34 +142,39 @@ export class ReaderActiveAyahService {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    const pending = this.pendingStartAyah;
+    const pending = this.pendingStartVerse;
     if (pending === null) {
       this.finishBinding();
       return;
     }
-    const list = this.corpus.verses();
-    if (list.length === 0 || this.corpus.surah() === null) {
+    const list = this.corpus.displayVerses();
+    if (list.length === 0) {
       if (attempt < 24) {
         this.pendingScrollTimer = setTimeout(() => this.fulfillPendingStart(attempt + 1), 50);
       }
       return;
     }
-    const lastAyah = list[list.length - 1]!.ayah;
-    const safeAyah = Math.min(Math.max(pending, 1), lastAyah);
-    const el = this.document.getElementById(verseElementId(safeAyah));
+    const target =
+      list.find((v) => v.surah === pending.surah && v.ayah === pending.ayah) ?? list[0]!;
+    const ref = { surah: target.surah, ayah: target.ayah };
+    const el = this.document.getElementById(
+      verseElementId(ref, this.corpus.viewKind()),
+    );
     if (!el) {
       if (attempt < 24) {
         this.pendingScrollTimer = setTimeout(() => this.fulfillPendingStart(attempt + 1), 50);
       }
       return;
     }
-    this.scroll.scrollToAyah(safeAyah, false);
-    this.activeAyah.set(safeAyah);
-    this.jumpModel.set(String(safeAyah));
-    this.pendingStartAyah = null;
-    this.fragments.markScrollSuppressed(this.corpus.surahNumber(), safeAyah);
-    this.fragments.replaceFragmentInUrl(safeAyah);
-    this.ayahElements = list.map((v) => this.document.getElementById(verseElementId(v.ayah)));
+    this.scroll.scrollToVerse(ref, false);
+    this.activeVerse.set(ref);
+    this.jumpModel.set(this.jumpValueFor(ref));
+    this.pendingStartVerse = null;
+    this.fragments.replaceFragmentInUrl(ref);
+    const kind = this.corpus.viewKind();
+    this.ayahElements = list.map((v) =>
+      this.document.getElementById(verseElementId({ surah: v.surah, ayah: v.ayah }, kind)),
+    );
     this.finishBinding();
   }
 
@@ -153,9 +189,11 @@ export class ReaderActiveAyahService {
 
   updateFromScroll(scrollY?: number): void {
     const centerY = (this.document.defaultView?.innerHeight ?? 800) / 2;
-    let next = 1;
+    let next: VerseRef = this.corpus.displayVerses()[0]
+      ? { surah: this.corpus.displayVerses()[0]!.surah, ayah: this.corpus.displayVerses()[0]!.ayah }
+      : { surah: 67, ayah: 1 };
     let bestDistance = Infinity;
-    const list = this.corpus.verses();
+    const list = this.corpus.displayVerses();
     const els = this.ayahElements;
     const useCachedRefs =
       !!els && els.length === list.length && els.some((el) => el !== null);
@@ -171,12 +209,15 @@ export class ReaderActiveAyahService {
         const distance = Math.abs(verseCenterY - centerY);
         if (distance < bestDistance) {
           bestDistance = distance;
-          next = verse.ayah;
+          next = { surah: verse.surah, ayah: verse.ayah };
         }
       }
     } else {
+      const kind = this.corpus.viewKind();
       for (const v of list) {
-        const el = this.document.getElementById(verseElementId(v.ayah));
+        const el = this.document.getElementById(
+          verseElementId({ surah: v.surah, ayah: v.ayah }, kind),
+        );
         if (!el) {
           continue;
         }
@@ -185,12 +226,13 @@ export class ReaderActiveAyahService {
         const distance = Math.abs(verseCenterY - centerY);
         if (distance < bestDistance) {
           bestDistance = distance;
-          next = v.ayah;
+          next = { surah: v.surah, ayah: v.ayah };
         }
       }
     }
-    if (next !== this.activeAyah()) {
-      this.setActiveAyah(next, true);
+    const current = this.activeVerse();
+    if (next.surah !== current.surah || next.ayah !== current.ayah) {
+      this.setActiveVerse(next, true);
     }
     if (scrollY !== undefined) {
       /* caller may update topbar separately */
@@ -202,5 +244,34 @@ export class ReaderActiveAyahService {
       clearTimeout(this.pendingScrollTimer);
       this.pendingScrollTimer = null;
     }
+  }
+
+  private jumpValueFor(ref: VerseRef): string {
+    if (this.corpus.viewKind() === 'surah') {
+      return String(ref.ayah);
+    }
+    return `${ref.surah}:${ref.ayah}`;
+  }
+
+  private parseJumpValue(
+    value: string,
+    list: readonly { readonly surah: number; readonly ayah: number }[],
+  ): VerseRef | null {
+    if (this.corpus.viewKind() === 'surah') {
+      const ayah = Number(value);
+      if (!Number.isFinite(ayah)) {
+        return null;
+      }
+      const hit = list.find((v) => v.ayah === ayah);
+      return hit ? { surah: hit.surah, ayah: hit.ayah } : null;
+    }
+    const colon = value.indexOf(':');
+    if (colon < 0) {
+      return null;
+    }
+    const surah = Number(value.slice(0, colon));
+    const ayah = Number(value.slice(colon + 1));
+    const hit = list.find((v) => v.surah === surah && v.ayah === ayah);
+    return hit ? { surah, ayah } : null;
   }
 }

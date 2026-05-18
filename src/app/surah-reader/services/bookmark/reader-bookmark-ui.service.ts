@@ -2,7 +2,7 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import type { ReadingBookmark } from '../../../core/bookmark/reading-bookmark.repository';
 import { READING_BOOKMARK_REPOSITORY } from '../../../core/bookmark/reading-bookmark.repository';
-import type { QuranVerseRow } from '../../../core/quran/quran-data.service';
+import type { ReaderDisplayVerse } from '../../models/reader-display-verse.model';
 import { DailyReminderService } from '../../../core/notifications/daily-reminder.service';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
 
@@ -28,29 +28,28 @@ export class ReaderBookmarkUiService {
     this.savedPlace.set(this.readingBookmark.read());
   }
 
-  saveAtAyah(ayah: number): void {
+  saveAtAyah(surah: number, ayah: number): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    const s = this.corpus.surahNumber();
-    this.readingBookmark.saveNow(s, ayah);
-    this.savedPlace.set({ surah: s, ayah });
+    this.readingBookmark.saveNow(surah, ayah);
+    this.savedPlace.set({ surah, ayah });
     this.flashSaved(ayah);
     void this.dailyReminder.onBookmarkChanged();
   }
 
-  saveForVerse(v: QuranVerseRow): void {
-    this.saveAtAyah(v.ayah);
+  saveForVerse(v: ReaderDisplayVerse): void {
+    this.saveAtAyah(v.surah, v.ayah);
   }
 
-  isVerseBookmarked(v: QuranVerseRow): boolean {
+  isVerseBookmarked(v: ReaderDisplayVerse): boolean {
     const b = this.savedPlace();
-    return b !== null && b.surah === this.corpus.surahNumber() && b.ayah === v.ayah;
+    return b !== null && b.surah === v.surah && b.ayah === v.ayah;
   }
 
-  isAyahBookmarked(ayah: number): boolean {
+  isAyahBookmarked(surah: number, ayah: number): boolean {
     const b = this.savedPlace();
-    return b !== null && b.surah === this.corpus.surahNumber() && b.ayah === ayah;
+    return b !== null && b.surah === surah && b.ayah === ayah;
   }
 
   flushOnHide(surah: number, ayah: number): void {

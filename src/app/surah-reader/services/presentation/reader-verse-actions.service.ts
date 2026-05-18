@@ -4,7 +4,7 @@ import {
   VERSE_PRESENTATION_STRATEGY,
   type VersePresentationContext,
 } from '../../../core/verse-presentation/verse-presentation.strategy';
-import type { QuranVerseRow } from '../../../core/quran/quran-data.service';
+import type { ReaderDisplayVerse } from '../../models/reader-display-verse.model';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
 
 @Injectable()
@@ -14,25 +14,26 @@ export class ReaderVerseActionsService {
   private readonly versePresentation = inject(VERSE_PRESENTATION_STRATEGY);
   private readonly corpus = inject(ReaderCorpusStateService);
 
-  readonly quoteSheetVerse = signal<QuranVerseRow | null>(null);
-  readonly copiedAyah = signal<number | null>(null);
+  readonly quoteSheetVerse = signal<ReaderDisplayVerse | null>(null);
+  readonly copiedAyah = signal<string | null>(null);
 
-  copyAyah(v: QuranVerseRow, ctx: VersePresentationContext): void {
+  copyAyah(v: ReaderDisplayVerse, ctx: VersePresentationContext): void {
     if (!isPlatformBrowser(this.platformId) || !navigator.clipboard?.writeText) {
       return;
     }
     const text = this.versePresentation.buildCopyText(v, ctx);
+    const key = `${v.surah}:${v.ayah}`;
     void navigator.clipboard.writeText(text).then(() => {
-      this.copiedAyah.set(v.ayah);
+      this.copiedAyah.set(key);
       setTimeout(() => {
-        if (this.copiedAyah() === v.ayah) {
+        if (this.copiedAyah() === key) {
           this.copiedAyah.set(null);
         }
       }, 1600);
     });
   }
 
-  shareAyah(v: QuranVerseRow, ctx: VersePresentationContext): void {
+  shareAyah(v: ReaderDisplayVerse, ctx: VersePresentationContext): void {
     if (!isPlatformBrowser(this.platformId) || typeof navigator.share !== 'function') {
       return;
     }
@@ -40,7 +41,7 @@ export class ReaderVerseActionsService {
     void navigator.share(sharePayload);
   }
 
-  openQuoteImage(v: QuranVerseRow): void {
+  openQuoteImage(v: ReaderDisplayVerse): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
@@ -55,10 +56,14 @@ export class ReaderVerseActionsService {
     return isPlatformBrowser(this.platformId) ? this.document.location.origin : '';
   }
 
-  presentationContext(formatUiNum: (n: number) => string): VersePresentationContext {
+  presentationContext(
+    formatUiNum: (n: number) => string,
+    v?: ReaderDisplayVerse,
+  ): VersePresentationContext {
+    const surahNumber = v?.surah ?? this.corpus.surahNumber();
     return {
-      surahNumber: this.corpus.surahNumber(),
-      surahNameAr: this.corpus.surah()?.nameAr ?? '',
+      surahNumber,
+      surahNameAr: this.corpus.surahNameFor(surahNumber),
       origin: this.document.location.origin,
       formatUiNum,
     };

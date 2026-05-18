@@ -10,6 +10,19 @@ export class ReaderDocumentTitleService {
   private readonly corpus = inject(ReaderCorpusStateService);
 
   sync(formatUiNum: (n: number) => string): void {
+    const kind = this.corpus.viewKind();
+    if (kind === 'page') {
+      this.title.setTitle(
+        this.ui.translate('documentTitlePage', { page: formatUiNum(this.corpus.pageNumber()) }),
+      );
+      return;
+    }
+    if (kind === 'juz') {
+      this.title.setTitle(
+        this.ui.translate('documentTitleJuz', { juz: formatUiNum(this.corpus.juzNumber()) }),
+      );
+      return;
+    }
     const s = this.corpus.surah();
     if (s) {
       this.title.setTitle(

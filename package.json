@@ -13,7 +13,8 @@
     "prewatch": "node scripts/ensure-node-for-angular.mjs",
     "watch": "ng build --watch --configuration development",
     "build-quran-data": "node scripts/build-quran-data.mjs",
-    "build-thematic-index": "node scripts/build-thematic-index.mjs"
+    "build-thematic-index": "node scripts/build-thematic-index.mjs",
+    "build-mushaf-index": "node scripts/build-mushaf-index.mjs"
   },
   "private": true,
   "dependencies": {
