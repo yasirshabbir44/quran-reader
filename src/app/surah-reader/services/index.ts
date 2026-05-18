@@ -1,0 +1,18 @@
+/** Barrel re-exports — prefer folder imports when adding new services. */
+export { ReaderCorpusStateService } from './corpus/reader-corpus-state.service';
+export { ReaderRouteCoordinatorService } from './routing/reader-route-coordinator.service';
+export { ReaderVerseFragmentService } from './routing/reader-verse-fragment.service';
+export { ReaderActiveAyahService } from './navigation/reader-active-ayah.service';
+export { ReaderScrollStateService } from './navigation/reader-scroll-state.service';
+export { ReaderSwipeNavigationService } from './navigation/reader-swipe-navigation.service';
+export { ReaderSurahSearchService } from './navigation/reader-surah-search.service';
+export { ReaderViewPreferencesService } from './preferences/reader-view-preferences.service';
+export { ReaderPanelCoordinatorService } from './panels/reader-panel-coordinator.service';
+export { ReaderSurahNavService } from './panels/reader-surah-nav.service';
+export { ReaderTafsirPanelService } from './panels/reader-tafsir-panel.service';
+export { ReaderBookmarkUiService } from './bookmark/reader-bookmark-ui.service';
+export { ReaderLayoutBreakpointsService } from './layout/reader-layout-breakpoints.service';
+export { ReaderVerseActionsService } from './presentation/reader-verse-actions.service';
+export { ReaderIntroContentService } from './presentation/reader-intro-content.service';
+export { ReaderDocumentTitleService } from './presentation/reader-document-title.service';
+export { ReaderAudioPlaybackService } from './media/reader-audio-playback.service';
