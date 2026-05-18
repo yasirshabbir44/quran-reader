@@ -76,6 +76,15 @@ export class HomeLandingComponent implements OnInit {
     return list[d.surah - 1] ?? null;
   });
 
+  protected readonly continueReadingSurah = computed(() => {
+    const bm = this.savedPlace();
+    const list = this.surahs();
+    if (!bm || list.length === 0) {
+      return null;
+    }
+    return list[bm.surah - 1] ?? null;
+  });
+
   ngOnInit(): void {
     this.title.setTitle(this.ui.translate('documentTitleHome'));
     if (isPlatformBrowser(this.platformId)) {
