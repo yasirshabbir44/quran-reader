@@ -1,4 +1,4 @@
-@if (corpusError()) {
+@if (corpus.error()) {
 <main class="reader reader--state-msg reader--state-msg--error" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
   <div class="reader__state-stack">
     <p class="reader__state-text">{{ 'loadError' | uiTranslate }}</p>
@@ -7,7 +7,7 @@
     </button>
   </div>
 </main>
-} @else if (corpusLoading() || !surah()) {
+} @else if (corpus.loading() || !corpus.surah()) {
 <main class="reader reader--state-msg" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
   <p class="reader__state-text">{{ 'loadingCorpus' | uiTranslate }}</p>
 </main>
@@ -17,14 +17,14 @@
 <div
   class="reader__progress"
   role="progressbar"
-  [attr.aria-valuenow]="scrollProgress"
+  [attr.aria-valuenow]="scroll.progress()"
   aria-valuemin="0"
   aria-valuemax="100"
-  [attr.aria-label]="'readProgressAria' | uiTranslate: { pct: scrollProgress }"
-  [style.--read-progress]="scrollProgress + '%'"
+  [attr.aria-label]="'readProgressAria' | uiTranslate: { pct: scroll.progress() }"
+  [style.--read-progress]="scroll.progress() + '%'"
 ></div>
 
-@if (showBookmarkSavedToast && savedPlace(); as bm) {
+@if (bookmarkUi.showSavedToast() && bookmarkUi.savedPlace(); as bm) {
 <div class="reader__toast" role="status" aria-live="polite">
   {{ 'bookmarkSavedToast' | uiTranslate: { surah: formatUiNum(bm.surah), ayah: formatUiNum(bm.ayah) } }}
 </div>
@@ -48,8 +48,8 @@
     <button
       type="button"
       class="reader__settings-btn"
-      [class.reader__settings-btn--active]="settingsOpen"
-      [attr.aria-expanded]="settingsOpen"
+      [class.reader__settings-btn--active]="panels.settingsOpen()"
+      [attr.aria-expanded]="panels.settingsOpen()"
       [attr.aria-label]="'settingsOpenAria' | uiTranslate"
       aria-controls="reader-settings-panel"
       (click)="toggleSettingsPanel()"
@@ -61,10 +61,10 @@
       </svg>
     </button>
 
-    @if (topbarCompact && !topbarFullRevealed) {
+    @if (scroll.topbarCompact() && !scroll.topbarFullRevealed()) {
     <p class="reader__topbar-readout" aria-hidden="true">
-      <span class="reader__topbar-readout-name">{{ surah()!.nameAr }}</span>
-      <span class="reader__topbar-readout-verse">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(activeAyah()) }}</span>
+      <span class="reader__topbar-readout-name">{{ corpus.surah()!.nameAr }}</span>
+      <span class="reader__topbar-readout-verse">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(activeAyah.activeAyah()) }}</span>
     </p>
     }
 
@@ -79,7 +79,7 @@
         >
           {{ 'bookmarkSaveTitle' | uiTranslate }}
         </button>
-        @if (savedPlace(); as bm) {
+        @if (bookmarkUi.savedPlace(); as bm) {
         <button
           type="button"
           class="reader__topbar-bookmark-btn reader__topbar-bookmark-btn--go"
@@ -91,7 +91,7 @@
         </button>
         }
       </div>
-      @if (!savedPlace()) {
+      @if (!bookmarkUi.savedPlace()) {
       <p class="reader__topbar-bookmark-hint">{{ 'bookmarkNoneYet' | uiTranslate }}</p>
       }
     </div>
@@ -105,17 +105,17 @@
         type="button"
         id="pick-surah"
         class="reader__surah-picker"
-        [class.reader__surah-picker--active]="surahNavOpen"
-        [attr.aria-expanded]="surahNavOpen"
+        [class.reader__surah-picker--active]="surahNav.open()"
+        [attr.aria-expanded]="surahNav.open()"
         [attr.aria-labelledby]="'lbl-surah-picker'"
         aria-controls="surah-nav-panel"
         (click)="toggleSurahNav()"
       >
-        <span class="reader__surah-picker-num" aria-hidden="true">{{ formatUiNum(surahNumber()) }}</span>
+        <span class="reader__surah-picker-num" aria-hidden="true">{{ formatUiNum(corpus.surahNumber()) }}</span>
         <span class="reader__surah-picker-label">
-          <span class="reader__surah-picker-translit" dir="ltr" lang="en">{{ surah()!.nameTranslit }}</span>
+          <span class="reader__surah-picker-translit" dir="ltr" lang="en">{{ corpus.surah()!.nameTranslit }}</span>
           <span class="reader__surah-picker-sep" aria-hidden="true">/</span>
-          <span class="reader__surah-picker-name" dir="rtl" lang="ar">{{ surah()!.nameAr }}</span>
+          <span class="reader__surah-picker-name" dir="rtl" lang="ar">{{ corpus.surah()!.nameAr }}</span>
         </span>
         <svg class="reader__surah-picker-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
@@ -145,7 +145,7 @@
         id="jump-ayah"
         class="reader__select reader__select--compact"
         aria-labelledby="lbl-jump"
-        [ngModel]="jumpAyahModel"
+        [ngModel]="activeAyah.jumpModel()"
         [ngModelOptions]="{ standalone: true }"
         (change)="jumpToAyah($event)"
       >
@@ -165,12 +165,12 @@
           class="reader__search-input"
           autocomplete="off"
           spellcheck="false"
-          [ngModel]="surahSearchQuery()"
+          [ngModel]="search.query()"
           [ngModelOptions]="{ standalone: true }"
           (ngModelChange)="onSurahSearchChange($event)"
           [placeholder]="'searchInSurahPlaceholder' | uiTranslate"
         />
-        @if (surahSearchQuery().trim()) {
+        @if (search.query().trim()) {
         <button
           type="button"
           class="reader__search-clear"
@@ -181,23 +181,23 @@
         </button>
         }
       </div>
-      @if (surahSearchQuery().trim()) {
+      @if (search.query().trim()) {
       <div class="reader__search-meta">
-        @if (surahSearchMatches().length === 0) {
+        @if (search.matches().length === 0) {
         <span class="reader__search-status">{{ 'searchNoResults' | uiTranslate }}</span>
         } @else {
         <span class="reader__search-count" aria-live="polite">
-          @if (surahSearchMatchIndex() >= 0) {
+          @if (search.matchIndex() >= 0) {
           {{
             'searchPosition'
               | uiTranslate
                 : {
-                    current: formatUiNum(surahSearchMatchIndex() + 1),
-                    total: formatUiNum(surahSearchMatches().length),
+                    current: formatUiNum(search.matchIndex() + 1),
+                    total: formatUiNum(search.matches().length),
                   }
           }}
           } @else {
-          {{ 'searchMatchesCount' | uiTranslate: { n: formatUiNum(surahSearchMatches().length) } }}
+          {{ 'searchMatchesCount' | uiTranslate: { n: formatUiNum(search.matches().length) } }}
           }
         </span>
         <div class="reader__search-nav" role="group" [attr.aria-label]="'searchStepperAria' | uiTranslate">
@@ -216,20 +216,20 @@
   </div>
 </nav>
 
-@if (surahNavOpen || settingsOpen) {
+@if (surahNav.open() || panels.settingsOpen()) {
 <button
   type="button"
   class="reader__nav-backdrop"
-  [attr.aria-label]="settingsOpen ? ('settingsCloseAria' | uiTranslate) : ('surahNavCloseAria' | uiTranslate)"
-  (click)="settingsOpen ? closeSettingsPanel() : closeSurahNav()"
+  [attr.aria-label]="panels.settingsOpen() ? ('settingsCloseAria' | uiTranslate) : ('surahNavCloseAria' | uiTranslate)"
+  (click)="panels.settingsOpen() ? closeSettingsPanel() : closeSurahNav()"
 ></button>
 }
 
 <aside
   id="surah-nav-panel"
   class="reader__surah-nav"
-  [class.reader__surah-nav--open]="surahNavOpen"
-  [attr.aria-hidden]="!surahNavOpen"
+  [class.reader__surah-nav--open]="surahNav.open()"
+  [attr.aria-hidden]="!surahNav.open()"
   [attr.aria-label]="'surahNavTitle' | uiTranslate"
 >
   <header class="reader__surah-nav-head">
@@ -256,12 +256,12 @@
         autocomplete="off"
         spellcheck="false"
         enterkeyhint="search"
-        [ngModel]="surahNavQuery()"
+        [ngModel]="surahNav.query()"
         [ngModelOptions]="{ standalone: true }"
         (ngModelChange)="onSurahNavQueryChange($event)"
         [placeholder]="'surahNavSearchPlaceholder' | uiTranslate"
       />
-      @if (surahNavQuery().trim()) {
+      @if (surahNav.query().trim()) {
       <button
         type="button"
         class="reader__search-clear"
@@ -276,26 +276,26 @@
       {{
         'homeIndexCount'
           | uiTranslate: {
-              shown: formatUiNum(filteredSurahList().length),
-              total: formatUiNum(surahList().length),
+              shown: formatUiNum(surahNav.filteredList().length),
+              total: formatUiNum(corpus.surahList().length),
             }
       }}
     </p>
   </div>
 
   <div class="reader__surah-nav-body reader__settings-scroll">
-    @if (filteredSurahList().length === 0 && surahNavQuery().trim()) {
+    @if (surahNav.filteredList().length === 0 && surahNav.query().trim()) {
     <p class="reader__surah-nav-empty">{{ 'surahNavNoResults' | uiTranslate }}</p>
     } @else {
     <ul class="reader__surah-nav-grid" role="listbox" [attr.aria-label]="'surahNavListAria' | uiTranslate">
-      @for (s of filteredSurahList(); track s.number) {
+      @for (s of surahNav.filteredList(); track s.number) {
       <li role="presentation">
         <button
           type="button"
           class="reader__surah-nav-card"
           role="option"
-          [class.reader__surah-nav-card--active]="s.number === surahNumber()"
-          [attr.aria-selected]="s.number === surahNumber()"
+          [class.reader__surah-nav-card--active]="s.number === corpus.surahNumber()"
+          [attr.aria-selected]="s.number === corpus.surahNumber()"
           (click)="selectSurahFromNav(s.number)"
           [attr.aria-label]="
             'surahNavSelectAria'
@@ -325,8 +325,8 @@
 <section
   id="reader-settings-panel"
   class="reader__settings-panel"
-  [class.reader__settings-panel--open]="settingsOpen"
-  [attr.aria-hidden]="!settingsOpen"
+  [class.reader__settings-panel--open]="panels.settingsOpen()"
+  [attr.aria-hidden]="!panels.settingsOpen()"
   [attr.aria-label]="'settingsTitle' | uiTranslate"
 >
   <div class="reader__settings-head">
@@ -347,8 +347,8 @@
       <button
         type="button"
         class="reader__seg-btn"
-        [class.reader__seg-btn--active]="colorTheme() === 'twilight'"
-        [attr.aria-pressed]="colorTheme() === 'twilight'"
+        [class.reader__seg-btn--active]="viewPrefs.colorTheme() === 'twilight'"
+        [attr.aria-pressed]="viewPrefs.colorTheme() === 'twilight'"
         (click)="setColorTheme('twilight')"
       >
         {{ 'themeTwilight' | uiTranslate }}
@@ -356,8 +356,8 @@
       <button
         type="button"
         class="reader__seg-btn"
-        [class.reader__seg-btn--active]="colorTheme() === 'night'"
-        [attr.aria-pressed]="colorTheme() === 'night'"
+        [class.reader__seg-btn--active]="viewPrefs.colorTheme() === 'night'"
+        [attr.aria-pressed]="viewPrefs.colorTheme() === 'night'"
         (click)="setColorTheme('night')"
       >
         {{ 'themeNight' | uiTranslate }}
@@ -365,8 +365,8 @@
       <button
         type="button"
         class="reader__seg-btn"
-        [class.reader__seg-btn--active]="colorTheme() === 'sepia'"
-        [attr.aria-pressed]="colorTheme() === 'sepia'"
+        [class.reader__seg-btn--active]="viewPrefs.colorTheme() === 'sepia'"
+        [attr.aria-pressed]="viewPrefs.colorTheme() === 'sepia'"
         (click)="setColorTheme('sepia')"
       >
         {{ 'themeSepia' | uiTranslate }}
@@ -378,7 +378,7 @@
     <select
       id="reader-mode"
       class="reader__select reader__select--compact"
-      [ngModel]="readingMode()"
+      [ngModel]="viewPrefs.readingMode()"
       [ngModelOptions]="{ standalone: true }"
       (ngModelChange)="setReadingMode($event)"
     >
@@ -389,15 +389,15 @@
     <label class="reader__tool-label reader__tool-label--compact">{{ 'translationsLabel' | uiTranslate }}</label>
     <div class="reader__settings-checks">
       <label class="reader__check">
-        <input type="checkbox" [checked]="showTranslationEn()" (change)="onTranslationCheckboxChange('en', $event)" />
+        <input type="checkbox" [checked]="viewPrefs.showTranslationEn()" (change)="onTranslationCheckboxChange('en', $event)" />
         <span>{{ 'translationEnOption' | uiTranslate }}</span>
       </label>
       <label class="reader__check">
-        <input type="checkbox" [checked]="showTranslationUr()" (change)="onTranslationCheckboxChange('ur', $event)" />
+        <input type="checkbox" [checked]="viewPrefs.showTranslationUr()" (change)="onTranslationCheckboxChange('ur', $event)" />
         <span>{{ 'translationUrOption' | uiTranslate }}</span>
       </label>
       <label class="reader__check">
-        <input type="checkbox" [checked]="showTransliteration()" (change)="onTransliterationCheckboxChange($event)" />
+        <input type="checkbox" [checked]="viewPrefs.showTransliteration()" (change)="onTransliterationCheckboxChange($event)" />
         <span>{{ 'transliterationOption' | uiTranslate }}</span>
       </label>
     </div>
@@ -409,8 +409,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="font() === 's'"
-          [attr.aria-pressed]="font() === 's'"
+          [class.reader__seg-btn--active]="viewPrefs.font() === 's'"
+          [attr.aria-pressed]="viewPrefs.font() === 's'"
           (click)="setFont('s')"
         >
           {{ 'fontSmall' | uiTranslate }}
@@ -418,8 +418,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="font() === 'm'"
-          [attr.aria-pressed]="font() === 'm'"
+          [class.reader__seg-btn--active]="viewPrefs.font() === 'm'"
+          [attr.aria-pressed]="viewPrefs.font() === 'm'"
           (click)="setFont('m')"
         >
           {{ 'fontMedium' | uiTranslate }}
@@ -427,8 +427,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="font() === 'l'"
-          [attr.aria-pressed]="font() === 'l'"
+          [class.reader__seg-btn--active]="viewPrefs.font() === 'l'"
+          [attr.aria-pressed]="viewPrefs.font() === 'l'"
           (click)="setFont('l')"
         >
           {{ 'fontLarge' | uiTranslate }}
@@ -436,8 +436,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="font() === 'xl'"
-          [attr.aria-pressed]="font() === 'xl'"
+          [class.reader__seg-btn--active]="viewPrefs.font() === 'xl'"
+          [attr.aria-pressed]="viewPrefs.font() === 'xl'"
           (click)="setFont('xl')"
         >
           {{ 'fontXL' | uiTranslate }}
@@ -451,8 +451,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="line() === 'normal'"
-          [attr.aria-pressed]="line() === 'normal'"
+          [class.reader__seg-btn--active]="viewPrefs.line() === 'normal'"
+          [attr.aria-pressed]="viewPrefs.line() === 'normal'"
           (click)="setLine('normal')"
         >
           {{ 'lineNormal' | uiTranslate }}
@@ -460,8 +460,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="line() === 'relaxed'"
-          [attr.aria-pressed]="line() === 'relaxed'"
+          [class.reader__seg-btn--active]="viewPrefs.line() === 'relaxed'"
+          [attr.aria-pressed]="viewPrefs.line() === 'relaxed'"
           (click)="setLine('relaxed')"
         >
           {{ 'lineRelaxed' | uiTranslate }}
@@ -469,8 +469,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="line() === 'loose'"
-          [attr.aria-pressed]="line() === 'loose'"
+          [class.reader__seg-btn--active]="viewPrefs.line() === 'loose'"
+          [attr.aria-pressed]="viewPrefs.line() === 'loose'"
           (click)="setLine('loose')"
         >
           {{ 'lineLoose' | uiTranslate }}
@@ -484,8 +484,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="width() === 'narrow'"
-          [attr.aria-pressed]="width() === 'narrow'"
+          [class.reader__seg-btn--active]="viewPrefs.width() === 'narrow'"
+          [attr.aria-pressed]="viewPrefs.width() === 'narrow'"
           (click)="setWidth('narrow')"
         >
           {{ 'widthNarrow' | uiTranslate }}
@@ -493,8 +493,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="width() === 'medium'"
-          [attr.aria-pressed]="width() === 'medium'"
+          [class.reader__seg-btn--active]="viewPrefs.width() === 'medium'"
+          [attr.aria-pressed]="viewPrefs.width() === 'medium'"
           (click)="setWidth('medium')"
         >
           {{ 'widthMedium' | uiTranslate }}
@@ -502,8 +502,8 @@
         <button
           type="button"
           class="reader__seg-btn"
-          [class.reader__seg-btn--active]="width() === 'wide'"
-          [attr.aria-pressed]="width() === 'wide'"
+          [class.reader__seg-btn--active]="viewPrefs.width() === 'wide'"
+          [attr.aria-pressed]="viewPrefs.width() === 'wide'"
           (click)="setWidth('wide')"
         >
           {{ 'widthWide' | uiTranslate }}
@@ -517,7 +517,7 @@
       <button type="button" class="reader__seg-btn" (click)="saveBookmarkAtCurrentLine()">
         {{ 'bookmarkSaveTitle' | uiTranslate }}
       </button>
-      @if (savedPlace()) {
+      @if (bookmarkUi.savedPlace()) {
       <button type="button" class="reader__seg-btn" (click)="goToSavedBookmark()">
         {{ 'bookmarkGoTitle' | uiTranslate }}
       </button>
@@ -536,7 +536,7 @@
       />
       <span>{{ 'dailyRemindersEnable' | uiTranslate }}</span>
     </label>
-    @if (notifyPermissionError(); as err) {
+    @if (notifyPermissionError; as err) {
     <p class="reader__settings-hint reader__settings-hint--notify-error">
       @if (err === 'denied') {
       {{ 'dailyRemindersPermissionDenied' | uiTranslate }}
@@ -591,21 +591,21 @@
   </div>
 </section>
 
-@if (mobileChrome()) {
+@if (breakpoints.mobileChrome()) {
 <nav
   class="reader__mobile-bar"
   [attr.aria-label]="'mobileBarAria' | uiTranslate"
 >
   <p class="reader__mobile-progress-label">
-    <span class="reader__mobile-progress-surah" dir="rtl" lang="ar">{{ surah()!.nameAr }}</span>
+    <span class="reader__mobile-progress-surah" dir="rtl" lang="ar">{{ corpus.surah()!.nameAr }}</span>
     <span class="reader__mobile-progress-verse">
       {{
         'surahProgressLabel'
           | uiTranslate
             : {
-                current: formatUiNum(surahAyahProgress().current),
-                total: formatUiNum(surahAyahProgress().total),
-                pct: surahAyahProgress().percent,
+                current: formatUiNum(activeAyah.surahProgress().current),
+                total: formatUiNum(activeAyah.surahProgress().total),
+                pct: activeAyah.surahProgress().percent,
               }
       }}
     </span>
@@ -613,22 +613,22 @@
   <div
     class="reader__mobile-progress"
     role="progressbar"
-    [attr.aria-valuenow]="surahAyahProgress().percent"
+    [attr.aria-valuenow]="activeAyah.surahProgress().percent"
     aria-valuemin="0"
     aria-valuemax="100"
     [attr.aria-label]="
       'surahProgressAria'
         | uiTranslate
           : {
-              current: formatUiNum(surahAyahProgress().current),
-              total: formatUiNum(surahAyahProgress().total),
-              pct: surahAyahProgress().percent,
+              current: formatUiNum(activeAyah.surahProgress().current),
+              total: formatUiNum(activeAyah.surahProgress().total),
+              pct: activeAyah.surahProgress().percent,
             }
     "
   >
     <span
       class="reader__mobile-progress-fill"
-      [style.width.%]="surahAyahProgress().percent"
+      [style.width.%]="activeAyah.surahProgress().percent"
     ></span>
   </div>
   <div class="reader__mobile-actions">
@@ -636,7 +636,7 @@
       type="button"
       class="reader__mobile-btn"
       (click)="goToPrevAyah()"
-      [disabled]="!canGoPrevAyah()"
+      [disabled]="!activeAyah.canGoPrev()"
       [attr.aria-label]="'prevAyahAria' | uiTranslate"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -648,7 +648,7 @@
       class="reader__mobile-btn reader__mobile-btn--bookmark"
       [class.reader__mobile-btn--bookmark-active]="isActiveAyahBookmarked()"
       (click)="saveBookmarkForActiveAyah()"
-      [attr.aria-label]="'bookmarkVerseAria' | uiTranslate: { n: formatUiNum(activeAyah()) }"
+      [attr.aria-label]="'bookmarkVerseAria' | uiTranslate: { n: formatUiNum(activeAyah.activeAyah()) }"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path
@@ -666,7 +666,7 @@
       [class.reader__mobile-btn--tafsir-active]="isActiveAyahTafsirOpen()"
       (click)="toggleTafsirForActiveAyah()"
       [attr.aria-expanded]="isActiveAyahTafsirOpen()"
-      [attr.aria-label]="'viewTafsirAria' | uiTranslate: { n: formatUiNum(activeAyah()) }"
+      [attr.aria-label]="'viewTafsirAria' | uiTranslate: { n: formatUiNum(activeAyah.activeAyah()) }"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path
@@ -693,7 +693,7 @@
       type="button"
       class="reader__mobile-btn"
       (click)="goToNextAyah()"
-      [disabled]="!canGoNextAyah()"
+      [disabled]="!activeAyah.canGoNext()"
       [attr.aria-label]="'nextAyahAria' | uiTranslate"
     >
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -707,7 +707,7 @@
 <button
   type="button"
   class="reader__to-top"
-  [class.reader__to-top--visible]="scrollTopVisible"
+  [class.reader__to-top--visible]="scroll.topVisible()"
   (click)="scrollToTop()"
   [attr.aria-label]="'backToTopAria' | uiTranslate"
 >
@@ -718,7 +718,7 @@
   class="reader"
   dir="rtl"
   lang="ar"
-  [ngClass]="['reader--font-' + font(), 'reader--line-' + line(), 'reader--measure-' + width()]"
+  [ngClass]="['reader--font-' + viewPrefs.font(), 'reader--line-' + viewPrefs.line(), 'reader--measure-' + viewPrefs.width()]"
 >
   <div class="reader__layout">
 
@@ -726,22 +726,22 @@
       <header class="reader__header">
         <section class="reader__intro" [attr.aria-label]="'introAria' | uiTranslate">
           <p class="reader__intro-kicker">{{ 'introKicker' | uiTranslate }}</p>
-          <h2 class="reader__intro-title">{{ 'introTitle' | uiTranslate: { name: surah()!.nameAr } }}</h2>
+          <h2 class="reader__intro-title">{{ 'introTitle' | uiTranslate: { name: corpus.surah()!.nameAr } }}</h2>
           <p class="reader__intro-body">{{ introSummary() }}</p>
           <div class="reader__intro-tags">
             <span class="reader__intro-tag">
-              {{ 'introTagTranslit' | uiTranslate }}: {{ surah()!.nameTranslit }}
+              {{ 'introTagTranslit' | uiTranslate }}: {{ corpus.surah()!.nameTranslit }}
             </span>
             <span class="reader__intro-tag">
               {{ 'introTagType' | uiTranslate }}:
-              @if (surah()!.revelationType === 'meccan') {
+              @if (corpus.surah()!.revelationType === 'meccan') {
               {{ 'factTypeMeccan' | uiTranslate }}
               } @else {
               {{ 'factTypeMedinan' | uiTranslate }}
               }
             </span>
             <span class="reader__intro-tag">
-              {{ 'introTagVerses' | uiTranslate }}: {{ formatUiNum(surah()!.versesCount) }}
+              {{ 'introTagVerses' | uiTranslate }}: {{ formatUiNum(corpus.surah()!.versesCount) }}
             </span>
           </div>
 
@@ -751,19 +751,19 @@
             <dl class="reader__facts">
               <div class="reader__fact">
                 <dt>{{ 'factJuz' | uiTranslate }}</dt>
-                <dd>{{ formatUiNum(mulkMeta.juz) }}</dd>
+                <dd>{{ formatUiNum(intro.mulkMeta.juz) }}</dd>
               </div>
               <div class="reader__fact">
                 <dt>{{ 'factType' | uiTranslate }}</dt>
-                <dd>{{ mulkMeta.revelationType }}</dd>
+                <dd>{{ intro.mulkMeta.revelationType }}</dd>
               </div>
               <div class="reader__fact">
                 <dt>{{ 'factRevelationOrder' | uiTranslate }}</dt>
-                <dd>{{ formatUiNum(mulkMeta.revelationOrder) }}</dd>
+                <dd>{{ formatUiNum(intro.mulkMeta.revelationOrder) }}</dd>
               </div>
               <div class="reader__fact">
                 <dt>{{ 'factPageStart' | uiTranslate }}</dt>
-                <dd>{{ formatUiNum(mulkMeta.mushafPageStart) }}</dd>
+                <dd>{{ formatUiNum(intro.mulkMeta.mushafPageStart) }}</dd>
               </div>
             </dl>
             <p class="reader__about-note">{{ 'aboutNote' | uiTranslate }}</p>
@@ -774,17 +774,17 @@
         </section>
 
         <p class="reader__meta">
-          {{ 'surahWord' | uiTranslate }} {{ formatUiNum(surah()!.number) }} — {{ formatUiNum(surah()!.versesCount) }}
+          {{ 'surahWord' | uiTranslate }} {{ formatUiNum(corpus.surah()!.number) }} — {{ formatUiNum(corpus.surah()!.versesCount) }}
           {{ 'versesWord' | uiTranslate }}
         </p>
-        <h1 class="reader__title">{{ surah()!.nameAr }}</h1>
+        <h1 class="reader__title">{{ corpus.surah()!.nameAr }}</h1>
         <p class="reader__subtitle">{{ 'subtitle' | uiTranslate }}</p>
 
 
       </header>
 
       <ol id="verses-start" class="verses" start="1" tabindex="-1">
-        @if (surahNumber() !== 9) {
+        @if (corpus.surahNumber() !== 9) {
         <li class="verses__bismillah" aria-hidden="true">
           <p class="verses__bismillah-text">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ</p>
         </li>
@@ -792,14 +792,14 @@
         @for (v of verses(); track v.ayah) {
         <li
           class="verses__item"
-          [class.verses__item--active]="v.ayah === activeAyah()"
+          [class.verses__item--active]="v.ayah === activeAyah.activeAyah()"
           [class.verses__item--bookmarked]="isVerseSavedBookmark(v)"
           [class.verses__item--search-hit]="isVerseSurahSearchHit(v)"
           [class.verses__item--search-active]="isVerseSurahSearchActive(v)"
           [class.verses__item--tafsir-open]="isTafsirOpen(v)"
           [id]="verseElementId(v.ayah)"
           [attr.data-ayah]="v.ayah"
-          [attr.aria-current]="v.ayah === activeAyah() ? 'true' : null"
+          [attr.aria-current]="v.ayah === activeAyah.activeAyah() ? 'true' : null"
         >
           <div class="verses__head">
             <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
@@ -809,9 +809,9 @@
                 class="verses__action-btn"
                 (click)="copyAyah(v)"
                 [attr.aria-label]="'copyVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
-                [attr.title]="copiedAyah === v.ayah ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate)"
+                [attr.title]="verseActions.copiedAyah() === v.ayah ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate)"
               >
-                {{ copiedAyah === v.ayah ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate) }}
+                {{ verseActions.copiedAyah() === v.ayah ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate) }}
               </button>
               <button
                 type="button"
@@ -828,7 +828,7 @@
                 [class.verses__action-btn--tafsir-active]="isTafsirOpen(v)"
                 (click)="toggleTafsir(v)"
                 [attr.aria-expanded]="isTafsirOpen(v)"
-                [attr.aria-controls]="tafsirSplitLayout() ? 'tafsir-side-panel' : 'tafsir-panel-' + v.ayah"
+                [attr.aria-controls]="breakpoints.tafsirSplitLayout() ? 'tafsir-side-panel' : 'tafsir-panel-' + v.ayah"
                 [attr.aria-label]="'viewTafsirAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
                 [attr.title]="isTafsirOpen(v) ? ('hideTafsirLabel' | uiTranslate) : ('viewTafsirLabel' | uiTranslate)"
               >
@@ -847,7 +847,7 @@
                 type="button"
                 class="verses__action-btn verses__action-btn--bookmark"
                 [class.verses__action-btn--bookmark-active]="isVerseSavedBookmark(v)"
-                [class.verses__action-btn--bookmark-pulse]="bookmarkPulseAyah() === v.ayah"
+                [class.verses__action-btn--bookmark-pulse]="bookmarkUi.pulseAyah() === v.ayah"
                 (click)="saveBookmarkForVerse(v)"
                 [attr.aria-label]="'bookmarkVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
                 [attr.title]="'bookmarkVerseTitle' | uiTranslate"
@@ -866,11 +866,11 @@
           </div>
           <div
             class="verses__content"
-            [class.verses__content--tafsir-target]="tafsirSplitLayout()"
-            [attr.role]="tafsirSplitLayout() ? 'button' : null"
-            [attr.tabindex]="tafsirSplitLayout() ? 0 : null"
+            [class.verses__content--tafsir-target]="breakpoints.tafsirSplitLayout()"
+            [attr.role]="breakpoints.tafsirSplitLayout() ? 'button' : null"
+            [attr.tabindex]="breakpoints.tafsirSplitLayout() ? 0 : null"
             [attr.aria-label]="
-              tafsirSplitLayout()
+              breakpoints.tafsirSplitLayout()
                 ? ('openVerseTafsirAria' | uiTranslate: { n: formatUiNum(v.ayah) })
                 : null
             "
@@ -899,13 +899,13 @@
               <span class="verses__section-label verses__section-label--translation">{{
                 'verseTranslationSectionLabel' | uiTranslate
               }}              </span>
-              @if (showTranslationEn()) {
+              @if (viewPrefs.showTranslationEn()) {
               <div class="verses__tr-block verses__tr-block--en" dir="ltr" lang="en">
                 <span class="verses__tr-label">{{ 'translationEnShort' | uiTranslate }}</span>
                 <p class="verses__tr-text">{{ verseTr(v).en }}</p>
               </div>
               }
-              @if (showTranslationUr()) {
+              @if (viewPrefs.showTranslationUr()) {
               <div class="verses__tr-block verses__tr-block--ur" dir="rtl" lang="ur">
                 <span class="verses__tr-label">{{ 'translationUrShort' | uiTranslate }}</span>
                 <p class="verses__tr-text">{{ verseTr(v).ur }}</p>
@@ -923,12 +923,11 @@
             [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
             [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
           >
-            <ng-container
-              *ngTemplateOutlet="
-                tafsirPanelBody;
-                context: { $implicit: v, editionId: 'tafsir-edition-' + v.ayah }
-              "
-            ></ng-container>
+            <app-reader-tafsir-panel
+              [verse]="v"
+              [editionId]="'tafsir-edition-' + v.ayah"
+              [formatUiNum]="formatUiNum"
+            />
           </aside>
           }
         </li>
@@ -951,8 +950,8 @@
       </footer>
     </div>
 
-    @if (verseForTafsir(); as tafsirVerse) {
-    @if (tafsirSplitLayout()) {
+    @if (tafsir.verseForPanel(); as tafsirVerse) {
+    @if (breakpoints.tafsirSplitLayout()) {
     <aside
       id="tafsir-side-panel"
       class="reader__side reader__side--tafsir reader__panel verses__tafsir verses__tafsir--side"
@@ -975,12 +974,11 @@
         </button>
       </header>
       <div class="reader__tafsir-side-scroll">
-        <ng-container
-          *ngTemplateOutlet="
-            tafsirPanelBody;
-            context: { $implicit: tafsirVerse, editionId: 'tafsir-edition-side' }
-          "
-        ></ng-container>
+        <app-reader-tafsir-panel
+          [verse]="tafsirVerse"
+          editionId="tafsir-edition-side"
+          [formatUiNum]="formatUiNum"
+        />
       </div>
     </aside>
     }
@@ -989,93 +987,9 @@
   </div>
 </main>
 
-<ng-template #tafsirPanelBody let-v let-editionId="editionId" let-accordion="accordion">
-  <span class="verses__section-label verses__section-label--tafsir">{{ 'verseTafsirSectionLabel' | uiTranslate }}</span>
-  <div class="verses__tafsir-toolbar">
-    <label class="verses__tafsir-label" [attr.for]="editionId">
-      {{ 'tafsirSourceLabel' | uiTranslate }}
-    </label>
-    <select
-      class="verses__tafsir-select reader__select reader__select--compact"
-      [id]="editionId"
-      [ngModel]="tafsirEditionSlug()"
-      [ngModelOptions]="{ standalone: true }"
-      (ngModelChange)="onTafsirEditionChange($event, v)"
-    >
-      @for (ed of tafsirEditionsForLocale(); track ed.slug) {
-      <option [value]="ed.slug">{{ ed.labelKey | uiTranslate }}</option>
-      }
-    </select>
-  </div>
-  @if (tafsirLoading()) {
-  <p class="verses__tafsir-status" role="status">{{ 'tafsirLoading' | uiTranslate }}</p>
-  } @else if (tafsirError()) {
-  <div class="verses__tafsir-status verses__tafsir-status--error">
-    <p>{{ 'tafsirLoadError' | uiTranslate }}</p>
-    <button type="button" class="verses__tafsir-retry" (click)="retryTafsir(v)">
-      {{ 'tafsirRetry' | uiTranslate }}
-    </button>
-  </div>
-  } @else if (accordion && tafsirBlocks().length > 1) {
-  <div class="verses__tafsir-body verses__tafsir-body--accordion">
-    @for (block of tafsirBlocks(); track block.type) {
-      @if ($index === 0) {
-      <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId + '-block-' + block.type">
-        <span class="verses__section-label verses__section-label--tafsir-block" [id]="editionId + '-block-' + block.type">
-          {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
-        </span>
-        <div class="verses__tafsir-block-body">
-          @for (para of block.paragraphs; track $index) {
-          <p class="verses__tafsir-p">{{ para }}</p>
-          }
-        </div>
-      </section>
-      }
-    }
-    <details class="verses__tafsir-more">
-      <summary class="verses__tafsir-more-summary">{{ 'tafsirReadMore' | uiTranslate }}</summary>
-      <div class="verses__tafsir-more-body">
-        @for (block of tafsirBlocks(); track block.type) {
-          @if ($index > 0) {
-          <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId + '-block-more-' + block.type">
-            <span class="verses__section-label verses__section-label--tafsir-block" [id]="editionId + '-block-more-' + block.type">
-              {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
-            </span>
-            <div class="verses__tafsir-block-body">
-              @for (para of block.paragraphs; track $index) {
-              <p class="verses__tafsir-p">{{ para }}</p>
-              }
-            </div>
-          </section>
-          }
-        }
-      </div>
-    </details>
-  </div>
-  } @else if (tafsirBlocks().length) {
-  <div class="verses__tafsir-body">
-    @for (block of tafsirBlocks(); track block.type) {
-    <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId + '-block-' + block.type">
-      <span class="verses__section-label verses__section-label--tafsir-block" [id]="editionId + '-block-' + block.type">
-        {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
-      </span>
-      <div class="verses__tafsir-block-body">
-        @for (para of block.paragraphs; track $index) {
-        <p class="verses__tafsir-p">{{ para }}</p>
-        }
-      </div>
-    </section>
-    }
-  </div>
-  } @else if (tafsirText()) {
-  <div class="verses__tafsir-body">
-    <p class="verses__tafsir-p">{{ tafsirText() }}</p>
-  </div>
-  }
-  <p class="verses__tafsir-attribution">{{ 'tafsirAttribution' | uiTranslate }}</p>
-</ng-template>
 
-@if (tafsirMobileSheetOpen() && verseForTafsir(); as tafsirVerse) {
+@defer (when tafsir.mobileSheetOpen() && tafsir.verseForPanel()) {
+@if (tafsir.verseForPanel(); as tafsirVerse) {
 <button
   type="button"
   class="reader__tafsir-sheet-backdrop"
@@ -1104,25 +1018,26 @@
     </button>
   </header>
   <div class="reader__tafsir-sheet-scroll">
-    <ng-container
-      *ngTemplateOutlet="
-        tafsirPanelBody;
-        context: { $implicit: tafsirVerse, editionId: 'tafsir-edition-sheet', accordion: true }
-      "
-    ></ng-container>
+    <app-reader-tafsir-panel
+      [verse]="tafsirVerse"
+      editionId="tafsir-edition-sheet"
+      [accordion]="true"
+      [formatUiNum]="formatUiNum"
+    />
   </div>
 </aside>
 }
 }
+}
 
-@if (quoteSheetVerse(); as quoteVerse) {
+@if (verseActions.quoteSheetVerse(); as quoteVerse) {
 <app-verse-quote-sheet
   [verse]="quoteVerse"
-  [surahNumber]="surahNumber()"
-  [surahNameAr]="surah()?.nameAr ?? ''"
+  [surahNumber]="corpus.surahNumber()"
+  [surahNameAr]="corpus.surah()?.nameAr ?? ''"
   [origin]="readerOrigin()"
-  [showEnDefault]="showTranslationEn()"
-  [showUrDefault]="showTranslationUr()"
+  [showEnDefault]="viewPrefs.showTranslationEn()"
+  [showUrDefault]="viewPrefs.showTranslationUr()"
   [formatUiNum]="formatUiNumForQuote"
   (closed)="closeQuoteSheet()"
 />
