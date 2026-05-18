@@ -76,6 +76,14 @@
           </a>
         </li>
         }
+        @if (dailyTopic(); as topic) {
+        <li>
+          <a class="landing__nav-link" href="#topic-today">
+            <span class="landing__nav-link-title">{{ 'homeNavTopicToday' | uiTranslate }}</span>
+            <span class="landing__nav-link-meta">{{ topic.theme.name }}</span>
+          </a>
+        </li>
+        }
       </ul>
     </nav>
 
@@ -119,6 +127,45 @@
           </a>
           <a class="landing__btn landing__btn--ghost" [routerLink]="['/', dv.surah]">
             {{ 'homeFeaturedReadSurah' | uiTranslate }}
+          </a>
+        </div>
+      </section>
+      }
+
+      @if (dailyTopic(); as topic) {
+      <section id="topic-today" class="landing__topic-today" aria-labelledby="topic-today-heading">
+        <div class="landing__topic-today-intro">
+          <p class="landing__topic-today-kicker">{{ 'homeTopicTodayKicker' | uiTranslate }}</p>
+          <h2 id="topic-today-heading" class="landing__section-title">
+            <a class="landing__topic-today-link" [routerLink]="['/themes', topic.theme.id]">
+              {{ topic.theme.name }}
+            </a>
+          </h2>
+          <p class="landing__topic-today-meta">{{ topic.categoryName }}</p>
+        </div>
+
+        <blockquote class="landing__verse-card">
+          <p class="landing__verse-ar" dir="rtl" lang="ar">{{ topic.verse.verse.ar }}</p>
+          <p class="landing__verse-ref">
+            {{ 'homeFeaturedSurahLabel' | uiTranslate }}
+            <span dir="rtl" lang="ar">{{ topic.verse.surahNameAr }}</span>
+            · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(topic.verse.ayah) }}
+          </p>
+          <p class="landing__verse-en" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+            {{ dailyTopicTranslation(topic) }}
+          </p>
+        </blockquote>
+
+        <div class="landing__featured-actions">
+          <a
+            class="landing__btn landing__btn--primary"
+            [routerLink]="verseLink(topic.verse.surah, topic.verse.ayah)"
+            [fragment]="verseFragment(topic.verse.ayah)"
+          >
+            {{ 'homeTopicTodayReadVerse' | uiTranslate }}
+          </a>
+          <a class="landing__btn landing__btn--ghost" [routerLink]="['/themes', topic.theme.id]">
+            {{ 'homeTopicTodayBrowseTopic' | uiTranslate }}
           </a>
         </div>
       </section>
