@@ -552,7 +552,7 @@ export class SurahReaderComponent implements OnInit {
           input.focus();
         }
         this.document
-          .querySelector('.reader__surah-nav-btn--active')
+          .querySelector('.reader__surah-nav-card--active')
           ?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
       },
       { injector: this.injector },
