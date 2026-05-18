@@ -58,7 +58,11 @@ import {
   type TafsirEdition,
 } from '../core/tafsir/tafsir-editions';
 import { TafsirService } from '../core/tafsir/tafsir.service';
-import { formatTafsirParagraphs } from '../core/tafsir/tafsir-text';
+import {
+  formatTafsirBlocks,
+  TAFSIR_BLOCK_LABEL_KEYS,
+  type TafsirBlockType,
+} from '../core/tafsir/tafsir-text';
 
 type ReaderMode = 'verse-by-verse' | 'reading';
 
@@ -165,7 +169,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly tafsirLoading = signal(false);
   protected readonly tafsirError = signal(false);
   protected readonly tafsirText = signal('');
-  protected readonly tafsirParagraphs = computed(() => formatTafsirParagraphs(this.tafsirText()));
+  protected readonly tafsirBlocks = computed(() => formatTafsirBlocks(this.tafsirText()));
   /** Desktop/tablet: Quran left, tafsir in a dedicated right column (≥1160px). */
   protected readonly tafsirSplitLayout = signal(false);
   protected readonly verseForTafsir = computed(() => {
@@ -832,6 +836,10 @@ export class SurahReaderComponent implements OnInit {
     if (this.expandedTafsirAyah() === v.ayah) {
       this.fetchTafsirForVerse(v.ayah);
     }
+  }
+
+  protected tafsirBlockLabelKey(type: TafsirBlockType): string {
+    return TAFSIR_BLOCK_LABEL_KEYS[type];
   }
 
   protected retryTafsir(v: QuranVerseRow): void {
