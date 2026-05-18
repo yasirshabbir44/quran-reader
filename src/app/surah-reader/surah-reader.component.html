@@ -903,11 +903,24 @@
       {{ 'tafsirRetry' | uiTranslate }}
     </button>
   </div>
-  } @else {
+  } @else if (tafsirBlocks().length) {
   <div class="verses__tafsir-body">
-    @for (para of tafsirParagraphs(); track $index) {
-    <p class="verses__tafsir-p">{{ para }}</p>
+    @for (block of tafsirBlocks(); track block.type) {
+    <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId + '-block-' + block.type">
+      <span class="verses__section-label verses__section-label--tafsir-block" [id]="editionId + '-block-' + block.type">
+        {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
+      </span>
+      <div class="verses__tafsir-block-body">
+        @for (para of block.paragraphs; track $index) {
+        <p class="verses__tafsir-p">{{ para }}</p>
+        }
+      </div>
+    </section>
     }
+  </div>
+  } @else if (tafsirText()) {
+  <div class="verses__tafsir-body">
+    <p class="verses__tafsir-p">{{ tafsirText() }}</p>
   </div>
   }
   <p class="verses__tafsir-attribution">{{ 'tafsirAttribution' | uiTranslate }}</p>
