@@ -9,6 +9,7 @@ export { ReaderSurahSearchService } from './navigation/reader-surah-search.servi
 export { ReaderViewPreferencesService } from './preferences/reader-view-preferences.service';
 export { ReaderPanelCoordinatorService } from './panels/reader-panel-coordinator.service';
 export { ReaderSurahNavService } from './panels/reader-surah-nav.service';
+export { ReaderMushafNavService } from './panels/reader-mushaf-nav.service';
 export { ReaderTafsirPanelService } from './panels/reader-tafsir-panel.service';
 export { ReaderBookmarkUiService } from './bookmark/reader-bookmark-ui.service';
 export { ReaderLayoutBreakpointsService } from './layout/reader-layout-breakpoints.service';

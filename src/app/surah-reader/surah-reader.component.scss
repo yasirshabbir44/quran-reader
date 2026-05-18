@@ -584,6 +584,50 @@ a.reader__settings-btn {
   cursor: pointer;
 }
 
+.reader__view-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.reader__view-tab {
+  min-height: 1.85rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.45rem;
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-chrome-bg-segment);
+  color: var(--reader-ink-muted);
+  font: inherit;
+  font-size: 0.78rem;
+  cursor: pointer;
+
+  &--active {
+    border-color: var(--reader-accent-border);
+    background: var(--reader-accent-soft);
+    color: var(--reader-ink);
+  }
+}
+
+.verses__surah-head {
+  list-style: none;
+  margin: 1.25rem 0 0.5rem;
+  padding: 0.65rem 0 0;
+  border-top: 1px solid var(--reader-border);
+
+  &-title {
+    margin: 0;
+    font-family: 'Amiri Quran', 'Amiri', serif;
+    font-size: 1.35rem;
+    color: var(--reader-ink-intro-title);
+  }
+
+  &-meta {
+    margin: 0.2rem 0 0;
+    font-size: 0.78rem;
+    color: var(--reader-ink-subtle);
+  }
+}
+
 .reader__surah-picker {
   display: flex;
   align-items: center;

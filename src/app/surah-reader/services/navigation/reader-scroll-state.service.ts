@@ -1,6 +1,7 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { DestroyRef, ElementRef, Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
-import { verseElementId } from '../../../core/routing/verse-deep-link.util';
+import type { VerseRef } from '../../../core/mushaf/mushaf-index.types';
+import { verseElementId } from '../../../core/routing/verse-location.util';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
 
 @Injectable()
@@ -105,8 +106,10 @@ export class ReaderScrollStateService {
     }
   }
 
-  scrollToAyah(ayah: number, smooth = true): void {
-    const el = this.document.getElementById(verseElementId(ayah));
+  scrollToVerse(ref: VerseRef, smooth = true): void {
+    const el = this.document.getElementById(
+      verseElementId(ref, this.corpus.viewKind()),
+    );
     if (!el) {
       return;
     }
@@ -115,5 +118,9 @@ export class ReaderScrollStateService {
       behavior: smooth ? 'smooth' : 'auto',
       block: 'start',
     });
+  }
+
+  scrollToAyah(ayah: number, smooth = true): void {
+    this.scrollToVerse({ surah: this.corpus.surahNumber(), ayah }, smooth);
   }
 }
