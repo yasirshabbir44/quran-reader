@@ -84,6 +84,8 @@ type SurahNavItem = {
         '[class.reader--topbar-expanded]': 'topbarFullRevealed || !topbarCompact',
         '[class.reader--tafsir-split]': 'tafsirSplitLayout()',
         '[class.reader--tafsir-panel-open]': 'tafsirSplitLayout() && expandedTafsirAyah() !== null',
+        '[class.reader--mobile-chrome]': 'mobileChrome()',
+        '[class.reader--tafsir-sheet-open]': 'tafsirMobileSheetOpen()',
     },
 })
 export class SurahReaderComponent implements OnInit {
@@ -172,6 +174,26 @@ export class SurahReaderComponent implements OnInit {
   protected readonly tafsirBlocks = computed(() => formatTafsirBlocks(this.tafsirText()));
   /** Desktop/tablet: Quran left, tafsir in a dedicated right column (≥1160px). */
   protected readonly tafsirSplitLayout = signal(false);
+  /** Phone layout: bottom controls, tafsir sheet, swipe navigation (≤719px). */
+  protected readonly mobileChrome = signal(false);
+  protected readonly tafsirMobileSheetOpen = signal(false);
+  protected readonly surahAyahProgress = computed(() => {
+    const total = this.surah()?.versesCount ?? 0;
+    if (total <= 0) {
+      return { current: 0, total: 0, percent: 0 };
+    }
+    const current = this.activeAyah();
+    return {
+      current,
+      total,
+      percent: Math.min(100, Math.round((current / total) * 100)),
+    };
+  });
+  protected readonly canGoPrevAyah = computed(() => this.activeAyah() > 1);
+  protected readonly canGoNextAyah = computed(() => {
+    const total = this.surah()?.versesCount ?? 0;
+    return total > 0 && this.activeAyah() < total;
+  });
   protected readonly verseForTafsir = computed(() => {
     const ayah = this.expandedTafsirAyah();
     const s = this.surah();
@@ -183,6 +205,10 @@ export class SurahReaderComponent implements OnInit {
   private tafsirLoadGeneration = 0;
   private tafsirSplitMql: MediaQueryList | null = null;
   private tafsirSplitMqlListener: ((e: MediaQueryListEvent) => void) | null = null;
+  private mobileChromeMql: MediaQueryList | null = null;
+  private mobileChromeMqlListener: ((e: MediaQueryListEvent) => void) | null = null;
+  private touchStartX = 0;
+  private touchStartY = 0;
 
   /** Text search within the loaded surah (Arabic + English + Urdu). */
   protected readonly surahSearchQuery = signal('');
@@ -231,7 +257,10 @@ export class SurahReaderComponent implements OnInit {
     this.tafsirEditionSlug.set(this.readStoredTafsirEdition());
     this.showTransliteration.set(this.readStoredTransliterationPref());
     if (isPlatformBrowser(this.platformId)) {
-      afterNextRender(() => this.bindTafsirSplitLayout(), { injector: this.injector });
+      afterNextRender(() => {
+        this.bindTafsirSplitLayout();
+        this.bindMobileChromeLayout();
+      }, { injector: this.injector });
     }
     const corpus$ = this.corpusSource.load().pipe(
       tap((payload) => {
@@ -370,6 +399,7 @@ export class SurahReaderComponent implements OnInit {
       }
       this.readingBookmark.flushPending(this.surahNumber(), this.activeAyah());
       this.savedPlace.set(this.readingBookmark.read());
+      this.unlockBodyScroll();
     });
     this.syncDocumentTitle();
   }
@@ -659,6 +689,10 @@ export class SurahReaderComponent implements OnInit {
       this.closeQuoteSheet();
       return;
     }
+    if (this.tafsirMobileSheetOpen()) {
+      this.closeTafsir();
+      return;
+    }
     if (this.surahNavOpen) {
       this.closeSurahNav();
       return;
@@ -798,6 +832,99 @@ export class SurahReaderComponent implements OnInit {
     this.openTafsirForVerse(v.ayah);
   }
 
+  protected useTafsirMobileSheet(): boolean {
+    return this.mobileChrome() && !this.tafsirSplitLayout();
+  }
+
+  protected showTafsirInline(v: QuranVerseRow): boolean {
+    return this.isTafsirOpen(v) && !this.useTafsirMobileSheet();
+  }
+
+  protected goToPrevAyah(): void {
+    if (!this.canGoPrevAyah() || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.navigateToAyah(this.activeAyah() - 1);
+  }
+
+  protected goToNextAyah(): void {
+    if (!this.canGoNextAyah() || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.navigateToAyah(this.activeAyah() + 1);
+  }
+
+  protected toggleTafsirForActiveAyah(): void {
+    const ayah = this.activeAyah();
+    const v = this.surah()?.verses.find((row) => row.ayah === ayah);
+    if (!v) {
+      return;
+    }
+    this.toggleTafsir(v);
+  }
+
+  protected isActiveAyahTafsirOpen(): boolean {
+    return this.expandedTafsirAyah() === this.activeAyah();
+  }
+
+  protected saveBookmarkForActiveAyah(): void {
+    const ayah = this.activeAyah();
+    const v = this.surah()?.verses.find((row) => row.ayah === ayah);
+    if (!v) {
+      return;
+    }
+    this.saveBookmarkForVerse(v);
+  }
+
+  protected isActiveAyahBookmarked(): boolean {
+    const b = this.savedPlace();
+    return b !== null && b.surah === this.surahNumber() && b.ayah === this.activeAyah();
+  }
+
+  protected closeTafsirMobileSheet(): void {
+    this.closeTafsir();
+  }
+
+  @HostListener('touchstart', ['$event'])
+  protected onTouchStart(event: TouchEvent): void {
+    if (!this.mobileChrome() || !isPlatformBrowser(this.platformId) || this.isSwipeBlocked()) {
+      return;
+    }
+    const touch = event.touches[0];
+    if (!touch) {
+      return;
+    }
+    const target = event.target;
+    if (target instanceof Element && target.closest('button, a, select, input, textarea, label, .reader__mobile-bar, .reader__tafsir-sheet')) {
+      return;
+    }
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+  }
+
+  @HostListener('touchend', ['$event'])
+  protected onTouchEnd(event: TouchEvent): void {
+    if (!this.mobileChrome() || !isPlatformBrowser(this.platformId) || this.isSwipeBlocked()) {
+      return;
+    }
+    const touch = event.changedTouches[0];
+    if (!touch) {
+      return;
+    }
+    const dx = touch.clientX - this.touchStartX;
+    const dy = touch.clientY - this.touchStartY;
+    if (Math.abs(dx) < 56 || Math.abs(dx) < Math.abs(dy) * 1.35) {
+      return;
+    }
+    const rtl = this.ui.locale() !== 'en';
+    const swipeTowardNext = rtl ? dx > 0 : dx < 0;
+    if (swipeTowardNext) {
+      this.goToNextAyah();
+    } else {
+      this.goToPrevAyah();
+    }
+  }
+
   protected onVerseContentKeyActivate(v: QuranVerseRow, event: Event): void {
     if (!this.tafsirSplitLayout() || !(event instanceof KeyboardEvent)) {
       return;
@@ -853,13 +980,18 @@ export class SurahReaderComponent implements OnInit {
   private openTafsirForVerse(ayah: number): void {
     this.expandedTafsirAyah.set(ayah);
     this.fetchTafsirForVerse(ayah);
-    if (this.tafsirSplitLayout()) {
+    if (this.useTafsirMobileSheet()) {
+      this.tafsirMobileSheetOpen.set(true);
+      this.lockBodyScroll();
+    } else if (this.tafsirSplitLayout()) {
       this.scrollVerseIntoViewForTafsir(ayah);
     }
   }
 
   private closeTafsir(): void {
     this.expandedTafsirAyah.set(null);
+    this.tafsirMobileSheetOpen.set(false);
+    this.unlockBodyScroll();
     this.tafsirLoading.set(false);
     this.tafsirError.set(false);
     this.tafsirText.set('');
@@ -878,7 +1010,13 @@ export class SurahReaderComponent implements OnInit {
     }
     this.tafsirSplitMql = mql;
     this.tafsirSplitLayout.set(mql.matches);
-    const onChange = (e: MediaQueryListEvent) => this.tafsirSplitLayout.set(e.matches);
+    const onChange = (e: MediaQueryListEvent) => {
+      this.tafsirSplitLayout.set(e.matches);
+      if (e.matches && this.tafsirMobileSheetOpen()) {
+        this.tafsirMobileSheetOpen.set(false);
+        this.unlockBodyScroll();
+      }
+    };
     this.tafsirSplitMqlListener = onChange;
     mql.addEventListener('change', onChange);
     this.destroyRef.onDestroy(() => {
@@ -886,6 +1024,65 @@ export class SurahReaderComponent implements OnInit {
       this.tafsirSplitMql = null;
       this.tafsirSplitMqlListener = null;
     });
+  }
+
+  private bindMobileChromeLayout(): void {
+    const mql = this.document.defaultView?.matchMedia('(max-width: 719px)');
+    if (!mql) {
+      return;
+    }
+    this.mobileChromeMql = mql;
+    this.mobileChrome.set(mql.matches);
+    const onChange = (e: MediaQueryListEvent) => {
+      this.mobileChrome.set(e.matches);
+      if (!e.matches && this.tafsirMobileSheetOpen()) {
+        this.tafsirMobileSheetOpen.set(false);
+        this.unlockBodyScroll();
+      }
+    };
+    this.mobileChromeMqlListener = onChange;
+    mql.addEventListener('change', onChange);
+    this.destroyRef.onDestroy(() => {
+      mql.removeEventListener('change', onChange);
+      this.mobileChromeMql = null;
+      this.mobileChromeMqlListener = null;
+    });
+  }
+
+  private navigateToAyah(ayah: number): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.scrollToAyah(ayah, true);
+    this.jumpAyahModel = String(ayah);
+    this.activeAyah.set(ayah);
+    this.replaceVerseFragmentInUrl(ayah);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.updateActiveAyah());
+    });
+  }
+
+  private isSwipeBlocked(): boolean {
+    return (
+      this.settingsOpen ||
+      this.surahNavOpen ||
+      !!this.quoteSheetVerse() ||
+      this.tafsirMobileSheetOpen()
+    );
+  }
+
+  private lockBodyScroll(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.document.body.style.overflow = 'hidden';
+  }
+
+  private unlockBodyScroll(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    this.document.body.style.overflow = '';
   }
 
   private fetchTafsirForVerse(ayah: number): void {
@@ -1304,6 +1501,9 @@ export class SurahReaderComponent implements OnInit {
     if (next !== this.activeAyah()) {
       this.activeAyah.set(next);
       this.scheduleVerseFragmentSync(next);
+      this.readingBookmark.scheduleSave(this.surahNumber(), next, () => {
+        this.savedPlace.set(this.readingBookmark.read());
+      });
     }
   }
 
