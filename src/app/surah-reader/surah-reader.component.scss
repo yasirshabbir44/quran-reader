@@ -1796,6 +1796,18 @@ a.reader__settings-btn {
     margin-bottom: 0.65rem;
     color: var(--reader-tafsir-accent);
   }
+
+  &--tafsir-block {
+    display: inline-block;
+    margin: 0 0 0.5rem;
+    padding: 0.22rem 0.55rem;
+    border-radius: 0.35rem;
+    border: 1px solid var(--reader-tafsir-border);
+    background: color-mix(in srgb, var(--reader-tafsir-accent) 14%, transparent);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    color: var(--reader-tafsir-accent);
+  }
 }
 
 .verses__quran {
@@ -1903,7 +1915,26 @@ a.reader__settings-btn {
 .verses__tafsir-body {
   display: flex;
   flex-direction: column;
-  gap: 0.95rem;
+  gap: 1.15rem;
+}
+
+.verses__tafsir-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+
+  & + & {
+    padding-top: 1rem;
+    border-top: 1px dashed var(--reader-tafsir-border);
+  }
+}
+
+.verses__tafsir-block-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .verses__tafsir-p {
