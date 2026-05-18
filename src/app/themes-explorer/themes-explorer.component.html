@@ -21,6 +21,20 @@
       <h1 class="themes__title">{{ 'themesTitle' | uiTranslate }}</h1>
       <p class="themes__subtitle">{{ 'themesSubtitle' | uiTranslate }}</p>
     </div>
+    <div class="themes__header-tools">
+      <label class="themes__tool-label" for="themes-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="themes-ui-locale"
+        class="themes__select"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
   </header>
 
   <div class="themes__index-head">
@@ -72,7 +86,10 @@
           <span class="themes__card-desc">{{ t.description }}</span>
           }
           <span class="themes__card-meta">
-            {{ formatUiNum(t.verseCount) }} {{ 'themesVerseCountLabel' | uiTranslate }}
+            <span class="themes__card-chip">{{ t.categoryName }}</span>
+            <span class="themes__card-verses">
+              {{ formatUiNum(t.verseCount) }} {{ 'themesVerseCountLabel' | uiTranslate }}
+            </span>
           </span>
         </a>
       </li>

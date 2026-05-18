@@ -15,7 +15,7 @@ import {
   type ThematicCategoryGroup,
   type ThematicThemeListItem,
 } from '../core/thematic-index/thematic-index.service';
-import { UiLocaleService } from '../core/ui/ui-locale.service';
+import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 
 const THEME_ICONS: Record<string, string> = {
@@ -37,6 +37,18 @@ const THEME_ICONS: Record<string, string> = {
   sun: '☀️',
   star: '⭐',
   book: '📖',
+  shield: '🛡️',
+  hands: '🤲',
+  flame: '🔥',
+  moon: '🌙',
+  'open-book': '📗',
+  'hands-pray': '🙏',
+  leaf: '🍃',
+  ribbon: '🎗️',
+  cup: '☕',
+  child: '👶',
+  wheat: '🌾',
+  healing: '💚',
 };
 
 @Component({
@@ -100,6 +112,11 @@ export class ThemesExplorerComponent implements OnInit {
             this.loadError.set(groups.length === 0);
           });
       });
+  }
+
+  protected onLocaleChange(code: UiLocaleCode): void {
+    this.ui.setLocale(code);
+    this.title.setTitle(this.ui.translate('themesDocumentTitle'));
   }
 
   protected formatUiNum(n: number): string {
