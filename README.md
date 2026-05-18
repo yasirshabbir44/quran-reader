@@ -15,7 +15,7 @@ This app is designed for distraction-free recitation and study:
 
 ## Tech Stack
 
-- Angular 18 (standalone components + router + HttpClient)
+- Angular 20 (standalone components + router + HttpClient + signals)
 - TypeScript
 - SCSS
 - Local JSON corpus served from `public/quran-full.json`
@@ -77,7 +77,10 @@ UI locale packs live in:
 
 ## Project Structure (Key Files)
 
-- `src/app/surah-reader/surah-reader.component.ts` - main reader logic and interactions
+- `src/app/surah-reader/` - surah reader feature ([architecture doc](src/app/surah-reader/README.md))
+  - `surah-reader.component.ts` - thin shell (host listeners, template wiring)
+  - `services/` - signals-first reader state (corpus, route, scroll, tafsir, search, …)
+  - `ui/` - standalone reader UI fragments (e.g. tafsir panel)
 - `src/app/core/quran/` - corpus types, `QuranDataService`, `QuranCorpusSource` token
 - `src/app/core/bookmark/` - reading place repository + `localStorage` service
 - `src/app/core/reader-layout/` - font / line / width preferences
