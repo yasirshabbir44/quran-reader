@@ -22,6 +22,7 @@ import {
   type QuranSurahPayload,
 } from '../core/quran/quran-data.service';
 import { verseFragment } from '../core/routing/verse-deep-link.util';
+import { ThematicIndexService } from '../core/thematic-index/thematic-index.service';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 
@@ -40,6 +41,7 @@ export class HomeLandingComponent implements OnInit {
   private readonly quranData = inject(QuranDataService);
   private readonly dailyVerse = inject(DailyVerseService);
   private readonly bookmarkRepo = inject(READING_BOOKMARK_REPOSITORY);
+  private readonly thematicIndex = inject(ThematicIndexService);
 
   protected readonly ui = inject(UiLocaleService);
 
@@ -49,6 +51,7 @@ export class HomeLandingComponent implements OnInit {
   protected readonly daily = signal<DailyVerseRef | null>(null);
   protected readonly savedPlace = signal<ReadingBookmark | null>(null);
   protected readonly indexQuery = signal('');
+  protected readonly themeCount = signal(0);
 
   protected readonly filteredSurahs = computed(() => {
     const list = this.surahs();
@@ -84,6 +87,15 @@ export class HomeLandingComponent implements OnInit {
           return;
         }
         this.applyCorpus(payload);
+      });
+
+    this.thematicIndex
+      .load()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((payload) => {
+        if (payload) {
+          this.themeCount.set(payload.themes.length);
+        }
       });
   }
 

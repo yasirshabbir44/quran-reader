@@ -59,7 +59,9 @@
         <li>
           <a class="landing__nav-link" routerLink="/themes">
             <span class="landing__nav-link-title">{{ 'homeNavThemes' | uiTranslate }}</span>
-            <span class="landing__nav-link-meta">{{ 'homeNavThemesHint' | uiTranslate }}</span>
+            <span class="landing__nav-link-meta">{{
+              'homeNavThemesHint' | uiTranslate: { count: formatUiNum(themeCount() || 30) }
+            }}</span>
           </a>
         </li>
         <li>
@@ -125,7 +127,9 @@
       <section class="landing__themes-promo" aria-labelledby="themes-promo-heading">
         <div class="landing__themes-promo-inner">
           <h2 id="themes-promo-heading" class="landing__section-title">{{ 'homeThemesPromoTitle' | uiTranslate }}</h2>
-          <p class="landing__index-subtitle">{{ 'homeThemesPromoSubtitle' | uiTranslate }}</p>
+          <p class="landing__index-subtitle">{{
+            'homeThemesPromoSubtitle' | uiTranslate: { count: formatUiNum(themeCount() || 30) }
+          }}</p>
           <a class="landing__btn landing__btn--primary" routerLink="/themes">
             {{ 'homeThemesPromoCta' | uiTranslate }}
           </a>
