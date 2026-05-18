@@ -139,6 +139,9 @@
         </div>
       </div>
       <p class="theme-detail__ar" dir="rtl" lang="ar">{{ v.verse.ar }}</p>
+      @if (verseTranslit(v); as translit) {
+      <p class="theme-detail__translit" dir="ltr" lang="en">{{ translit }}</p>
+      }
       <p class="theme-detail__tr" [attr.dir]="ui.locale() === 'ur' ? 'rtl' : 'ltr'" [attr.lang]="ui.locale()">
         {{ translationPrimary(v) }}
       </p>

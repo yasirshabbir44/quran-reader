@@ -1,6 +1,6 @@
 /**
- * Downloads Arabic (Uthmani-style), English, and Urdu from risan/quran-json (MIT)
- * and writes a single file for offline/same-origin use in the app.
+ * Downloads Arabic (Uthmani-style), English, Urdu, and phonetic transliteration from
+ * risan/quran-json (MIT) and writes a single file for offline/same-origin use in the app.
  *
  * Run: node scripts/build-quran-data.mjs
  */
@@ -24,19 +24,24 @@ async function fetchJson(path) {
 }
 
 function main() {
-  return Promise.all([fetchJson('quran.json'), fetchJson('quran_en.json'), fetchJson('quran_ur.json')]).then(
-    ([ar, en, ur]) => {
+  return Promise.all([
+    fetchJson('quran.json'),
+    fetchJson('quran_en.json'),
+    fetchJson('quran_ur.json'),
+    fetchJson('quran_transliteration.json'),
+  ]).then(([ar, en, ur, tr]) => {
       const surahs = [];
       for (let k = 0; k < 114; k++) {
         const key = String(k);
         const sar = ar[key];
         const sen = en[key];
         const sur = ur[key];
-        if (!sar || !sen || !sur || sar.id !== sen.id || sar.id !== sur.id) {
+        const str = tr[key];
+        if (!sar || !sen || !sur || !str || sar.id !== sen.id || sar.id !== sur.id || sar.id !== str.id) {
           throw new Error(`Mismatch at surah index ${k}`);
         }
         const n = sar.verses.length;
-        if (sen.verses.length !== n || sur.verses.length !== n) {
+        if (sen.verses.length !== n || sur.verses.length !== n || str.verses.length !== n) {
           throw new Error(`Verse count mismatch surah ${sar.id}`);
         }
         const verses = [];
@@ -44,7 +49,8 @@ function main() {
           const va = sar.verses[i];
           const ve = sen.verses[i];
           const vu = sur.verses[i];
-          if (va.id !== ve.id || va.id !== vu.id) {
+          const vt = str.verses[i];
+          if (va.id !== ve.id || va.id !== vu.id || va.id !== vt.id) {
             throw new Error(`Ayah id mismatch surah ${sar.id} index ${i}`);
           }
           verses.push({
@@ -52,6 +58,7 @@ function main() {
             ar: va.text,
             en: ve.translation ?? '',
             ur: vu.translation ?? '',
+            tr: vt.transliteration ?? '',
           });
         }
         surahs.push({
