@@ -1,3 +1,5 @@
+@use '../core/reader-layout/reader-index-layout' as idx;
+
 :host {
   display: block;
   min-height: 100vh;
@@ -42,7 +44,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: 0.75rem;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
   margin-bottom: 1.75rem;
 }
 
@@ -78,6 +81,10 @@
   box-shadow: 0 16px 40px var(--reader-shadow-card);
 }
 
+.themes__header-tools {
+  @include idx.page-header-tools;
+}
+
 .themes__kicker {
   margin: 0 0 0.35rem;
   font-size: 0.85rem;
@@ -102,71 +109,39 @@
 }
 
 .themes__tool-label {
-  display: block;
-  margin-bottom: 0.35rem;
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--reader-ink-subtle);
+  @include idx.index-tool-label;
 }
 
-.themes__search-input {
-  width: 100%;
-  min-height: 2.35rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: 0.55rem;
-  border: 1px solid var(--reader-border-strong);
-  background: var(--reader-chrome-bg-segment);
-  color: var(--reader-ink-ui);
-  font: inherit;
-  font-size: 0.92rem;
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 2px;
-  }
+.themes__select {
+  @include idx.page-select;
 }
 
 .themes__index-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.75rem 1rem;
-  margin-bottom: 1rem;
+  @include idx.index-head;
 }
 
 .themes__index-title {
-  margin: 0;
-  font-size: clamp(1.1rem, 3vw, 1.35rem);
-  font-weight: 700;
-  color: var(--reader-ink-intro-title);
+  @include idx.index-section-title;
 }
 
 .themes__index-subtitle {
-  margin: 0.35rem 0 0;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  color: var(--reader-ink-muted);
+  @include idx.index-section-subtitle;
 }
 
 .themes__search {
-  margin-bottom: 1.1rem;
+  @include idx.index-search;
+}
+
+.themes__search-input {
+  @include idx.index-search-input;
 }
 
 .themes__count {
-  margin: 0;
-  font-size: 0.82rem;
-  color: var(--reader-ink-subtle);
+  @include idx.index-count;
 }
 
 .themes__empty {
-  margin: 0;
-  padding: 2rem 1rem;
-  text-align: center;
-  color: var(--reader-ink-muted);
-  border-radius: 0.85rem;
-  border: 1px dashed var(--reader-border-strong);
+  @include idx.index-empty;
 }
 
 .themes__group {
@@ -182,41 +157,11 @@
 }
 
 .themes__grid {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr));
-  gap: 0.75rem;
+  @include idx.index-card-grid(10.5rem);
 }
 
 .themes__card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  height: 100%;
-  padding: 1rem;
-  border-radius: 0.85rem;
-  text-decoration: none;
-  border: 1px solid var(--reader-border-strong);
-  background: var(--reader-chrome-bg-panel);
-  color: var(--reader-ink-ui);
-  box-shadow: 0 8px 24px var(--reader-shadow-card);
-  transition:
-    transform 0.15s ease,
-    border-color 0.15s ease,
-    box-shadow 0.15s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-    border-color: var(--reader-accent-border);
-    box-shadow: 0 12px 32px var(--reader-shadow-card-hover);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 2px;
-  }
+  @include idx.index-card-link;
 }
 
 .themes__card-icon {
@@ -241,10 +186,16 @@
 }
 
 .themes__card-meta {
-  margin-top: auto;
-  padding-top: 0.35rem;
-  font-size: 0.75rem;
-  color: var(--reader-meta-color);
+  @include idx.index-card-meta;
+}
+
+.themes__card-chip {
+  @include idx.index-card-chip;
+}
+
+.themes__card-verses {
+  font-size: inherit;
+  color: inherit;
 }
 
 .themes__btn {
