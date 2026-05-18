@@ -41,6 +41,13 @@ export interface ThemeVersesResult {
   readonly verses: readonly ThematicVerseDetail[];
 }
 
+/** One curated verse from a rotating life topic — stable for a given calendar day. */
+export interface DailyThemeInspiration {
+  readonly theme: ThematicTheme;
+  readonly categoryName: string;
+  readonly verse: ThematicVerseDetail;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ThematicIndexService {
   private readonly http = inject(HttpClient);
@@ -123,6 +130,13 @@ export class ThematicIndexService {
     );
   }
 
+  /** Deterministic topic + verse for a calendar day (for home “topic of the day”). */
+  getDailyInspiration(date: Date = new Date()): Observable<DailyThemeInspiration | null> {
+    return combineLatest([this.index$, this.quranData.load()]).pipe(
+      map(([payload, corpus]) => this.buildDailyInspiration(payload, corpus, date)),
+    );
+  }
+
   private buildThemeVerses(
     payload: ThematicIndexPayload | null,
     corpus: QuranFullPayload | null,
@@ -146,6 +160,50 @@ export class ThematicIndexService {
       .filter((v): v is ThematicVerseDetail => v !== null);
 
     return { theme, categoryName, verses };
+  }
+
+  private buildDailyInspiration(
+    payload: ThematicIndexPayload | null,
+    corpus: QuranFullPayload | null,
+    date: Date,
+  ): DailyThemeInspiration | null {
+    if (!payload || !corpus || payload.themes.length === 0) {
+      return null;
+    }
+
+    const key = this.dateKey(date);
+    const themes = [...payload.themes].sort((a, b) => a.id.localeCompare(b.id));
+    const theme = themes[this.hashString(`${key}:theme`) % themes.length]!;
+    const refs = payload.mappings.filter((m) => m.themeId === theme.id);
+    if (refs.length === 0) {
+      return null;
+    }
+
+    const ref = refs[this.hashString(`${key}:verse`) % refs.length]!;
+    const verse = this.resolveVerse(corpus, ref);
+    if (!verse) {
+      return null;
+    }
+
+    const categoryName =
+      payload.categories.find((c) => c.id === theme.categoryId)?.name ?? theme.categoryId;
+
+    return { theme, categoryName, verse };
+  }
+
+  private dateKey(date: Date): string {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const d = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
+  private hashString(value: string): number {
+    let hash = 0;
+    for (let i = 0; i < value.length; i++) {
+      hash = (Math.imul(31, hash) + value.charCodeAt(i)) | 0;
+    }
+    return Math.abs(hash);
   }
 
   private resolveVerse(
