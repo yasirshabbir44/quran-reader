@@ -99,6 +99,16 @@
 
   <div class="reader__topbar-menu">
 
+    <div class="reader__topbar-cluster reader__topbar-cluster--view" role="group" [attr.aria-label]="'viewModeAria' | uiTranslate">
+      <span class="reader__tool-label reader__tool-label--compact">{{ 'viewModeLabel' | uiTranslate }}</span>
+      <div class="reader__view-tabs">
+        <button type="button" class="reader__view-tab" [class.reader__view-tab--active]="viewKind() === 'surah'" (click)="switchView('surah')">{{ 'viewModeSurah' | uiTranslate }}</button>
+        <button type="button" class="reader__view-tab" [class.reader__view-tab--active]="viewKind() === 'page'" (click)="switchView('page')">{{ 'viewModePage' | uiTranslate }}</button>
+        <button type="button" class="reader__view-tab" [class.reader__view-tab--active]="viewKind() === 'juz'" (click)="switchView('juz')">{{ 'viewModeJuz' | uiTranslate }}</button>
+      </div>
+    </div>
+
+    @if (viewKind() === 'surah') {
     <div class="reader__topbar-cluster reader__topbar-cluster--surah">
       <span class="reader__tool-label reader__tool-label--compact" id="lbl-surah-picker">{{ 'surahLabel' | uiTranslate }}</span>
       <button
@@ -122,6 +132,49 @@
         </svg>
       </button>
     </div>
+    } @else if (viewKind() === 'page') {
+    <div class="reader__topbar-cluster reader__topbar-cluster--surah">
+      <span class="reader__tool-label reader__tool-label--compact" id="lbl-page-picker">{{ 'pageLabel' | uiTranslate }}</span>
+      <button
+        type="button"
+        class="reader__surah-picker"
+        [class.reader__surah-picker--active]="mushafNav.open() && mushafNav.kind() === 'page'"
+        [attr.aria-expanded]="mushafNav.open() && mushafNav.kind() === 'page'"
+        [attr.aria-labelledby]="'lbl-page-picker'"
+        aria-controls="mushaf-nav-panel"
+        (click)="toggleMushafNav('page')"
+      >
+        <span class="reader__surah-picker-num" aria-hidden="true">{{ formatUiNum(corpus.pageNumber()) }}</span>
+        <span class="reader__surah-picker-label">
+          <span class="reader__surah-picker-translit" dir="ltr" lang="en">{{ 'mushafPagePickerHint' | uiTranslate }}</span>
+        </span>
+        <svg class="reader__surah-picker-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    } @else {
+    <div class="reader__topbar-cluster reader__topbar-cluster--surah">
+      <span class="reader__tool-label reader__tool-label--compact" id="lbl-juz-picker">{{ 'juzLabel' | uiTranslate }}</span>
+      <button
+        type="button"
+        class="reader__surah-picker"
+        [class.reader__surah-picker--active]="mushafNav.open() && mushafNav.kind() === 'juz'"
+        [attr.aria-expanded]="mushafNav.open() && mushafNav.kind() === 'juz'"
+        [attr.aria-labelledby]="'lbl-juz-picker'"
+        aria-controls="mushaf-nav-panel"
+        (click)="toggleMushafNav('juz')"
+      >
+        <span class="reader__surah-picker-num" aria-hidden="true">{{ formatUiNum(corpus.juzNumber()) }}</span>
+        <span class="reader__surah-picker-label">
+          <span class="reader__surah-picker-translit" dir="ltr" lang="en">{{ 'mushafJuzPickerHint' | uiTranslate }}</span>
+        </span>
+        <svg class="reader__surah-picker-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M7 10l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    }
 
     <div class="reader__topbar-cluster reader__topbar-cluster--lang">
       <label class="reader__tool-label reader__tool-label--compact" for="ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
@@ -150,12 +203,19 @@
         (change)="jumpToAyah($event)"
       >
         <option value="" disabled>{{ 'chooseAyah' | uiTranslate }}</option>
-        @for (v of verses(); track v.ayah) {
-        <option [value]="v.ayah">{{ 'verseLabel' | uiTranslate }} {{ formatUiNum(v.ayah) }}</option>
+        @for (v of verses(); track v.surah + ':' + v.ayah) {
+        <option [value]="viewKind() === 'surah' ? v.ayah : v.surah + ':' + v.ayah">
+          @if (viewKind() === 'surah') {
+          {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(v.ayah) }}
+          } @else {
+          {{ formatUiNum(v.surah) }}:{{ formatUiNum(v.ayah) }}
+          }
+        </option>
         }
       </select>
     </div>
 
+    @if (viewKind() === 'surah') {
     <div class="reader__topbar-cluster reader__topbar-cluster--search" role="search" [attr.aria-label]="'searchInSurahAria' | uiTranslate">
       <label class="reader__tool-label reader__tool-label--compact" for="surah-search">{{ 'searchInSurahLabel' | uiTranslate }}</label>
       <div class="reader__search-wrap">
@@ -212,16 +272,17 @@
       </div>
       }
     </div>
+    }
 
   </div>
 </nav>
 
-@if (surahNav.open() || panels.settingsOpen()) {
+@if (surahNav.open() || mushafNav.open() || panels.settingsOpen()) {
 <button
   type="button"
   class="reader__nav-backdrop"
-  [attr.aria-label]="panels.settingsOpen() ? ('settingsCloseAria' | uiTranslate) : ('surahNavCloseAria' | uiTranslate)"
-  (click)="panels.settingsOpen() ? closeSettingsPanel() : closeSurahNav()"
+  [attr.aria-label]="panels.settingsOpen() ? ('settingsCloseAria' | uiTranslate) : (mushafNav.open() ? ('mushafNavCloseAria' | uiTranslate) : ('surahNavCloseAria' | uiTranslate))"
+  (click)="panels.settingsOpen() ? closeSettingsPanel() : (mushafNav.open() ? closeMushafNav() : closeSurahNav())"
 ></button>
 }
 
@@ -313,6 +374,83 @@
             <span class="reader__surah-nav-card-verses">
               {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
             </span>
+          </span>
+        </button>
+      </li>
+      }
+    </ul>
+    }
+  </div>
+</aside>
+
+<aside
+  id="mushaf-nav-panel"
+  class="reader__surah-nav"
+  [class.reader__surah-nav--open]="mushafNav.open()"
+  [attr.aria-hidden]="!mushafNav.open()"
+  [attr.aria-label]="mushafNav.kind() === 'page' ? ('pageNavTitle' | uiTranslate) : ('juzNavTitle' | uiTranslate)"
+>
+  <header class="reader__surah-nav-head">
+    <div class="reader__surah-nav-head-text">
+      <h2 class="reader__settings-title">
+        {{ mushafNav.kind() === 'page' ? ('pageNavTitle' | uiTranslate) : ('juzNavTitle' | uiTranslate) }}
+      </h2>
+      <p class="reader__surah-nav-subtitle">
+        {{ mushafNav.kind() === 'page' ? ('pageNavSubtitle' | uiTranslate) : ('juzNavSubtitle' | uiTranslate) }}
+      </p>
+    </div>
+    <button type="button" class="reader__settings-close" (click)="closeMushafNav()" [attr.aria-label]="'mushafNavCloseAria' | uiTranslate">✕</button>
+  </header>
+
+  <div class="reader__surah-nav-search" role="search">
+    <div class="reader__search-wrap">
+      <input
+        type="search"
+        class="reader__search-input reader__search-input--nav"
+        autocomplete="off"
+        spellcheck="false"
+        [ngModel]="mushafNav.query()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="mushafNav.setQuery($event)"
+        [placeholder]="mushafNav.kind() === 'page' ? ('pageNavSearchPlaceholder' | uiTranslate) : ('juzNavSearchPlaceholder' | uiTranslate)"
+      />
+    </div>
+  </div>
+
+  <div class="reader__surah-nav-body reader__settings-scroll">
+    @if (mushafNav.kind() === 'page') {
+    <ul class="reader__surah-nav-grid" role="listbox">
+      @for (p of mushafNav.filteredPages(); track p.page) {
+      <li role="presentation">
+        <button
+          type="button"
+          class="reader__surah-nav-card"
+          role="option"
+          [class.reader__surah-nav-card--active]="p.page === corpus.pageNumber() && viewKind() === 'page'"
+          (click)="selectPageFromNav(p.page)"
+        >
+          <span class="reader__surah-nav-card-num">{{ formatUiNum(p.page) }}</span>
+          <span class="reader__surah-nav-card-meta">
+            {{ 'mushafNavStartRef' | uiTranslate: { surah: formatUiNum(p.start.surah), ayah: formatUiNum(p.start.ayah), juz: formatUiNum(p.juz) } }}
+          </span>
+        </button>
+      </li>
+      }
+    </ul>
+    } @else {
+    <ul class="reader__surah-nav-grid" role="listbox">
+      @for (j of mushafNav.filteredJuz(); track j.juz) {
+      <li role="presentation">
+        <button
+          type="button"
+          class="reader__surah-nav-card"
+          role="option"
+          [class.reader__surah-nav-card--active]="j.juz === corpus.juzNumber() && viewKind() === 'juz'"
+          (click)="selectJuzFromNav(j.juz)"
+        >
+          <span class="reader__surah-nav-card-num">{{ formatUiNum(j.juz) }}</span>
+          <span class="reader__surah-nav-card-meta">
+            {{ 'mushafNavJuzMeta' | uiTranslate: { surah: formatUiNum(j.start.surah), ayah: formatUiNum(j.start.ayah), page: formatUiNum(j.page) } }}
           </span>
         </button>
       </li>
@@ -725,6 +863,7 @@
     <div class="reader__shell">
       <header class="reader__header">
         <section class="reader__intro" [attr.aria-label]="'introAria' | uiTranslate">
+          @if (viewKind() === 'surah') {
           <p class="reader__intro-kicker">{{ 'introKicker' | uiTranslate }}</p>
           <h2 class="reader__intro-title">{{ 'introTitle' | uiTranslate: { name: corpus.surah()!.nameAr } }}</h2>
           <p class="reader__intro-body">{{ introSummary() }}</p>
@@ -771,47 +910,84 @@
             <p class="reader__about-body">{{ 'aboutBodyGeneric' | uiTranslate }}</p>
             }
           </details>
+          } @else if (viewKind() === 'page') {
+          <p class="reader__intro-kicker">{{ 'mushafPageKicker' | uiTranslate }}</p>
+          <h2 class="reader__intro-title">{{ 'mushafPageTitle' | uiTranslate: { page: formatUiNum(corpus.pageNumber()) } }}</h2>
+          <p class="reader__intro-body">{{ 'mushafPageBody' | uiTranslate: { count: formatUiNum(verses().length) } }}</p>
+          <p class="reader__about-note">{{ 'aboutNote' | uiTranslate }}</p>
+          } @else {
+          <p class="reader__intro-kicker">{{ 'mushafJuzKicker' | uiTranslate }}</p>
+          <h2 class="reader__intro-title">{{ 'mushafJuzTitle' | uiTranslate: { juz: formatUiNum(corpus.juzNumber()) } }}</h2>
+          <p class="reader__intro-body">{{ 'mushafJuzBody' | uiTranslate: { count: formatUiNum(verses().length) } }}</p>
+          <p class="reader__about-note">{{ 'aboutNote' | uiTranslate }}</p>
+          }
         </section>
 
+        @if (viewKind() === 'surah') {
         <p class="reader__meta">
           {{ 'surahWord' | uiTranslate }} {{ formatUiNum(corpus.surah()!.number) }} — {{ formatUiNum(corpus.surah()!.versesCount) }}
           {{ 'versesWord' | uiTranslate }}
         </p>
         <h1 class="reader__title">{{ corpus.surah()!.nameAr }}</h1>
+        } @else if (viewKind() === 'page') {
+        <p class="reader__meta">{{ 'mushafPageMeta' | uiTranslate: { page: formatUiNum(corpus.pageNumber()), count: formatUiNum(verses().length) } }}</p>
+        <h1 class="reader__title">{{ 'mushafPageTitle' | uiTranslate: { page: formatUiNum(corpus.pageNumber()) } }}</h1>
+        } @else {
+        <p class="reader__meta">{{ 'mushafJuzMeta' | uiTranslate: { juz: formatUiNum(corpus.juzNumber()), count: formatUiNum(verses().length) } }}</p>
+        <h1 class="reader__title">{{ 'mushafJuzTitle' | uiTranslate: { juz: formatUiNum(corpus.juzNumber()) } }}</h1>
+        }
         <p class="reader__subtitle">{{ 'subtitle' | uiTranslate }}</p>
 
 
       </header>
 
       <ol id="verses-start" class="verses" start="1" tabindex="-1">
-        @if (corpus.surahNumber() !== 9) {
+        @if (viewKind() === 'surah' && corpus.surahNumber() !== 9) {
         <li class="verses__bismillah" aria-hidden="true">
           <p class="verses__bismillah-text">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ</p>
         </li>
         }
-        @for (v of verses(); track v.ayah) {
+        @for (v of verses(); track v.surah + ':' + v.ayah; let i = $index) {
+        @if (showSurahHeading(v, i)) {
+        <li class="verses__surah-head">
+          <h2 class="verses__surah-head-title" dir="rtl" lang="ar">{{ corpus.surahNameFor(v.surah) }}</h2>
+          <p class="verses__surah-head-meta" dir="ltr">{{ 'surahWord' | uiTranslate }} {{ formatUiNum(v.surah) }}</p>
+        </li>
+        }
+        @if (showBismillah(v, i)) {
+        <li class="verses__bismillah" aria-hidden="true">
+          <p class="verses__bismillah-text">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ</p>
+        </li>
+        }
         <li
           class="verses__item"
-          [class.verses__item--active]="v.ayah === activeAyah.activeAyah()"
+          [class.verses__item--active]="isActiveVerse(v)"
           [class.verses__item--bookmarked]="isVerseSavedBookmark(v)"
           [class.verses__item--search-hit]="isVerseSurahSearchHit(v)"
           [class.verses__item--search-active]="isVerseSurahSearchActive(v)"
           [class.verses__item--tafsir-open]="isTafsirOpen(v)"
-          [id]="verseElementId(v.ayah)"
+          [id]="verseElementId(v)"
+          [attr.data-surah]="v.surah"
           [attr.data-ayah]="v.ayah"
-          [attr.aria-current]="v.ayah === activeAyah.activeAyah() ? 'true' : null"
+          [attr.aria-current]="isActiveVerse(v) ? 'true' : null"
         >
           <div class="verses__head">
-            <span class="verses__num" aria-hidden="true">{{ formatUiNum(v.ayah) }}</span>
+            <span class="verses__num" aria-hidden="true">
+              @if (viewKind() === 'surah') {
+              {{ formatUiNum(v.ayah) }}
+              } @else {
+              {{ formatUiNum(v.surah) }}:{{ formatUiNum(v.ayah) }}
+              }
+            </span>
             <div class="verses__actions">
               <button
                 type="button"
                 class="verses__action-btn"
                 (click)="copyAyah(v)"
                 [attr.aria-label]="'copyVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
-                [attr.title]="verseActions.copiedAyah() === v.ayah ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate)"
+                [attr.title]="verseCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate)"
               >
-                {{ verseActions.copiedAyah() === v.ayah ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate) }}
+                {{ verseCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate) }}
               </button>
               <button
                 type="button"
@@ -828,7 +1004,7 @@
                 [class.verses__action-btn--tafsir-active]="isTafsirOpen(v)"
                 (click)="toggleTafsir(v)"
                 [attr.aria-expanded]="isTafsirOpen(v)"
-                [attr.aria-controls]="breakpoints.tafsirSplitLayout() ? 'tafsir-side-panel' : 'tafsir-panel-' + v.ayah"
+                [attr.aria-controls]="breakpoints.tafsirSplitLayout() ? 'tafsir-side-panel' : 'tafsir-panel-' + v.surah + '-' + v.ayah"
                 [attr.aria-label]="'viewTafsirAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
                 [attr.title]="isTafsirOpen(v) ? ('hideTafsirLabel' | uiTranslate) : ('viewTafsirLabel' | uiTranslate)"
               >
@@ -847,7 +1023,7 @@
                 type="button"
                 class="verses__action-btn verses__action-btn--bookmark"
                 [class.verses__action-btn--bookmark-active]="isVerseSavedBookmark(v)"
-                [class.verses__action-btn--bookmark-pulse]="bookmarkUi.pulseAyah() === v.ayah"
+                [class.verses__action-btn--bookmark-pulse]="bookmarkUi.pulseAyah() === v.ayah && bookmarkUi.savedPlace()?.surah === v.surah"
                 (click)="saveBookmarkForVerse(v)"
                 [attr.aria-label]="'bookmarkVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
                 [attr.title]="'bookmarkVerseTitle' | uiTranslate"
@@ -917,7 +1093,7 @@
           @if (showTafsirInline(v)) {
           <aside
             class="verses__tafsir verses__tafsir--inline"
-            [id]="'tafsir-panel-' + v.ayah"
+            [id]="'tafsir-panel-' + v.surah + '-' + v.ayah"
             role="region"
             [attr.aria-label]="'tafsirPanelAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
             [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"

@@ -8,8 +8,9 @@ import {
 import { TafsirService } from '../../../core/tafsir/tafsir.service';
 import { formatTafsirBlocks } from '../../../core/tafsir/tafsir-text';
 import { UiLocaleService } from '../../../core/ui/ui-locale.service';
-import { verseElementId } from '../../../core/routing/verse-deep-link.util';
-import type { QuranVerseRow } from '../../../core/quran/quran-data.service';
+import type { VerseRef } from '../../../core/mushaf/mushaf-index.types';
+import { verseElementId } from '../../../core/routing/verse-location.util';
+import type { ReaderDisplayVerse } from '../../models/reader-display-verse.model';
 import {
   persistTafsirEdition,
   readStoredTafsirEdition,
@@ -27,7 +28,8 @@ export class ReaderTafsirPanelService {
   private readonly corpus = inject(ReaderCorpusStateService);
   private readonly breakpoints = inject(ReaderLayoutBreakpointsService);
 
-  readonly expandedAyah = signal<number | null>(null);
+  readonly expandedVerse = signal<VerseRef | null>(null);
+  readonly expandedAyah = computed(() => this.expandedVerse()?.ayah ?? null);
   readonly editionSlug = signal('');
   readonly loading = signal(false);
   readonly error = signal(false);
@@ -37,12 +39,13 @@ export class ReaderTafsirPanelService {
   readonly blocks = computed(() => formatTafsirBlocks(this.text()));
 
   readonly verseForPanel = computed(() => {
-    const ayah = this.expandedAyah();
-    const s = this.corpus.surah();
-    if (ayah == null || !s) {
+    const ref = this.expandedVerse();
+    if (ref == null) {
       return null;
     }
-    return s.verses.find((v) => v.ayah === ayah) ?? null;
+    return (
+      this.corpus.displayVerses().find((v) => v.surah === ref.surah && v.ayah === ref.ayah) ?? null
+    );
   });
 
   readonly editionsForLocale = computed(() => tafsirEditionsForLocale(this.ui.locale()));
@@ -60,41 +63,49 @@ export class ReaderTafsirPanelService {
     return this.breakpoints.mobileChrome() && !this.breakpoints.tafsirSplitLayout();
   }
 
-  isOpen(v: QuranVerseRow): boolean {
-    return this.expandedAyah() === v.ayah;
+  isOpen(v: ReaderDisplayVerse): boolean {
+    const ref = this.expandedVerse();
+    return ref !== null && ref.surah === v.surah && ref.ayah === v.ayah;
   }
 
-  showInline(v: QuranVerseRow): boolean {
-    return this.isOpen(v) && !this.useMobileSheet();
+  showInline(v: ReaderDisplayVerse): boolean {
+    return (
+      this.isOpen(v) &&
+      !this.useMobileSheet() &&
+      !this.breakpoints.tafsirSplitLayout()
+    );
   }
 
-  toggle(v: QuranVerseRow): void {
+  toggle(v: ReaderDisplayVerse): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    if (this.expandedAyah() === v.ayah) {
+    const ref = { surah: v.surah, ayah: v.ayah };
+    if (this.isOpen(v)) {
       this.close();
       return;
     }
-    this.open(v.ayah);
+    this.open(ref);
   }
 
-  open(ayah: number): void {
-    this.expandedAyah.set(ayah);
-    this.fetch(ayah);
+  open(ref: VerseRef): void {
+    this.expandedVerse.set(ref);
+    this.fetch(ref);
     if (this.useMobileSheet()) {
       this.mobileSheetOpen.set(true);
       this.lockBodyScroll();
     } else if (this.breakpoints.tafsirSplitLayout()) {
-      this.document.getElementById(verseElementId(ayah))?.scrollIntoView({
-        block: 'nearest',
-        behavior: 'smooth',
-      });
+      this.document
+        .getElementById(verseElementId(ref, this.corpus.viewKind()))
+        ?.scrollIntoView({
+          block: 'nearest',
+          behavior: 'smooth',
+        });
     }
   }
 
   close(): void {
-    this.expandedAyah.set(null);
+    this.expandedVerse.set(null);
     this.mobileSheetOpen.set(false);
     this.unlockBodyScroll();
     this.loading.set(false);
@@ -107,14 +118,15 @@ export class ReaderTafsirPanelService {
     this.close();
   }
 
-  onEditionChange(slug: string, ayah: number): void {
+  onEditionChange(slug: string, ref: VerseRef): void {
     if (!slug || slug === this.editionSlug()) {
       return;
     }
     this.editionSlug.set(slug);
     persistTafsirEdition(slug, this.browserStorage());
-    if (this.expandedAyah() === ayah) {
-      this.fetch(ayah);
+    const open = this.expandedVerse();
+    if (open && open.surah === ref.surah && open.ayah === ref.ayah) {
+      this.fetch(ref);
     }
   }
 
@@ -135,18 +147,18 @@ export class ReaderTafsirPanelService {
     if (prevSlug !== nextSlug) {
       persistTafsirEdition(nextSlug, this.browserStorage());
     }
-    const openAyah = this.expandedAyah();
-    if (openAyah !== null) {
-      this.fetch(openAyah);
+    const open = this.expandedVerse();
+    if (open !== null) {
+      this.fetch(open);
     }
   }
 
-  retry(ayah: number): void {
+  retry(ref: VerseRef): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
-    this.tafsirService.invalidateVerse(this.resolveEditionSlug(), this.corpus.surahNumber(), ayah);
-    this.fetch(ayah);
+    this.tafsirService.invalidateVerse(this.resolveEditionSlug(), ref.surah, ref.ayah);
+    this.fetch(ref);
   }
 
   onBreakpointChange(): void {
@@ -160,17 +172,23 @@ export class ReaderTafsirPanelService {
     }
   }
 
-  private fetch(ayah: number): void {
+  private fetch(ref: VerseRef): void {
     const slug = this.resolveEditionSlug();
     const gen = ++this.loadGeneration;
     this.loading.set(true);
     this.error.set(false);
     this.text.set('');
     this.tafsirService
-      .loadVerse(slug, this.corpus.surahNumber(), ayah)
+      .loadVerse(slug, ref.surah, ref.ayah)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((payload) => {
-        if (gen !== this.loadGeneration || this.expandedAyah() !== ayah) {
+        const open = this.expandedVerse();
+        if (
+          gen !== this.loadGeneration ||
+          open === null ||
+          open.surah !== ref.surah ||
+          open.ayah !== ref.ayah
+        ) {
           return;
         }
         this.loading.set(false);

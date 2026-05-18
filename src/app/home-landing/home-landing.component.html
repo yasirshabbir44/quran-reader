@@ -81,6 +81,18 @@
             <span class="landing__nav-link-title">{{ 'homeNavIndex' | uiTranslate }}</span>
           </a>
         </li>
+        <li>
+          <a class="landing__nav-link" routerLink="/page/1">
+            <span class="landing__nav-link-title">{{ 'homeNavPages' | uiTranslate }}</span>
+            <span class="landing__nav-link-meta">{{ 'homeNavPagesHint' | uiTranslate }}</span>
+          </a>
+        </li>
+        <li>
+          <a class="landing__nav-link" routerLink="/juz/1">
+            <span class="landing__nav-link-title">{{ 'homeNavJuz' | uiTranslate }}</span>
+            <span class="landing__nav-link-meta">{{ 'homeNavJuzHint' | uiTranslate }}</span>
+          </a>
+        </li>
         @if (daily()) {
         <li>
           <a class="landing__nav-link" href="#featured-today">
