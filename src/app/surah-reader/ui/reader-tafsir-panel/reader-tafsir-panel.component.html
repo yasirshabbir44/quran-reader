@@ -1,0 +1,95 @@
+<span class="verses__section-label verses__section-label--tafsir">{{ 'verseTafsirSectionLabel' | uiTranslate }}</span>
+<div class="verses__tafsir-toolbar">
+  <label class="verses__tafsir-label" [attr.for]="editionId()">
+    {{ 'tafsirSourceLabel' | uiTranslate }}
+  </label>
+  <select
+    class="verses__tafsir-select reader__select reader__select--compact"
+    [id]="editionId()"
+    [ngModel]="tafsir.editionSlug()"
+    [ngModelOptions]="{ standalone: true }"
+    (ngModelChange)="onEditionChange($event)"
+  >
+    @for (ed of tafsir.editionsForLocale(); track ed.slug) {
+    <option [value]="ed.slug">{{ ed.labelKey | uiTranslate }}</option>
+    }
+  </select>
+</div>
+@if (tafsir.loading()) {
+<p class="verses__tafsir-status" role="status">{{ 'tafsirLoading' | uiTranslate }}</p>
+} @else if (tafsir.error()) {
+<div class="verses__tafsir-status verses__tafsir-status--error">
+  <p>{{ 'tafsirLoadError' | uiTranslate }}</p>
+  <button type="button" class="verses__tafsir-retry" (click)="retry()">
+    {{ 'tafsirRetry' | uiTranslate }}
+  </button>
+</div>
+} @else if (accordion() && tafsir.blocks().length > 1) {
+<div class="verses__tafsir-body verses__tafsir-body--accordion">
+  @for (block of tafsir.blocks(); track block.type) {
+    @if ($index === 0) {
+    <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId() + '-block-' + block.type">
+      <span
+        class="verses__section-label verses__section-label--tafsir-block"
+        [id]="editionId() + '-block-' + block.type"
+      >
+        {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
+      </span>
+      <div class="verses__tafsir-block-body">
+        @for (para of block.paragraphs; track $index) {
+        <p class="verses__tafsir-p">{{ para }}</p>
+        }
+      </div>
+    </section>
+    }
+  }
+  <details class="verses__tafsir-more">
+    <summary class="verses__tafsir-more-summary">{{ 'tafsirReadMore' | uiTranslate }}</summary>
+    <div class="verses__tafsir-more-body">
+      @for (block of tafsir.blocks(); track block.type) {
+        @if ($index > 0) {
+        <section
+          class="verses__tafsir-block"
+          [attr.aria-labelledby]="editionId() + '-block-more-' + block.type"
+        >
+          <span
+            class="verses__section-label verses__section-label--tafsir-block"
+            [id]="editionId() + '-block-more-' + block.type"
+          >
+            {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
+          </span>
+          <div class="verses__tafsir-block-body">
+            @for (para of block.paragraphs; track $index) {
+            <p class="verses__tafsir-p">{{ para }}</p>
+            }
+          </div>
+        </section>
+        }
+      }
+    </div>
+  </details>
+</div>
+} @else if (tafsir.blocks().length) {
+<div class="verses__tafsir-body">
+  @for (block of tafsir.blocks(); track block.type) {
+  <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId() + '-block-' + block.type">
+    <span
+      class="verses__section-label verses__section-label--tafsir-block"
+      [id]="editionId() + '-block-' + block.type"
+    >
+      {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
+    </span>
+    <div class="verses__tafsir-block-body">
+      @for (para of block.paragraphs; track $index) {
+      <p class="verses__tafsir-p">{{ para }}</p>
+      }
+    </div>
+  </section>
+  }
+</div>
+} @else if (tafsir.text()) {
+<div class="verses__tafsir-body">
+  <p class="verses__tafsir-p">{{ tafsir.text() }}</p>
+</div>
+}
+<p class="verses__tafsir-attribution">{{ 'tafsirAttribution' | uiTranslate }}</p>
