@@ -6,6 +6,8 @@ import type { QuranCorpusSource } from './quran-corpus.source';
 export interface QuranVerseRow {
   readonly ayah: number;
   readonly ar: string;
+  /** Phonetic roman transliteration (Tanzil-style, from quran-json). */
+  readonly tr: string;
   readonly en: string;
   readonly ur: string;
 }

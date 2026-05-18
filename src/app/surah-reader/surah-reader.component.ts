@@ -37,6 +37,7 @@ import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 import {
   normalizeVerseTranslations,
+  normalizeVerseTransliteration,
   VERSE_PRESENTATION_STRATEGY,
   type VersePresentationContext,
 } from '../core/verse-presentation/verse-presentation.strategy';
@@ -138,6 +139,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly readingMode = signal<ReaderMode>('verse-by-verse');
   protected readonly showTranslationEn = signal(true);
   protected readonly showTranslationUr = signal(true);
+  protected readonly showTransliteration = signal(true);
   protected settingsOpen = false;
   protected readonly quoteSheetVerse = signal<QuranVerseRow | null>(null);
   protected surahNavOpen = false;
@@ -156,6 +158,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly notifyPermissionError = signal<'denied' | 'unsupported' | null>(null);
 
   private static readonly TAFSIR_EDITION_LS_KEY = 'surah-reader-tafsir-edition';
+  private static readonly TRANSLITERATION_LS_KEY = 'surah-reader-show-transliteration';
 
   protected readonly expandedTafsirAyah = signal<number | null>(null);
   protected readonly tafsirEditionSlug = signal('');
@@ -191,7 +194,8 @@ export class SurahReaderComponent implements OnInit {
     const hits: number[] = [];
     for (const v of s.verses) {
       const tr = normalizeVerseTranslations(v);
-      const haystack = `${v.ar}\n${tr.en}\n${tr.ur}`.normalize('NFKC').toLowerCase();
+      const translit = normalizeVerseTransliteration(v);
+      const haystack = `${v.ar}\n${translit}\n${tr.en}\n${tr.ur}`.normalize('NFKC').toLowerCase();
       if (haystack.includes(needle)) {
         hits.push(v.ayah);
       }
@@ -221,6 +225,7 @@ export class SurahReaderComponent implements OnInit {
 
   constructor() {
     this.tafsirEditionSlug.set(this.readStoredTafsirEdition());
+    this.showTransliteration.set(this.readStoredTransliterationPref());
     if (isPlatformBrowser(this.platformId)) {
       afterNextRender(() => this.bindTafsirSplitLayout(), { injector: this.injector });
     }
@@ -698,10 +703,28 @@ export class SurahReaderComponent implements OnInit {
     return this.readingMode() === 'verse-by-verse' && (this.showTranslationEn() || this.showTranslationUr());
   }
 
+  protected showTransliterationBlock(): boolean {
+    return this.readingMode() === 'verse-by-verse' && this.showTransliteration();
+  }
+
+  protected onTransliterationCheckboxChange(event: Event): void {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement)) {
+      return;
+    }
+    this.setShowTransliteration(input.checked);
+  }
+
+  protected setShowTransliteration(checked: boolean): void {
+    this.showTransliteration.set(checked);
+    this.persistTransliterationPref(checked);
+  }
+
   protected resetReaderViewSettings(): void {
     this.readingMode.set('verse-by-verse');
     this.showTranslationEn.set(true);
     this.showTranslationUr.set(true);
+    this.setShowTransliteration(true);
     this.updateReaderQueryParams();
   }
 
@@ -723,6 +746,10 @@ export class SurahReaderComponent implements OnInit {
 
   protected verseTr(v: QuranVerseRow): { en: string; ur: string } {
     return normalizeVerseTranslations(v);
+  }
+
+  protected verseTranslit(v: QuranVerseRow): string {
+    return normalizeVerseTransliteration(v);
   }
 
   protected introSummary(): string {
@@ -1346,6 +1373,32 @@ export class SurahReaderComponent implements OnInit {
       this.title.setTitle(this.ui.translate('documentTitleError'));
     } else {
       this.title.setTitle(this.ui.translate('documentTitle'));
+    }
+  }
+
+  private readStoredTransliterationPref(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      return true;
+    }
+    try {
+      const raw = localStorage.getItem(SurahReaderComponent.TRANSLITERATION_LS_KEY);
+      if (raw === '0' || raw === 'false') {
+        return false;
+      }
+    } catch {
+      /* ignore */
+    }
+    return true;
+  }
+
+  private persistTransliterationPref(checked: boolean): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    try {
+      localStorage.setItem(SurahReaderComponent.TRANSLITERATION_LS_KEY, checked ? '1' : '0');
+    } catch {
+      /* private mode / quota */
     }
   }
 

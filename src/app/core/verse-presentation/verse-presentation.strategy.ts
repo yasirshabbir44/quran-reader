@@ -30,21 +30,37 @@ export function normalizeVerseTranslations(v: QuranVerseRow): { en: string; ur: 
   };
 }
 
+export function normalizeVerseTransliteration(v: QuranVerseRow): string {
+  return (v.tr ?? '').trim();
+}
+
 @Injectable({ providedIn: 'root' })
 export class DefaultVersePresentationStrategy implements VersePresentationStrategy {
   buildCopyText(verse: QuranVerseRow, ctx: VersePresentationContext): string {
     const tr = normalizeVerseTranslations(verse);
+    const translit = normalizeVerseTransliteration(verse);
     const ref = `${ctx.formatUiNum(ctx.surahNumber)}:${ctx.formatUiNum(verse.ayah)}`;
-    return `${verse.ar}\n\n${tr.en}\n\n${tr.ur}\n\n${ctx.surahNameAr} ${ref}`;
+    const parts = [verse.ar];
+    if (translit) {
+      parts.push(translit);
+    }
+    parts.push(tr.en, tr.ur, `${ctx.surahNameAr} ${ref}`);
+    return parts.join('\n\n');
   }
 
   buildShareData(verse: QuranVerseRow, ctx: VersePresentationContext): ShareData {
     const tr = normalizeVerseTranslations(verse);
+    const translit = normalizeVerseTransliteration(verse);
     const ref = `${ctx.formatUiNum(ctx.surahNumber)}:${ctx.formatUiNum(verse.ayah)}`;
     const shareUrl = buildVerseDeepLink(ctx.origin, ctx.surahNumber, verse.ayah);
+    const textParts = [verse.ar];
+    if (translit) {
+      textParts.push(translit);
+    }
+    textParts.push(tr.en, `${ctx.surahNameAr} ${ref}`);
     return new ShareDataBuilder()
       .setTitle(`${ctx.surahNameAr} ${verse.ayah}`)
-      .setText(`${verse.ar}\n\n${tr.en}\n\n${ctx.surahNameAr} ${ref}`)
+      .setText(textParts.join('\n\n'))
       .setUrl(shareUrl)
       .build();
   }

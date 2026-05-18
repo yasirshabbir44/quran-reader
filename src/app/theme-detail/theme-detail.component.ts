@@ -25,6 +25,7 @@ import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 import {
   VERSE_PRESENTATION_STRATEGY,
   normalizeVerseTranslations,
+  normalizeVerseTransliteration,
   type VersePresentationContext,
 } from '../core/verse-presentation/verse-presentation.strategy';
 
@@ -120,6 +121,10 @@ export class ThemeDetailComponent implements OnInit {
 
   protected verseRefLabel(v: ThematicVerseDetail): string {
     return `${v.surahNameTranslit} ${this.formatUiNum(v.surah)}:${this.formatUiNum(v.ayah)}`;
+  }
+
+  protected verseTranslit(v: ThematicVerseDetail): string {
+    return normalizeVerseTransliteration(v.verse);
   }
 
   protected translationPrimary(v: ThematicVerseDetail): string {
@@ -242,6 +247,9 @@ export class ThemeDetailComponent implements OnInit {
     }
     const tr = normalizeVerseTranslations(v.verse);
     if (tr.en.toLowerCase().includes(needle) || tr.ur.includes(needle)) {
+      return true;
+    }
+    if (normalizeVerseTransliteration(v.verse).toLowerCase().includes(needle)) {
       return true;
     }
     return false;
