@@ -59,6 +59,7 @@
   "loadError": "تعذّر تحميل ملف القرآن المحلي (quran-full.json). نفّذ npm run build-quran-data ثم حدّث الصفحة.",
   "surahLabel": "السورة",
   "surahNavTitle": "تصفّح السور",
+  "surahNavSubtitle": "جميع السور الـ١١٤ — عربي ونقل حرفي",
   "surahNavOpenAria": "فتح قائمة السور",
   "surahNavCloseAria": "إغلاق قائمة السور",
   "surahNavSearchAria": "تصفية السور",
