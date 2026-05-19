@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Hajar and Zamzam">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b6914"/>
+      <stop offset="100%" style="stop-color:#3d2e0a"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <ellipse cx="400" cy="380" rx="350" ry="40" fill="#c4a035" opacity="0.3"/>
+  <path d="M380 200 L400 120 L420 200 Z" fill="#4a90c8" opacity="0.7"/>
+  <text x="400" y="280" text-anchor="middle" fill="#f5ecd8" font-family="Georgia,serif" font-size="38" font-weight="bold">Hajar &amp; Zamzam</text>
+  <text x="400" y="325" text-anchor="middle" fill="#d4c4a0" font-family="sans-serif" font-size="17">Trust between Safa and Marwa</text>
+</svg>

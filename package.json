@@ -14,6 +14,7 @@
     "watch": "ng build --watch --configuration development",
     "build-quran-data": "node scripts/build-quran-data.mjs",
     "build-thematic-index": "node scripts/build-thematic-index.mjs",
+    "build-blog-index": "node scripts/build-blog-index.mjs",
     "build-mushaf-index": "node scripts/build-mushaf-index.mjs"
   },
   "private": true,

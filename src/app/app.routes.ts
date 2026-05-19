@@ -8,9 +8,13 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { SurahReaderComponent } from './surah-reader/surah-reader.component';
 import { ThemeDetailComponent } from './theme-detail/theme-detail.component';
 import { ThemesExplorerComponent } from './themes-explorer/themes-explorer.component';
+import { BlogExplorerComponent } from './blog-explorer/blog-explorer.component';
+import { BlogDetailComponent } from './blog-detail/blog-detail.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeLandingComponent },
+  { path: 'blog', component: BlogExplorerComponent },
+  { path: 'blog/:id', component: BlogDetailComponent },
   { path: 'themes', component: ThemesExplorerComponent },
   { path: 'themes/:id', component: ThemeDetailComponent },
   { path: 'surah/:n', redirectTo: legacySurahRedirect },

@@ -1,0 +1,111 @@
+@if (loadError()) {
+<main class="blog blog--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="blog__state-card">
+    <p class="blog__state-text">{{ 'blogLoadError' | uiTranslate }}</p>
+    <button type="button" class="blog__btn blog__btn--primary" (click)="retryLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+    <a class="blog__btn blog__btn--ghost" routerLink="/">{{ 'blogBackHome' | uiTranslate }}</a>
+  </div>
+</main>
+} @else if (loading()) {
+<main class="blog blog--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <p class="blog__state-text">{{ 'blogLoading' | uiTranslate }}</p>
+</main>
+} @else {
+<div class="blog" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <header class="blog__header">
+    <a class="blog__back" routerLink="/" [attr.aria-label]="'homeNavHomeAria' | uiTranslate">←</a>
+    <div class="blog__brand">
+      <p class="blog__kicker">{{ 'blogKicker' | uiTranslate }}</p>
+      <h1 class="blog__title">{{ 'blogTitle' | uiTranslate }}</h1>
+      <p class="blog__subtitle">{{ 'blogSubtitle' | uiTranslate }}</p>
+    </div>
+    <div class="blog__header-tools">
+      <label class="blog__tool-label" for="blog-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="blog-ui-locale"
+        class="blog__select"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+  </header>
+
+  <div class="blog__index-head">
+    <div>
+      <h2 class="blog__index-title">{{ 'blogIndexTitle' | uiTranslate }}</h2>
+      <p class="blog__index-subtitle">{{ 'blogIndexSubtitle' | uiTranslate }}</p>
+    </div>
+    <p class="blog__count" aria-live="polite">
+      {{
+        'blogCount'
+          | uiTranslate: { shown: formatUiNum(shownPosts()), total: formatUiNum(totalPosts()) }
+      }}
+    </p>
+  </div>
+
+  <div class="blog__search" role="search">
+    <label class="blog__tool-label" for="blog-search">{{ 'blogSearchLabel' | uiTranslate }}</label>
+    <input
+      id="blog-search"
+      class="blog__search-input"
+      type="search"
+      autocomplete="off"
+      spellcheck="false"
+      [attr.placeholder]="'blogSearchPlaceholder' | uiTranslate"
+      [ngModel]="searchQuery()"
+      (ngModelChange)="searchQuery.set($event)"
+    />
+  </div>
+
+  @if (filteredGroups().length === 0) {
+  <p class="blog__empty">{{ 'blogEmpty' | uiTranslate }}</p>
+  } @else {
+  @for (group of filteredGroups(); track group.category.id) {
+  <section class="blog__group" [attr.aria-labelledby]="'blog-cat-' + group.category.id">
+    <h2 [id]="'blog-cat-' + group.category.id" class="blog__group-title">{{ categoryName(group) }}</h2>
+    <ul class="blog__grid">
+      @for (post of group.posts; track post.id) {
+      <li>
+        <a
+          class="blog__card"
+          [routerLink]="['/blog', post.id]"
+          [attr.aria-label]="'blogCardAria' | uiTranslate: { title: postTitle(post) }"
+        >
+          <span class="blog__card-media">
+            <img
+              class="blog__card-img"
+              [src]="post.image"
+              [alt]="blog.pickLocalized(post.imageAlt)"
+              width="400"
+              height="225"
+              loading="lazy"
+              decoding="async"
+            />
+          </span>
+          <span class="blog__card-body">
+            <span class="blog__card-category">{{ post.categoryName }}</span>
+            <span class="blog__card-title">{{ postTitle(post) }}</span>
+            <span class="blog__card-excerpt">{{ postExcerpt(post) }}</span>
+            <span class="blog__card-meta">
+              <time [attr.datetime]="post.publishedAt">{{ formatDate(post.publishedAt) }}</time>
+              <span class="blog__card-read">
+                {{ formatUiNum(post.readMinutes) }} {{ 'blogReadMinutes' | uiTranslate }}
+              </span>
+            </span>
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+  }
+  }
+</div>
+}
