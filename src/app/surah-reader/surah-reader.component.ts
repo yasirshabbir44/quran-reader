@@ -42,12 +42,14 @@ import {
   ReaderSurahSearchService,
   ReaderSwipeNavigationService,
   ReaderTafsirPanelService,
+  ReaderWordStudyPanelService,
   ReaderVerseActionsService,
   ReaderVerseFragmentService,
   ReaderViewPreferencesService,
 } from './services';
 import type { SurahNavItem } from './models/surah-nav-item.model';
 import { ReaderTafsirPanelComponent } from './ui/reader-tafsir-panel/reader-tafsir-panel.component';
+import { ReaderWordStudyPanelComponent } from './ui/reader-word-study-panel/reader-word-study-panel.component';
 
 /**
  * Surah reader route shell.
@@ -64,6 +66,7 @@ import { ReaderTafsirPanelComponent } from './ui/reader-tafsir-panel/reader-tafs
     UiTranslatePipe,
     VerseQuoteSheetComponent,
     ReaderTafsirPanelComponent,
+    ReaderWordStudyPanelComponent,
   ],
   providers: [...READER_FEATURE_PROVIDERS],
   templateUrl: './surah-reader.component.html',
@@ -101,6 +104,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly panels = inject(ReaderPanelCoordinatorService);
   protected readonly bookmarkUi = inject(ReaderBookmarkUiService);
   protected readonly tafsir = inject(ReaderTafsirPanelService);
+  protected readonly wordStudy = inject(ReaderWordStudyPanelService);
   protected readonly breakpoints = inject(ReaderLayoutBreakpointsService);
   protected readonly verseActions = inject(ReaderVerseActionsService);
   protected readonly swipe = inject(ReaderSwipeNavigationService);
@@ -234,6 +238,10 @@ export class SurahReaderComponent implements OnInit {
     }
     if (this.tafsir.mobileSheetOpen()) {
       this.tafsir.close();
+      return;
+    }
+    if (this.wordStudy.expandedVerse()) {
+      this.wordStudy.close();
       return;
     }
     if (this.surahNav.open()) {
@@ -517,7 +525,17 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected toggleTafsir(v: ReaderDisplayVerse): void {
+    if (!this.tafsir.isOpen(v)) {
+      this.wordStudy.close();
+    }
     this.tafsir.toggle(v);
+  }
+
+  protected toggleWordStudy(v: ReaderDisplayVerse): void {
+    if (!this.wordStudy.isOpen(v)) {
+      this.tafsir.close();
+    }
+    this.wordStudy.toggle(v);
   }
 
   protected onVerseContentClick(v: ReaderDisplayVerse, event: MouseEvent): void {
@@ -642,8 +660,16 @@ export class SurahReaderComponent implements OnInit {
     return this.tafsir.isOpen(v);
   }
 
+  protected isWordStudyOpen(v: ReaderDisplayVerse): boolean {
+    return this.wordStudy.isOpen(v);
+  }
+
   protected showTafsirInline(v: ReaderDisplayVerse): boolean {
     return this.tafsir.showInline(v);
+  }
+
+  protected showWordStudyInline(v: ReaderDisplayVerse): boolean {
+    return this.wordStudy.isOpen(v);
   }
 
   protected useTafsirMobileSheet(): boolean {

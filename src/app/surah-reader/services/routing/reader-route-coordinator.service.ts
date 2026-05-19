@@ -13,6 +13,7 @@ import { ReaderActiveAyahService } from '../navigation/reader-active-ayah.servic
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
 import { ReaderSurahSearchService } from '../navigation/reader-surah-search.service';
 import { ReaderTafsirPanelService } from '../panels/reader-tafsir-panel.service';
+import { ReaderWordStudyPanelService } from '../panels/reader-word-study-panel.service';
 import { ReaderVerseFragmentService } from './reader-verse-fragment.service';
 import { ReaderViewPreferencesService } from '../preferences/reader-view-preferences.service';
 import { ReaderBookmarkUiService } from '../bookmark/reader-bookmark-ui.service';
@@ -44,6 +45,7 @@ export class ReaderRouteCoordinatorService {
   private readonly fragments = inject(ReaderVerseFragmentService);
   private readonly search = inject(ReaderSurahSearchService);
   private readonly tafsir = inject(ReaderTafsirPanelService);
+  private readonly wordStudy = inject(ReaderWordStudyPanelService);
   private readonly bookmarkUi = inject(ReaderBookmarkUiService);
   private readonly scroll = inject(ReaderScrollStateService);
   private readonly mushafNav = inject(ReaderMushafNavService);
@@ -177,9 +179,11 @@ export class ReaderRouteCoordinatorService {
     if (resolved.kind === 'surah' && prevKind === 'surah' && resolved.n !== prevKey) {
       this.search.resetOnSurahChange();
       this.tafsir.closeOnSurahChange();
+      this.wordStudy.closeOnViewChange();
     } else if (this.viewKindKey(resolved) !== prevKind || this.routeKey(resolved) !== prevKey) {
       this.search.resetOnSurahChange();
       this.tafsir.closeOnSurahChange();
+      this.wordStudy.closeOnViewChange();
     }
 
     this.bookmarkUi.refreshFromStorage();

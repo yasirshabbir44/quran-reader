@@ -1,0 +1,98 @@
+<span class="verses__section-label verses__section-label--word-study">{{
+  'verseWordStudySectionLabel' | uiTranslate
+}}</span>
+
+@if (wordStudy.loading()) {
+<p class="verses__word-study-status" role="status">{{ 'wordStudyLoading' | uiTranslate }}</p>
+} @else if (wordStudy.error() && !wordStudy.words().length) {
+<div class="verses__word-study-status verses__word-study-status--error">
+  <p>{{ 'wordStudyLoadError' | uiTranslate }}</p>
+  <button type="button" class="verses__word-study-retry" (click)="retry()">
+    {{ 'wordStudyRetry' | uiTranslate }}
+  </button>
+</div>
+}
+
+@if (wordStudy.words().length) {
+<div class="verses__word-study-table-wrap" role="region" [attr.aria-label]="'wordStudyTableAria' | uiTranslate">
+  <table class="verses__word-study-table">
+    <thead>
+      <tr>
+        <th scope="col">{{ 'wordStudyColArabic' | uiTranslate }}</th>
+        <th scope="col">{{ 'wordStudyColTransliteration' | uiTranslate }}</th>
+        <th scope="col">{{ 'wordStudyColTranslation' | uiTranslate }}</th>
+        <th scope="col" class="verses__word-study-th--grammar">
+          <span class="reader__visually-hidden">{{ 'wordStudyColGrammar' | uiTranslate }}</span>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (token of wordStudy.words(); track token.position) {
+      <tr>
+        <td class="verses__word-study-ar" dir="rtl" lang="ar">{{ token.text }}</td>
+        <td class="verses__word-study-tr" dir="ltr" lang="en">{{ token.transliteration }}</td>
+        <td class="verses__word-study-en" dir="ltr" lang="en">{{ token.translation }}</td>
+        <td class="verses__word-study-grammar">
+          <a
+            class="verses__word-study-grammar-link"
+            [href]="token.corpusMorphologyUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+            [attr.aria-label]="
+              'wordStudyMorphologyLinkAria' | uiTranslate: { n: formatUiNum()(token.position) }
+            "
+          >
+            {{ 'wordStudyMorphologyLink' | uiTranslate }}
+          </a>
+        </td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>
+}
+
+@if (links(); as studyLinks) {
+<section class="verses__word-study-external" [attr.aria-labelledby]="'word-study-ext-' + verse().ayah">
+  <h3 class="verses__word-study-external-title" [id]="'word-study-ext-' + verse().ayah">
+    {{ 'wordStudyExternalTitle' | uiTranslate }}
+  </h3>
+  <ul class="verses__word-study-links">
+    <li>
+      <a
+        class="verses__word-study-ext-link"
+        [href]="studyLinks.quranCom"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="verses__word-study-ext-name">{{ 'wordStudyLinkQuranCom' | uiTranslate }}</span>
+        <span class="verses__word-study-ext-hint">{{ 'wordStudyLinkQuranComHint' | uiTranslate }}</span>
+      </a>
+    </li>
+    <li>
+      <a
+        class="verses__word-study-ext-link"
+        [href]="studyLinks.corpusWordByWord"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="verses__word-study-ext-name">{{ 'wordStudyLinkCorpusWbw' | uiTranslate }}</span>
+        <span class="verses__word-study-ext-hint">{{ 'wordStudyLinkCorpusWbwHint' | uiTranslate }}</span>
+      </a>
+    </li>
+    <li>
+      <a
+        class="verses__word-study-ext-link"
+        [href]="studyLinks.corpusSyntaxTree"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span class="verses__word-study-ext-name">{{ 'wordStudyLinkCorpusTree' | uiTranslate }}</span>
+        <span class="verses__word-study-ext-hint">{{ 'wordStudyLinkCorpusTreeHint' | uiTranslate }}</span>
+      </a>
+    </li>
+  </ul>
+</section>
+}
+
+<p class="verses__word-study-attribution">{{ 'wordStudyAttribution' | uiTranslate }}</p>
