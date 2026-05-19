@@ -966,6 +966,7 @@
           [class.verses__item--search-hit]="isVerseSurahSearchHit(v)"
           [class.verses__item--search-active]="isVerseSurahSearchActive(v)"
           [class.verses__item--tafsir-open]="isTafsirOpen(v)"
+          [class.verses__item--word-study-open]="isWordStudyOpen(v)"
           [id]="verseElementId(v)"
           [attr.data-surah]="v.surah"
           [attr.data-ayah]="v.ayah"
@@ -997,6 +998,24 @@
                 [attr.title]="'shareLabel' | uiTranslate"
               >
                 {{ 'shareLabel' | uiTranslate }}
+              </button>
+              <button
+                type="button"
+                class="verses__action-btn verses__action-btn--word-study"
+                [class.verses__action-btn--word-study-active]="isWordStudyOpen(v)"
+                (click)="toggleWordStudy(v)"
+                [attr.aria-expanded]="isWordStudyOpen(v)"
+                [attr.aria-controls]="'word-study-panel-' + v.surah + '-' + v.ayah"
+                [attr.aria-label]="
+                  isWordStudyOpen(v)
+                    ? ('hideWordStudyAria' | uiTranslate: { n: formatUiNum(v.ayah) })
+                    : ('viewWordStudyAria' | uiTranslate: { n: formatUiNum(v.ayah) })
+                "
+                [attr.title]="
+                  isWordStudyOpen(v) ? ('hideWordStudyLabel' | uiTranslate) : ('viewWordStudyLabel' | uiTranslate)
+                "
+              >
+                {{ isWordStudyOpen(v) ? ('hideWordStudyLabel' | uiTranslate) : ('viewWordStudyLabel' | uiTranslate) }}
               </button>
               <button
                 type="button"
@@ -1090,6 +1109,18 @@
             </section>
             }
           </div>
+          @if (showWordStudyInline(v)) {
+          <app-reader-word-study-panel
+            class="verses__word-study--inline"
+            [id]="'word-study-panel-' + v.surah + '-' + v.ayah"
+            role="region"
+            [attr.aria-label]="'wordStudyPanelAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+            [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
+            [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
+            [verse]="v"
+            [formatUiNum]="formatUiNum"
+          />
+          }
           @if (showTafsirInline(v)) {
           <aside
             class="verses__tafsir verses__tafsir--inline"
