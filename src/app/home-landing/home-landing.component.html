@@ -77,6 +77,12 @@
           </a>
         </li>
         <li>
+          <a class="landing__nav-link" routerLink="/blog">
+            <span class="landing__nav-link-title">{{ 'homeNavBlog' | uiTranslate }}</span>
+            <span class="landing__nav-link-meta">{{ 'homeNavBlogHint' | uiTranslate }}</span>
+          </a>
+        </li>
+        <li>
           <a class="landing__nav-link" href="#surah-index">
             <span class="landing__nav-link-title">{{ 'homeNavIndex' | uiTranslate }}</span>
           </a>
@@ -203,6 +209,16 @@
           }}</p>
           <a class="landing__btn landing__btn--primary" routerLink="/themes">
             {{ 'homeThemesPromoCta' | uiTranslate }}
+          </a>
+        </div>
+      </section>
+
+      <section class="landing__themes-promo landing__blog-promo" aria-labelledby="blog-promo-heading">
+        <div class="landing__themes-promo-inner">
+          <h2 id="blog-promo-heading" class="landing__section-title">{{ 'homeBlogPromoTitle' | uiTranslate }}</h2>
+          <p class="landing__index-subtitle">{{ 'homeBlogPromoSubtitle' | uiTranslate }}</p>
+          <a class="landing__btn landing__btn--primary" routerLink="/blog">
+            {{ 'homeBlogPromoCta' | uiTranslate }}
           </a>
         </div>
       </section>
