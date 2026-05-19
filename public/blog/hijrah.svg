@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="The Hijrah">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="50%" x2="100%" y2="50%">
+      <stop offset="0%" style="stop-color:#1a2840"/>
+      <stop offset="50%" style="stop-color:#2a4060"/>
+      <stop offset="100%" style="stop-color:#1a2840"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <path d="M100 350 Q400 150 700 350" stroke="#c9a227" stroke-width="3" fill="none" opacity="0.6"/>
+  <circle cx="150" cy="340" r="12" fill="#e8d5a3"/>
+  <circle cx="650" cy="340" r="12" fill="#7eb8a8"/>
+  <text x="400" y="200" text-anchor="middle" fill="#e8e8f0" font-family="Georgia,serif" font-size="44" font-weight="bold">The Hijrah</text>
+  <text x="400" y="250" text-anchor="middle" fill="#a0b0c8" font-family="sans-serif" font-size="18">Makkah to Madinah · 622 CE</text>
+</svg>

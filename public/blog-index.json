@@ -1,0 +1,2896 @@
+{
+  "categories": [
+    {
+      "id": "quranic-stories",
+      "name": {
+        "en": "Quranic Stories",
+        "ur": "قرآنی کہانیاں",
+        "ar": "قصص قرآنية"
+      }
+    },
+    {
+      "id": "prophets",
+      "name": {
+        "en": "Prophets",
+        "ur": "انبیاء",
+        "ar": "الأنبياء"
+      }
+    },
+    {
+      "id": "companions",
+      "name": {
+        "en": "Companions",
+        "ur": "صحابہ",
+        "ar": "الصحابة"
+      }
+    },
+    {
+      "id": "islamic-history",
+      "name": {
+        "en": "Islamic History",
+        "ur": "اسلامی تاریخ",
+        "ar": "التاريخ الإسلامي"
+      }
+    },
+    {
+      "id": "islamic-beliefs",
+      "name": {
+        "en": "Islamic Beliefs",
+        "ur": "اسلامی عقائد",
+        "ar": "العقيدة الإسلامية"
+      }
+    },
+    {
+      "id": "quranic-teachings",
+      "name": {
+        "en": "Quranic Teachings",
+        "ur": "قرآنی تعلیمات",
+        "ar": "التعاليم القرآنية"
+      }
+    },
+    {
+      "id": "salah",
+      "name": {
+        "en": "Salah",
+        "ur": "نماز",
+        "ar": "الصلاة"
+      }
+    },
+    {
+      "id": "sawm",
+      "name": {
+        "en": "Sawm",
+        "ur": "روزہ",
+        "ar": "الصيام"
+      }
+    },
+    {
+      "id": "sunnah-hadith",
+      "name": {
+        "en": "Sunnah & Hadith",
+        "ur": "سنت و حدیث",
+        "ar": "السنة والحديث"
+      }
+    },
+    {
+      "id": "tawhid",
+      "name": {
+        "en": "Tawhid",
+        "ur": "توحید",
+        "ar": "التوحيد"
+      }
+    },
+    {
+      "id": "hajj",
+      "name": {
+        "en": "Hajj",
+        "ur": "حج",
+        "ar": "الحج"
+      }
+    },
+    {
+      "id": "lifestyle",
+      "name": {
+        "en": "Lifestyle",
+        "ur": "اسلامی طرزِ زندگی",
+        "ar": "نمط الحياة الإسلامي"
+      }
+    },
+    {
+      "id": "history",
+      "name": {
+        "en": "History",
+        "ur": "تاریخ",
+        "ar": "التاريخ"
+      }
+    }
+  ],
+  "posts": [
+    {
+      "id": "types-of-hadith",
+      "categoryId": "sunnah-hadith",
+      "publishedAt": "2026-03-29",
+      "image": "/blog/types-of-hadith.svg",
+      "imageAlt": {
+        "en": "Types of Hadith",
+        "ur": "حدیث کی اقسام",
+        "ar": "أنواع الحديث"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Types of Hadith",
+        "ur": "حدیث کی اقسام",
+        "ar": "أنواع الحديث"
+      },
+      "excerpt": {
+        "en": "Hadith sciences classify narrations by authenticity, transmission, and textual strength.",
+        "ur": "علومِ حدیث روایات کو سند اور متن کی قوت کے لحاظ سے تقسیم کرتے ہیں۔",
+        "ar": "يصنف علم الحديث الروايات بحسب السند والمتن ودرجة الثبوت."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Common categories by authenticity include sahih, hasan, and da'if. Scholars analyze narrator reliability, chain continuity, and absence of hidden defects before accepting a report.",
+            "ur": "قبولیت کے اعتبار سے معروف درجے صحیح، حسن اور ضعیف ہیں۔ محدثین راویوں کی عدالت، سند کے اتصال اور علتِ خفیہ کی جانچ کے بعد فیصلہ کرتے ہیں۔",
+            "ar": "من أشهر الدرجات: صحيح وحسن وضعيف. ويدقق المحدثون في عدالة الرواة واتصال السند وسلامة الحديث من العلل."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Hadith are also grouped by attribution: Qudsi (meaning from Allah, wording via Prophet), Marfu', Mawquf, and Maqtu'. Learning these basics protects Muslims from misinformation.",
+            "ur": "نسبت کے اعتبار سے بھی اقسام ہیں: حدیث قدسی، مرفوع، موقوف اور مقطوع۔ یہ بنیادی علم مسلمان کو جھوٹی یا کمزور روایات سے بچاتا ہے۔",
+            "ar": "وتصنف الأحاديث أيضاً بحسب النسبة: قدسي ومرفوع وموقوف ومقطوع. ومعرفة ذلك تقي من تداول الروايات غير الثابتة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "hadith-and-quran-importance",
+      "categoryId": "sunnah-hadith",
+      "publishedAt": "2026-03-21",
+      "image": "/blog/hadith-and-quran-importance.svg",
+      "imageAlt": {
+        "en": "Importance of Hadith with the Quran",
+        "ur": "قرآن کے ساتھ حدیث کی اہمیت",
+        "ar": "أهمية الحديث مع القرآن"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 59,
+      "title": {
+        "en": "Importance of Hadith with the Quran",
+        "ur": "قرآن کے ساتھ حدیث کی اہمیت",
+        "ar": "أهمية الحديث مع القرآن"
+      },
+      "excerpt": {
+        "en": "The Quran gives foundations; Hadith explains implementation through the Prophet's teaching.",
+        "ur": "قرآن اصول دیتا ہے اور حدیث نبی ﷺ کی سنت کے ذریعے اس کی عملی تشریح کرتی ہے۔",
+        "ar": "يضع القرآن الأصول وتبيّن السنة التطبيق العملي لها."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Allah revealed the Quran and sent the Prophet to explain it in practice. Without Sunnah, key acts such as prayer units, zakah details, and Hajj procedures cannot be fully performed.",
+            "ur": "اللہ نے قرآن نازل کیا اور رسول ﷺ کو اس کی عملی وضاحت کے لیے بھیجا۔ سنت کے بغیر نماز کی رکعات، زکوٰۃ کی تفصیل اور حج کے طریقے مکمل طور پر معلوم نہیں ہوتے۔",
+            "ar": "أنزل الله القرآن وأرسل الرسول ﷺ لبيانه. فبدون السنة لا تُعرف كثير من تفاصيل الصلاة والزكاة والحج."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Authentic hadith complements, clarifies, and contextualizes revelation. Muslims therefore hold both sources together: Quran as primary text and Sunnah as its lived interpretation.",
+            "ur": "صحیح حدیث وحی کی تکمیل، توضیح اور تطبیق کرتی ہے۔ اسی لیے مسلمان دونوں کو ساتھ لیتے ہیں: قرآن اصل نص اور سنت اس کی زندہ تفسیر۔",
+            "ar": "والحديث الصحيح يكمّل الوحي ويفسره. لذلك يجمع المسلم بين القرآن أصلاً والسنة بياناً عملياً."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "وَمَا آتَاكُمُ الرَّسُولُ فَخُذُوهُ",
+          "ref": "59:7",
+          "text": {
+            "en": "\"Whatever the Messenger gives you, take it.\"",
+            "ur": "\"رسول تمہیں جو کچھ دیں وہ لے لو۔\"",
+            "ar": "«وما آتاكم الرسول فخذوه»"
+          }
+        }
+      ]
+    },
+    {
+      "id": "prophet-muhammad-miracles",
+      "categoryId": "sunnah-hadith",
+      "publishedAt": "2026-03-13",
+      "image": "/blog/prophet-muhammad-miracles.svg",
+      "imageAlt": {
+        "en": "Miracles of Prophet Muhammad",
+        "ur": "نبی اکرم ﷺ کے معجزات",
+        "ar": "معجزات النبي محمد ﷺ"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 54,
+      "title": {
+        "en": "Miracles of Prophet Muhammad",
+        "ur": "نبی اکرم ﷺ کے معجزات",
+        "ar": "معجزات النبي محمد ﷺ"
+      },
+      "excerpt": {
+        "en": "The Prophet's greatest miracle is the Quran, alongside many witnessed signs.",
+        "ur": "نبی ﷺ کا سب سے بڑا معجزہ قرآن ہے، اس کے ساتھ بہت سے محسوس معجزات بھی ثابت ہیں۔",
+        "ar": "أعظم معجزات النبي ﷺ القرآن، مع آيات حسية كثيرة ثابتة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The everlasting miracle is the Quran: unmatched in language, guidance, and preservation. In hadith literature, companions also reported signs such as water flowing from his fingers and increase of food.",
+            "ur": "دائمی معجزہ قرآن ہے: فصاحت، ہدایت اور حفاظت میں بے مثال۔ احادیث میں صحابہ نے دیگر معجزات بھی روایت کیے، جیسے انگلیوں سے پانی جاری ہونا اور کھانے میں برکت۔",
+            "ar": "المعجزة الخالدة هي القرآن ببيانه وهدايته وحفظه. وروت السنة آيات حسية كنبع الماء من بين أصابعه وتكثير الطعام."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Miracles are not entertainment; they affirm truthfulness of prophethood and call hearts to obedience. The strongest response to these signs is to follow his Sunnah in worship and character.",
+            "ur": "معجزات تماشہ نہیں بلکہ نبوت کی صداقت کی دلیل ہیں جو اطاعت کی دعوت دیتی ہیں۔ ان کا بہترین جواب یہ ہے کہ عبادت اور اخلاق میں سنتِ نبوی کی پیروی کی جائے۔",
+            "ar": "والمعجزات ليست للتسلية، بل لتصديق الرسالة ودعوة القلوب للطاعة. وأصدق الاستجابة لها اتباع سنته في العبادة والأخلاق."
+          }
+        }
+      ]
+    },
+    {
+      "id": "barzakh-in-islam",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2026-03-05",
+      "image": "/blog/barzakh-in-islam.svg",
+      "imageAlt": {
+        "en": "Barzakh in Islam",
+        "ur": "اسلام میں برزخ",
+        "ar": "البرزخ في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 23,
+      "title": {
+        "en": "Barzakh in Islam",
+        "ur": "اسلام میں برزخ",
+        "ar": "البرزخ في الإسلام"
+      },
+      "excerpt": {
+        "en": "Barzakh is the intermediate life between death and resurrection.",
+        "ur": "برزخ موت اور قیامت کے درمیان کی درمیانی زندگی ہے۔",
+        "ar": "البرزخ هو الحياة الفاصلة بين الموت والبعث."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "When a person dies, worldly deeds stop but accountability begins in a new unseen phase called barzakh. This stage includes comfort or hardship according to Allah's justice and mercy.",
+            "ur": "انسان کے وفات پانے کے بعد دنیاوی عمل بند ہو جاتا ہے مگر حساب کا مرحلہ شروع ہوتا ہے جسے برزخ کہتے ہیں۔ اس میں اللہ کے عدل و رحمت کے مطابق راحت یا تنگی ہوتی ہے۔",
+            "ar": "إذا مات الإنسان انتقل إلى عالم الغيب المسمى البرزخ، وفيه نعيم أو عذاب بحسب عدل الله ورحمته."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Belief in barzakh reminds Muslims to prepare before death through repentance, good deeds, and settling rights. We pray for the deceased because dua and charity can still benefit them by Allah's permission.",
+            "ur": "برزخ پر ایمان انسان کو موت سے پہلے توبہ، نیک اعمال اور حقوق کی ادائیگی کی طرف متوجہ کرتا ہے۔ میت کے لیے دعا اور صدقہ اسی لیے اہم ہیں کہ اللہ کے اذن سے نفع پہنچتا ہے۔",
+            "ar": "والإيمان بالبرزخ يدفع إلى الاستعداد قبل الموت بالتوبة والعمل الصالح ورد المظالم. والدعاء والصدقة عن الميت من أعظم ما ينفعه بإذن الله."
+          }
+        }
+      ]
+    },
+    {
+      "id": "kaffarah-in-islam",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2026-02-25",
+      "image": "/blog/kaffarah-in-islam.svg",
+      "imageAlt": {
+        "en": "Kaffarah in Islam",
+        "ur": "اسلام میں کفارہ",
+        "ar": "الكفارة في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 5,
+      "title": {
+        "en": "Kaffarah in Islam",
+        "ur": "اسلام میں کفارہ",
+        "ar": "الكفارة في الإسلام"
+      },
+      "excerpt": {
+        "en": "Kaffarah is an expiation prescribed for specific violations with mercy and discipline.",
+        "ur": "کفارہ بعض مخصوص شرعی خلاف ورزیوں کا تدارک ہے جس میں رحمت اور تربیت دونوں ہیں۔",
+        "ar": "الكفارة جبر شرعي لبعض المخالفات، يجمع بين الرحمة والتأديب."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Islamic law prescribes kaffarah for certain acts, such as broken oaths or specific fasting violations, with defined options like feeding the poor, clothing, or fasting. It teaches accountability with a path to repair.",
+            "ur": "شریعت میں بعض معاملات پر کفارہ مقرر ہے، جیسے قسم توڑنا یا بعض روزے کی خلاف ورزیاں۔ اس کے طریقوں میں مسکینوں کو کھانا کھلانا، لباس دینا یا روزہ رکھنا شامل ہے۔",
+            "ar": "شرعت الكفارة في مسائل محددة كالأيمان وبعض المخالفات، مع خيارات كالإطعام أو الكسوة أو الصيام. وهي باب إصلاح مع تحمل المسؤولية."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Kaffarah should be learned from qualified scholars because details differ by case and madhhab. Its spirit is not punishment alone, but purification, restitution, and renewed obedience.",
+            "ur": "کفارہ کے احکام مسئلہ اور فقہی مسلک کے لحاظ سے مختلف ہو سکتے ہیں، اس لیے اہلِ علم سے رہنمائی ضروری ہے۔ اس کا مقصد صرف سزا نہیں بلکہ تطہیر اور اصلاح ہے۔",
+            "ar": "تفاصيل الكفارة تختلف باختلاف المسألة والمذهب، لذا يلزم الرجوع لأهل العلم. ومقصدها التطهير وجبر الخلل لا العقوبة المجردة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "sadaqah-jariyah",
+      "categoryId": "lifestyle",
+      "publishedAt": "2026-02-17",
+      "image": "/blog/sadaqah-jariyah.svg",
+      "imageAlt": {
+        "en": "What Is Sadaqah Jariyah?",
+        "ur": "صدقہ جاریہ کیا ہے؟",
+        "ar": "ما هي الصدقة الجارية؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "What Is Sadaqah Jariyah?",
+        "ur": "صدقہ جاریہ کیا ہے؟",
+        "ar": "ما هي الصدقة الجارية؟"
+      },
+      "excerpt": {
+        "en": "Sadaqah jariyah is continuous charity that keeps benefiting people over time.",
+        "ur": "صدقہ جاریہ وہ خیر ہے جس کا نفع مسلسل جاری رہے۔",
+        "ar": "الصدقة الجارية هي إحسان يستمر نفعه مع الزمن."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Examples include building wells, supporting Quran education, planting beneficial trees, or funding medical access. As long as people continue to benefit, the reward continues by Allah's grace.",
+            "ur": "اس کی مثالیں: کنواں بنانا، دینی تعلیم میں تعاون، مفید درخت لگانا یا علاج کے وسائل فراہم کرنا۔ جب تک لوگوں کو فائدہ پہنچتا رہے، اجر جاری رہتا ہے۔",
+            "ar": "من صورها حفر الآبار ودعم تعليم القرآن وغرس الأشجار النافعة وتمويل العلاج. ويستمر الأجر ما دام النفع مستمراً."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Sadaqah jariyah is a legacy mindset: think beyond immediate giving to sustainable benefit. Even small recurring acts can become large in the scale through sincerity and planning.",
+            "ur": "صدقہ جاریہ ہمیں دور رس سوچ سکھاتا ہے: وقتی خیر سے بڑھ کر پائیدار نفع کا منصوبہ بناؤ۔ چھوٹے مگر مستقل کام بھی اخلاص کے ساتھ میزان میں بہت بڑے ہو جاتے ہیں۔",
+            "ar": "الصدقة الجارية تربي على أثر طويل المدى لا عطاء لحظي فقط. والعمل الصغير المتقن قد يعظم في الميزان بالإخلاص وحسن التدبير."
+          }
+        }
+      ]
+    },
+    {
+      "id": "rights-of-children-islam",
+      "categoryId": "lifestyle",
+      "publishedAt": "2026-02-09",
+      "image": "/blog/rights-of-children-islam.svg",
+      "imageAlt": {
+        "en": "Rights of Children in Islam",
+        "ur": "اسلام میں بچوں کے حقوق",
+        "ar": "حقوق الطفل في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 31,
+      "title": {
+        "en": "Rights of Children in Islam",
+        "ur": "اسلام میں بچوں کے حقوق",
+        "ar": "حقوق الطفل في الإسلام"
+      },
+      "excerpt": {
+        "en": "Children have rights to care, naming, education, mercy, and moral nurturing in Islam.",
+        "ur": "اسلام میں بچوں کو نگہداشت، اچھا نام، تعلیم، شفقت اور اخلاقی تربیت کے حقوق حاصل ہیں۔",
+        "ar": "للطفل في الإسلام حقوق الرعاية والتسمية الحسنة والتعليم والرحمة والتربية."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "From birth, Islam emphasizes dignity for children: kind naming, breastfeeding support, financial care, and lawful guardianship. Parents are trustees, not owners, responsible for safety and compassion.",
+            "ur": "اسلام پیدائش سے ہی بچے کی حرمت سکھاتا ہے: اچھا نام، دودھ پلانے کا حق، مالی کفالت اور شرعی سرپرستی۔ والدین مالک نہیں بلکہ امانت دار ہیں۔",
+            "ar": "يؤكد الإسلام كرامة الطفل منذ ولادته: التسمية الحسنة والرعاية والنفقة والحضانة الشرعية. والوالدان أمناء لا ملاك."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Emotional wellbeing is also part of Sunnah: affection, listening, fairness among siblings, and disciplined guidance without humiliation. Healthy tarbiyah builds believers and responsible citizens.",
+            "ur": "جذباتی آسودگی بھی سنت کا حصہ ہے: محبت، گفتگو، بہن بھائیوں میں انصاف، اور اصلاح کے ساتھ عزت کا خیال۔ متوازن تربیت سے باایمان اور ذمہ دار نسل تیار ہوتی ہے۔",
+            "ar": "ومن هدي النبوة الرحمة العاطفية: التقبيل والإنصات والعدل بين الأبناء والتأديب بلا إهانة. والتربية المتوازنة تصنع جيلاً صالحاً مسؤولاً."
+          }
+        }
+      ]
+    },
+    {
+      "id": "rights-of-women-islam",
+      "categoryId": "lifestyle",
+      "publishedAt": "2026-02-01",
+      "image": "/blog/rights-of-women-islam.svg",
+      "imageAlt": {
+        "en": "Rights of Women in Islam",
+        "ur": "اسلام میں خواتین کے حقوق",
+        "ar": "حقوق المرأة في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 4,
+      "title": {
+        "en": "Rights of Women in Islam",
+        "ur": "اسلام میں خواتین کے حقوق",
+        "ar": "حقوق المرأة في الإسلام"
+      },
+      "excerpt": {
+        "en": "Islam granted women legal, spiritual, and economic rights with dignity and responsibility.",
+        "ur": "اسلام نے خواتین کو قانونی، روحانی اور معاشی حقوق باعزت انداز میں عطا کیے۔",
+        "ar": "أقر الإسلام للمرأة حقوقاً شرعية وروحية واقتصادية بكرامة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Islam recognizes women as full moral agents before Allah, equal in spiritual accountability and reward. They have rights in marriage consent, mahr, inheritance, property ownership, education, and protection from abuse.",
+            "ur": "اسلام عورت کو اللہ کے سامنے مکمل اخلاقی شخصیت مانتا ہے، اجر و حساب میں برابر۔ نکاح میں رضامندی، مہر، وراثت، جائیداد، تعلیم اور تحفظ کے حقوق واضح کیے گئے ہیں۔",
+            "ar": "جعل الإسلام المرأة مكلفة كاملة، مساوية في الثواب والعقاب. وأثبت لها حقوق الرضا في الزواج والمهر والميراث والتملك والتعليم وصيانة الكرامة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Abuses done in some cultures should not be confused with Islam itself. Restoring women's rights requires knowledge, justice in family systems, and prophetic ethics in daily behavior.",
+            "ur": "بعض ثقافتی زیادتیوں کو اسلام پر منطبق نہیں کیا جا سکتا۔ خواتین کے حقوق کی بحالی کے لیے صحیح علم، خاندانی عدل اور اخلاقِ نبوی کی عملی پیروی ضروری ہے۔",
+            "ar": "لا يجوز خلط الممارسات الثقافية الظالمة بتعاليم الإسلام. واستعادة حقوق المرأة تحتاج علماً وعدلاً أسرياً وتطبيقاً لأخلاق النبوة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "best-deeds-dhul-hijjah",
+      "categoryId": "hajj",
+      "publishedAt": "2026-01-24",
+      "image": "/blog/best-deeds-dhul-hijjah.svg",
+      "imageAlt": {
+        "en": "Best Deeds in Dhul Hijjah",
+        "ur": "ذوالحجہ میں بہترین اعمال",
+        "ar": "أفضل الأعمال في ذي الحجة"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 22,
+      "title": {
+        "en": "Best Deeds in Dhul Hijjah",
+        "ur": "ذوالحجہ میں بہترین اعمال",
+        "ar": "أفضل الأعمال في ذي الحجة"
+      },
+      "excerpt": {
+        "en": "The first ten days of Dhul Hijjah are among the most virtuous days of the year.",
+        "ur": "ذوالحجہ کے پہلے دس دن سال کے سب سے افضل ایام میں شمار ہوتے ہیں۔",
+        "ar": "العشر الأوائل من ذي الحجة من أفضل أيام السنة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Prophet (peace be upon him) praised righteous deeds in the first ten days of Dhul Hijjah. Recommended acts include abundant dhikr, Quran, charity, family ties, and extra prayers.",
+            "ur": "نبی ﷺ نے ذوالحجہ کے ابتدائی دس دنوں میں نیک اعمال کی خاص فضیلت بیان فرمائی۔ ان دنوں میں ذکر، تلاوت، صدقہ، صلہ رحمی اور نوافل بڑھانا مستحب ہے۔",
+            "ar": "بيّن النبي ﷺ فضل العمل الصالح في العشر الأول من ذي الحجة. ويستحب فيها الإكثار من الذكر والقرآن والصدقة والنوافل وصلة الرحم."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "For non-pilgrims, fasting on the Day of Arafah is highly recommended and expiates sins of two years by Allah's mercy. These days train hearts for sacrifice and gratitude.",
+            "ur": "غیر حاجیوں کے لیے یومِ عرفہ کا روزہ بہت فضیلت رکھتا ہے اور اللہ کے فضل سے دو سال کے گناہوں کا کفارہ بنتا ہے۔ یہ دن دل کو قربانی اور شکر کی تربیت دیتے ہیں۔",
+            "ar": "ويستحب لغير الحاج صيام يوم عرفة، وقد ورد أنه يكفّر سنتين بإذن الله. فهي أيام تربية على البذل والشكر."
+          }
+        }
+      ]
+    },
+    {
+      "id": "what-is-muharram",
+      "categoryId": "history",
+      "publishedAt": "2026-01-16",
+      "image": "/blog/what-is-muharram.svg",
+      "imageAlt": {
+        "en": "What Is Muharram?",
+        "ur": "محرم کیا ہے؟",
+        "ar": "ما هو محرم؟"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 9,
+      "title": {
+        "en": "What Is Muharram?",
+        "ur": "محرم کیا ہے؟",
+        "ar": "ما هو محرم؟"
+      },
+      "excerpt": {
+        "en": "Muharram is one of the four sacred months and marks the opening of the Hijri year.",
+        "ur": "محرم چار حرمت والے مہینوں میں سے ہے اور ہجری سال کا آغاز ہے۔",
+        "ar": "محرم أحد الأشهر الحرم وبداية السنة الهجرية."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Muharram carries special sanctity in Islam as one of the sacred months mentioned in the Quran. Sin and oppression are especially blameworthy in these months, while good deeds carry greater spiritual weight.",
+            "ur": "محرم قرآن میں مذکور حرمت والے مہینوں میں شامل ہے۔ ان مہینوں میں گناہ اور ظلم کی قباحت زیادہ ہے، جبکہ نیک اعمال کی اہمیت بڑھ جاتی ہے۔",
+            "ar": "محرم من الأشهر الحرم التي عظّمها الله. ويشتد قبح المعصية والظلم فيها، ويعظم أجر الطاعات."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The 10th of Muharram (Ashura) is especially significant, with fasting encouraged in gratitude for Allah's help to Musa. Muslims begin the year with repentance, reflection, and resolve.",
+            "ur": "دس محرم (یومِ عاشورا) خاص اہمیت رکھتا ہے اور اس دن روزہ رکھنا مستحب ہے، شکر کے طور پر کہ اللہ نے موسیٰ علیہ السلام کو نجات دی۔ مسلمان سال کی ابتدا توبہ اور عزم سے کرتے ہیں۔",
+            "ar": "ويوم عاشوراء له منزلة عظيمة، ويستحب صيامه شكراً لنجاة موسى عليه السلام. ويستقبل المسلمون العام بالتوبة والعزم على الطاعة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "islamic-birth-date",
+      "categoryId": "history",
+      "publishedAt": "2026-01-08",
+      "image": "/blog/islamic-birth-date.svg",
+      "imageAlt": {
+        "en": "Recording Birth Dates in Islamic Calendar",
+        "ur": "پیدائش کی اسلامی تاریخ لکھنے کی اہمیت",
+        "ar": "تسجيل تاريخ الميلاد بالهجري"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Recording Birth Dates in Islamic Calendar",
+        "ur": "پیدائش کی اسلامی تاریخ لکھنے کی اہمیت",
+        "ar": "تسجيل تاريخ الميلاد بالهجري"
+      },
+      "excerpt": {
+        "en": "Using Hijri birth dates helps preserve Muslim calendar literacy and identity.",
+        "ur": "پیدائش کی ہجری تاریخ محفوظ کرنے سے اسلامی تقویم کا شعور اور شناخت مضبوط ہوتی ہے۔",
+        "ar": "حفظ تاريخ الميلاد الهجري يعزز الوعي بالتقويم الإسلامي والهوية."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Most official documents use Gregorian dates, but Muslim families can also preserve Hijri dates for births and key events. This practice keeps children connected to Islamic time consciousness.",
+            "ur": "اگرچہ سرکاری ریکارڈ عموماً عیسوی تاریخ پر ہوتے ہیں، مگر مسلم خاندان پیدائش اور اہم مواقع کی ہجری تاریخ بھی محفوظ کر سکتے ہیں۔ اس سے نئی نسل اسلامی تقویم سے جڑی رہتی ہے۔",
+            "ar": "رغم اعتماد المعاملات الرسمية على الميلادي، يمكن للأسرة المسلمة حفظ التاريخ الهجري للميلاد والمناسبات المهمة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Simple tools and apps can convert dates accurately, but families should verify with trusted sources. Blending practical civic needs with Islamic memory creates balanced identity.",
+            "ur": "تاریخ تبدیل کرنے کے لیے ایپس اور کیلکولیٹر دستیاب ہیں، مگر معتبر ذرائع سے تصدیق بہتر ہے۔ شہری ضرورت اور دینی یادداشت کو ساتھ رکھنا متوازن شناخت بناتا ہے۔",
+            "ar": "تتوفر أدوات دقيقة للتحويل بين التاريخين مع أهمية التثبت. والجمع بين متطلبات الواقع وحفظ الذاكرة الإسلامية يحقق توازناً محموداً."
+          }
+        }
+      ]
+    },
+    {
+      "id": "islamic-lunar-calendar",
+      "categoryId": "history",
+      "publishedAt": "2025-12-31",
+      "image": "/blog/islamic-lunar-calendar.svg",
+      "imageAlt": {
+        "en": "Understanding the Islamic Lunar Calendar",
+        "ur": "اسلامی قمری کیلنڈر کی سمجھ",
+        "ar": "فهم التقويم القمري الإسلامي"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 9,
+      "title": {
+        "en": "Understanding the Islamic Lunar Calendar",
+        "ur": "اسلامی قمری کیلنڈر کی سمجھ",
+        "ar": "فهم التقويم القمري الإسلامي"
+      },
+      "excerpt": {
+        "en": "The Islamic calendar runs on lunar months of 29 or 30 days across 12 months.",
+        "ur": "اسلامی کیلنڈر 12 قمری مہینوں پر مشتمل ہے، ہر مہینہ 29 یا 30 دن کا ہوتا ہے۔",
+        "ar": "يقوم التقويم الإسلامي على 12 شهراً قمرياً، كل شهر 29 أو 30 يوماً."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Unlike solar calendars, the Hijri year is shorter by about eleven days. This causes Ramadan and Hajj seasons to rotate through the year, allowing worship in varying climates and circumstances.",
+            "ur": "شمسی کیلنڈر کے برعکس ہجری سال تقریباً گیارہ دن کم ہوتا ہے، اسی لیے رمضان اور حج کے موسم ہر سال آگے آتے ہیں اور مختلف حالات میں عبادت کا موقع ملتا ہے۔",
+            "ar": "السنة الهجرية أقصر من الشمسية بنحو أحد عشر يوماً، لذلك يدور رمضان والحج على فصول العام المختلفة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The lunar cycle keeps Muslims closely connected to natural signs and communal timing. Learning Hijri months helps families plan worship, charity, and historical remembrance with greater awareness.",
+            "ur": "قمری نظام مسلمانوں کو فطری نشانیوں اور اجتماعی عبادت کے اوقات سے جوڑتا ہے۔ ہجری مہینوں کا شعور خاندان کو عبادات، صدقات اور تاریخی مواقع کی بہتر تیاری دیتا ہے۔",
+            "ar": "يربط النظام القمري المسلمين بآيات الكون ومواقيت الجماعة. وفهم شهوره يعين الأسر على تنظيم العبادة والصدقة واستحضار المناسبات الإيمانية."
+          }
+        }
+      ]
+    },
+    {
+      "id": "hijri-calendar-origin",
+      "categoryId": "history",
+      "publishedAt": "2025-12-23",
+      "image": "/blog/hijri-calendar-origin.svg",
+      "imageAlt": {
+        "en": "Origin of the Hijri Calendar",
+        "ur": "ہجری تقویم کی ابتدا",
+        "ar": "أصل التقويم الهجري"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Origin of the Hijri Calendar",
+        "ur": "ہجری تقویم کی ابتدا",
+        "ar": "أصل التقويم الهجري"
+      },
+      "excerpt": {
+        "en": "The Hijri calendar was formally organized under Caliph Umar using the migration as epoch.",
+        "ur": "ہجری تقویم کو باضابطہ حضرت عمر کے دور میں مرتب کیا گیا اور ہجرت کو آغاز بنایا گیا۔",
+        "ar": "نُظّم التقويم الهجري رسمياً في عهد عمر وجُعلت الهجرة مبدأه."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "In the caliphate of Umar ibn al-Khattab, administrative correspondence needed a unified dating system. The companions agreed to count years from the Hijrah, which marked the rise of the Muslim community.",
+            "ur": "حضرت عمر فاروق رضی اللہ عنہ کے دور میں سرکاری معاملات کے لیے ایک واضح تاریخ درکار تھی۔ صحابہ نے متفق ہو کر ہجرت نبوی کو سنِ ہجری کا نقطۂ آغاز بنایا۔",
+            "ar": "في عهد عمر رضي الله عنه احتيج إلى تأريخ موحد للمعاملات، فاتفق الصحابة على جعل الهجرة مبدأ للتقويم."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Muharram was chosen as the first month due to established Arab usage and practical governance rhythm. The Hijri calendar keeps Muslim memory connected to sacrifice, migration, and mission.",
+            "ur": "محرم کو پہلا مہینہ مقرر کیا گیا جو عربی معمول اور انتظامی ترتیب سے موافق تھا۔ ہجری تقویم مسلمانوں کو ہجرت، قربانی اور دینی مقصد کی یاد سے جوڑے رکھتی ہے۔",
+            "ar": "واختير المحرم أولاً للشهور موافقةً للاستعمال المعروف آنذاك. ويبقي التقويم الهجري الوعي الإسلامي متصلاً بمعاني الهجرة والجهاد الدعوي."
+          }
+        }
+      ]
+    },
+    {
+      "id": "moon-sighting-islamic-dates",
+      "categoryId": "history",
+      "publishedAt": "2025-12-15",
+      "image": "/blog/moon-sighting-islamic-dates.svg",
+      "imageAlt": {
+        "en": "Moon Sighting and Islamic Dates",
+        "ur": "چاند دیکھنا اور اسلامی تاریخیں",
+        "ar": "رؤية الهلال والتواريخ الإسلامية"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 2,
+      "title": {
+        "en": "Moon Sighting and Islamic Dates",
+        "ur": "چاند دیکھنا اور اسلامی تاریخیں",
+        "ar": "رؤية الهلال والتواريخ الإسلامية"
+      },
+      "excerpt": {
+        "en": "Islamic months begin with lunar observation or valid astronomical-administrative methods.",
+        "ur": "اسلامی مہینے چاند دیکھنے یا معتبر شرعی و انتظامی طریقوں سے شروع ہوتے ہیں۔",
+        "ar": "تبدأ الشهور الهجرية برؤية الهلال أو بطرق معتبرة تنظيماً وفق الاجتهاد."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Islamic calendar is lunar, so month starts are tied to the crescent. Communities historically relied on local sighting, while modern fiqh councils discuss broader criteria to reduce confusion.",
+            "ur": "اسلامی تقویم قمری ہے، اس لیے مہینے کا آغاز ہلال سے وابستہ ہے۔ ماضی میں مقامی رویت پر عمل ہوتا رہا، جبکہ آج فقہی مجالس نظم و اتحاد کے لیے وسیع معیار بھی زیرِ بحث لاتی ہیں۔",
+            "ar": "التقويم الهجري قمري، وبداية الشهر مرتبطة بالهلال. واعتمد الناس قديماً الرؤية المحلية، وتبحث المجامع المعاصرة عن معايير أوسع لضبط المواقيت."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Differences should be handled with adab, not hostility. Whether one follows local authority or accepted regional decisions, unity of hearts and sincerity in worship remain essential.",
+            "ur": "اختلاف کی صورت میں ادب لازم ہے، نزاع نہیں۔ مقامی اعلان ہو یا معتبر اجتماعی فیصلہ، اصل یہ ہے کہ عبادت اخلاص سے ہو اور دلوں میں وحدت قائم رہے۔",
+            "ar": "ويجب أن يُدار الخلاف بأدب لا خصومة. سواء اتُّبع الإعلان المحلي أو القرار الجماعي المعتبر، فالمقصود إخلاص العبادة ووحدة القلوب."
+          }
+        }
+      ]
+    },
+    {
+      "id": "imam-hussain-karbala",
+      "categoryId": "history",
+      "publishedAt": "2025-12-07",
+      "image": "/blog/imam-hussain-karbala.svg",
+      "imageAlt": {
+        "en": "Imam Hussain and Karbala",
+        "ur": "امام حسین اور کربلا",
+        "ar": "الإمام الحسين وكربلاء"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Imam Hussain and Karbala",
+        "ur": "امام حسین اور کربلا",
+        "ar": "الإمام الحسين وكربلاء"
+      },
+      "excerpt": {
+        "en": "Karbala symbolizes sacrifice for justice, principle, and moral courage in Muslim memory.",
+        "ur": "کربلا مسلم تاریخ میں حق، اصول اور اخلاقی جرات کے لیے قربانی کی علامت ہے۔",
+        "ar": "تمثل كربلاء رمز التضحية من أجل الحق والمبدأ في الوعي الإسلامي."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Imam Hussain, grandson of the Prophet (peace be upon him), refused to legitimize oppressive rule and stood for moral accountability. In 61 AH at Karbala, he and his small group were martyred after immense hardship.",
+            "ur": "امام حسین رضی اللہ عنہ، نبی ﷺ کے نواسے، نے جابر اقتدار کی توثیق سے انکار کیا اور اصولی موقف اختیار کیا۔ 61 ہجری میں کربلا میں شدید مصائب کے بعد آپ اور آپ کے رفقا شہید ہوئے۔",
+            "ar": "وقف الإمام الحسين سبط النبي ﷺ موقفاً أخلاقياً رافضاً للظلم. وفي كربلاء سنة 61هـ استشهد مع قلة من أهل بيته وأصحابه."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Muslims remember Karbala as a call to integrity, patience, and speaking truth with wisdom. Respectful remembrance should unite hearts around justice and prophetic ethics, not division.",
+            "ur": "کربلا کا پیغام دیانت، صبر اور حکمت کے ساتھ حق گوئی ہے۔ اس واقعے کی یاد ہمیں عدل اور اخلاقِ نبوی پر جمع کرے، تفرقہ نہ بڑھائے۔",
+            "ar": "وتبقى كربلاء درساً في الثبات والصبر وصدق الكلمة. والواجب أن تكون ذكراها باب وحدة على العدل والأخلاق النبوية لا باب نزاع."
+          }
+        }
+      ]
+    },
+    {
+      "id": "story-of-yusuf",
+      "categoryId": "quranic-stories",
+      "publishedAt": "2025-12-01",
+      "image": "/blog/yusuf.svg",
+      "imageAlt": {
+        "en": "Illustration for the story of Prophet Yusuf",
+        "ur": "حضرت یوسف علیہ السلام کی کہانی",
+        "ar": "قصة النبي يوسف"
+      },
+      "readMinutes": 6,
+      "relatedSurah": 12,
+      "title": {
+        "en": "The Story of Prophet Yusuf (AS): Patience Through Every Trial",
+        "ur": "حضرت یوسف علیہ السلام: ہر آزمائش میں صبر",
+        "ar": "قصة النبي يوسف: الصبر في كل ابتلاء"
+      },
+      "excerpt": {
+        "en": "Betrayed by brothers, sold into slavery, and imprisoned unjustly — yet Yusuf (AS) never lost trust in Allah. Surah Yusuf is called the best of stories.",
+        "ur": "بھائیوں کی طرف سے دھوکہ، غلامی، اور ناحق قید — پھر بھی یوسف علیہ السلام نے اللہ پر بھروسہ نہیں چھوڑا۔",
+        "ar": "خانه إخوته وباعوه عبداً وسجن ظلماً — ولم يفقد يوسف الثقة بالله قط."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Quran dedicates an entire surah — Surah Yusuf (12) — to one narrative, calling it \"the best of stories\" (ahsan al-qasas). Prophet Yusuf (AS) was the beloved son of Ya'qub (AS). Out of jealousy, his brothers threw him into a well and told their father he had been killed by a wolf.",
+            "ur": "قرآن نے پوری ایک سورہ — سورہ یوسف — ایک واقعے کے لیے وقف کی ہے اور اسے \"کہانیوں میں سب سے بہتر\" قرار دیا۔ حضرت یوسف علیہ السلام حضرت یعقوب علیہ السلام کے پیارے بیٹے تھے۔ حسد کی وجہ سے بھائیوں نے انہیں کنویں میں پھینک دیا۔",
+            "ar": "خصّ القرآن سورة كاملة — سورة يوسف — لقصة واحدة، وسمّاها «أحسن القصص». كان يوسف ابن يعقوب الحبيب، فألقاه إخوته في البئر حسداً."
+          }
+        },
+        {
+          "type": "heading",
+          "text": {
+            "en": "From the well to the palace",
+            "ur": "کنویں سے محل تک",
+            "ar": "من البئر إلى القصر"
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "A passing caravan found Yusuf and sold him in Egypt. He served in the house of Al-'Aziz, where he was tempted by the wife of his master but chose prison over sin — saying, \"My Lord, prison is dearer to me than what they invite me to.\" (12:33). Allah granted him wisdom, and years later he interpreted the king's dream, was released, and rose to manage Egypt's storehouses during famine.",
+            "ur": "ایک قافلے نے یوسف کو مصر میں بیچ دیا۔ عزیز کے گھر میں انہوں نے گناہ کی دعوت کو رد کیا اور کہا: \"اے میرے رب! مجھے قید گھر ان کی دعوت سے زیادہ پسند ہے۔\" اللہ نے انہیں حکمت دی اور بعد میں بادشاہ کے خواب کی تعبیر سے آزاد ہوئے۔",
+            "ar": "وجدهت قافلة فباعوه في مصر. رفض فتنة امرأة العزيز واختار السجن، ثم آتاه الله الحكم وفسر رؤيا الملك وولّاه خزائن الأرض."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "إِنَّهُ مَن يَتَّقِ وَيَصْبِرْ فَإِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ",
+          "ref": "12:90",
+          "text": {
+            "en": "\"Indeed, whoever fears Allah and is patient — then indeed, Allah does not allow to be lost the reward of those who do good.\"",
+            "ur": "\"جو اللہ سے ڈرتا اور صبر کرتا ہے تو اللہ نیکوکاروں کا اجر ضائع نہیں کرتا۔\"",
+            "ar": "«إن من يتق ويصبر فإن الله لا يضيع أجر المحسنين»"
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "When famine struck, his brothers came to Egypt seeking grain — not recognizing him. Yusuf eventually revealed himself, forgave them, and the family was reunited. Ya'qub's sight was restored when the shirt Yusuf had sent reached him, just as Yusuf had promised. The story teaches that every hardship, when borne with taqwa and sabr, becomes a path to honor.",
+            "ur": "قحط پڑا تو بھائی اناج لینے آئے — انہیں پہچانا نہیں۔ یوسف نے خود کو ظاہر کیا، معاف کیا، اور خاندان مل گیا۔ یعقوب کی بینائی لوٹ آئی جب قمیض پہنچی۔ یہ کہانی سکھاتی ہے کہ تقویٰ اور صبر ہر مشکل کو عزت کا راستہ بنا دیتے ہیں۔",
+            "ar": "جاء إخوته طلباً للغلّ فعفا عنهم وأظهر نفسه، وعادت البصيرة إلى يعقوب بقميص يوسف. تعلّمنا أن كل ابتلاء مع التقوى والصبر طريق إلى الكرامة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "honor-parents-islam",
+      "categoryId": "lifestyle",
+      "publishedAt": "2025-11-29",
+      "image": "/blog/honor-parents-islam.svg",
+      "imageAlt": {
+        "en": "Honoring Parents in Islam",
+        "ur": "اسلام میں والدین کا احترام",
+        "ar": "بر الوالدين في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 17,
+      "title": {
+        "en": "Honoring Parents in Islam",
+        "ur": "اسلام میں والدین کا احترام",
+        "ar": "بر الوالدين في الإسلام"
+      },
+      "excerpt": {
+        "en": "The Quran places kindness to parents immediately after worship of Allah.",
+        "ur": "قرآن نے اللہ کی عبادت کے بعد فوراً والدین کے ساتھ حسنِ سلوک کا حکم دیا۔",
+        "ar": "جعل القرآن الإحسان للوالدين بعد توحيد الله مباشرة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Serving parents is one of the highest acts of worship after tawhid. The Quran commands gentle speech, humility, and gratitude for their sacrifice, especially in old age.",
+            "ur": "والدین کی خدمت توحید کے بعد بڑی عبادات میں سے ہے۔ قرآن نرم گفتگو، عاجزی اور خصوصاً بڑھاپے میں ان کے احسانات کا اعتراف سکھاتا ہے۔",
+            "ar": "بر الوالدين من أعظم القربات بعد التوحيد. ويأمر القرآن بالقول الكريم وخفض الجناح والرحمة، خصوصاً عند الكِبَر."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Even where parents disagree with a child's faith choices, Islam requires respectful companionship without obeying sin. Daily kindness, dua, and practical help are lasting forms of birr.",
+            "ur": "اگر عقیدے میں اختلاف بھی ہو تو اسلام گناہ میں اطاعت کے بغیر باادب ساتھ رہنے کا حکم دیتا ہے۔ روزمرہ خدمت، دعا اور مدد ہی حقیقی برّ ہے۔",
+            "ar": "حتى مع الاختلاف الديني، يأمر الإسلام بصحبتهما بالمعروف دون طاعة في المعصية. والدعاء والخدمة اليومية من أصدق صور البر."
+          }
+        }
+      ]
+    },
+    {
+      "id": "prayer-mat-origin",
+      "categoryId": "history",
+      "publishedAt": "2025-11-21",
+      "image": "/blog/prayer-mat-origin.svg",
+      "imageAlt": {
+        "en": "Origin of the Prayer Mat",
+        "ur": "جائے نماز کی تاریخ",
+        "ar": "أصل سجادة الصلاة"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Origin of the Prayer Mat",
+        "ur": "جائے نماز کی تاریخ",
+        "ar": "أصل سجادة الصلاة"
+      },
+      "excerpt": {
+        "en": "Prayer mats are cultural tools for cleanliness and comfort, not a condition for valid prayer.",
+        "ur": "جائے نماز صفائی اور سہولت کا ثقافتی وسیلہ ہے، نماز کی شرط نہیں۔",
+        "ar": "سجادة الصلاة وسيلة للنظافة والراحة وليست شرطاً لصحة الصلاة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "In early Islam, people prayed directly on clean earth, sand, or simple coverings. Over time, woven mats became common in different regions to improve cleanliness and comfort, especially in homes and masjids.",
+            "ur": "ابتدائی دورِ اسلام میں لوگ صاف زمین یا سادہ کپڑے پر نماز پڑھتے تھے۔ وقت کے ساتھ مختلف علاقوں میں صفائی اور آسانی کے لیے بُنی ہوئی جائے نماز عام ہو گئی۔",
+            "ar": "في صدر الإسلام صلّى المسلمون على الأرض الطاهرة أو ما تيسر من البسط. ثم شاعت السجادات عبر العصور للنظافة والراحة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The key requirement in fiqh is purity of place, not owning a specific mat. A prayer mat is beneficial etiquette but should never become a barrier to praying anywhere permissible.",
+            "ur": "فقہ کی اصل شرط جگہ کی پاکی ہے، مخصوص مصلّیٰ نہیں۔ جائے نماز مفید آداب میں سے ہے، مگر اسے نماز میں رکاوٹ نہیں بنانا چاہیے۔",
+            "ar": "الشرط الشرعي هو طهارة الموضع لا وجود سجادة معينة. فهي أدب حسن، لكن لا ينبغي أن تمنع من الصلاة في كل مكان جائز."
+          }
+        }
+      ]
+    },
+    {
+      "id": "people-of-the-cave",
+      "categoryId": "quranic-stories",
+      "publishedAt": "2025-11-20",
+      "image": "/blog/kahf.svg",
+      "imageAlt": {
+        "en": "People of the Cave illustration",
+        "ur": "اصحاب کہف",
+        "ar": "أصحاب الكهف"
+      },
+      "readMinutes": 5,
+      "relatedSurah": 18,
+      "title": {
+        "en": "The People of the Cave: Faith That Outlasted an Empire",
+        "ur": "اصحاب کہف: ایمان جو سلطنت سے بڑھ کر رہا",
+        "ar": "أصحاب الكهف: إيمان بقي بعد الإمبراطورية"
+      },
+      "excerpt": {
+        "en": "Young believers fled a tyrant king and slept in a cave for centuries. Allah preserved them as a sign for all time — recited every Friday in Surah Al-Kahf.",
+        "ur": "نوجوان مومن ظالم بادشاہ سے بھاگے اور غار میں صدیوں سوئے رہے۔ اللہ نے انہیں ہمیشہ کی نشانی بنا دیا۔",
+        "ar": "هرب شباب مؤمنون من ملك جبار فناموا في كهف قروناً، فجعلهم الله آية إلى يوم القيامة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Surah Al-Kahf opens with the story of young men who lived under a ruler who demanded worship besides Allah. They refused idolatry, declared faith in the One God, and withdrew to a cave for protection. Their number is not fixed in the Quran — tradition mentions seven, with a dog at the entrance.",
+            "ur": "سورہ کہف کا آغاز ان نوجوانوں سے ہے جو ایک ایسے حکمران کے زیر اقتدار تھے جو اللہ کے سوا عبادت چاہتا تھا۔ انہوں نے شرک سے انکار کیا اور غار میں پناہ لی۔",
+            "ar": "افتتحت سورة الكهف بقصة فتية رفضوا عبادة غير الله ولجأوا إلى كهف، وذكر القرآن كلباً عند مدخلهم."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "وَنُقَلِّبُهُمْ ذَاتَ الْيَمِينِ وَذَاتَ الشِّمَالِ",
+          "ref": "18:18",
+          "text": {
+            "en": "\"And We turned them to the right and to the left, while their dog stretched his forelegs at the entrance.\"",
+            "ur": "\"اور ہم انہیں دائیں بائیں پھیرتے رہے، اور ان کا کتا دہلیز پر اگلے پاؤں پھیلائے ہوئے تھا۔\"",
+            "ar": "«ونقلّبهم ذات اليمين وذات الشمال وكلبهم باسط ذراعيه بالوصيد»"
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Allah caused them to sleep for 309 years (or the equivalent in lunar reckoning). When they awoke, they thought they had slept only a day. One of them went to buy food with old coins — and the townspeople were astonished. The story reminds believers that standing for truth may require sacrifice, but Allah protects those who stand firm.",
+            "ur": "اللہ نے انہیں تین سو نو سال سونایا۔ جب جاگے تو سمجھے ایک دن سوئے۔ ایک نے پرانی سکوں سے کھانا خریدا — لوگ حیران رہ گئے۔ یہ کہانی سکھاتی ہے کہ حق پر ڈٹنے والے اللہ کی حفاظت میں ہیں۔",
+            "ar": "أنامهم الله ثلاثمائة وتسع سنين، فظنوا أنهم ناموا يوماً. بعث أحدهم ليشتري طعاماً بدراهم قديمة فعجب الناس. تذكير بأن الثبات على الحق محفوظ عند الله."
+          }
+        }
+      ]
+    },
+    {
+      "id": "signs-laylatul-qadr",
+      "categoryId": "sawm",
+      "publishedAt": "2025-11-13",
+      "image": "/blog/signs-laylatul-qadr.svg",
+      "imageAlt": {
+        "en": "Signs of Laylatul Qadr",
+        "ur": "لیلۃ القدر کی نشانیاں",
+        "ar": "علامات ليلة القدر"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 97,
+      "title": {
+        "en": "Signs of Laylatul Qadr",
+        "ur": "لیلۃ القدر کی نشانیاں",
+        "ar": "علامات ليلة القدر"
+      },
+      "excerpt": {
+        "en": "Hadith mention subtle signs, but the goal is worship across all last ten nights.",
+        "ur": "احادیث میں کچھ نرم نشانیاں آئی ہیں، مگر اصل ہدف آخری عشرے کی مکمل عبادت ہے۔",
+        "ar": "ذكرت السنة علامات لطيفة، لكن المقصود الاجتهاد في العشر كلها."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Laylatul Qadr is better than a thousand months and occurs in the last ten nights of Ramadan, especially odd nights. Reported signs include a peaceful night and a gentle sunrise without harsh rays.",
+            "ur": "لیلۃ القدر ہزار مہینوں سے بہتر ہے اور رمضان کے آخری عشرے، خصوصاً طاق راتوں میں تلاش کی جاتی ہے۔ روایات میں اس کی نشانیوں میں پُرسکون رات اور نرم طلوعِ آفتاب کا ذکر ہے۔",
+            "ar": "ليلة القدر خير من ألف شهر، وتلتمس في العشر الأواخر خاصة الأوتار. ومن علاماتها المروية سكون الليل وطلوع الشمس صبيحتها بلا شعاع قوي."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Believers should avoid obsession with prediction and instead maximize prayer, Quran, and forgiveness. The famous dua \"Allahumma innaka 'afuwwun...\" captures the heart of this night.",
+            "ur": "مومن کو قیاس آرائی کے بجائے عبادت بڑھانی چاہیے: قیام، تلاوت اور استغفار۔ مشہور دعا \"اللهم إنك عفو...\" اسی رات کا مرکزی پیغام ہے۔",
+            "ar": "ينبغي ترك الانشغال بالتخمين والإكثار من القيام والقرآن والاستغفار. ودعاء «اللهم إنك عفو تحب العفو فاعف عني» خلاصة مقصودها."
+          }
+        }
+      ]
+    },
+    {
+      "id": "salah-mentioned-quran",
+      "categoryId": "salah",
+      "publishedAt": "2025-11-05",
+      "image": "/blog/salah-mentioned-quran.svg",
+      "imageAlt": {
+        "en": "How Salah Is Mentioned in the Quran",
+        "ur": "قرآن میں نماز کا ذکر",
+        "ar": "ذكر الصلاة في القرآن"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 2,
+      "title": {
+        "en": "How Salah Is Mentioned in the Quran",
+        "ur": "قرآن میں نماز کا ذکر",
+        "ar": "ذكر الصلاة في القرآن"
+      },
+      "excerpt": {
+        "en": "The Quran repeatedly commands establishing prayer as a pillar of faith and discipline.",
+        "ur": "قرآن بار بار نماز قائم کرنے کا حکم دیتا ہے جو ایمان اور نظم کی بنیاد ہے۔",
+        "ar": "يأمر القرآن مراراً بإقامة الصلاة بوصفها عماد الإيمان والانضباط."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Quran does not treat salah as occasional ritual but as an ongoing covenant: \"Establish prayer.\" It links prayer with patience, charity, and remembrance, forming a complete moral life.",
+            "ur": "قرآن نماز کو وقتی رسم نہیں بلکہ مستقل عہد کے طور پر پیش کرتا ہے: \"نماز قائم کرو\"۔ نماز کو صبر، زکوٰۃ اور ذکر کے ساتھ جوڑ کر مکمل اخلاقی زندگی بنائی گئی ہے۔",
+            "ar": "لا يعرض القرآن الصلاة كطقس عابر، بل كعهد دائم: «أقيموا الصلاة». ويربطها بالصبر والزكاة والذكر لتكوين حياة مستقيمة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Prophetic Sunnah explains the details of timing and form, while Quran gives the central command and purpose. Together, they teach that prayer protects from indecency and spiritual drift.",
+            "ur": "نماز کے اوقات اور طریقہ کی تفصیل سنت نبوی سے ملتی ہے، جبکہ قرآن اس کا بنیادی حکم اور مقصد بیان کرتا ہے۔ دونوں مل کر سکھاتے ہیں کہ نماز بے حیائی اور غفلت سے بچاتی ہے۔",
+            "ar": "وتفاصيل الأداء بينتها السنة، بينما قرر القرآن أصل الفريضة ومقصدها. وكلاهما يدل على أن الصلاة تنهى عن الفحشاء وتقي من الغفلة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "combined-salah",
+      "categoryId": "salah",
+      "publishedAt": "2025-10-28",
+      "image": "/blog/combined-salah.svg",
+      "imageAlt": {
+        "en": "When Can Salah Be Combined?",
+        "ur": "نمازیں کب جمع کی جا سکتی ہیں؟",
+        "ar": "متى يجوز جمع الصلوات؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "When Can Salah Be Combined?",
+        "ur": "نمازیں کب جمع کی جا سکتی ہیں؟",
+        "ar": "متى يجوز جمع الصلوات؟"
+      },
+      "excerpt": {
+        "en": "Combining prayers is allowed in specific conditions such as travel and hardship according to fiqh.",
+        "ur": "فقہ کے مطابق سفر اور بعض مشقت کی حالتوں میں نمازیں جمع کرنا جائز ہے۔",
+        "ar": "يجوز جمع الصلوات في أحوال مخصوصة كالسفر والمشقة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Islam sets prayer times clearly, yet allows concessions for hardship. In travel, many scholars permit combining Dhuhr with Asr and Maghrib with Isha, either early or delayed.",
+            "ur": "اسلام نے نماز کے اوقات مقرر کیے ہیں، مگر مشقت میں رخصت بھی دی ہے۔ سفر میں اکثر فقہاء ظہر عصر اور مغرب عشاء کو تقدیم یا تاخیر کے ساتھ جمع کرنے کی اجازت دیتے ہیں۔",
+            "ar": "حدد الشرع أوقات الصلاة، مع رخصة عند المشقة. وفي السفر يجوز عند جمهور العلماء جمع الظهر مع العصر والمغرب مع العشاء تقديماً أو تأخيراً."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Outside travel, some jurists also allow combining in unusual hardship, illness, or severe weather without making it habit. A believer should follow trusted local scholarship and avoid casual neglect of prayer times.",
+            "ur": "سفر کے علاوہ بعض فقہاء بیماری یا غیر معمولی دشواری میں بھی جمع کی گنجائش دیتے ہیں، مگر اسے معمول نہیں بنانا چاہیے۔ معتبر اہلِ علم کی رہنمائی سے عمل کرنا بہتر ہے۔",
+            "ar": "وخارج السفر رخص بعض الفقهاء في الجمع للحاجة الشديدة والمرض ونحوه بلا اتخاذه عادة. والواجب الرجوع للعلماء الموثوقين."
+          }
+        }
+      ]
+    },
+    {
+      "id": "al-qantarah-bridge",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2025-10-20",
+      "image": "/blog/al-qantarah-bridge.svg",
+      "imageAlt": {
+        "en": "What Is Al-Qantarah?",
+        "ur": "القنطرہ کیا ہے؟",
+        "ar": "ما هي القنطرة؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "What Is Al-Qantarah?",
+        "ur": "القنطرہ کیا ہے؟",
+        "ar": "ما هي القنطرة؟"
+      },
+      "excerpt": {
+        "en": "Al-Qantarah is described in hadith as a station where believers settle mutual rights before Paradise.",
+        "ur": "حدیث کے مطابق قنطرہ وہ مقام ہے جہاں اہلِ ایمان جنت سے پہلے باہمی حقوق کا حساب چکاتے ہیں۔",
+        "ar": "القنطرة في الحديث موضع يُقتص فيه بين المؤمنين قبل دخول الجنة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "After crossing the Sirat, believers are gathered at al-Qantarah where unresolved wrongs between them are corrected. This demonstrates that even among believers, justice and rights remain sacred.",
+            "ur": "صراط سے گزرنے کے بعد اہلِ ایمان قنطرہ پر روکے جائیں گے جہاں باہمی ظلم کا بدلہ اور تطہیر ہوگی۔ اس سے معلوم ہوتا ہے کہ مومنوں کے درمیان بھی حقوق کی بڑی اہمیت ہے۔",
+            "ar": "بعد المرور على الصراط يقف المؤمنون على القنطرة فيُقتص لبعضهم من بعض. وفي ذلك تعظيم لحقوق العباد حتى بين أهل الإيمان."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The teaching motivates us to forgive quickly and restore rights in this life. Whoever wants a peaceful entry into the Hereafter should clean his dealings now.",
+            "ur": "یہ تعلیم ہمیں دنیا ہی میں معافی، مصالحت اور حقوق کی ادائیگی کی طرف بلاتی ہے۔ جو آخرت میں آسانی چاہتا ہے وہ اپنے معاملات ابھی درست کرے۔",
+            "ar": "يدعونا هذا المعنى إلى إصلاح المظالم في الدنيا والمسارعة للعفو ورد الحقوق، ليكون المرور في الآخرة أيسر."
+          }
+        }
+      ]
+    },
+    {
+      "id": "battle-of-badr",
+      "categoryId": "islamic-history",
+      "publishedAt": "2025-10-15",
+      "image": "/blog/badr.svg",
+      "imageAlt": {
+        "en": "Battle of Badr",
+        "ur": "غزوہ بدر",
+        "ar": "غزوة بدر"
+      },
+      "readMinutes": 5,
+      "title": {
+        "en": "The Battle of Badr: When 313 Stood Against an Army",
+        "ur": "غزوہ بدر: جب ۳۱۳ نے لشکر کا مقابلہ کیا",
+        "ar": "غزوة بدر: حين وقف 313 في وجه جيش"
+      },
+      "excerpt": {
+        "en": "On 17 Ramadan, 2 AH, the outnumbered Muslims of Madinah faced the Quraysh at Badr. Angels fought alongside the believers — a turning point in Islamic history.",
+        "ur": "۱۷ رمضان ۲ ہجری کو مدینہ کے مسلمانوں نے بدر میں قریش کا مقابلہ کیا۔ فرشتے مومنوں کے ساتھ لڑے۔",
+        "ar": "في 17 رمضان سنة 2 هـ، واجه المسلمون قريشاً في بدر رغم قلة العدد، وكانت نقطة تحول في التاريخ."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "After the Hijrah, the Muslims of Madinah were still economically tied to Makkah. When a trade caravan led by Abu Sufyan passed near Madinah, the Prophet (peace be upon him) marched with about 313 men to intercept it — not primarily seeking battle, but responding to years of persecution.",
+            "ur": "ہجرت کے بعد مدینہ کے مسلمان مکہ سے معاشی طور پر جڑے تھے۔ جب ابو سفیان کی قافلہ گزرا تو نبی کریم ﷺ تقریباً ۳۱۳ صحابہ کے ساتھ نکلے — بنیادی طور پر جنگ نہیں، بلکہ سالوں کے ظلم کا جواب تھا۔",
+            "ar": "بعد الهجرة سار النبي ﷺ بقرابة 313 رجلاً لاعتراض قافلة قريش، استجابة لسنوات من الاضطهاد في مكة."
+          }
+        },
+        {
+          "type": "heading",
+          "text": {
+            "en": "The wells of Badr",
+            "ur": "بدر کے کنویں",
+            "ar": "آبار بدر"
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Muslims reached the wells of Badr first and used them strategically. The Quraysh army — over 1,000 strong — arrived for battle. The Prophet (peace be upon him) spent the night in prayer, weeping and begging Allah for victory. Allah revealed: \"Already has He given you victory at Badr when you were few in number.\" (3:123)",
+            "ur": "مسلمان پہلے بدر کے کنویں پر پہنچے۔ قریش کی فوج ایک ہزار سے زیادہ تھی۔ نبی کریم ﷺ نے رات دعا میں گزاری۔ اللہ نے فرمایا: \"تمہیں بدر میں فتح دے دی جب تم تھوڑے تھے۔\"",
+            "ar": "سبق المسلمون آبار بدر، وجاءت قريش بأكثر من ألف. بات النبي ﷺ يدعو، وأنزل الله: «لقد نصركم الله في بدر وأنتم أذلة»."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Despite being outnumbered more than three to one, the Muslims won decisively. Seventy Quraysh were killed; fourteen Muslims were martyred. The battle proved that sincerity and divine help matter more than numbers — and established Madinah as a power that could not be ignored.",
+            "ur": "تین گنا سے زیادہ کم ہونے کے باوجود مسلمانوں نے فتح حاصل کی۔ ستر قریشی ہلاک، چودہ شہداء ہوئے۔ یہ ثابت ہوا کہ اخلاص اور اللہ کی مدد تعداد سے بڑی ہے۔",
+            "ar": "انتصر المسلمون رغم قلة العدد. قُتل سبعون من قريش واستُشهد أربعة عشر. أثبتت بدر أن النصر من عند الله لا من كثرة العدد."
+          }
+        }
+      ]
+    },
+    {
+      "id": "palestine-in-quran",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-10-12",
+      "image": "/blog/palestine-in-quran.svg",
+      "imageAlt": {
+        "en": "Palestine in the Quran",
+        "ur": "قرآن میں فلسطین",
+        "ar": "فلسطين في القرآن"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 17,
+      "title": {
+        "en": "Palestine in the Quran",
+        "ur": "قرآن میں فلسطین",
+        "ar": "فلسطين في القرآن"
+      },
+      "excerpt": {
+        "en": "The Quran refers to blessed lands around Al-Aqsa and links them to prophetic history.",
+        "ur": "قرآن مسجد اقصیٰ کے گرد مبارک سرزمین کا ذکر کرتا ہے اور اسے انبیائی تاریخ سے جوڑتا ہے۔",
+        "ar": "يشير القرآن إلى الأرض المباركة حول الأقصى ويربطها بسير الأنبياء."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Surah Al-Isra mentions Masjid Al-Aqsa as part of a blessed region. This land is associated with many prophets and major events in revelation history, making it spiritually significant for Muslims.",
+            "ur": "سورۃ الاسراء میں مسجد اقصیٰ کو اس خطے کے ساتھ ذکر کیا گیا جسے اللہ نے برکت دی۔ یہ سرزمین انبیاء کے واقعات سے جڑی ہے، اس لیے مسلمانوں کے لیے خاص روحانی اہمیت رکھتی ہے۔",
+            "ar": "ذكرت سورة الإسراء المسجد الأقصى في سياق «الذي باركنا حوله». وترتبط هذه الأرض بتاريخ أنبياء كثر، فهي ذات مكانة روحية عند المسلمين."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Islamic concern for Palestine should combine prayer, justice, compassion, and ethical advocacy. The Quranic approach calls for principled support without hatred of innocents.",
+            "ur": "فلسطین کے بارے میں اسلامی احساس میں دعا، عدل، رحم اور ذمہ دار آواز شامل ہونی چاہیے۔ قرآنی منہج اصولی حمایت سکھاتا ہے، بے گناہوں سے نفرت نہیں۔",
+            "ar": "الواجب الشرعي تجاه فلسطين يجمع الدعاء والعدل والرحمة والمناصرة الأخلاقية، دون ظلم الأبرياء أو خطاب الكراهية."
+          }
+        }
+      ]
+    },
+    {
+      "id": "evil-eye-islam",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2025-10-04",
+      "image": "/blog/evil-eye-islam.svg",
+      "imageAlt": {
+        "en": "Evil Eye in Islam",
+        "ur": "اسلام میں نظرِ بد",
+        "ar": "العين في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 113,
+      "title": {
+        "en": "Evil Eye in Islam",
+        "ur": "اسلام میں نظرِ بد",
+        "ar": "العين في الإسلام"
+      },
+      "excerpt": {
+        "en": "Islam recognizes the evil eye and teaches protection through duas and trust in Allah.",
+        "ur": "اسلام نظرِ بد کے اثر کو تسلیم کرتا ہے اور دعا و توکل کے ذریعے حفاظت سکھاتا ہے۔",
+        "ar": "يقر الإسلام بالعَيْن ويعلّم التحصن بالأذكار والتوكل على الله."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Prophetic teachings confirm that envy-driven gaze can cause harm by Allah's permission. Islam does not promote paranoia; instead it gives balanced protection through adhkar, ruqyah, and humility.",
+            "ur": "احادیث میں آیا ہے کہ حسد بھری نظر اللہ کے اذن سے اثر ڈال سکتی ہے۔ اسلام وہم نہیں پھیلاتا بلکہ متوازن تحفظ سکھاتا ہے: اذکار، رقیہ اور عاجزی۔",
+            "ar": "ثبت في السنة أثر العين بإذن الله. ولا يدعو الإسلام إلى الهلع، بل إلى تحصين معتدل بالأذكار والرقية والتواضع."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Recommended practices include reciting Al-Falaq and An-Nas, saying \"Masha'Allah\" upon seeing blessings, and avoiding boastful display. Ultimate protection comes from sincere reliance on Allah.",
+            "ur": "حفاظت کے لیے معوذتین کی تلاوت، نعمت دیکھ کر \"ما شاء اللہ\" کہنا، اور نمائش سے بچنا مفید ہے۔ حقیقی حفاظت خالص توکل سے ملتی ہے۔",
+            "ar": "من أسباب الوقاية قراءة المعوذتين وقول \"ما شاء الله\" عند رؤية النعمة وترك التفاخر. والحفظ الحق بالتوكل الصادق على الله."
+          }
+        }
+      ]
+    },
+    {
+      "id": "why-surah-kafirun-revealed",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-09-26",
+      "image": "/blog/why-surah-kafirun-revealed.svg",
+      "imageAlt": {
+        "en": "Why Was Surah Al-Kafirun Revealed?",
+        "ur": "سورۃ الکافرون کیوں نازل ہوئی؟",
+        "ar": "لماذا نزلت سورة الكافرون؟"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 109,
+      "title": {
+        "en": "Why Was Surah Al-Kafirun Revealed?",
+        "ur": "سورۃ الکافرون کیوں نازل ہوئی؟",
+        "ar": "لماذا نزلت سورة الكافرون؟"
+      },
+      "excerpt": {
+        "en": "This surah firmly rejects religious compromise in matters of worship.",
+        "ur": "یہ سورت عبادت کے معاملے میں مصالحتی شرک کو قطعی طور پر رد کرتی ہے۔",
+        "ar": "ترفض السورة أي مساومة عقدية في العبادة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Leaders of Quraysh proposed a compromise: they would worship Allah for a period if the Prophet joined idol worship for another period. Surah Al-Kafirun came as a decisive response rejecting mixture in creed.",
+            "ur": "قریش کے سرداروں نے سمجھوتہ پیش کیا کہ کچھ عرصہ وہ اللہ کی عبادت کریں گے اور کچھ عرصہ نبی ﷺ ان کے معبودوں کی۔ سورۃ الکافرون نے اس عقیدتی سودے کو قطعی رد کر دیا۔",
+            "ar": "اقترح مشركو قريش مساومة في العبادة، فنزلت سورة الكافرون حاسمةً برفض الخلط العقدي."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The surah teaches respectful coexistence without surrendering principles. Muslims can show kindness to others while keeping worship purely for Allah.",
+            "ur": "یہ سورت بتاتی ہے کہ باہمی احترام ممکن ہے مگر عقیدہ فروخت نہیں ہوتا۔ مسلمان دوسروں سے حسنِ سلوک رکھتے ہوئے عبادت صرف اللہ کے لیے خاص رکھتے ہیں۔",
+            "ar": "تعلّم السورة الجمع بين حسن المعاملة والثبات العقدي؛ فالإحسان للناس لا يعني التنازل عن توحيد العبادة."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "لَكُمْ دِينُكُمْ وَلِيَ دِينِ",
+          "ref": "109:6",
+          "text": {
+            "en": "\"For you is your religion, and for me is my religion.\"",
+            "ur": "\"تمہارے لیے تمہارا دین، اور میرے لیے میرا دین۔\"",
+            "ar": "«لكم دينكم ولي دين»"
+          }
+        }
+      ]
+    },
+    {
+      "id": "names-of-angels-islam",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2025-09-18",
+      "image": "/blog/names-of-angels-islam.svg",
+      "imageAlt": {
+        "en": "Names of Angels in Islam",
+        "ur": "اسلام میں فرشتوں کے نام",
+        "ar": "أسماء الملائكة في الإسلام"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Names of Angels in Islam",
+        "ur": "اسلام میں فرشتوں کے نام",
+        "ar": "أسماء الملائكة في الإسلام"
+      },
+      "excerpt": {
+        "en": "Belief in angels includes known names and trust in unseen servants of Allah.",
+        "ur": "فرشتوں پر ایمان میں معروف ناموں کے ساتھ تمام غیبی ملائکہ پر یقین شامل ہے۔",
+        "ar": "الإيمان بالملائكة يشمل الأسماء الواردة والإيمان بسائرهم غيباً."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Among the well-known angels are Jibreel (revelation), Mika'il (provision), Israfil (trumpet), and Malik (guardian of Hell). The Quran and Sunnah also mention Kiraman Katibin, Munkar and Nakir, and angels carrying the Throne.",
+            "ur": "مشہور فرشتوں میں جبریل (وحی)، میکائیل (رزق)، اسرافیل (صور) اور مالک (دوزخ کے داروغہ) شامل ہیں۔ قرآن و حدیث میں کراماً کاتبین، منکر نکیر اور حاملانِ عرش کا بھی ذکر ہے۔",
+            "ar": "من أشهر الملائكة: جبريل للوحي، وميكائيل للرزق، وإسرافيل للنفخ في الصور، ومالك خازن النار. وورد ذكر الكاتبين ومنكر ونكير وحملة العرش."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Angels never disobey Allah and continuously serve His command. Remembering them deepens awareness that human life is recorded and monitored with absolute justice.",
+            "ur": "فرشتے اللہ کی نافرمانی نہیں کرتے اور ہمیشہ اس کے حکم پر قائم رہتے ہیں۔ ان پر ایمان سے بندے کو شعور ملتا ہے کہ اس کی زندگی مکمل عدل کے ساتھ لکھی جا رہی ہے۔",
+            "ar": "الملائكة لا يعصون الله ويفعلون ما يؤمرون. واستحضارهم يرسخ أن أعمال الإنسان محفوظة ومحاسَب عليها بالعدل."
+          }
+        }
+      ]
+    },
+    {
+      "id": "types-of-kufr",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2025-09-10",
+      "image": "/blog/types-of-kufr.svg",
+      "imageAlt": {
+        "en": "Types of Kufr",
+        "ur": "کفر کی اقسام",
+        "ar": "أنواع الكفر"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Types of Kufr",
+        "ur": "کفر کی اقسام",
+        "ar": "أنواع الكفر"
+      },
+      "excerpt": {
+        "en": "Islamic scholarship distinguishes between disbelief in creed and sins called minor kufr in language.",
+        "ur": "علمائے اسلام اعتقادی کفر اور ایسے اعمال میں فرق کرتے ہیں جنہیں مجازی طور پر کفر کہا گیا ہو۔",
+        "ar": "يفرق العلماء بين الكفر الاعتقادي وبين أعمال توصف بكفر دون الخروج من الملة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Classical scholars describe major kufr as rejection of Allah, revelation, or core beliefs that define Islam. They also discuss forms like denial, arrogance, hypocrisy in creed, and turning away from truth knowingly.",
+            "ur": "اکابر علماء کے نزدیک کفرِ اکبر وہ ہے جو اللہ، وحی یا اصولِ ایمان کے انکار پر مبنی ہو۔ اس میں انکار، استکبار، اعتقادی نفاق اور حق سے جان بوجھ کر اعراض شامل ہو سکتے ہیں۔",
+            "ar": "يذكر العلماء أن الكفر الأكبر يكون بجحد أصول الإيمان أو الإعراض عنها، ومن صوره الجحود والاستكبار والنفاق الاعتقادي."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Some texts also mention \"kufr duna kufr\" for severe sins that do not expel a Muslim from Islam. These distinctions require scholarship, caution, and avoidance of reckless takfir.",
+            "ur": "بعض نصوص میں \"کفر دون کفر\" بھی آتا ہے، یعنی بڑے گناہ جو ایمان سے خارج نہیں کرتے۔ ان مسائل میں احتیاط اور اہلِ علم کی رہنمائی ضروری ہے، بے جا تکفیر سے بچنا چاہیے۔",
+            "ar": "وتأتي نصوص في \"كفر دون كفر\" لأعمال عظيمة لا تُخرج من الملة. وهذه الأبواب تحتاج علماً وحذراً وترك التسرع في التكفير."
+          }
+        }
+      ]
+    },
+    {
+      "id": "shirk-in-islam",
+      "categoryId": "tawhid",
+      "publishedAt": "2025-09-02",
+      "image": "/blog/shirk-in-islam.svg",
+      "imageAlt": {
+        "en": "Shirk in Islam",
+        "ur": "اسلام میں شرک",
+        "ar": "الشرك في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 4,
+      "title": {
+        "en": "Shirk in Islam",
+        "ur": "اسلام میں شرک",
+        "ar": "الشرك في الإسلام"
+      },
+      "excerpt": {
+        "en": "Shirk is associating partners with Allah and is the gravest spiritual violation.",
+        "ur": "شرک اللہ کے ساتھ شریک ٹھہرانا ہے اور یہ سب سے بڑا روحانی جرم ہے۔",
+        "ar": "الشرك هو جعل شريك لله، وهو أعظم الذنوب."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Tawhid is the foundation of Islam, and shirk opposes that foundation by directing worship, reliance, or ultimate fear to other than Allah. The Quran repeatedly warns against both obvious and subtle forms of shirk.",
+            "ur": "توحید اسلام کی بنیاد ہے اور شرک اس بنیاد کی ضد ہے، یعنی عبادت، توکل یا خوفِ مطلق اللہ کے سوا کسی کے لیے رکھنا۔ قرآن کھلے اور پوشیدہ دونوں طرح کے شرک سے خبردار کرتا ہے۔",
+            "ar": "التوحيد أساس الدين، والشرك نقض لهذا الأساس بتوجيه العبادة أو التوكل أو الخوف المطلق لغير الله. وقد حذر القرآن من الشرك الجلي والخفي."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Muslims protect faith by learning correct aqidah, making sincere dua, and avoiding superstition. Repentance remains open for every sin before death, and Allah loves those who return to Him.",
+            "ur": "مسلمان صحیح عقیدہ سیکھ کر، خالص دعا کر کے، اور توہمات سے بچ کر ایمان کی حفاظت کرتے ہیں۔ موت سے پہلے ہر گناہ سے توبہ کا دروازہ کھلا ہے، اور اللہ توبہ کرنے والوں سے محبت کرتا ہے۔",
+            "ar": "يحفظ المسلم إيمانه بتعلم العقيدة الصحيحة والإخلاص في الدعاء وترك الخرافة. وباب التوبة مفتوح قبل الموت، والله يحب التوابين."
+          }
+        }
+      ]
+    },
+    {
+      "id": "the-hijrah",
+      "categoryId": "islamic-history",
+      "publishedAt": "2025-09-01",
+      "image": "/blog/hijrah.svg",
+      "imageAlt": {
+        "en": "The Hijrah journey",
+        "ur": "ہجرت",
+        "ar": "الهجرة"
+      },
+      "readMinutes": 5,
+      "title": {
+        "en": "The Hijrah: A Journey That Changed the World",
+        "ur": "ہجرت: ایک سفر جس نے دنیا بدل دی",
+        "ar": "الهجرة: رحلة غيّرت العالم"
+      },
+      "excerpt": {
+        "en": "In 622 CE, the Prophet (peace be upon him) and Abu Bakr (RA) left Makkah by night, hiding in the Cave of Thawr while pursuers searched outside. The Islamic calendar begins from this migration.",
+        "ur": "۶۲۲ء میں نبی کریم ﷺ اور حضرت ابوبکر صدیق رضی اللہ عنہ راتوں رات مکہ چھوڑ گئے۔ اسلامی تقویم اسی ہجرت سے شروع ہوتی ہے۔",
+        "ar": "في 622م غادر النبي ﷺ وأبو بكر مكة ليلاً واختبآ في غار ثور. من هذه الهجرة يبدأ التاريخ الهجري."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "After years of preaching in Makkah, persecution intensified. The Quraysh plotted to kill the Prophet (peace be upon him) — one man from each clan would strike together so no single tribe could be blamed. Jibreel (AS) informed him, and he asked Ali (RA) to sleep in his bed as a decoy while he slipped away with Abu Bakr (RA).",
+            "ur": "مکہ میں سالوں دعوت کے بعد ظلم بڑھ گیا۔ قریش نے قتل کی سازش کی۔ جبریل علیہ السلام نے خبر دی۔ نبی کریم ﷺ نے حضرت علی رضی اللہ عنہ کو اپنی جگہ سونے کو کہا اور حضرت ابوبکر صدیق رضی اللہ عنہ کے ساتھ روانہ ہوئے۔",
+            "ar": "تآمرت قريش لقتل النبي ﷺ، فأخبره جبريل. ترك علياً في فراشه وخرج مع أبي بكر ليلاً."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "لَا تَحْزَنْ إِنَّ اللَّهَ مَعَنَا",
+          "ref": "9:40",
+          "text": {
+            "en": "Abu Bakr whispered in fear at the cave entrance. The Prophet (peace be upon him) replied: \"Do not grieve; indeed Allah is with us.\"",
+            "ur": "غار ثور میں حضرت ابوبکر صدیق رضی اللہ عنہ نے کہا: \"اے اللہ کے رسول! اگر کوئی نیچے جھانک لے؟\" آپ ﷺ نے فرمایا: \"غم نہ کرو، اللہ ہمارے ساتھ ہے۔\"",
+            "ar": "قال أبو بكر في الغار: «يا رسول الله لو أن أحدهم نظر إلى أقدامه». فقال: «لا تحزن إن الله معنا»."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "A spider wove a web and a dove nested at the cave mouth — so pursuers assumed no one had entered. The two traveled south to Madinah (then Yathrib), where the Ansar welcomed them. The Hijrah marks the birth of the first Muslim community-state and the start of the Islamic lunar calendar.",
+            "ur": "مکڑی نے جالا بنا دیا اور کبوتر نے انڈے دیے — تلاش کرنے والوں نے سوچا کوئی اندر نہیں گیا۔ دونوں مدینہ (یثرب) پہنچے جہاں انصار نے خیرمقدم کیا۔ ہجرت پہلی مسلم جمہوریت کی بنیاد ہے۔",
+            "ar": "نسجت عنكبوت وبيضت حمامة عند فم الغار، فلم يدخل الطالبون. وصلوا إلى يثرب فآواهم الأنصار. من الهجرة بدأ التاريخ الإسلامي."
+          }
+        }
+      ]
+    },
+    {
+      "id": "taharah-cleanliness",
+      "categoryId": "lifestyle",
+      "publishedAt": "2025-08-25",
+      "image": "/blog/taharah-cleanliness.svg",
+      "imageAlt": {
+        "en": "Taharah and Cleanliness in Islam",
+        "ur": "اسلام میں طہارت اور صفائی",
+        "ar": "الطهارة والنظافة في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 2,
+      "title": {
+        "en": "Taharah and Cleanliness in Islam",
+        "ur": "اسلام میں طہارت اور صفائی",
+        "ar": "الطهارة والنظافة في الإسلام"
+      },
+      "excerpt": {
+        "en": "Taharah is physical and spiritual purification at the heart of Islamic practice.",
+        "ur": "طہارت ظاہری و باطنی پاکیزگی ہے جو اسلامی زندگی کا بنیادی حصہ ہے۔",
+        "ar": "الطهارة تطهير حسي ومعنوي وهي أصل في حياة المسلم."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Prayer, Quran recitation, and many acts of worship begin with purification through wudu or ghusl. Islam links cleanliness with dignity, health, and readiness to stand before Allah.",
+            "ur": "نماز، تلاوت اور کئی عبادات سے پہلے وضو یا غسل کی طہارت مطلوب ہے۔ اسلام صفائی کو عزت، صحت اور اللہ کے حضور حاضری کی تیاری سے جوڑتا ہے۔",
+            "ar": "تسبق الطهارة كثيراً من العبادات كالصلاة، بالوضوء أو الغسل. ويربط الإسلام النظافة بالكرامة والصحة والاستعداد للوقوف بين يدي الله."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Taharah also includes moral purity: guarding the heart from envy and the tongue from harm. A clean home and clean heart together reflect prophetic character.",
+            "ur": "طہارت صرف جسمانی نہیں، اخلاقی بھی ہے: دل کو حسد سے اور زبان کو اذیت سے پاک رکھنا۔ پاک گھر اور پاک دل مل کر سنتی کردار بناتے ہیں۔",
+            "ar": "ولا تقتصر الطهارة على البدن، بل تشمل نقاء القلب من الحسد واللسان من الأذى. فطهارة الظاهر والباطن من هدي النبوة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "prophets-last-sermon",
+      "categoryId": "sunnah-hadith",
+      "publishedAt": "2025-08-17",
+      "image": "/blog/prophets-last-sermon.svg",
+      "imageAlt": {
+        "en": "Lessons from the Prophet's Last Sermon",
+        "ur": "خطبہ حجۃ الوداع کے اسباق",
+        "ar": "دروس من خطبة الوداع"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Lessons from the Prophet's Last Sermon",
+        "ur": "خطبہ حجۃ الوداع کے اسباق",
+        "ar": "دروس من خطبة الوداع"
+      },
+      "excerpt": {
+        "en": "The Farewell Sermon established human dignity, justice, and accountability before Allah.",
+        "ur": "خطبہ حجۃ الوداع نے انسانی حرمت، عدل اور جواب دہی کے اصول واضح کیے۔",
+        "ar": "قررت خطبة الوداع حرمة الإنسان والعدل والمسؤولية أمام الله."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "In his final sermon, the Prophet (peace be upon him) emphasized sanctity of life, property, and honor. He abolished pre-Islamic injustice, condemned usury, and reminded believers that all are equal before Allah except by taqwa.",
+            "ur": "خطبہ حجۃ الوداع میں نبی ﷺ نے جان، مال اور عزت کی حرمت پر زور دیا۔ جاہلی ظلم اور سود کی مذمت کی، اور بتایا کہ اللہ کے نزدیک برتری کا معیار صرف تقویٰ ہے۔",
+            "ar": "أكد النبي ﷺ في خطبة الوداع حرمة الدماء والأموال والأعراض، وأبطل مظالم الجاهلية والربا، وقرر أن التفاضل بالتقوى."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "He also highlighted women's rights, trust in revelation, and duty to convey truth. The sermon remains a comprehensive ethical charter for Muslim societies today.",
+            "ur": "آپ ﷺ نے خواتین کے حقوق، کتاب و سنت سے وابستگی اور دین پہنچانے کی ذمہ داری بھی بیان کی۔ یہ خطبہ آج بھی مسلم معاشروں کے لیے مکمل اخلاقی منشور ہے۔",
+            "ar": "كما أوصى بحقوق النساء والتمسك بالوحي وتبليغ الرسالة. وتبقى الخطبة ميثاقاً أخلاقياً جامعاً للمجتمعات المسلمة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "hajar-and-zamzam",
+      "categoryId": "prophets",
+      "publishedAt": "2025-08-10",
+      "image": "/blog/hajar.svg",
+      "imageAlt": {
+        "en": "Hajar and the well of Zamzam",
+        "ur": "ہاجر اور زمزم",
+        "ar": "هاجر وزمزم"
+      },
+      "readMinutes": 4,
+      "title": {
+        "en": "Hajar and Zamzam: Trust Between Safa and Marwa",
+        "ur": "ہاجر اور زمزم: صفا و مروہ کے درمیان بھروسہ",
+        "ar": "هاجر وزمزم: ثقة بين الصفا والمروة"
+      },
+      "excerpt": {
+        "en": "Left alone in the desert with her infant Isma'il, Hajar ran between two hills seeking water — until the spring of Zamzam burst forth. Every Hajj and Umrah reenacts her search.",
+        "ur": "صحرا میں تنہا ہاجر نے اپنے شیرخوار اسماعیل کے لیے صفا اور مروہ کے درمیان دوڑ لگائی — پھر زمزم پھوٹ پڑا۔",
+        "ar": "تُركت هاجر في الصحراء مع إسماعيل رضيعاً، فركضت بين الصفا والمروة حتى انفجر زمزم."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Ibrahim (AS) left his wife Hajar and infant son Isma'il in the barren valley of Makkah by Allah's command — a test of trust for both. When provisions ran out and the baby cried from thirst, Hajar ran seven times between the hills of Safa and Marwa, searching for any sign of water or travelers.",
+            "ur": "حضرت ابراہیم علیہ السلام نے اللہ کے حکم سے اپنی بیوی ہاجر اور بیٹے اسماعیل کو مکہ کی ویران وادی میں چھوڑ دیا — یہ دونوں کے لیے بھروسے کی آزمائش تھی۔ پانی ختم ہوا تو ہاجر نے صفا اور مروہ کے درمیان سات بار دوڑ لگائی۔",
+            "ar": "ترك إبراهيم هاجر وإسماعيل في وادي مكة بأمر الله. لما نفد الماء ركضت هاجر سبع مرات بين الصفا والمروة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "At Marwa, Jibreel (AS) struck the ground and the well of Zamzam gushed forth. Hajar gathered sand around it to contain the water — saying \"Zam zam\" (stop, stop). The well still flows in Masjid al-Haram today. Sa'i between Safa and Marwa during Hajj and Umrah commemorates her desperate, faithful search.",
+            "ur": "مروہ پر جبریل علیہ السلام نے زمین پر مارا اور زمزم پھوٹ پڑا۔ ہاجر نے پانی روکنے کے لیے \"زم زم\" کہا۔ آج بھی یہ کنواں مسجد الحرام میں بہ رہا ہے۔ حج و عمرہ میں صفا مروہ کی سعی اسی یاد میں ہے۔",
+            "ar": "ضرب جبريل الأرض فانبجست زمزم. قالت هاجر «زم زم» لئلا يذهب الماء. يُحيي المسلمون سعيها في الحج والعمرة بين الصفا والمروة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "universe-created-allah",
+      "categoryId": "tawhid",
+      "publishedAt": "2025-08-09",
+      "image": "/blog/universe-created-allah.svg",
+      "imageAlt": {
+        "en": "Was the Universe Created by Allah?",
+        "ur": "کیا کائنات اللہ نے پیدا کی؟",
+        "ar": "هل خلق الله الكون؟"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 21,
+      "title": {
+        "en": "Was the Universe Created by Allah?",
+        "ur": "کیا کائنات اللہ نے پیدا کی؟",
+        "ar": "هل خلق الله الكون؟"
+      },
+      "excerpt": {
+        "en": "The Quran repeatedly points to cosmic signs as evidence of one Creator.",
+        "ur": "قرآن بار بار کائنات کی نشانیوں سے ایک خالق پر دلیل قائم کرتا ہے۔",
+        "ar": "يستدل القرآن بآيات الكون على وجود الخالق الواحد."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Islamic belief affirms that Allah created the heavens and the earth with wisdom and purpose. The order of stars, cycles of life, and harmony of natural laws are signs leading the heart to tawhid.",
+            "ur": "اسلامی عقیدہ ہے کہ اللہ نے آسمان و زمین کو حکمت کے ساتھ پیدا کیا۔ ستاروں کی ترتیب، زندگی کے نظام اور کائناتی توازن انسان کو توحید کی طرف رہنمائی دیتے ہیں۔",
+            "ar": "تؤكد العقيدة الإسلامية أن الله خلق السماوات والأرض بحكمة. ونظام الكون وتناسقه آيات تهدي إلى التوحيد."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Quran encourages reflection rather than blind imitation. Scientific exploration can deepen faith when approached with humility, recognizing that knowledge uncovers creation but does not replace the Creator.",
+            "ur": "قرآن اندھی تقلید کے بجائے غور و فکر کی دعوت دیتا ہے۔ سائنسی تحقیق ایمان کو گہرا کر سکتی ہے جب انسان عاجزی سے سمجھے کہ علم مخلوق کو کھولتا ہے، خالق کا بدل نہیں بنتا۔",
+            "ar": "يدعو القرآن إلى التفكر لا التقليد الأعمى. والبحث العلمي يزيد الإيمان إذا اقترن بالتواضع، فالعلم يكشف الخلق ولا يغني عن الخالق."
+          }
+        }
+      ]
+    },
+    {
+      "id": "prophet-lineage-abraham",
+      "categoryId": "history",
+      "publishedAt": "2025-08-01",
+      "image": "/blog/prophet-lineage-abraham.svg",
+      "imageAlt": {
+        "en": "Prophetic Lineage from Abraham",
+        "ur": "ابراہیم علیہ السلام سے انبیاء کی نسل",
+        "ar": "سلسلة الأنبياء من ذرية إبراهيم"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Prophetic Lineage from Abraham",
+        "ur": "ابراہیم علیہ السلام سے انبیاء کی نسل",
+        "ar": "سلسلة الأنبياء من ذرية إبراهيم"
+      },
+      "excerpt": {
+        "en": "Many prophets came through the blessed lineage of Ibrahim through Ishaq and Isma'il.",
+        "ur": "حضرت ابراہیم کی مبارک نسل سے اسحاق اور اسماعیل کے ذریعے کئی انبیاء آئے۔",
+        "ar": "جاء كثير من الأنبياء من ذرية إبراهيم عبر إسحاق وإسماعيل."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Allah granted Ibrahim (AS) righteous descendants and made prophethood continue among them. Through Ishaq came prophets of Bani Israel, and through Isma'il came the Arab line culminating in Prophet Muhammad (peace be upon him).",
+            "ur": "اللہ نے حضرت ابراہیم کو نیک اولاد دی اور نبوت کا سلسلہ ان میں جاری رکھا۔ اسحاق کی نسل میں بنی اسرائیل کے انبیاء آئے، اور اسماعیل کی نسل میں آخرکار محمد ﷺ تشریف لائے۔",
+            "ar": "جعل الله في ذرية إبراهيم النبوة. فمن جهة إسحاق جاء أنبياء بني إسرائيل، ومن جهة إسماعيل جاء خاتم الأنبياء محمد ﷺ."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Studying prophetic lineage teaches historical continuity of faith. The message remained one across generations: submit to Allah, uphold justice, and call humanity to truth.",
+            "ur": "انبیائی نسب کا مطالعہ ایمان کی تاریخی وحدت دکھاتا ہے۔ نسلیں بدلتی رہیں مگر پیغام ایک ہی رہا: اللہ کے آگے جھکنا، عدل قائم کرنا اور حق کی دعوت دینا۔",
+            "ar": "تعلّمنا الأنساب النبوية وحدة الرسالة عبر التاريخ: الاستسلام لله وإقامة العدل والدعوة إلى الحق."
+          }
+        }
+      ]
+    },
+    {
+      "id": "marriage-rules-islam",
+      "categoryId": "lifestyle",
+      "publishedAt": "2025-07-24",
+      "image": "/blog/marriage-rules-islam.svg",
+      "imageAlt": {
+        "en": "Marriage Rules in Islam",
+        "ur": "اسلام میں نکاح کے اصول",
+        "ar": "أحكام الزواج في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 4,
+      "title": {
+        "en": "Marriage Rules in Islam",
+        "ur": "اسلام میں نکاح کے اصول",
+        "ar": "أحكام الزواج في الإسلام"
+      },
+      "excerpt": {
+        "en": "Islamic marriage is a sacred contract built on consent, responsibility, and mercy.",
+        "ur": "اسلامی نکاح رضامندی، ذمہ داری اور رحمت پر قائم ایک مقدس معاہدہ ہے۔",
+        "ar": "الزواج في الإسلام عقد مقدس قائم على الرضا والمسؤولية والرحمة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "A valid nikah requires clear consent, witnesses, mahr, and public recognition. Islam forbids coercion and commands fairness, maintenance, and good treatment between spouses.",
+            "ur": "درست نکاح کے لیے باہمی رضامندی، گواہ، مہر اور اعلان ضروری ہیں۔ اسلام زبردستی کو منع کرتا ہے اور میاں بیوی کے درمیان حسنِ سلوک اور عدل کا حکم دیتا ہے۔",
+            "ar": "يشترط لصحة النكاح الرضا والشهود والمهر والإشهار. ويحرم الإكراه، ويأمر الإسلام بالعدل وحسن المعاشرة بين الزوجين."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Marriage is not only social arrangement but spiritual partnership. Couples are encouraged to resolve conflict with patience, consultation, and respect for rights laid out in Shariah.",
+            "ur": "نکاح صرف سماجی بندھن نہیں بلکہ روحانی رفاقت ہے۔ اختلاف کی صورت میں صبر، مشاورت اور شرعی حقوق کی پاسداری سے گھر مضبوط ہوتا ہے۔",
+            "ar": "والزواج ليس ترتيباً اجتماعياً فقط بل شراكة إيمانية. وتُعالج الخلافات بالصبر والشورى واحترام الحقوق الشرعية."
+          }
+        }
+      ]
+    },
+    {
+      "id": "musa-and-pharaoh",
+      "categoryId": "prophets",
+      "publishedAt": "2025-07-20",
+      "image": "/blog/musa.svg",
+      "imageAlt": {
+        "en": "Musa confronting Pharaoh",
+        "ur": "موسیٰ اور فرعون",
+        "ar": "موسى وفرعون"
+      },
+      "readMinutes": 5,
+      "relatedSurah": 20,
+      "title": {
+        "en": "Musa (AS) and Pharaoh: Truth Against Tyranny",
+        "ur": "حضرت موسیٰ اور فرعون: حق کے سامنے ظلم",
+        "ar": "موسى وفرعون: الحق في وجه الطغيان"
+      },
+      "excerpt": {
+        "en": "Raised in Pharaoh's palace yet chosen as Allah's messenger, Musa (AS) returned to demand freedom for Bani Israel — and witnessed the sea part by divine command.",
+        "ur": "فرعون کے محل میں پلے بڑھے مگر اللہ کے رسول بنے — بنی اسرائیل کی آزادی مانگیں اور سمندر اللہ کے حکم سے پھٹ گیا۔",
+        "ar": "نشأ موسى في قصر فرعون ثم أُرسل رسولاً ليُخرج بني إسرائيل، فانشق البحر بأمر الله."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Pharaoh ruled Egypt with absolute power, claiming divinity. Musa (AS) was born when Pharaoh ordered newborn Israelite boys killed. His mother placed him in a basket on the Nile; Pharaoh's wife found and raised him — yet Allah returned him to his mother to nurse. Years later, at the burning bush, Allah spoke to Musa directly: \"Go to Pharaoh — indeed he has transgressed.\" (20:24)",
+            "ur": "فرعون مصر پر مطلق حکمرانی رکھتا تھا اور خود کو خدا سمجھتا تھا۔ موسیٰ علیہ السلام پیدا ہوئے جب فرعون نے بنی اسرائیل کے نوزائیدہ لڑکوں کو قتل کا حکم دیا۔ ماں نے انہیں ٹوکری میں دریائے نیل میں رکھا — فرعون کی بیوی نے پالا، مگر اللہ نے انہیں اپنی ماں کے پاس واپس کیا۔",
+            "ar": "ادّعى فرعون الألوهية وقتل أبناء بني إسرائيل. وُضع موسى في التابوت فالتقطته امرأة فرعون. كلّمه الله من الشجرة: «اذهب إلى فرعون إنه طغى»."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "With his brother Harun (AS), Musa confronted Pharaoh with miracles — the staff becoming a serpent, the hand shining white. Pharaoh's magicians, after seeing truth, fell in prostration: \"We believe in the Lord of Musa and Harun.\" When Pharaoh pursued the fleeing Israelites, Allah parted the Red Sea for them and drowned Pharaoh's army — a lesson that no tyrant outlasts divine justice.",
+            "ur": "حضرت ہارون علیہ السلام کے ساتھ موسیٰ نے معجزات پیش کیے — لاٹھی سانپ بن گئی۔ جادوگر سجدہ میں گر پڑے: \"ہم موسیٰ اور ہارون کے رب پر ایمان لائے۔\" فرعون نے پیچھا کیا تو سمندر پھٹا اور فرعون کی فوج ڈوب گئی۔",
+            "ar": "أتى موسى وهرون بآيات: العصا حية واليد بيضاء. سجد السحرة لله. لما طاردهم فرعون انشق البحر وغرق الجيش — لا يبقى طاغية على هوان الله."
+          }
+        }
+      ]
+    },
+    {
+      "id": "messiah-in-quran",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2025-07-16",
+      "image": "/blog/messiah-in-quran.svg",
+      "imageAlt": {
+        "en": "The Messiah in the Quran",
+        "ur": "قرآن میں مسیح کا تصور",
+        "ar": "المسيح في القرآن"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 3,
+      "title": {
+        "en": "The Messiah in the Quran",
+        "ur": "قرآن میں مسیح کا تصور",
+        "ar": "المسيح في القرآن"
+      },
+      "excerpt": {
+        "en": "The Quran affirms Isa as al-Masih, a noble prophet and sign from Allah.",
+        "ur": "قرآن حضرت عیسیٰ کو مسیح قرار دیتا ہے: اللہ کے برگزیدہ نبی اور نشانی۔",
+        "ar": "يثبت القرآن أن عيسى هو المسيح، نبي كريم وآية من الله."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "In the Quran, Isa ibn Maryam is called al-Masih and honored with miracles by Allah's permission. He spoke in the cradle, healed the sick by Allah's leave, and called people to pure monotheism.",
+            "ur": "قرآن میں عیسیٰ ابن مریم کو \"المسیح\" کہا گیا ہے اور اللہ کے اذن سے معجزات دیے گئے۔ انہوں نے گہوارے میں کلام کیا، مریضوں کو شفا دی، اور توحید کی دعوت دی۔",
+            "ar": "في القرآن يُسمى عيسى ابن مريم بالمسيح، وأُيّد بآيات بإذن الله؛ كالكلام في المهد وإبراء المرضى والدعوة إلى التوحيد."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Islam rejects both denial and deification of Isa. Muslims love him as a mighty messenger, believe in his return before the end times, and follow the final revelation brought by Muhammad (peace be upon him).",
+            "ur": "اسلام عیسیٰ علیہ السلام کے انکار اور الوہیت دونوں کو رد کرتا ہے۔ مسلمان انہیں عظیم رسول مانتے، ان کی واپسی پر ایمان رکھتے، اور محمد ﷺ کی آخری شریعت کی پیروی کرتے ہیں۔",
+            "ar": "يرفض الإسلام جحود عيسى وتأليهه معاً. فالمسلمون يؤمنون به رسولاً عظيماً وبنزوله آخر الزمان، ويتبعون الوحي الخاتم لمحمد ﷺ."
+          }
+        }
+      ]
+    },
+    {
+      "id": "abraham-prophet-islam",
+      "categoryId": "prophets",
+      "publishedAt": "2025-07-08",
+      "image": "/blog/abraham-prophet-islam.svg",
+      "imageAlt": {
+        "en": "Prophet Ibrahim in Islam",
+        "ur": "اسلام میں حضرت ابراہیم علیہ السلام",
+        "ar": "إبراهيم عليه السلام في الإسلام"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 14,
+      "title": {
+        "en": "Prophet Ibrahim in Islam",
+        "ur": "اسلام میں حضرت ابراہیم علیہ السلام",
+        "ar": "إبراهيم عليه السلام في الإسلام"
+      },
+      "excerpt": {
+        "en": "Ibrahim is a model of tawhid, sacrifice, and unwavering trust in Allah.",
+        "ur": "حضرت ابراہیم توحید، قربانی اور توکل کے عظیم نمونہ ہیں۔",
+        "ar": "إبراهيم قدوة في التوحيد والتضحية والتوكل."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Ibrahim (AS) challenged idol worship with wisdom and courage, even facing his own people and ruler. He was thrown into fire, but Allah made it cool and safe, proving that truth is protected by divine will.",
+            "ur": "حضرت ابراہیم علیہ السلام نے بت پرستی کے خلاف حکمت اور جرات سے آواز اٹھائی۔ انہیں آگ میں ڈالا گیا مگر اللہ نے اسے ٹھنڈی اور سلامتی والی بنا دیا۔",
+            "ar": "واجه إبراهيم قومه وملكهم في قضية التوحيد، فأُلقي في النار فجعلها الله برداً وسلاماً عليه."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "His life also includes migration, rebuilding the Ka'bah with Isma'il, and readiness to sacrifice what he loved for Allah. Muslims honor him daily in salah and yearly in Hajj rites.",
+            "ur": "ان کی زندگی ہجرت، اسماعیل کے ساتھ کعبہ کی تعمیر، اور اللہ کے لیے محبوب چیز قربان کرنے کے جذبے سے بھرپور ہے۔ مسلمان نماز اور حج میں روز ان کی یاد تازہ کرتے ہیں۔",
+            "ar": "ومن سيرته الهجرة وبناء الكعبة مع إسماعيل والاستعداد للتضحية في سبيل الله. ويحيي المسلمون أثره في الصلاة والحج."
+          }
+        }
+      ]
+    },
+    {
+      "id": "surah-kahf-last-10-verses",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-06-30",
+      "image": "/blog/surah-kahf-last-10-verses.svg",
+      "imageAlt": {
+        "en": "Last 10 Verses of Surah Al-Kahf",
+        "ur": "سورۃ کہف کی آخری دس آیات",
+        "ar": "أواخر عشر آيات من سورة الكهف"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 18,
+      "title": {
+        "en": "Last 10 Verses of Surah Al-Kahf",
+        "ur": "سورۃ کہف کی آخری دس آیات",
+        "ar": "أواخر عشر آيات من سورة الكهف"
+      },
+      "excerpt": {
+        "en": "These verses conclude with sincerity, humility, and warning against hidden shirk.",
+        "ur": "یہ آیات اخلاص، عاجزی اور پوشیدہ شرک سے بچنے کی نصیحت کرتی ہیں۔",
+        "ar": "تختم هذه الآيات بمعاني الإخلاص والتواضع والتحذير من الشرك الخفي."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The closing of Surah Al-Kahf recalls accountability before Allah and the reality that worldly efforts can be wasted if detached from true faith. It addresses self-deception in worship and action.",
+            "ur": "سورۃ کہف کا اختتام آخرت کے حساب اور اس حقیقت کو سامنے لاتا ہے کہ ایمان کے بغیر اعمال ضائع ہو سکتے ہیں۔ یہ عبادت اور عمل میں خود فریبی سے خبردار کرتا ہے۔",
+            "ar": "ختام السورة يذكر بالحساب وأن العمل قد يضيع إذا خلا من الإيمان الصحيح. وفيه تحذير من الاغترار بالنفس في العبادة والعمل."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The final verse commands that whoever hopes to meet Allah must do righteous deeds and avoid associating partners in worship. This concise formula defines accepted devotion.",
+            "ur": "آخری آیت کہتی ہے کہ جو اپنے رب سے ملاقات کی امید رکھتا ہے وہ نیک عمل کرے اور عبادت میں کسی کو شریک نہ کرے۔ یہی قبولیتِ عبادت کا خلاصہ ہے۔",
+            "ar": "تأمر الآية الأخيرة من يرجو لقاء ربه بالعمل الصالح وترك الإشراك في العبادة. وهي قاعدة جامعة لقبول العمل."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "فَمَنْ كَانَ يَرْجُو لِقَاءَ رَبِّهِ فَلْيَعْمَلْ عَمَلًا صَالِحًا وَلَا يُشْرِكْ",
+          "ref": "18:110",
+          "text": {
+            "en": "\"Whoever hopes to meet his Lord, let him do righteous deeds and not associate anyone in worship.\"",
+            "ur": "\"جو اپنے رب سے ملنے کی امید رکھتا ہے وہ نیک عمل کرے اور عبادت میں کسی کو شریک نہ ٹھہرائے۔\"",
+            "ar": "«فليعمل عملاً صالحاً ولا يشرك بعبادة ربه أحداً»"
+          }
+        }
+      ]
+    },
+    {
+      "id": "bani-israel-in-quran",
+      "categoryId": "quranic-stories",
+      "publishedAt": "2025-06-22",
+      "image": "/blog/bani-israel-in-quran.svg",
+      "imageAlt": {
+        "en": "Bani Israel in the Quran",
+        "ur": "قرآن میں بنی اسرائیل",
+        "ar": "بنو إسرائيل في القرآن"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 2,
+      "title": {
+        "en": "Bani Israel in the Quran",
+        "ur": "قرآن میں بنی اسرائیل",
+        "ar": "بنو إسرائيل في القرآن"
+      },
+      "excerpt": {
+        "en": "The Quran recounts Bani Israel with lessons on gratitude, covenant, and obedience.",
+        "ur": "قرآن بنی اسرائیل کے واقعات کو شکر، عہد اور اطاعت کے اسباق کے ساتھ بیان کرتا ہے۔",
+        "ar": "يذكر القرآن بني إسرائيل بعبر في الشكر والميثاق والطاعة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Bani Israel are mentioned extensively in the Quran, especially around the mission of Musa (AS). Their story includes liberation from Pharaoh, receiving divine law, and repeated tests of faith and discipline.",
+            "ur": "بنی اسرائیل کا ذکر قرآن میں کثرت سے آیا ہے، خصوصاً حضرت موسیٰ علیہ السلام کے واقعات میں۔ ان کی تاریخ میں فرعون سے نجات، شریعت کا ملنا، اور ایمان و اطاعت کے مسلسل امتحانات شامل ہیں۔",
+            "ar": "ورد ذكر بني إسرائيل كثيراً في القرآن، ولا سيما مع موسى عليه السلام. وتتضمن قصتهم النجاة من فرعون، وتلقي الشريعة، وابتلاءات متكررة في الإيمان والانضباط."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Quran uses these narratives as moral instruction for all communities, not ethnic condemnation. Believers are taught to fulfill promises, avoid arrogance, and remain grateful for guidance.",
+            "ur": "قرآن ان واقعات کو نسل پرستی کے لیے نہیں بلکہ اخلاقی رہنمائی کے لیے بیان کرتا ہے۔ اہلِ ایمان کو عہد پورا کرنے، تکبر سے بچنے اور ہدایت پر شکر ادا کرنے کی تعلیم دی جاتی ہے۔",
+            "ar": "لا يذكر القرآن هذه القصة للتجريح العرقي، بل للعبرة العامة. فالمؤمن مأمور بالوفاء والبعد عن الكبر وشكر نعمة الهداية."
+          }
+        }
+      ]
+    },
+    {
+      "id": "bilal-ibn-rabah",
+      "categoryId": "companions",
+      "publishedAt": "2025-06-15",
+      "image": "/blog/bilal.svg",
+      "imageAlt": {
+        "en": "Bilal ibn Rabah, first mu'adhin",
+        "ur": "بلال بن رباح، پہلے مؤذن",
+        "ar": "بلال بن رباح، أول مؤذن"
+      },
+      "readMinutes": 4,
+      "title": {
+        "en": "Bilal ibn Rabah (RA): The Voice That Called the Ummah to Prayer",
+        "ur": "بلال بن رباح رضی اللہ عنہ: وہ آواز جو امت کو نماز کی طرف بلاتی تھی",
+        "ar": "بلال بن رباح: الصوت الذي نادى الأمة إلى الصلاة"
+      },
+      "excerpt": {
+        "en": "An Abyssinian slave tortured in the sun for saying \"Ahad, Ahad\" — One God alone. He became Islam's first mu'adhin and stood on the Ka'bah at the Conquest of Makkah.",
+        "ur": "حبشی غلام جسے \"احد، احد\" کہنے پر سخت عذاب دیا گیا — وہ اسلام کے پہلے مؤذن بنے اور فتح مکہ پر کعبہ پر کھڑے ہوئے۔",
+        "ar": "عبد حبشي عُذّب تحت الشمس لقوله «أحد أحد»، فصار أول مؤذن في الإسلام."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Bilal (RA) was owned by Umayyah ibn Khalaf, who placed a heavy rock on his chest in the desert heat whenever Bilal declared \"Ahad, Ahad\" — that God is One. Abu Bakr (RA) purchased and freed him. Bilal became one of the earliest companions and endured torture without renouncing faith.",
+            "ur": "بلال رضی اللہ عنہ امیاہ بن خلف کے غلام تھے۔ جب \"احد، احد\" کہتے تو سینے پر پتھر رکھ کر عذاب دیتے۔ حضرت ابوبکر صدیق رضی اللہ عنہ نے خرید کر آزاد کیا۔",
+            "ar": "كان بلال عبداً لأمية بن خلف يعذّبه لقوله «أحد». اشتراه أبو بكر وأعتقه."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "When the adhan was established, the Prophet (peace be upon him) chose Bilal for his beautiful, resonant voice — making him the first mu'adhin in Islam. He called the faithful to prayer from the mosque of the Prophet in Madinah. At the Conquest of Makkah in 8 AH, Bilal climbed the Ka'bah to give the adhan — a moment that symbolized how Islam elevates dignity regardless of origin.",
+            "ur": "اذان کے آغاز پر نبی کریم ﷺ نے بلال رضی اللہ عنہ کو ان کی خوبصورت آواز کی وجہ سے منتخب کیا — اسلام کے پہلے مؤذن۔ فتح مکہ پر انہوں نے کعبہ پر اذان دی — یہ لمحہ دکھاتا ہے کہ اسلام نسل و نسب سے بالا ہے۔",
+            "ar": "اختاره النبي ﷺ أول مؤذن لحسن صوته. أذّن على الكعبة يوم الفتح — رمز لرفعة الإسلام للإنسان بغض النظر عن أصله."
+          }
+        }
+      ]
+    },
+    {
+      "id": "surah-kahf-first-10-verses",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-06-14",
+      "image": "/blog/surah-kahf-first-10-verses.svg",
+      "imageAlt": {
+        "en": "First 10 Verses of Surah Al-Kahf",
+        "ur": "سورۃ کہف کی پہلی دس آیات",
+        "ar": "أوائل عشر آيات من سورة الكهف"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 18,
+      "title": {
+        "en": "First 10 Verses of Surah Al-Kahf",
+        "ur": "سورۃ کہف کی پہلی دس آیات",
+        "ar": "أوائل عشر آيات من سورة الكهف"
+      },
+      "excerpt": {
+        "en": "Memorizing these verses is linked to protection from Dajjal and fitan.",
+        "ur": "ان آیات کی یادداشت کو دجال کے فتنہ سے حفاظت کا ذریعہ بتایا گیا ہے۔",
+        "ar": "حفظ هذه الآيات مرتبط بالحماية من فتنة الدجال والفتن."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The opening of Surah Al-Kahf praises Allah for revealing the straight Book and warns against deviation. It establishes clear faith principles: revelation, accountability, and hope for righteous deeds.",
+            "ur": "سورۃ کہف کی ابتدا اللہ کی حمد اور کتابِ مستقیم کے ذکر سے ہوتی ہے، اور انحراف سے خبردار کرتی ہے۔ اس میں وحی، جواب دہی اور عملِ صالح کے بنیادی اصول قائم کیے گئے ہیں۔",
+            "ar": "تبدأ سورة الكهف بحمد الله على إنزال الكتاب القيّم والتحذير من الانحراف. وتؤسس لمعاني الوحي والمسؤولية والبشارة لأهل الصلاح."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Prophetic narrations encourage memorizing and reciting these verses for protection from major trials. Regular Friday recitation renews iman and reminds believers that truth survives every age.",
+            "ur": "احادیث میں ان آیات کو بڑے فتنوں سے حفاظت کا ذریعہ بتایا گیا ہے۔ جمعہ کے دن ان کی تلاوت ایمان کو تازہ کرتی اور حق پر استقامت سکھاتی ہے۔",
+            "ar": "تحث السنة على حفظ هذه الآيات وقراءتها اتقاءً للفتن الكبرى. ومواظبتها يوم الجمعة تجدد الإيمان وتثبت على الحق."
+          }
+        }
+      ]
+    },
+    {
+      "id": "how-to-pray-janazah",
+      "categoryId": "salah",
+      "publishedAt": "2025-06-06",
+      "image": "/blog/how-to-pray-janazah.svg",
+      "imageAlt": {
+        "en": "How to Pray Janazah",
+        "ur": "نمازِ جنازہ کیسے پڑھیں؟",
+        "ar": "كيف تصلى صلاة الجنازة؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "How to Pray Janazah",
+        "ur": "نمازِ جنازہ کیسے پڑھیں؟",
+        "ar": "كيف تصلى صلاة الجنازة؟"
+      },
+      "excerpt": {
+        "en": "Janazah prayer is a communal obligation with takbirs, dua, and no ruku or sujud.",
+        "ur": "نمازِ جنازہ فرضِ کفایہ ہے، جس میں تکبیریں اور دعائیں ہوتی ہیں، رکوع و سجدہ نہیں۔",
+        "ar": "صلاة الجنازة فرض كفاية، فيها تكبيرات وأدعية بلا ركوع ولا سجود."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The imam stands facing qiblah with the deceased placed ahead. Janazah consists of four takbirs: after the first, Surah Al-Fatihah; after the second, salawat on the Prophet; after the third, dua for the deceased; after the fourth, brief pause then salam.",
+            "ur": "امام قبلہ رخ کھڑا ہوتا ہے اور میت سامنے رکھی جاتی ہے۔ جنازہ چار تکبیروں پر مشتمل ہے: پہلی کے بعد فاتحہ، دوسری کے بعد درود، تیسری کے بعد میت کے لیے دعا، چوتھی کے بعد سلام۔",
+            "ar": "يقف الإمام إلى القبلة والميت أمامه. صلاة الجنازة أربع تكبيرات: بعد الأولى الفاتحة، وبعد الثانية الصلاة على النبي، وبعد الثالثة الدعاء للميت، ثم تسليم."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Because death softens hearts, Janazah reminds the living to repent and prepare for meeting Allah. Participating in funeral rites is both service to the community and personal spiritual awakening.",
+            "ur": "موت دل کو نرم کرتی ہے، اس لیے نمازِ جنازہ زندہ لوگوں کو توبہ اور آخرت کی تیاری یاد دلاتی ہے۔ جنازہ میں شرکت خدمتِ خلق بھی ہے اور روحانی بیداری بھی۔",
+            "ar": "تذكّر الجنازة الأحياء بالرجوع إلى الله والاستعداد للآخرة. والمشاركة فيها خدمة للمجتمع وتربية للنفس."
+          }
+        }
+      ]
+    },
+    {
+      "id": "abrahamic-prophets-islam",
+      "categoryId": "prophets",
+      "publishedAt": "2025-05-29",
+      "image": "/blog/abrahamic-prophets-islam.svg",
+      "imageAlt": {
+        "en": "Abrahamic Prophets in Islam",
+        "ur": "اسلام میں ابراہیمی انبیاء",
+        "ar": "الأنبياء الإبراهيميون في الإسلام"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Abrahamic Prophets in Islam",
+        "ur": "اسلام میں ابراہیمی انبیاء",
+        "ar": "الأنبياء الإبراهيميون في الإسلام"
+      },
+      "excerpt": {
+        "en": "Islam honors Ibrahim and his prophetic descendants as one chain of monotheistic guidance.",
+        "ur": "اسلام حضرت ابراہیم اور ان کی نسل کے انبیاء کو توحیدی ہدایت کی ایک زنجیر مانتا ہے۔",
+        "ar": "يُجل الإسلام إبراهيم وذرية الأنبياء من بعده كسلسلة هداية توحيدية واحدة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Ibrahim (AS) is a central figure in Islam, titled Khalilullah. Through his sons Ishaq and Isma'il came many prophets, including Ya'qub, Yusuf, Musa, Dawud, Sulayman, Zakariyya, Yahya, Isa, and finally Muhammad (peace be upon them all).",
+            "ur": "حضرت ابراہیم علیہ السلام اسلام میں خلیل اللہ کے طور پر عظیم مقام رکھتے ہیں۔ ان کی نسل میں اسحاق و اسماعیل سے متعدد انبیاء آئے، یہاں تک کہ موسیٰ، داؤد، عیسیٰ اور آخر میں محمد ﷺ۔",
+            "ar": "لإبراهيم عليه السلام مكانة عظيمة في الإسلام بوصفه خليل الله. ومن ذريته عبر إسحاق وإسماعيل جاء أنبياء كثيرون حتى خاتمهم محمد ﷺ."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "This continuity shows that divine revelation has one core message: worship Allah alone and live righteously. Muslims respect all prophets and reject selective belief in some while denying others.",
+            "ur": "یہ تسلسل بتاتا ہے کہ وحی کا مرکزی پیغام ایک ہی ہے: صرف اللہ کی عبادت اور نیک زندگی۔ مسلمان تمام انبیاء پر ایمان رکھتے ہیں، کسی کو مان کر کسی کو رد نہیں کرتے۔",
+            "ar": "يدل هذا الامتداد على وحدة الرسالة: عبادة الله وحده والاستقامة. ويؤمن المسلمون بجميع الأنبياء دون تفريق انتقائي."
+          }
+        }
+      ]
+    },
+    {
+      "id": "kalima-in-islam",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2025-05-21",
+      "image": "/blog/kalima-in-islam.svg",
+      "imageAlt": {
+        "en": "The Kalima in Islam",
+        "ur": "اسلام میں کلمہ",
+        "ar": "الكلمة في الإسلام"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "The Kalima in Islam",
+        "ur": "اسلام میں کلمہ",
+        "ar": "الكلمة في الإسلام"
+      },
+      "excerpt": {
+        "en": "The Kalima declares tawhid and acceptance of Prophet Muhammad as Allah's messenger.",
+        "ur": "کلمہ توحید اور رسالتِ محمدی کی گواہی ہے۔",
+        "ar": "الكلمة إعلان للتوحيد والشهادة برسالة محمد ﷺ."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The testimony \"La ilaha illa Allah, Muhammadur Rasulullah\" is the doorway to Islam. It rejects all false objects of worship and commits the believer to obeying Allah through prophetic guidance.",
+            "ur": "\"لا الٰہ الا اللہ محمد رسول اللہ\" اسلام کا دروازہ ہے۔ یہ ہر باطل معبود کی نفی کرتا ہے اور بندے کو اللہ اور اس کے رسول ﷺ کی اطاعت کا پابند بناتا ہے۔",
+            "ar": "شهادة «لا إله إلا الله محمد رسول الله» هي مدخل الإسلام. فهي نفي لكل معبود باطل وإقرار بطاعة الله واتباع رسوله ﷺ."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Kalima is not a slogan but a covenant that shapes ethics, worship, and social dealings. A truthful tongue must be matched by truthful conduct.",
+            "ur": "کلمہ صرف نعرہ نہیں بلکہ عہد ہے جو عبادت، اخلاق اور معاملات کو بدلتا ہے۔ زبان کی سچائی کے ساتھ کردار کی سچائی بھی ضروری ہے۔",
+            "ar": "ليست الكلمة شعاراً مجرداً، بل عهد يوجّه العبادة والأخلاق والمعاملات. وصدق اللسان يكتمل بصدق العمل."
+          }
+        }
+      ]
+    },
+    {
+      "id": "qayamah-day-of-judgment",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2025-05-13",
+      "image": "/blog/qayamah-day-of-judgment.svg",
+      "imageAlt": {
+        "en": "Qayamah: The Day of Judgment",
+        "ur": "قیامت کا دن",
+        "ar": "القيامة: يوم الحساب"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 99,
+      "title": {
+        "en": "Qayamah: The Day of Judgment",
+        "ur": "قیامت کا دن",
+        "ar": "القيامة: يوم الحساب"
+      },
+      "excerpt": {
+        "en": "Qayamah is the final resurrection when every soul is judged with perfect justice.",
+        "ur": "قیامت وہ دن ہے جب ہر نفس اٹھایا جائے گا اور مکمل عدل کے ساتھ حساب ہوگا۔",
+        "ar": "القيامة يوم يبعث الله فيه الخلق للحساب بالعدل التام."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Islam teaches that worldly life is a test and not the final destination. On the Day of Judgment, deeds, intentions, and rights of others will be examined before Allah, who wrongs no one even by an atom's weight.",
+            "ur": "اسلام سکھاتا ہے کہ دنیا امتحان ہے، آخری منزل نہیں۔ قیامت میں اعمال، نیتیں اور حقوق العباد سب پیش ہوں گے، اور اللہ ذرہ برابر ظلم نہیں کرے گا۔",
+            "ar": "تعلمنا العقيدة أن الدنيا دار ابتلاء لا قرار. وفي يوم القيامة تعرض الأعمال والنيات والحقوق على الله الذي لا يظلم مثقال ذرة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Remembering Qayamah reforms conduct: a believer guards the tongue, fulfills trusts, and repents quickly. Hope in Allah's mercy and fear of accountability keep life balanced and meaningful.",
+            "ur": "قیامت کی یاد انسان کی اصلاح کرتی ہے: زبان کی حفاظت، امانت کی ادائیگی اور فوری توبہ۔ اللہ کی رحمت کی امید اور حساب کا خوف زندگی کو متوازن بناتا ہے۔",
+            "ar": "استحضار القيامة يهذب السلوك: حفظ اللسان وأداء الأمانة والمبادرة بالتوبة. والعبد يعيش بين رجاء الرحمة وخوف الحساب."
+          }
+        }
+      ]
+    },
+    {
+      "id": "how-women-pray-islam",
+      "categoryId": "salah",
+      "publishedAt": "2025-05-05",
+      "image": "/blog/how-women-pray-islam.svg",
+      "imageAlt": {
+        "en": "How Women Pray in Islam",
+        "ur": "اسلام میں خواتین نماز کیسے پڑھتی ہیں؟",
+        "ar": "كيف تصلي المرأة في الإسلام؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "How Women Pray in Islam",
+        "ur": "اسلام میں خواتین نماز کیسے پڑھتی ہیں؟",
+        "ar": "كيف تصلي المرأة في الإسلام؟"
+      },
+      "excerpt": {
+        "en": "Women perform the same pillars of salah, with fiqh details on modesty and congregation arrangements.",
+        "ur": "خواتین بھی نماز کے بنیادی ارکان وہی ادا کرتی ہیں، البتہ فقہی تفصیلات حیا اور ترتیب سے متعلق ہیں۔",
+        "ar": "تصلي المرأة بأركان الصلاة نفسها، مع تفاصيل فقهية تتعلق بالستر والتنظيم."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The essentials of salah are shared by men and women: intention, takbir, recitation, bowing, prostration, and tashahhud. The spiritual standing before Allah is equal in reward according to sincerity and obedience.",
+            "ur": "نماز کے بنیادی ارکان مرد و عورت دونوں کے لیے یکساں ہیں: نیت، تکبیر، قراءت، رکوع، سجدہ اور تشہد۔ اللہ کے ہاں اجر اخلاص اور اطاعت کے مطابق ہے۔",
+            "ar": "أركان الصلاة واحدة للرجل والمرأة: النية والتكبير والقراءة والركوع والسجود والتشهد. والثواب عند الله بحسب الإخلاص والطاعة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Schools of fiqh mention some practical differences in posture preference and public congregation context. Women should learn from reliable local scholars and maintain confidence that proper prayer is fully accepted by Allah.",
+            "ur": "مذاہبِ فقہ میں بعض عملی فرق، جیسے ہیئت اور جماعتی ترتیب، بیان کیے گئے ہیں۔ خواتین معتبر اہلِ علم سے رہنمائی لیں اور اطمینان رکھیں کہ درست نماز اللہ کے ہاں پوری قبول ہے۔",
+            "ar": "تذكر المذاهب بعض الفروع العملية في الهيئة وسياق الجماعة. والأصل أن تتعلم المرأة من أهل العلم الموثوقين وتطمئن إلى قبول صلاتها بإذن الله."
+          }
+        }
+      ]
+    },
+    {
+      "id": "quran-preserved",
+      "categoryId": "islamic-history",
+      "publishedAt": "2025-05-01",
+      "image": "/blog/quran-preserved.svg",
+      "imageAlt": {
+        "en": "Preservation of the Holy Quran",
+        "ur": "قرآن کی حفاظت",
+        "ar": "حفظ القرآن"
+      },
+      "readMinutes": 5,
+      "title": {
+        "en": "How the Quran Was Preserved: From Revelation to Today",
+        "ur": "قرآن کی حفاظت: وحی سے آج تک",
+        "ar": "كيف حُفظ القرآن: من الوحي إلى اليوم"
+      },
+      "excerpt": {
+        "en": "Revealed over 23 years, memorized by thousands in the Prophet's lifetime, compiled under Abu Bakr and Uthman (RA) — the Quran remains unchanged word for word.",
+        "ur": "۲۳ سال میں نازل، نبی کریم ﷺ کے زمانے میں ہزاروں نے حفظ کیا، ابوبکر اور عثمان رضی اللہ عنہ کے دور میں جمع — آج تک ایک حرف بھی نہیں بدلا۔",
+        "ar": "نُزل على 23 سنة، حفظه آلاف في عهد النبي ﷺ، جُمع في عهد أبي بكر وعثمان — ولم يتغيّر حرف."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Quran was revealed to Prophet Muhammad (peace be upon him) through Jibreel (AS) over approximately 23 years — sometimes a single verse, sometimes longer passages. The Prophet (peace be upon him) recited each revelation immediately to companions, who memorized it and wrote it on parchment, bones, and leather.",
+            "ur": "قرآن نبی کریم ﷺ پر تقریباً ۲۳ سال میں جبریل علیہ السلام کے ذریعے نازل ہوا۔ ہر وحی فوراً صحابہ کو سنائی جاتی، وہ حفظ کرتے اور کھال، ہڈیوں اور کاغذ پر لکھتے۔",
+            "ar": "أُنزل القرآن على النبي ﷺ نحو 23 سنة. كان يقرأ كل آية على الصحابة فيحفظونها ويكتبونها."
+          }
+        },
+        {
+          "type": "heading",
+          "text": {
+            "en": "Compilation and standardization",
+            "ur": "جمع اور معیاری نسخہ",
+            "ar": "الجمع والتوحيد"
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "After many huffaz (memorizers) were martyred at Yamamah, Abu Bakr (RA) ordered the first official compilation into a single manuscript under Zayd ibn Thabit (RA). Later, during Uthman's caliphate (RA), copies were sent to major cities when disputes arose over dialect readings — standardizing the Uthmani script Muslims read worldwide today.",
+            "ur": "یمامہ کی لڑائی میں بہت سے حفاظ شہید ہوئے تو حضرت ابوبکر صدیق رضی اللہ عنہ نے زید بن ثابت رضی اللہ عنہ کی نگرانی میں پہلی سرکاری مصحف تیار کروائی۔ حضرت عثمان رضی اللہ عنہ کے دور میں مختلف علاقوں میں ایک معیاری نسخہ بھیجا گیا۔",
+            "ar": "بعد استشهاد حفّاظ في اليمامة، جمع أبو بكر المصحف بإشراف زيد بن ثابت. في عهد عثمان وُحّدت المصاحف وأُرسلت إلى الأمصار."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "إِنَّا نَحْنُ نَزَّلْنَا الذِّكْرَ وَإِنَّا لَهُ لَحَافِظُونَ",
+          "ref": "15:9",
+          "text": {
+            "en": "\"Indeed, it is We who sent down the Reminder and indeed, We will be its guardian.\"",
+            "ur": "\"بے شک ہم نے یہ ذکر نازل کیا ہے اور بے شک ہم ہی اس کی حفاظت کرنے والے ہیں۔\"",
+            "ar": "«إنا نحن نزلنا الذكر وإنا له لحافظون»"
+          }
+        }
+      ]
+    },
+    {
+      "id": "quran-seven-ahruf",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-04-27",
+      "image": "/blog/quran-seven-ahruf.svg",
+      "imageAlt": {
+        "en": "What Are the Seven Ahruf?",
+        "ur": "قرآن کے سات احرف کیا ہیں؟",
+        "ar": "ما معنى الأحرف السبعة؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "What Are the Seven Ahruf?",
+        "ur": "قرآن کے سات احرف کیا ہیں؟",
+        "ar": "ما معنى الأحرف السبعة؟"
+      },
+      "excerpt": {
+        "en": "The seven ahruf refer to divinely allowed modes that eased recitation for Arab tribes.",
+        "ur": "سات احرف سے مراد قراءت کی وہ وسعت ہے جو عرب قبائل کی آسانی کے لیے دی گئی۔",
+        "ar": "الأحرف السبعة وجوه قرائية أذن الله بها تيسيراً على العرب."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Authentic hadith mention that the Quran was revealed on seven ahruf. Scholars explained this as a mercy allowing certain linguistic variations in pronunciation and expression among early Arab communities.",
+            "ur": "صحیح احادیث میں آیا ہے کہ قرآن سات احرف پر نازل ہوا۔ اہلِ علم نے اسے رحمت قرار دیا کہ ابتدائی عربی لہجوں اور اسالیب کے لیے گنجائش دی گئی۔",
+            "ar": "ثبت في الأحاديث أن القرآن أُنزل على سبعة أحرف، وفسرها العلماء بأنها تيسير في بعض الوجوه اللغوية لألسنة العرب."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "This concept should not confuse believers about preservation. The Uthmani codex and canonical qira'at preserved the revelation with precision, while maintaining legitimate recitational breadth.",
+            "ur": "یہ تصور حفاظتِ قرآن کے خلاف نہیں۔ مصحفِ عثمانی اور متواتر قراءات نے وحی کو مکمل دقت کے ساتھ محفوظ رکھا اور جائز قراءتی وسعت بھی برقرار رہی۔",
+            "ar": "لا يناقض ذلك حفظ القرآن؛ فالمصحف العثماني والقراءات المتواترة صانت النص بدقة مع بقاء السعة المعتبرة في الأداء."
+          }
+        }
+      ]
+    },
+    {
+      "id": "what-is-nafl-prayer",
+      "categoryId": "salah",
+      "publishedAt": "2025-04-19",
+      "image": "/blog/what-is-nafl-prayer.svg",
+      "imageAlt": {
+        "en": "What Is Nafl Prayer?",
+        "ur": "نفل نماز کیا ہے؟",
+        "ar": "ما هي صلاة النفل؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "What Is Nafl Prayer?",
+        "ur": "نفل نماز کیا ہے؟",
+        "ar": "ما هي صلاة النفل؟"
+      },
+      "excerpt": {
+        "en": "Nafl prayer is extra voluntary worship beyond obligatory and Sunnah prayers.",
+        "ur": "نفل نماز فرض اور سنت کے علاوہ اضافی اختیاری عبادت ہے۔",
+        "ar": "صلاة النفل عبادة تطوعية زائدة على الفرض والسنة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Nafl prayers can be offered at various times, including Duha, Tahajjud, and general extra rak'ahs. They are not sinful to miss, yet they are a major means of drawing close to Allah.",
+            "ur": "نفل نمازیں مختلف اوقات میں ادا کی جا سکتی ہیں، جیسے اشراق/ضحیٰ، تہجد یا عمومی اضافی رکعات۔ انہیں چھوڑنے پر گناہ نہیں، لیکن یہ قربِ الٰہی کا بڑا ذریعہ ہیں۔",
+            "ar": "تصلى النوافل في أوقات متعددة مثل الضحى والتهجد وغيرها. ولا يأثم تاركها، لكنها من أعظم أبواب القرب إلى الله."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Nafl softens the heart and repairs spiritual dryness. Even two extra rak'ahs after making wudu or before sleep can transform a person's relationship with worship.",
+            "ur": "نفل دل کو نرم کرتی اور روحانی خشکی دور کرتی ہے۔ صرف دو اضافی رکعتیں، مثلاً وضو کے بعد یا سونے سے پہلے، عبادت سے تعلق گہرا کر دیتی ہیں۔",
+            "ar": "تليّن النوافل القلب وتجدد الإيمان. وركعتان يسيرتان بعد الوضوء أو قبل النوم قد تغيّران علاقة العبد بعبادته."
+          }
+        }
+      ]
+    },
+    {
+      "id": "what-is-sunnah-prayer",
+      "categoryId": "salah",
+      "publishedAt": "2025-04-11",
+      "image": "/blog/what-is-sunnah-prayer.svg",
+      "imageAlt": {
+        "en": "What Is Sunnah Prayer?",
+        "ur": "سنت نماز کیا ہے؟",
+        "ar": "ما هي صلاة السنة؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "What Is Sunnah Prayer?",
+        "ur": "سنت نماز کیا ہے؟",
+        "ar": "ما هي صلاة السنة؟"
+      },
+      "excerpt": {
+        "en": "Sunnah prayers are voluntary prayers linked to obligatory salah and prophetic practice.",
+        "ur": "سنت نمازیں وہ نفل عبادات ہیں جو فرض نمازوں کے ساتھ نبی ﷺ سے ثابت ہیں۔",
+        "ar": "صلاة السنة هي نوافل مرتبطة بالفرائض وثابتة عن النبي ﷺ."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Sunnah prayers include emphasized units before and after obligatory prayers, such as two before Fajr and others around Dhuhr, Maghrib, and Isha. They compensate shortcomings and increase love for worship.",
+            "ur": "سنت نمازوں میں فرضوں سے پہلے اور بعد کی مؤکدہ رکعات شامل ہیں، جیسے فجر سے پہلے دو رکعت۔ یہ عبادت کی کمی پوری کرتی اور نماز سے محبت بڑھاتی ہیں۔",
+            "ar": "تشمل السنن الرواتب ركعات مؤكدة قبل الفرائض وبعدها، كركعتي الفجر. وهي تجبر النقص في الفرض وتزيد تعلق القلب بالصلاة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "A person should begin gradually and remain consistent. The Prophet loved deeds that were regular even if small, so steady Sunnah practice builds lifelong discipline.",
+            "ur": "آدمی کو آہستہ آغاز کر کے مستقل مزاجی اختیار کرنی چاہیے۔ نبی ﷺ کو وہ عمل پسند تھا جو تھوڑا مگر مسلسل ہو؛ اسی سے دائمی تربیت بنتی ہے۔",
+            "ar": "الأفضل التدرج مع الاستمرار؛ فقد أحب النبي ﷺ الأعمال الدائمة وإن قلت. والمواظبة على السنن تصنع انضباطاً إيمانياً طويلاً."
+          }
+        }
+      ]
+    },
+    {
+      "id": "how-to-memorize-quran",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-04-03",
+      "image": "/blog/how-to-memorize-quran.svg",
+      "imageAlt": {
+        "en": "How to Memorize the Quran",
+        "ur": "قرآن حفظ کیسے کریں؟",
+        "ar": "كيف تحفظ القرآن؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "How to Memorize the Quran",
+        "ur": "قرآن حفظ کیسے کریں؟",
+        "ar": "كيف تحفظ القرآن؟"
+      },
+      "excerpt": {
+        "en": "Hifz succeeds through small daily portions, revision, tajweed, and sincere dua.",
+        "ur": "حفظِ قرآن چھوٹے روزانہ حصے، دہرائی، تجوید اور دعا سے کامیاب ہوتا ہے۔",
+        "ar": "ينجح حفظ القرآن بالقليل اليومي والمراجعة والتجويد والدعاء."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Start with a realistic schedule: even half a page daily is powerful if consistent. Read new lines repeatedly with tajweed, then recite from memory to a teacher or study partner.",
+            "ur": "حفظ کے لیے حقیقت پسندانہ نظام بنائیں: آدھا صفحہ روزانہ بھی مسلسل ہو تو مؤثر ہے۔ نئی سطور تجوید کے ساتھ بار بار پڑھیں، پھر استاد یا ساتھی کو سنائیں۔",
+            "ar": "ابدأ بخطة واقعية؛ نصف صفحة يومياً مع الاستمرار مؤثر جداً. كرر الوجه الجديد بالتجويد ثم سمعه للشيخ أو زميل الحفظ."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Revision is more important than new memorization. Divide time between sabq (new), sabaq-para (recent), and old portions to prevent forgetting. Ask Allah for barakah in time and firmness in heart.",
+            "ur": "دہرائی نئی سبق سے زیادہ اہم ہے۔ وقت کو سبق، منزل اور پرانے حصے میں بانٹیں تاکہ بھول نہ ہو۔ اللہ سے وقت میں برکت اور دل کی پختگی مانگیں۔",
+            "ar": "المراجعة أهم من الجديد. قسّم وقتك بين الجديد والقريب والقديم لئلا يتفلت المحفوظ. واسأل الله الثبات والبركة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "how-to-perform-jummah-prayer",
+      "categoryId": "salah",
+      "publishedAt": "2025-03-26",
+      "image": "/blog/how-to-perform-jummah-prayer.svg",
+      "imageAlt": {
+        "en": "How to Perform Jumu'ah Prayer",
+        "ur": "جمعہ کی نماز کیسے ادا کریں؟",
+        "ar": "كيف تؤدى صلاة الجمعة؟"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 62,
+      "title": {
+        "en": "How to Perform Jumu'ah Prayer",
+        "ur": "جمعہ کی نماز کیسے ادا کریں؟",
+        "ar": "كيف تؤدى صلاة الجمعة؟"
+      },
+      "excerpt": {
+        "en": "Jumu'ah includes a sermon and two rak'ahs prayed in congregation at the time of Dhuhr.",
+        "ur": "نمازِ جمعہ میں خطبہ اور دو رکعت باجماعت ادا کی جاتی ہیں۔",
+        "ar": "صلاة الجمعة تتضمن خطبتين وركعتين جماعة في وقت الظهر."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "A Muslim prepares for Jumu'ah with ghusl, clean clothing, perfume (for men), and early arrival. The khatib delivers two sermons separated by a brief sitting, then the imam leads two rak'ahs aloud.",
+            "ur": "جمعہ کے لیے غسل، پاکیزہ لباس، خوشبو (مردوں کے لیے) اور جلد مسجد پہنچنا مستحب ہے۔ خطیب دو خطبے دیتا ہے جن کے درمیان مختصر بیٹھنا ہوتا ہے، پھر امام دو رکعت بلند قراءت سے پڑھاتا ہے۔",
+            "ar": "يستحب للجمعة الغسل ولبس أحسن الثياب والتبكير. ثم يخطب الخطيب خطبتين بينهما جلوس يسير، وبعده يصلي الإمام ركعتين جهريتين."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Congregants should listen silently during khutbah and avoid distractions, including unnecessary phone use. Jumu'ah is a weekly spiritual reset that combines knowledge, community, and worship.",
+            "ur": "مقتدیوں کو خطبہ غور سے سننا چاہیے اور دورانِ خطبہ گفتگو یا موبائل سے اجتناب کرنا چاہیے۔ جمعہ ہفتہ وار روحانی تجدید ہے جس میں علم، اجتماع اور عبادت جمع ہوتے ہیں۔",
+            "ar": "يجب الإنصات للخطبة وترك اللغو والانشغال. والجمعة تجديد إيماني أسبوعي يجمع بين العلم والجماعة والعبادة."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا نُودِيَ لِلصَّلَاةِ مِنْ يَوْمِ الْجُمُعَةِ فَاسْعَوْا إِلَىٰ ذِكْرِ اللَّهِ",
+          "ref": "62:9",
+          "text": {
+            "en": "\"When the call is made for prayer on Friday, hasten to the remembrance of Allah.\"",
+            "ur": "\"اے ایمان والو! جب جمعہ کے دن نماز کے لیے پکارا جائے تو اللہ کے ذکر کی طرف دوڑو۔\"",
+            "ar": "«فاسعوا إلى ذكر الله»"
+          }
+        }
+      ]
+    },
+    {
+      "id": "al-qadha-wal-qadr",
+      "categoryId": "islamic-beliefs",
+      "publishedAt": "2025-03-18",
+      "image": "/blog/al-qadha-wal-qadr.svg",
+      "imageAlt": {
+        "en": "Al-Qadha wal-Qadr Explained",
+        "ur": "القضاء والقدر کی وضاحت",
+        "ar": "شرح القضاء والقدر"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 54,
+      "title": {
+        "en": "Al-Qadha wal-Qadr Explained",
+        "ur": "القضاء والقدر کی وضاحت",
+        "ar": "شرح القضاء والقدر"
+      },
+      "excerpt": {
+        "en": "Qadr means Allah's complete knowledge and decree, while humans still make accountable choices.",
+        "ur": "قدر کا مطلب اللہ کا کامل علم اور فیصلہ ہے، جبکہ انسان اپنے انتخاب کا ذمہ دار رہتا ہے۔",
+        "ar": "القدر هو علم الله السابق وتقديره، مع بقاء الإنسان مسؤولاً عن اختياره."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Belief in qadr is one pillar of iman: Allah knows everything before it occurs, writes it, wills it, and creates it. This belief gives stability in hardship because nothing escapes divine wisdom.",
+            "ur": "قدر پر ایمان ارکانِ ایمان میں شامل ہے: اللہ ہر چیز کو پہلے سے جانتا، لکھتا، چاہتا اور پیدا کرتا ہے۔ یہ عقیدہ مصیبت میں دل کو سہارا دیتا ہے کہ کچھ بھی اللہ کی حکمت سے باہر نہیں۔",
+            "ar": "الإيمان بالقدر ركن من أركان الإيمان: علم الله السابق وكتابته ومشيئته وخلقه لكل شيء. وهذا يورث الطمأنينة عند البلاء."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "At the same time, Islam affirms human responsibility. We choose, strive, repent, and answer for actions. Trusting qadr never means passivity; it means effort with surrender to Allah's final outcome.",
+            "ur": "ساتھ ہی اسلام انسانی ذمہ داری کو ثابت کرتا ہے۔ ہم نیت کرتے، محنت کرتے، توبہ کرتے اور جواب دہ ہوتے ہیں۔ قدر پر ایمان سستی نہیں بلکہ کوشش کے ساتھ اللہ پر توکل ہے۔",
+            "ar": "ومع ذلك يثبت الإسلام مسؤولية العبد عن أفعاله. فالإيمان بالقدر لا يعني الكسل، بل الأخذ بالأسباب ثم التسليم لحكم الله."
+          }
+        }
+      ]
+    },
+    {
+      "id": "what-is-tajweed",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-03-10",
+      "image": "/blog/what-is-tajweed.svg",
+      "imageAlt": {
+        "en": "What Is Tajweed?",
+        "ur": "تجوید کیا ہے؟",
+        "ar": "ما هو التجويد؟"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 73,
+      "title": {
+        "en": "What Is Tajweed?",
+        "ur": "تجوید کیا ہے؟",
+        "ar": "ما هو التجويد؟"
+      },
+      "excerpt": {
+        "en": "Tajweed is reciting Quran with correct pronunciation, rights of letters, and proper rhythm.",
+        "ur": "تجوید قرآن کو صحیح مخارج اور قواعد کے ساتھ پڑھنے کا علم ہے۔",
+        "ar": "التجويد هو قراءة القرآن بإخراج الحروف من مخارجها وإعطائها حقوقها."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Tajweed preserves how the Quran was recited by the Prophet (peace be upon him). It includes rules of articulation, elongation, stopping, and letter qualities so the meaning is protected in recitation.",
+            "ur": "تجوید وہ طریقہ ہے جس سے قرآن نبی ﷺ کی قراءت کے مطابق محفوظ رہتا ہے۔ اس میں مخارج، مدود، وقف اور حروف کی صفات شامل ہیں تاکہ معنی محفوظ رہیں۔",
+            "ar": "يحفظ التجويد طريقة قراءة النبي ﷺ للقرآن. ويشمل المخارج والمدود والوقف وصفات الحروف لصيانة المعنى والأداء."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Beginners should learn slowly with a qualified teacher, even if reading speed is low. Beautiful recitation is not only melody; it is accuracy, reverence, and understanding.",
+            "ur": "ابتدائی طالب علم کو رفتار کم ہو تب بھی استاد کے ساتھ درست پڑھنا سیکھنا چاہیے۔ خوبصورت تلاوت صرف آواز نہیں بلکہ صحت، ادب اور فہم ہے۔",
+            "ar": "ينبغي للمبتدئ التعلم على شيخ متقن ولو ببطء. فحسن التلاوة ليس نغماً فقط، بل صحة وأدب وفهم."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "وَرَتِّلِ الْقُرْآنَ تَرْتِيلًا",
+          "ref": "73:4",
+          "text": {
+            "en": "\"And recite the Quran with measured recitation.\"",
+            "ur": "\"اور قرآن کو ٹھہر ٹھہر کر پڑھو۔\"",
+            "ar": "«ورتل القرآن ترتيلا»"
+          }
+        }
+      ]
+    },
+    {
+      "id": "how-many-pages-quran",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-03-02",
+      "image": "/blog/how-many-pages-quran.svg",
+      "imageAlt": {
+        "en": "How Many Pages Are in the Quran?",
+        "ur": "قرآن کے کتنے صفحات ہیں؟",
+        "ar": "كم عدد صفحات القرآن؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "How Many Pages Are in the Quran?",
+        "ur": "قرآن کے کتنے صفحات ہیں؟",
+        "ar": "كم عدد صفحات القرآن؟"
+      },
+      "excerpt": {
+        "en": "The common Madani mushaf has 604 pages, divided into 30 ajza for practical recitation.",
+        "ur": "عام مدنی مصحف میں 604 صفحات ہوتے ہیں اور اسے 30 پاروں میں تقسیم کیا گیا ہے۔",
+        "ar": "المصحف المدني الشائع يتكون من 604 صفحات مقسمة إلى 30 جزءاً."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Most printed copies today follow the Madani format with 604 pages. The Quran has 114 surahs and 30 juz, making daily recitation plans easier for students and families.",
+            "ur": "آج کل زیادہ تر مطبوعہ نسخے مدنی ترتیب کے مطابق 604 صفحات پر مشتمل ہوتے ہیں۔ قرآن میں 114 سورتیں اور 30 پارے ہیں، جس سے روزانہ تلاوت کا معمول آسان بنتا ہے۔",
+            "ar": "تعتمد المصاحف الشائعة اليوم طبعة المدينة ذات 604 صفحات. ويتكوّن القرآن من 114 سورة و30 جزءاً، مما يسهل خطط التلاوة اليومية."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Page numbers can vary in smaller scripts or regional prints, but the revealed text is identical. What matters most is consistency: a little recitation every day builds deep connection.",
+            "ur": "چھوٹے رسم الخط یا علاقائی طباعت میں صفحات کی گنتی بدل سکتی ہے، مگر متن وہی رہتا ہے۔ اصل اہمیت تسلسل کی ہے: روزانہ تھوڑی تلاوت بھی دل کو قرآن سے جوڑ دیتی ہے۔",
+            "ar": "قد يختلف ترقيم الصفحات باختلاف الطباعة والخط، لكن النص واحد. والأهم المداومة؛ فالقليل اليومي يصنع صلة عميقة بالقرآن."
+          }
+        }
+      ]
+    },
+    {
+      "id": "laylatul-jaiza",
+      "categoryId": "sawm",
+      "publishedAt": "2025-02-22",
+      "image": "/blog/laylatul-jaiza.svg",
+      "imageAlt": {
+        "en": "What Is Laylatul Jaiza?",
+        "ur": "لیلۃ الجائزہ کیا ہے؟",
+        "ar": "ما هي ليلة الجائزة؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "What Is Laylatul Jaiza?",
+        "ur": "لیلۃ الجائزہ کیا ہے؟",
+        "ar": "ما هي ليلة الجائزة؟"
+      },
+      "excerpt": {
+        "en": "Laylatul Jaiza refers to the night before Eid, celebrated as a time of gratitude and dua.",
+        "ur": "لیلۃ الجائزہ عید سے پہلی رات کو کہا جاتا ہے جس میں شکر اور دعا کی تلقین ہے۔",
+        "ar": "ليلة الجائزة هي ليلة العيد، وتُعظَّم بالشكر والدعاء."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "In many Muslim traditions, the eve of Eid al-Fitr is called Laylatul Jaiza, the \"night of reward,\" after a month of fasting and devotion. While specific narrations vary in authenticity, the spirit of gratitude is well-rooted.",
+            "ur": "مسلم روایت میں عید الفطر سے پہلی رات کو لیلۃ الجائزہ کہا جاتا ہے، یعنی اجر کی رات۔ اگرچہ اس عنوان سے بعض روایات کی اسناد مختلف درجے کی ہیں، مگر شکر گزاری کا مفہوم مضبوط ہے۔",
+            "ar": "تسمى ليلة عيد الفطر عند كثير من المسلمين \"ليلة الجائزة\" بعد شهر الصيام. ورغم اختلاف درجة بعض الروايات، فمعنى الشكر بعد الطاعة ثابت في الدين."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "A believer spends this night in takbir, istighfar, charity, and family reconciliation. The best celebration is to carry Ramadan's discipline into the rest of the year.",
+            "ur": "اس رات تکبیر، استغفار، صدقہ اور باہمی صلح کا اہتمام کیا جاتا ہے۔ بہترین خوشی یہ ہے کہ رمضان کی تربیت کو پورے سال جاری رکھا جائے۔",
+            "ar": "يحييها المؤمن بالتكبير والاستغفار والصدقة وصلة الرحم. وأعظم فرحة أن تستمر تربية رمضان بعد انقضائه."
+          }
+        }
+      ]
+    },
+    {
+      "id": "hafs-vs-warsh-quran",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-02-14",
+      "image": "/blog/hafs-vs-warsh-quran.svg",
+      "imageAlt": {
+        "en": "Hafs vs Warsh: Are They Different Qurans?",
+        "ur": "حفص اور ورش: کیا یہ دو قرآن ہیں؟",
+        "ar": "حفص وورش: هل هما قرآنان مختلفان؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Hafs vs Warsh: Are They Different Qurans?",
+        "ur": "حفص اور ورش: کیا یہ دو قرآن ہیں؟",
+        "ar": "حفص وورش: هل هما قرآنان مختلفان؟"
+      },
+      "excerpt": {
+        "en": "Hafs and Warsh are canonical recitation transmissions, not separate scriptures.",
+        "ur": "حفص اور ورش قراءت کی معتبر روایات ہیں، الگ قرآن نہیں۔",
+        "ar": "حفص وورش طريقان متواتران في القراءة، وليسَا قرآنين مختلفين."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Quran was revealed with recitational flexibility and transmitted through trusted reciters. Hafs 'an Asim is common in many regions, while Warsh 'an Nafi is widespread in North and West Africa.",
+            "ur": "قرآن قراءت کے تنوع کے ساتھ نازل ہوا اور معتبر قراء کے ذریعے منتقل ہوا۔ حفص عن عاصم بہت علاقوں میں عام ہے جبکہ ورش عن نافع شمالی اور مغربی افریقہ میں معروف ہے۔",
+            "ar": "نزل القرآن بوجوه قرائية ونُقل بالأسانيد المتواترة. حفص عن عاصم شائع في بلدان كثيرة، وورش عن نافع مشهور في المغرب وإفريقيا الغربية."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Differences are mostly in pronunciation, elongation, and limited wording variations that preserve the same message. This richness demonstrates preservation through multiple chains, not contradiction.",
+            "ur": "فرق عموماً تلفظ، مدود اور چند لفظی وجوہ میں ہوتا ہے مگر معنی ایک ہی رہتا ہے۔ یہ اختلاف نہیں بلکہ حفاظتِ قرآن کی ایک مضبوط صورت ہے۔",
+            "ar": "الفروق غالبها في الأداء وبعض الألفاظ المعتبرة التي لا تنقض المعنى. وهذا يدل على قوة الحفظ بالنقل المتعدد لا على التناقض."
+          }
+        }
+      ]
+    },
+    {
+      "id": "quran-10-94-doubt-certainty",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-02-06",
+      "image": "/blog/quran-10-94-doubt-certainty.svg",
+      "imageAlt": {
+        "en": "Quran 10:94 - Doubt and Certainty",
+        "ur": "قرآن 10:94 — شک اور یقین",
+        "ar": "الآية 10:94 بين الشك واليقين"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 10,
+      "title": {
+        "en": "Quran 10:94 - Doubt and Certainty",
+        "ur": "قرآن 10:94 — شک اور یقین",
+        "ar": "الآية 10:94 بين الشك واليقين"
+      },
+      "excerpt": {
+        "en": "This verse addresses opponents and confirms revelation, not uncertainty in the Prophet.",
+        "ur": "یہ آیت نبی ﷺ کے شک کے لیے نہیں بلکہ منکرین پر حجت قائم کرنے کے لیے ہے۔",
+        "ar": "هذه الآية ليست لإثبات شك عند النبي، بل لإقامة الحجة على المنكرين."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Some readers misunderstand 10:94 as if the Prophet (peace be upon him) doubted revelation. Classical tafsir explains that the wording is conditional and rhetorical, aimed at disbelievers who denied earlier scriptures and current revelation alike.",
+            "ur": "بعض لوگ 10:94 کو غلط سمجھتے ہیں، جیسے نبی ﷺ کو وحی میں شک ہو۔ مفسرین نے واضح کیا کہ یہ اسلوبِ شرط بطور حجت ہے، اصل مخاطب منکرین ہیں۔",
+            "ar": "يُسيء بعض الناس فهم قوله تعالى في 10:94. وبيّن المفسرون أنه أسلوب شرطي لإقامة الحجة على المكذبين، لا أنه شك من النبي ﷺ."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Prophet lived with complete certainty in his mission. For believers, the lesson is to study context in Quranic verses and rely on tafsir scholarship before drawing theological conclusions.",
+            "ur": "نبی کریم ﷺ اپنے مشن پر کامل یقین رکھتے تھے۔ ہمارے لیے سبق یہ ہے کہ قرآنی آیات کو سیاق و سباق اور معتبر تفسیر کے ساتھ سمجھا جائے۔",
+            "ar": "كان النبي ﷺ على يقين تام برسالته. والعبرة للمؤمن أن يفهم الآيات في سياقها ويرجع إلى التفسير الموثوق قبل بناء الأحكام العقدية."
+          }
+        }
+      ]
+    },
+    {
+      "id": "surah-hashr-last-3-ayat",
+      "categoryId": "quranic-teachings",
+      "publishedAt": "2025-01-29",
+      "image": "/blog/surah-hashr-last-3-ayat.svg",
+      "imageAlt": {
+        "en": "Last 3 Verses of Surah Al-Hashr",
+        "ur": "سورۃ الحشر کی آخری تین آیات",
+        "ar": "آخر ثلاث آيات من سورة الحشر"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 59,
+      "title": {
+        "en": "Last 3 Verses of Surah Al-Hashr",
+        "ur": "سورۃ الحشر کی آخری تین آیات",
+        "ar": "آخر ثلاث آيات من سورة الحشر"
+      },
+      "excerpt": {
+        "en": "These verses gather profound Names of Allah and strengthen awe, trust, and remembrance.",
+        "ur": "ان آیات میں اللہ کے جلیل القدر اسماء جمع ہیں جو دل میں خشیت اور یقین پیدا کرتے ہیں۔",
+        "ar": "تجمع هذه الآيات أسماء عظيمة لله وتغرس الخشية واليقين."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The final verses of Surah Al-Hashr mention majestic Names like Al-Malik, Al-Quddus, As-Salam, and Al-Aziz. Reciting them reminds believers that true power, peace, and honor all belong to Allah alone.",
+            "ur": "سورۃ الحشر کی آخری آیات میں الملک، القدوس، السلام اور العزیز جیسے عظیم اسماء آتے ہیں۔ ان کی تلاوت سے یاد رہتا ہے کہ اصل اقتدار، امن اور عزت صرف اللہ کے لیے ہے۔",
+            "ar": "تختم سورة الحشر بأسماء جليلة مثل الملك والقدوس والسلام والعزيز. وتلاوتها تربي القلب على أن السيادة والطمأنينة والعزة لله وحده."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Many Muslims recite these verses in daily adhkar for spiritual grounding. Their message is practical: worship with humility, avoid arrogance, and trust the wisdom of the Lord who knows the unseen and the seen.",
+            "ur": "بہت سے مسلمان انہیں روزانہ اذکار میں پڑھتے ہیں۔ ان کا عملی پیغام یہ ہے کہ عاجزی کے ساتھ بندگی کرو، تکبر سے بچو، اور اس رب کی حکمت پر بھروسہ رکھو جو غیب و ظاہر کا جاننے والا ہے۔",
+            "ar": "يقرأها المسلمون ضمن الأذكار لما فيها من تثبيت. ورسالتها عملية: تواضع في العبادة، وابتعد عن الكبر، وثق بحكمة العليم بالغيب والشهادة."
+          }
+        }
+      ]
+    },
+    {
+      "id": "what-is-itikaf",
+      "categoryId": "sawm",
+      "publishedAt": "2025-01-21",
+      "image": "/blog/what-is-itikaf.svg",
+      "imageAlt": {
+        "en": "What Is I'tikaf?",
+        "ur": "اعتکاف کیا ہے؟",
+        "ar": "ما هو الاعتكاف؟"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 2,
+      "title": {
+        "en": "What Is I'tikaf?",
+        "ur": "اعتکاف کیا ہے؟",
+        "ar": "ما هو الاعتكاف؟"
+      },
+      "excerpt": {
+        "en": "I'tikaf is retreating in the mosque for focused worship, especially in the last ten nights of Ramadan.",
+        "ur": "اعتکاف مسجد میں ٹھہر کر یکسو عبادت کا نام ہے، خاص طور پر رمضان کے آخری عشرے میں۔",
+        "ar": "الاعتكاف لزوم المسجد للتفرغ للعبادة، خاصة في العشر الأواخر من رمضان."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "I'tikaf means staying in the mosque with intention to worship Allah, cutting down distractions of daily life. The Prophet (peace be upon him) regularly observed i'tikaf in Ramadan and encouraged seeking Laylat al-Qadr within those nights.",
+            "ur": "اعتکاف کا مطلب نیت کے ساتھ مسجد میں قیام کر کے عبادت میں مشغول ہونا ہے۔ نبی کریم ﷺ رمضان میں باقاعدہ اعتکاف فرماتے اور انہی راتوں میں لیلۃ القدر تلاش کرنے کی ترغیب دیتے تھے۔",
+            "ar": "الاعتكاف هو المكث في المسجد بنية العبادة وترك شواغل الدنيا. وقد داوم النبي ﷺ على الاعتكاف في رمضان وحث على التماس ليلة القدر."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "During i'tikaf, a person increases Quran recitation, dhikr, dua, and reflection. It purifies priorities: the heart learns that nearness to Allah is a daily need, not only a seasonal emotion.",
+            "ur": "اعتکاف میں قرآن، ذکر، دعا اور محاسبہ بڑھتا ہے۔ یہ عمل انسان کی ترجیحات درست کرتا ہے اور دل کو سکھاتا ہے کہ اللہ سے قربت وقتی جذبہ نہیں بلکہ مستقل ضرورت ہے۔",
+            "ar": "في الاعتكاف يكثر العبد من القرآن والذكر والدعاء والمحاسبة. وهو مدرسة تربوية تعيد ترتيب الأولويات ليصبح القرب من الله حاجة دائمة."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "وَلَا تُبَاشِرُوهُنَّ وَأَنْتُمْ عَاكِفُونَ فِي الْمَسَاجِدِ",
+          "ref": "2:187",
+          "text": {
+            "en": "\"And do not approach them while you are in retreat in the mosques.\"",
+            "ur": "\"اور جب تم مسجدوں میں اعتکاف کیے ہوئے ہو تو (ازدواجی تعلق) نہ رکھو۔\"",
+            "ar": "«ولا تباشروهن وأنتم عاكفون في المساجد»"
+          }
+        }
+      ]
+    },
+    {
+      "id": "kufi-hat-men-islam",
+      "categoryId": "lifestyle",
+      "publishedAt": "2025-01-13",
+      "image": "/blog/kufi-hat-men-islam.svg",
+      "imageAlt": {
+        "en": "Is Wearing a Kufi Required for Men?",
+        "ur": "کیا مردوں کے لیے ٹوپی لازمی ہے؟",
+        "ar": "هل لبس الكوفية واجب على الرجال؟"
+      },
+      "readMinutes": 3,
+      "title": {
+        "en": "Is Wearing a Kufi Required for Men?",
+        "ur": "کیا مردوں کے لیے ٹوپی لازمی ہے؟",
+        "ar": "هل لبس الكوفية واجب على الرجال؟"
+      },
+      "excerpt": {
+        "en": "A kufi is a respected tradition, but the core Sunnah is modesty and proper prayer etiquette.",
+        "ur": "ٹوپی پہننا ایک قابلِ احترام روایت ہے، مگر اصل سنت حیا اور نماز کا ادب ہے۔",
+        "ar": "لبس الكوفية عادة محترمة، لكن السنة الأصلية هي الستر وأدب الصلاة."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Many Muslims wear a kufi out of love for Islamic identity and reverence in worship. Scholars generally describe it as permissible and recommended in some cultures, but not a strict condition for salah.",
+            "ur": "بہت سے مسلمان دینی شناخت اور عبادت کے ادب کے طور پر ٹوپی پہنتے ہیں۔ اہلِ علم کے نزدیک یہ جائز اور بعض ماحول میں مستحسن ہے، لیکن نماز کی شرط نہیں۔",
+            "ar": "يلبس كثير من المسلمين الكوفية تعظيماً للشعائر وهو أمر جائز ومستحب في بعض الأعراف، لكنه ليس شرطاً لصحة الصلاة."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "If someone prays bareheaded, the prayer remains valid if the awrah is covered and humility is present. A believer should avoid judging others over clothing details and prioritize sincerity, cleanliness, and concentration.",
+            "ur": "اگر کوئی شخص بغیر ٹوپی نماز پڑھے تو ستر ڈھکا ہو اور خشوع موجود ہو تو نماز درست ہے۔ لباس کے جزوی مسائل پر دوسروں کو جج کرنے کے بجائے اخلاص، پاکیزگی اور توجہ کو اہم رکھنا چاہیے۔",
+            "ar": "تصح الصلاة بلا غطاء رأس إذا تحقق ستر العورة والخشوع. والأولى ترك التشدد في هذه الجزئيات والاهتمام بالإخلاص والطهارة وحضور القلب."
+          }
+        }
+      ]
+    },
+    {
+      "id": "what-does-allah-look-like",
+      "categoryId": "tawhid",
+      "publishedAt": "2025-01-05",
+      "image": "/blog/what-does-allah-look-like.svg",
+      "imageAlt": {
+        "en": "What Does Allah Look Like?",
+        "ur": "اللہ کیسا ہے؟",
+        "ar": "كيف يكون الله؟"
+      },
+      "readMinutes": 3,
+      "relatedSurah": 42,
+      "title": {
+        "en": "What Does Allah Look Like?",
+        "ur": "اللہ کیسا ہے؟",
+        "ar": "كيف يكون الله؟"
+      },
+      "excerpt": {
+        "en": "Islam teaches that Allah is unlike creation and cannot be imagined in physical form.",
+        "ur": "اسلام سکھاتا ہے کہ اللہ مخلوق جیسا نہیں اور کسی جسمانی شکل میں تصور نہیں کیا جا سکتا۔",
+        "ar": "يعلمنا الإسلام أن الله ليس كمثله شيء ولا يُتصوَّر بصورة جسدية."
+      },
+      "sections": [
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "The Quran states, \"There is nothing like unto Him\" (42:11). This verse closes the door to making images of Allah in the human mind. Allah sees, hears, and knows perfectly, but His attributes do not resemble created beings.",
+            "ur": "قرآن کہتا ہے: \"اس جیسی کوئی چیز نہیں\" (الشوریٰ 11:42)۔ یہ آیت اللہ کی انسانی یا مادی تصویر بنانے سے روکتی ہے۔ اللہ سنتا، دیکھتا اور جانتا ہے، مگر اس کی صفات مخلوق جیسی نہیں۔",
+            "ar": "قال الله تعالى: «ليس كمثله شيء» (الشورى: 11). هذه الآية تمنع تشبيه الله بخلقه. فالله سميع بصير عليم، لكن صفاته ليست كصفات المخلوقين."
+          }
+        },
+        {
+          "type": "paragraph",
+          "text": {
+            "en": "Believers focus on knowing Allah through His Names and revelation, not through imagination. In Jannah, the righteous will be honored with seeing Allah in a manner befitting His majesty, without asking \"how.\"",
+            "ur": "مومن اللہ کو اس کے اسماء الحسنیٰ اور وحی کے ذریعے پہچانتے ہیں، تخیّل کے ذریعے نہیں۔ جنت میں اہلِ ایمان کو اللہ کا دیدار نصیب ہوگا، مگر \"کیسے\" کا سوال نہیں کیا جاتا۔",
+            "ar": "يعرف المؤمنون ربهم بأسمائه الحسنى ووحيه، لا بالخيال. وفي الجنة يكرم الله أهل الإيمان برؤيته على وجه يليق بجلاله بلا سؤال: كيف."
+          }
+        },
+        {
+          "type": "quote",
+          "arabic": "لَيْسَ كَمِثْلِهِ شَيْءٌ",
+          "ref": "42:11",
+          "text": {
+            "en": "\"There is nothing like unto Him.\"",
+            "ur": "\"اس جیسی کوئی چیز نہیں۔\"",
+            "ar": "«ليس كمثله شيء»"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="Story of Prophet Yusuf">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a3a2e"/>
+      <stop offset="100%" style="stop-color:#0d1f18"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <circle cx="650" cy="80" r="45" fill="#c9a227" opacity="0.9"/>
+  <path d="M120 380 Q200 200 400 280 T680 320 L680 450 L120 450 Z" fill="#2d5a47" opacity="0.6"/>
+  <text x="400" y="230" text-anchor="middle" fill="#e8d5a3" font-family="Georgia,serif" font-size="42" font-weight="bold">Yusuf</text>
+  <text x="400" y="280" text-anchor="middle" fill="#a8c4b8" font-family="sans-serif" font-size="18">Patience &amp; Trust in Allah</text>
+</svg>
