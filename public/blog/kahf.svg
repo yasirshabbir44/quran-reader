@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" role="img" aria-label="People of the Cave">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e2a4a"/>
+      <stop offset="100%" style="stop-color:#0f1528"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bg)"/>
+  <ellipse cx="250" cy="320" rx="180" ry="90" fill="#2a3555"/>
+  <ellipse cx="280" cy="300" rx="120" ry="60" fill="#1a2238"/>
+  <circle cx="120" cy="60" r="8" fill="#fff" opacity="0.8"/>
+  <circle cx="200" cy="40" r="5" fill="#fff" opacity="0.6"/>
+  <text x="500" y="220" text-anchor="middle" fill="#b8c8e8" font-family="Georgia,serif" font-size="36" font-weight="bold">Ashab al-Kahf</text>
+  <text x="500" y="265" text-anchor="middle" fill="#8898b8" font-family="sans-serif" font-size="16">Faith tested by time</text>
+</svg>

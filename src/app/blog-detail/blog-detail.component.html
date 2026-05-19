@@ -1,0 +1,104 @@
+@if (loadError()) {
+<main class="blog-detail blog-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="blog-detail__state-card">
+    <p class="blog-detail__state-text">{{ 'blogLoadError' | uiTranslate }}</p>
+    <button type="button" class="blog-detail__btn blog-detail__btn--primary" (click)="retryLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+  </div>
+</main>
+} @else if (loading()) {
+<main class="blog-detail blog-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <p class="blog-detail__state-text">{{ 'blogDetailLoading' | uiTranslate }}</p>
+</main>
+} @else if (notFound()) {
+<main class="blog-detail blog-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="blog-detail__state-card">
+    <h1 class="blog-detail__state-title">{{ 'blogNotFoundTitle' | uiTranslate }}</h1>
+    <p class="blog-detail__state-text">{{ 'blogNotFoundBody' | uiTranslate }}</p>
+    <a class="blog-detail__btn blog-detail__btn--primary" routerLink="/blog">
+      {{ 'blogBackToDirectory' | uiTranslate }}
+    </a>
+  </div>
+</main>
+} @else if (post(); as article) {
+<article class="blog-detail" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <header class="blog-detail__header">
+    <a class="blog-detail__back" routerLink="/blog" [attr.aria-label]="'blogBackToDirectory' | uiTranslate">
+      ←
+    </a>
+    <div class="blog-detail__header-tools">
+      <label class="blog-detail__tool-label" for="blog-detail-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="blog-detail-locale"
+        class="blog-detail__select"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+  </header>
+
+  <figure class="blog-detail__hero">
+    <img
+      class="blog-detail__hero-img"
+      [src]="article.image"
+      [alt]="blog.pickLocalized(article.imageAlt)"
+      width="800"
+      height="450"
+      decoding="async"
+    />
+  </figure>
+
+  <div class="blog-detail__intro">
+    <p class="blog-detail__category">{{ article.categoryName }}</p>
+    <h1 class="blog-detail__title">{{ blog.pickLocalized(article.title) }}</h1>
+    <p class="blog-detail__meta">
+      <time [attr.datetime]="article.publishedAt">{{ formatDate(article.publishedAt) }}</time>
+      <span class="blog-detail__read">
+        {{ formatUiNum(article.readMinutes) }} {{ 'blogReadMinutes' | uiTranslate }}
+      </span>
+    </p>
+    <p class="blog-detail__excerpt">{{ blog.pickLocalized(article.excerpt) }}</p>
+    @if (article.relatedSurah) {
+    <a class="blog-detail__surah-link" [routerLink]="['/', article.relatedSurah]">
+      {{ 'blogReadRelatedSurah' | uiTranslate: { num: formatUiNum(article.relatedSurah) } }}
+    </a>
+    }
+  </div>
+
+  <div class="blog-detail__content">
+    @for (section of article.sections; track $index) {
+    @switch (section.type) {
+    @case ('heading') {
+    <h2 class="blog-detail__h2">{{ sectionText(section) }}</h2>
+    }
+    @case ('paragraph') {
+    <p class="blog-detail__p">{{ sectionText(section) }}</p>
+    }
+    @case ('quote') {
+    <blockquote class="blog-detail__quote">
+      @if (section.arabic) {
+      <p class="blog-detail__quote-ar" dir="rtl" lang="ar">{{ section.arabic }}</p>
+      }
+      <p class="blog-detail__quote-text">{{ sectionText(section) }}</p>
+      @if (section.ref) {
+      <footer class="blog-detail__quote-ref" dir="ltr" lang="en">{{ section.ref }}</footer>
+      }
+    </blockquote>
+    }
+    }
+    }
+  </div>
+
+  <footer class="blog-detail__footer">
+    <a class="blog-detail__btn blog-detail__btn--primary" routerLink="/blog">
+      {{ 'blogBackToDirectory' | uiTranslate }}
+    </a>
+  </footer>
+</article>
+}
