@@ -28,6 +28,15 @@
   ],
   "dataGroups": [
     {
+      "name": "blog-index",
+      "urls": ["/blog-index.json", "/blog/**"],
+      "cacheConfig": {
+        "maxSize": 20,
+        "maxAge": "365d",
+        "strategy": "performance"
+      }
+    },
+    {
       "name": "thematic-index",
       "urls": ["/thematic-index.json"],
       "cacheConfig": {
