@@ -11,6 +11,7 @@ export { ReaderPanelCoordinatorService } from './panels/reader-panel-coordinator
 export { ReaderSurahNavService } from './panels/reader-surah-nav.service';
 export { ReaderMushafNavService } from './panels/reader-mushaf-nav.service';
 export { ReaderTafsirPanelService } from './panels/reader-tafsir-panel.service';
+export { ReaderWordStudyPanelService } from './panels/reader-word-study-panel.service';
 export { ReaderBookmarkUiService } from './bookmark/reader-bookmark-ui.service';
 export { ReaderLayoutBreakpointsService } from './layout/reader-layout-breakpoints.service';
 export { ReaderVerseActionsService } from './presentation/reader-verse-actions.service';

@@ -1810,11 +1810,28 @@ a.reader__settings-btn {
     color: var(--reader-accent);
     background: rgba(201, 162, 39, 0.1);
   }
+
+  &--word-study {
+    border-color: rgba(120, 170, 210, 0.28);
+    color: #9ec5e8;
+    background: rgba(120, 170, 210, 0.08);
+  }
+
+  &--word-study-active {
+    border-color: rgba(120, 170, 210, 0.5);
+    color: #b8daf5;
+    background: rgba(120, 170, 210, 0.14);
+  }
 }
 
 .verses__item--tafsir-open {
   border-color: rgba(201, 162, 39, 0.28);
   box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.08);
+}
+
+.verses__item--word-study-open {
+  border-color: rgba(120, 170, 210, 0.28);
+  box-shadow: 0 0 0 1px rgba(120, 170, 210, 0.08);
 }
 
 .verses__content {
@@ -2048,6 +2065,12 @@ a.reader__settings-btn {
   flex-direction: column;
   gap: 0.85rem;
   padding: 0 0.85rem 0.85rem;
+}
+
+.verses__word-study--inline {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
 }
 
 @keyframes verses-bookmark-pop {
