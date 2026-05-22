@@ -15,7 +15,7 @@
 
 .verses__word-study-status {
   margin: 0 0 0.75rem;
-  font-family: 'Amiri', serif;
+  font-family: var(--reader-font-ui);
   font-size: 0.92rem;
   line-height: 1.55;
   color: var(--reader-ink-muted);
@@ -35,7 +35,7 @@
   border: 1px solid rgba(120, 170, 210, 0.35);
   background: rgba(120, 170, 210, 0.12);
   color: #b8daf5;
-  font-family: 'Amiri', serif;
+  font-family: var(--reader-font-ui);
   font-size: 0.78rem;
   cursor: pointer;
 
@@ -67,7 +67,7 @@
   }
 
   th {
-    font-family: 'Amiri', serif;
+    font-family: var(--reader-font-ui);
     font-size: 0.72rem;
     font-weight: 700;
     letter-spacing: 0.05em;
@@ -86,7 +86,7 @@
 }
 
 .verses__word-study-ar {
-  font-family: 'Amiri Quran', 'Amiri', serif;
+  font-family: var(--reader-font-arabic);
   font-size: 1.15rem;
   line-height: 1.5;
   color: var(--reader-ink);
@@ -132,7 +132,7 @@
 
 .verses__word-study-external-title {
   margin: 0 0 0.55rem;
-  font-family: 'Amiri', serif;
+  font-family: var(--reader-font-ui);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -187,7 +187,7 @@
 
 .verses__word-study-attribution {
   margin: 0.75rem 0 0;
-  font-family: 'Amiri', serif;
+  font-family: var(--reader-font-ui);
   font-size: 0.74rem;
   line-height: 1.45;
   color: var(--reader-ink-muted);
