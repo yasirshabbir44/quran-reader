@@ -4,6 +4,7 @@ import type { ReadingBookmark } from '../../../core/bookmark/reading-bookmark.re
 import { READING_BOOKMARK_REPOSITORY } from '../../../core/bookmark/reading-bookmark.repository';
 import type { ReaderDisplayVerse } from '../../models/reader-display-verse.model';
 import { DailyReminderService } from '../../../core/notifications/daily-reminder.service';
+import { KhatamService } from '../../../core/khatam/khatam.service';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
 
 @Injectable()
@@ -13,6 +14,7 @@ export class ReaderBookmarkUiService {
   private readonly readingBookmark = inject(READING_BOOKMARK_REPOSITORY);
   private readonly dailyReminder = inject(DailyReminderService);
   private readonly corpus = inject(ReaderCorpusStateService);
+  private readonly khatam = inject(KhatamService);
 
   readonly savedPlace = signal<ReadingBookmark | null>(null);
   readonly showSavedToast = signal(false);
@@ -33,6 +35,7 @@ export class ReaderBookmarkUiService {
       return;
     }
     this.readingBookmark.saveNow(surah, ayah);
+    this.khatam.recordProgress(surah, ayah);
     this.savedPlace.set({ surah, ayah });
     this.flashSaved(ayah);
     void this.dailyReminder.onBookmarkChanged();
