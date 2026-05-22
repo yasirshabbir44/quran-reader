@@ -250,11 +250,9 @@
         <input
           id="home-quick-jump"
           class="landing__search-input landing__jump-input"
-          type="number"
-          inputmode="numeric"
-          min="1"
-          max="114"
+          type="search"
           autocomplete="off"
+          spellcheck="false"
           [attr.placeholder]="'homeQuickJumpPlaceholder' | uiTranslate"
           [ngModel]="quickJumpInput()"
           (ngModelChange)="quickJumpInput.set($event); quickJumpError.set(false)"
@@ -391,31 +389,54 @@
       </p>
     </div>
 
-    <div class="landing__filters" role="group" [attr.aria-label]="'homeFilterAria' | uiTranslate">
-      <button
-        type="button"
-        class="landing__filter-chip"
-        [class.landing__filter-chip--active]="revelationFilter() === 'all'"
-        (click)="setRevelationFilter('all')"
-      >
-        {{ 'homeFilterAll' | uiTranslate }} ({{ formatUiNum(surahs().length) }})
-      </button>
-      <button
-        type="button"
-        class="landing__filter-chip"
-        [class.landing__filter-chip--active]="revelationFilter() === 'meccan'"
-        (click)="setRevelationFilter('meccan')"
-      >
-        {{ 'factTypeMeccan' | uiTranslate }} ({{ formatUiNum(meccanCount()) }})
-      </button>
-      <button
-        type="button"
-        class="landing__filter-chip"
-        [class.landing__filter-chip--active]="revelationFilter() === 'medinan'"
-        (click)="setRevelationFilter('medinan')"
-      >
-        {{ 'factTypeMedinan' | uiTranslate }} ({{ formatUiNum(medinanCount()) }})
-      </button>
+    <div class="landing__index-controls">
+      <div class="landing__filters" role="group" [attr.aria-label]="'homeFilterAria' | uiTranslate">
+        <button
+          type="button"
+          class="landing__filter-chip"
+          [class.landing__filter-chip--active]="revelationFilter() === 'all'"
+          (click)="setRevelationFilter('all')"
+        >
+          {{ 'homeFilterAll' | uiTranslate }} ({{ formatUiNum(surahs().length) }})
+        </button>
+        <button
+          type="button"
+          class="landing__filter-chip"
+          [class.landing__filter-chip--active]="revelationFilter() === 'meccan'"
+          (click)="setRevelationFilter('meccan')"
+        >
+          {{ 'factTypeMeccan' | uiTranslate }} ({{ formatUiNum(meccanCount()) }})
+        </button>
+        <button
+          type="button"
+          class="landing__filter-chip"
+          [class.landing__filter-chip--active]="revelationFilter() === 'medinan'"
+          (click)="setRevelationFilter('medinan')"
+        >
+          {{ 'factTypeMedinan' | uiTranslate }} ({{ formatUiNum(medinanCount()) }})
+        </button>
+      </div>
+
+      <div class="landing__layout-toggle" role="group" [attr.aria-label]="'homeIndexLayoutAria' | uiTranslate">
+        <button
+          type="button"
+          class="landing__filter-chip"
+          [class.landing__filter-chip--active]="indexLayout() === 'list'"
+          [disabled]="!mushafPayload()"
+          (click)="setIndexLayout('list')"
+        >
+          {{ 'homeIndexLayoutList' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="landing__filter-chip"
+          [class.landing__filter-chip--active]="indexLayout() === 'juz'"
+          [disabled]="!mushafPayload()"
+          (click)="setIndexLayout('juz')"
+        >
+          {{ 'homeIndexLayoutJuz' | uiTranslate }}
+        </button>
+      </div>
     </div>
 
     <div class="landing__search" role="search">
@@ -434,6 +455,46 @@
 
     @if (filteredSurahs().length === 0) {
     <p class="landing__index-empty">{{ 'homeIndexEmpty' | uiTranslate }}</p>
+    } @else if (indexLayout() === 'juz' && mushafPayload()) {
+    <div class="landing__juz-groups">
+      @for (group of indexJuzGroups(); track group.juz) {
+      <section class="landing__juz-block" [attr.aria-labelledby]="'juz-block-' + group.juz">
+        <div class="landing__juz-block-head">
+          <h3 [id]="'juz-block-' + group.juz" class="landing__juz-block-title">
+            {{ 'homeJuzGroupTitle' | uiTranslate: { juz: formatUiNum(group.juz) } }}
+          </h3>
+          <a
+            class="landing__juz-block-link"
+            [routerLink]="['/juz', group.juz]"
+            [attr.aria-label]="'homeJuzGroupReadAria' | uiTranslate: { juz: formatUiNum(group.juz) }"
+          >
+            {{ 'homeJuzGroupRead' | uiTranslate }}
+          </a>
+        </div>
+        <ul class="landing__grid landing__grid--compact">
+          @for (s of group.surahs; track s.number) {
+          <li>
+            <a
+              class="landing__surah-card"
+              [routerLink]="['/', s.number]"
+              [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
+            >
+              <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
+              <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+              <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
+              <span class="landing__surah-meta">
+                <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
+                <span class="landing__surah-verses">
+                  {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
+                </span>
+              </span>
+            </a>
+          </li>
+          }
+        </ul>
+      </section>
+      }
+    </div>
     } @else {
     <ul class="landing__grid">
       @for (s of filteredSurahs(); track s.number) {

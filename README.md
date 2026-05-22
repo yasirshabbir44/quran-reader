@@ -6,8 +6,9 @@ A lightweight Angular app for reading Quran with a focused default experience on
 
 This app is designed for distraction-free recitation and study:
 
-- Opens directly to Surah Al-Mulk by default (`/surah/67`)
-- Supports reading any surah from `1` to `114` through route params (`/surah/:n`)
+- Opens to a **home dashboard** at `/` with resume reading, popular surahs, and a searchable surah index (groupable by juz)
+- Supports reading any surah from `1` to `114` at `/:n` (legacy `/surah/:n` redirects)
+- Al-Mulk (67) remains the reader fallback when a route is invalid; the app is still optimized for that surah
 - Shows Arabic + English + Urdu per ayah
 - Provides UI localization in English, Arabic, and Urdu
 - Tracks active ayah while scrolling and supports quick jump-to-ayah navigation
