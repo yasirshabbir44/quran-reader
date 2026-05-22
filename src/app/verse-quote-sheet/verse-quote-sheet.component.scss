@@ -22,11 +22,12 @@
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
-  padding: 0.9rem;
-  border-radius: 1rem 1rem 0.85rem 0.85rem;
+  padding: 1rem 1.05rem;
+  border-radius: var(--reader-radius-xl) var(--reader-radius-xl) var(--reader-radius-lg) var(--reader-radius-lg);
   border: 1px solid var(--reader-border-strong);
   background: var(--reader-chrome-bg-solid);
-  box-shadow: 0 18px 48px var(--reader-shadow);
+  box-shadow: 0 22px 56px var(--reader-shadow);
+  font-family: var(--reader-font-ui);
 }
 
 @media (min-width: 640px) {
@@ -48,7 +49,7 @@
 
 .quote-sheet__title {
   margin: 0;
-  font-family: 'Amiri', serif;
+  font-family: var(--reader-font-ui);
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--reader-ink);

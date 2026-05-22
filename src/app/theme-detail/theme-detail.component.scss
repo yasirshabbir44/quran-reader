@@ -1,4 +1,5 @@
 @use '../core/reader-layout/reader-index-layout' as idx;
+@use '../core/reader-layout/reader-ui-system' as ui;
 
 :host {
   display: block;
@@ -6,111 +7,52 @@
 }
 
 .theme-detail {
-  min-height: 100vh;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding:
-    max(1.25rem, env(safe-area-inset-top))
-    max(1rem, env(safe-area-inset-right))
-    max(2rem, env(safe-area-inset-bottom))
-    max(1rem, env(safe-area-inset-left));
-  color: var(--reader-body-ink);
+  @include ui.ui-page-shell;
 }
 
 .theme-detail--state {
-  display: grid;
-  place-items: center;
-  text-align: center;
+  @include ui.ui-state-center;
 }
 
 .theme-detail__state-card {
-  max-width: 24rem;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  border: 1px solid var(--reader-border-strong);
-  background: var(--reader-chrome-bg-panel);
+  @include ui.ui-state-card;
 }
 
 .theme-detail__state-title {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
+  font-weight: 700;
   color: var(--reader-ink-intro-title);
 }
 
 .theme-detail__state-text {
-  margin: 0 0 1rem;
-  line-height: 1.6;
-  color: var(--reader-ink-muted);
+  @include ui.ui-state-text;
+  margin-bottom: 1rem;
 }
 
 .theme-detail__header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem 1.5rem;
-  margin-bottom: 1.75rem;
+  @include ui.ui-page-header;
 }
 
 .theme-detail__back {
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  flex: 0 0 auto;
-  border-radius: 0.55rem;
-  text-decoration: none;
-  color: var(--reader-ink-ui);
-  background: var(--reader-overlay);
-  border: 1px solid var(--reader-border-strong);
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
-
-  &:hover {
-    background: var(--reader-elevated-hover);
-    color: var(--reader-ink-ui-hover);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 2px;
-  }
+  @include ui.ui-back-btn;
 }
 
 .theme-detail__intro {
-  flex: 1 1 16rem;
-  min-width: 0;
-  padding: 1.35rem 1.25rem;
-  border-radius: 1.1rem;
-  border: 1px solid var(--reader-accent-border);
-  background: var(--reader-intro-bg);
-  box-shadow: 0 16px 40px var(--reader-shadow-card);
+  @include ui.ui-brand-hero;
 }
 
 .theme-detail__category {
-  margin: 0 0 0.35rem;
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--reader-ink-intro-kicker);
+  @include ui.ui-kicker;
 }
 
 .theme-detail__title {
-  margin: 0 0 0.4rem;
-  font-size: clamp(1.65rem, 4vw, 2.15rem);
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--reader-ink-intro-title);
+  @include ui.ui-page-title;
 }
 
 .theme-detail__desc {
-  margin: 0;
+  @include ui.ui-page-subtitle;
   max-width: 34rem;
-  font-size: clamp(0.95rem, 2.2vw, 1.05rem);
-  line-height: 1.55;
-  color: var(--reader-ink-muted);
 }
 
 .theme-detail__header-tools {
@@ -262,45 +204,23 @@
 }
 
 .theme-detail__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  @include ui.ui-btn-base;
   min-height: 2rem;
   padding: 0.25rem 0.85rem;
-  border-radius: 999px;
   font-size: 0.78rem;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition:
-    filter 0.15s ease,
-    background 0.15s ease,
-    color 0.15s ease;
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 3px;
-  }
 }
 
 .theme-detail__btn--primary {
-  color: var(--reader-btn-on-accent);
-  background: linear-gradient(180deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
-  border-color: var(--reader-accent-border-strong);
-
-  &:hover {
-    filter: brightness(1.06);
-  }
+  @include ui.ui-btn-primary;
 }
 
 .theme-detail__translit {
   margin: -0.35rem 0 0.75rem;
   padding: 0.55rem 1rem;
-  border-radius: 0.65rem;
+  border-radius: var(--reader-radius-sm);
   border: 1px solid var(--reader-accent-border);
   background: var(--reader-accent-soft);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--reader-font-ui);
   font-size: 0.88rem;
   font-style: italic;
   line-height: 1.55;
@@ -310,20 +230,14 @@
 .theme-detail__ar {
   margin: 0 0 0.75rem;
   padding: 1rem 1.1rem;
-  border-radius: 0.85rem;
-  border: 1px solid var(--reader-border-strong);
-  background: var(--reader-bismillah-bg);
-  font-family: 'Amiri Quran', 'Amiri', serif;
+  @include ui.ui-verse-arabic;
   font-size: clamp(1.35rem, 3.5vw, 1.75rem);
-  line-height: 1.85;
-  color: var(--reader-ink-bismillah);
 }
 
 .theme-detail__tr {
   margin: 0;
+  @include ui.ui-verse-translation;
   font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--reader-ink-intro-body);
 
   &--secondary {
     margin-top: 0.45rem;
