@@ -649,6 +649,52 @@
       </div>
     </fieldset>
   </div>
+  <div class="reader__settings-khatam">
+    <p class="reader__tool-label reader__tool-label--compact">{{ 'khatamTitle' | uiTranslate }}</p>
+    @if (khatam.isActive() || khatam.isComplete()) {
+    <p class="reader__settings-khatam-meta">
+      {{
+        'khatamReaderProgress'
+          | uiTranslate
+            : {
+                pct: formatUiNum(khatam.progress().percent),
+                juz: formatUiNum(khatam.progress().juzCompleted),
+                totalJuz: formatUiNum(khatam.progress().totalJuz),
+              }
+      }}
+    </p>
+    <div
+      class="reader__settings-khatam-bar"
+      role="progressbar"
+      [attr.aria-valuenow]="khatam.progress().percent"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [attr.aria-label]="'khatamProgressAria' | uiTranslate: { pct: formatUiNum(khatam.progress().percent) }"
+    >
+      <span class="reader__settings-khatam-fill" [style.width.%]="khatam.progress().percent"></span>
+    </div>
+    }
+    <div class="reader__settings-khatam-actions">
+      @if (khatam.isActive()) {
+      <button type="button" class="reader__seg-btn" (click)="goToKhatamPlace()">
+        {{ 'khatamContinueCta' | uiTranslate }}
+      </button>
+      <button type="button" class="reader__seg-btn" (click)="startNewKhatam()">
+        {{ 'khatamNewCta' | uiTranslate }}
+      </button>
+      } @else if (khatam.isComplete()) {
+      <p class="reader__settings-hint">{{ 'khatamCompleteMessage' | uiTranslate }}</p>
+      <button type="button" class="reader__seg-btn" (click)="startNewKhatam()">
+        {{ 'khatamStartNewAfterComplete' | uiTranslate }}
+      </button>
+      } @else {
+      <button type="button" class="reader__seg-btn" (click)="startKhatam()">
+        {{ 'khatamStartCta' | uiTranslate }}
+      </button>
+      }
+    </div>
+    <p class="reader__settings-hint reader__settings-hint--khatam">{{ 'khatamReaderHint' | uiTranslate }}</p>
+  </div>
   <div class="reader__settings-bookmark">
     <p class="reader__tool-label reader__tool-label--compact">{{ 'bookmarkToolsGroup' | uiTranslate }}</p>
     <div class="reader__settings-bookmark-actions">

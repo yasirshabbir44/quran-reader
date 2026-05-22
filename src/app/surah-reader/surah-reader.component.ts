@@ -16,6 +16,7 @@ import { verseElementId as verseElementIdForLocation } from '../core/routing/ver
 import type { ReaderDisplayVerse } from './models/reader-display-verse.model';
 import type { ReaderViewKind } from './models/reader-view-kind.model';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
+import { KhatamService } from '../core/khatam/khatam.service';
 import { DailyReminderService } from '../core/notifications/daily-reminder.service';
 import { NotificationPreferencesService } from '../core/notifications/notification-preferences.service';
 import type { DailyReminderKind } from '../core/notifications/notification-storage';
@@ -103,6 +104,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly mushafNav = inject(ReaderMushafNavService);
   protected readonly panels = inject(ReaderPanelCoordinatorService);
   protected readonly bookmarkUi = inject(ReaderBookmarkUiService);
+  protected readonly khatam = inject(KhatamService);
   protected readonly tafsir = inject(ReaderTafsirPanelService);
   protected readonly wordStudy = inject(ReaderWordStudyPanelService);
   protected readonly breakpoints = inject(ReaderLayoutBreakpointsService);
@@ -405,6 +407,29 @@ export class SurahReaderComponent implements OnInit {
     this.activeAyah.updateFromScroll();
     const ref = this.activeAyah.activeVerse();
     this.bookmarkUi.saveAtAyah(ref.surah, ref.ayah);
+  }
+
+  protected startKhatam(): void {
+    this.khatam.startNew();
+  }
+
+  protected startNewKhatam(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (this.khatam.isActive() && !window.confirm(this.ui.translate('khatamNewConfirm'))) {
+      return;
+    }
+    this.khatam.startNew();
+  }
+
+  protected goToKhatamPlace(): void {
+    const ref = this.khatam.furthest();
+    if (this.corpus.viewKind() !== 'surah' || ref.surah !== this.corpus.surahNumber()) {
+      this.fragments.navigateWithFragment(ref.surah, ref.ayah);
+      return;
+    }
+    this.activeAyah.navigateToVerse(ref);
   }
 
   protected goToSavedBookmark(): void {
