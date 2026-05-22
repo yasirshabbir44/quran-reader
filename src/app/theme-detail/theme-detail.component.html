@@ -1,19 +1,40 @@
 @if (loadError()) {
 <main class="theme-detail theme-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
   <div class="theme-detail__state-card">
+    <p class="theme-detail__state-icon" aria-hidden="true">◇</p>
     <p class="theme-detail__state-text">{{ 'themesLoadError' | uiTranslate }}</p>
-    <button type="button" class="theme-detail__btn" (click)="retryLoad()">
+    <button type="button" class="theme-detail__btn theme-detail__btn--primary" (click)="retryLoad()">
       {{ 'retryLoadButton' | uiTranslate }}
     </button>
+    <a class="theme-detail__btn theme-detail__btn--ghost" routerLink="/themes">
+      {{ 'themesBackToDirectory' | uiTranslate }}
+    </a>
   </div>
 </main>
 } @else if (loading()) {
-<main class="theme-detail theme-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
-  <p class="theme-detail__state-text">{{ 'themesDetailLoading' | uiTranslate }}</p>
+<main
+  class="theme-detail theme-detail--loading"
+  [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
+  [attr.lang]="ui.locale()"
+  [attr.aria-busy]="true"
+  [attr.aria-label]="'themesDetailLoading' | uiTranslate"
+>
+  <div class="theme-detail__skeleton-header" aria-hidden="true"></div>
+  <div class="theme-detail__skeleton-stats" aria-hidden="true">
+    @for (i of [1, 2]; track i) {
+    <span class="theme-detail__skeleton-stat"></span>
+    }
+  </div>
+  <ul class="theme-detail__skeleton-list" aria-hidden="true">
+    @for (i of [1, 2, 3, 4]; track i) {
+    <li class="theme-detail__skeleton-card"></li>
+    }
+  </ul>
 </main>
 } @else if (notFound()) {
 <main class="theme-detail theme-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
   <div class="theme-detail__state-card">
+    <p class="theme-detail__state-icon" aria-hidden="true">?</p>
     <h1 class="theme-detail__state-title">{{ 'themesNotFoundTitle' | uiTranslate }}</h1>
     <p class="theme-detail__state-text">{{ 'themesNotFoundBody' | uiTranslate }}</p>
     <a class="theme-detail__btn theme-detail__btn--primary" routerLink="/themes">
@@ -23,34 +44,88 @@
 </main>
 } @else if (result(); as data) {
 <div class="theme-detail" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <nav class="theme-detail__breadcrumb" aria-label="Breadcrumb">
+    <a class="theme-detail__crumb" routerLink="/themes">{{ 'themesBackToDirectory' | uiTranslate }}</a>
+    <span class="theme-detail__crumb-sep" aria-hidden="true">/</span>
+    <span class="theme-detail__crumb theme-detail__crumb--current">{{ data.categoryName }}</span>
+  </nav>
+
   <header class="theme-detail__header">
     <a class="theme-detail__back" routerLink="/themes" [attr.aria-label]="'themesBackToDirectory' | uiTranslate">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
       </svg>
     </a>
-    <div class="theme-detail__intro">
-      <p class="theme-detail__category">{{ data.categoryName }}</p>
-      <h1 class="theme-detail__title">{{ data.theme.name }}</h1>
+    <div class="theme-detail__hero">
+      <div class="theme-detail__hero-top">
+        <span class="theme-detail__hero-icon" aria-hidden="true">{{ themeIcon(data.theme) }}</span>
+        <div class="theme-detail__hero-head">
+          <p class="theme-detail__category">{{ data.categoryName }}</p>
+          <h1 class="theme-detail__title">{{ data.theme.name }}</h1>
+        </div>
+        <div class="theme-detail__header-tools">
+          <label class="theme-detail__tool-label" for="theme-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+          <select
+            id="theme-ui-locale"
+            class="theme-detail__select"
+            [ngModel]="ui.locale()"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onLocaleChange($event)"
+          >
+            @for (opt of ui.availableLocales; track opt.code) {
+            <option [value]="opt.code">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
       @if (data.theme.description) {
       <p class="theme-detail__desc">{{ data.theme.description }}</p>
       }
-    </div>
-    <div class="theme-detail__header-tools">
-      <label class="theme-detail__tool-label" for="theme-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
-      <select
-        id="theme-ui-locale"
-        class="theme-detail__select"
-        [ngModel]="ui.locale()"
-        [ngModelOptions]="{ standalone: true }"
-        (ngModelChange)="onLocaleChange($event)"
-      >
-        @for (opt of ui.availableLocales; track opt.code) {
-        <option [value]="opt.code">{{ opt.label }}</option>
+      <div class="theme-detail__hero-foot">
+        <span class="theme-detail__badge">
+          {{ formatUiNum(data.verses.length) }} {{ 'themesVerseCountLabel' | uiTranslate }}
+        </span>
+        @if (data.verses.length > 0) {
+        <div class="theme-detail__hero-actions">
+          <button type="button" class="theme-detail__btn theme-detail__btn--primary" (click)="openFirstVerse()">
+            {{ 'themesDetailReadFirst' | uiTranslate }}
+          </button>
+          <a class="theme-detail__btn theme-detail__btn--ghost" href="#theme-verses-heading">
+            {{ 'themesDetailBrowseVerses' | uiTranslate }}
+          </a>
+        </div>
         }
-      </select>
+      </div>
     </div>
   </header>
+
+  @if (relatedThemes().length > 0) {
+  <section class="theme-detail__related" aria-labelledby="theme-related-heading">
+    <h2 id="theme-related-heading" class="theme-detail__related-title">
+      {{ 'themesDetailRelatedTitle' | uiTranslate }}
+    </h2>
+    <p class="theme-detail__related-subtitle">{{ 'themesDetailRelatedSubtitle' | uiTranslate }}</p>
+    <ul class="theme-detail__related-list">
+      @for (t of relatedThemes(); track t.id) {
+      <li>
+        <a
+          class="theme-detail__related-chip"
+          [routerLink]="['/themes', t.id]"
+          [attr.aria-label]="
+            'themesCardAria' | uiTranslate: { name: t.name, count: formatUiNum(t.verseCount) }
+          "
+        >
+          <span class="theme-detail__related-icon" aria-hidden="true">{{ themeIcon(t) }}</span>
+          <span class="theme-detail__related-name">{{ t.name }}</span>
+          <span class="theme-detail__related-meta">
+            {{ formatUiNum(t.verseCount) }} {{ 'themesVerseCountLabel' | uiTranslate }}
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+  }
 
   <section class="theme-detail__verses" aria-labelledby="theme-verses-heading">
     <div class="theme-detail__verses-head">
@@ -69,46 +144,117 @@
         {{
           'themesDetailCount'
             | uiTranslate: {
-                shown: formatUiNum(filteredVerses().length),
+                shown: formatUiNum(displayVerses().length),
                 total: formatUiNum(data.verses.length),
               }
         }}
       </p>
     </div>
 
-    <div class="theme-detail__search" role="search">
-      <label class="theme-detail__tool-label" for="theme-verses-search">
-        {{ 'themesDetailSearchLabel' | uiTranslate }}
-      </label>
-      <input
-        id="theme-verses-search"
-        class="theme-detail__search-input"
-        type="search"
-        autocomplete="off"
-        spellcheck="false"
-        [attr.placeholder]="'themesDetailSearchPlaceholder' | uiTranslate"
-        [ngModel]="searchQuery()"
-        (ngModelChange)="searchQuery.set($event)"
-      />
+    <div class="theme-detail__toolbar">
+      <div class="theme-detail__search" role="search">
+        <label class="theme-detail__tool-label" for="theme-verses-search">
+          {{ 'themesDetailSearchLabel' | uiTranslate }}
+        </label>
+        <div class="theme-detail__search-wrap">
+          <span class="theme-detail__search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path
+                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+          </span>
+          <input
+            id="theme-verses-search"
+            class="theme-detail__search-input"
+            type="search"
+            autocomplete="off"
+            spellcheck="false"
+            [attr.placeholder]="'themesDetailSearchPlaceholder' | uiTranslate"
+            [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)"
+          />
+          @if (hasSearch()) {
+          <button
+            type="button"
+            class="theme-detail__search-clear"
+            (click)="clearSearch()"
+            [attr.aria-label]="'themesDetailSearchClearAria' | uiTranslate"
+          >
+            ×
+          </button>
+          }
+        </div>
+      </div>
+
+      <div class="theme-detail__sort" role="group" [attr.aria-label]="'themesDetailSortLabel' | uiTranslate">
+        <span class="theme-detail__tool-label">{{ 'themesDetailSortLabel' | uiTranslate }}</span>
+        <div class="theme-detail__sort-chips">
+          <button
+            type="button"
+            class="theme-detail__filter-chip"
+            [class.theme-detail__filter-chip--active]="sortMode() === 'surah'"
+            (click)="setSortMode('surah')"
+          >
+            {{ 'themesDetailSortSurah' | uiTranslate }}
+          </button>
+          <button
+            type="button"
+            class="theme-detail__filter-chip"
+            [class.theme-detail__filter-chip--active]="sortMode() === 'curated'"
+            (click)="setSortMode('curated')"
+          >
+            {{ 'themesDetailSortCurated' | uiTranslate }}
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 
-  @if (filteredVerses().length === 0) {
-  <p class="theme-detail__empty">{{ 'themesDetailEmpty' | uiTranslate }}</p>
+  @if (displayVerses().length === 0) {
+  <div class="theme-detail__empty">
+    <p class="theme-detail__empty-text">{{ 'themesDetailEmpty' | uiTranslate }}</p>
+    @if (hasSearch()) {
+    <button type="button" class="theme-detail__btn theme-detail__btn--primary" (click)="clearSearch()">
+      {{ 'themesDetailClearSearch' | uiTranslate }}
+    </button>
+    }
+  </div>
   } @else {
   <ol class="theme-detail__list">
-    @for (v of filteredVerses(); track v.surah + '-' + v.ayah) {
+    @for (v of displayVerses(); track v.surah + '-' + v.ayah; let i = $index) {
     <li class="theme-detail__card">
-      <div class="theme-detail__card-head">
+      <div class="theme-detail__card-top">
+        <span class="theme-detail__index" aria-hidden="true">{{ formatUiNum(i + 1) }}</span>
         <a
           class="theme-detail__ref"
           [routerLink]="verseLink(v.surah, v.ayah)"
           [fragment]="verseFragment(v.ayah)"
           [queryParams]="{ startingVerse: v.ayah }"
         >
-          <span dir="rtl" lang="ar">{{ v.surahNameAr }}</span>
+          <span class="theme-detail__ref-ar" dir="rtl" lang="ar">{{ v.surahNameAr }}</span>
           <span class="theme-detail__ref-num" dir="ltr" lang="en">{{ verseRefLabel(v) }}</span>
         </a>
+      </div>
+
+      <blockquote class="theme-detail__verse-block">
+        <p class="theme-detail__ar" dir="rtl" lang="ar">{{ v.verse.ar }}</p>
+        @if (verseTranslit(v); as translit) {
+        <p class="theme-detail__translit" dir="ltr" lang="en">{{ translit }}</p>
+        }
+        <p
+          class="theme-detail__tr"
+          [attr.dir]="ui.locale() === 'ur' ? 'rtl' : 'ltr'"
+          [attr.lang]="ui.locale()"
+        >
+          {{ translationPrimary(v) }}
+        </p>
+        @if (translationSecondary(v); as secondary) {
+        <p class="theme-detail__tr theme-detail__tr--secondary" dir="ltr" lang="en">{{ secondary }}</p>
+        }
+      </blockquote>
+
+      <div class="theme-detail__card-foot">
         <div class="theme-detail__actions">
           <button
             type="button"
@@ -135,21 +281,18 @@
           >
             {{ 'bookmarkVerseTitle' | uiTranslate }}
           </button>
-          <button type="button" class="theme-detail__btn theme-detail__btn--primary" (click)="openInReader(v)">
-            {{ 'themesReadInReader' | uiTranslate }}
-          </button>
         </div>
+        <button
+          type="button"
+          class="theme-detail__btn theme-detail__btn--primary theme-detail__btn--read"
+          (click)="openInReader(v)"
+        >
+          {{ 'themesReadInReader' | uiTranslate }}
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+          </svg>
+        </button>
       </div>
-      <p class="theme-detail__ar" dir="rtl" lang="ar">{{ v.verse.ar }}</p>
-      @if (verseTranslit(v); as translit) {
-      <p class="theme-detail__translit" dir="ltr" lang="en">{{ translit }}</p>
-      }
-      <p class="theme-detail__tr" [attr.dir]="ui.locale() === 'ur' ? 'rtl' : 'ltr'" [attr.lang]="ui.locale()">
-        {{ translationPrimary(v) }}
-      </p>
-      @if (translationSecondary(v); as secondary) {
-      <p class="theme-detail__tr theme-detail__tr--secondary" dir="ltr" lang="en">{{ secondary }}</p>
-      }
     </li>
     }
   </ol>
