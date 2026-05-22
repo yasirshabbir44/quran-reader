@@ -1,4 +1,5 @@
 @use '../core/reader-layout/reader-index-layout' as idx;
+@use '../core/reader-layout/reader-ui-system' as ui;
 
 :host {
   display: block;
@@ -6,79 +7,31 @@
 }
 
 .themes {
-  min-height: 100vh;
-  max-width: 72rem;
-  margin: 0 auto;
-  padding:
-    max(1.25rem, env(safe-area-inset-top))
-    max(1rem, env(safe-area-inset-right))
-    max(2rem, env(safe-area-inset-bottom))
-    max(1rem, env(safe-area-inset-left));
-  color: var(--reader-body-ink);
+  @include ui.ui-page-shell;
 }
 
 .themes--state {
-  display: grid;
-  place-items: center;
-  text-align: center;
+  @include ui.ui-state-center;
 }
 
 .themes__state-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  max-width: 24rem;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  border: 1px solid var(--reader-border-strong);
-  background: var(--reader-chrome-bg-panel);
+  @include ui.ui-state-card;
 }
 
 .themes__state-text {
-  margin: 0;
-  line-height: 1.6;
-  color: var(--reader-ink-muted);
+  @include ui.ui-state-text;
 }
 
 .themes__header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem 1.5rem;
-  margin-bottom: 1.75rem;
+  @include ui.ui-page-header;
 }
 
 .themes__back {
-  display: grid;
-  place-items: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  margin-top: 0.15rem;
-  border-radius: 0.55rem;
-  text-decoration: none;
-  color: var(--reader-ink-ui);
-  background: var(--reader-overlay);
-  border: 1px solid var(--reader-border-strong);
-
-  &:hover {
-    background: var(--reader-elevated-hover);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 2px;
-  }
+  @include ui.ui-back-btn;
 }
 
 .themes__brand {
-  flex: 1 1 16rem;
-  min-width: 0;
-  padding: 1.35rem 1.25rem;
-  border-radius: 1.1rem;
-  border: 1px solid var(--reader-accent-border);
-  background: var(--reader-intro-bg);
-  box-shadow: 0 16px 40px var(--reader-shadow-card);
+  @include ui.ui-brand-hero;
 }
 
 .themes__header-tools {
@@ -86,26 +39,15 @@
 }
 
 .themes__kicker {
-  margin: 0 0 0.35rem;
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--reader-ink-intro-kicker);
+  @include ui.ui-kicker;
 }
 
 .themes__title {
-  margin: 0 0 0.4rem;
-  font-size: clamp(1.65rem, 4vw, 2.15rem);
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--reader-ink-intro-title);
+  @include ui.ui-page-title;
 }
 
 .themes__subtitle {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: var(--reader-ink-muted);
+  @include ui.ui-page-subtitle;
 }
 
 .themes__tool-label {
@@ -150,7 +92,9 @@
 
 .themes__group-title {
   margin: 0 0 0.85rem;
+  font-family: var(--reader-font-ui);
   font-size: 0.78rem;
+  font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--reader-ink-subtle);
@@ -165,8 +109,8 @@
 }
 
 .themes__card-icon {
-  font-size: 1.35rem;
-  line-height: 1;
+  @include ui.ui-icon-badge;
+  font-size: 1rem;
 }
 
 .themes__card-name {
@@ -199,32 +143,13 @@
 }
 
 .themes__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.5rem;
-  padding: 0.4rem 1.15rem;
-  border-radius: 999px;
-  font-size: 0.92rem;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-  border: 1px solid transparent;
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 3px;
-  }
+  @include ui.ui-btn-base;
 }
 
 .themes__btn--primary {
-  color: var(--reader-btn-on-accent);
-  background: linear-gradient(180deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
-  border-color: var(--reader-accent-border-strong);
+  @include ui.ui-btn-primary;
 }
 
 .themes__btn--ghost {
-  color: var(--reader-ink-action);
-  background: var(--reader-overlay);
-  border-color: var(--reader-border-strong);
+  @include ui.ui-btn-ghost;
 }

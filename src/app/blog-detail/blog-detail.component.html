@@ -25,7 +25,9 @@
 <article class="blog-detail" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
   <header class="blog-detail__header">
     <a class="blog-detail__back" routerLink="/blog" [attr.aria-label]="'blogBackToDirectory' | uiTranslate">
-      ←
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+      </svg>
     </a>
     <div class="blog-detail__header-tools">
       <label class="blog-detail__tool-label" for="blog-detail-locale">{{ 'languageLabel' | uiTranslate }}</label>

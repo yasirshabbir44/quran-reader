@@ -5,6 +5,8 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { routes } from './app.routes';
 import { READING_BOOKMARK_REPOSITORY } from './core/bookmark/reading-bookmark.repository';
 import { ReadingBookmarkService } from './core/bookmark/reading-bookmark.service';
+import { KHATAM_REPOSITORY } from './core/khatam/khatam.repository';
+import { KhatamService } from './core/khatam/khatam.service';
 import { QURAN_CORPUS_SOURCE } from './core/quran/quran-corpus.source';
 import { QuranDataService } from './core/quran/quran-data.service';
 import {
@@ -27,6 +29,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     { provide: QURAN_CORPUS_SOURCE, useExisting: QuranDataService },
     { provide: READING_BOOKMARK_REPOSITORY, useExisting: ReadingBookmarkService },
+    { provide: KHATAM_REPOSITORY, useExisting: KhatamService },
     { provide: VERSE_PRESENTATION_STRATEGY, useExisting: DefaultVersePresentationStrategy },
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),

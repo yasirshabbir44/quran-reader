@@ -15,7 +15,8 @@
     "build-quran-data": "node scripts/build-quran-data.mjs",
     "build-thematic-index": "node scripts/build-thematic-index.mjs",
     "build-blog-index": "node scripts/build-blog-index.mjs",
-    "build-mushaf-index": "node scripts/build-mushaf-index.mjs"
+    "build-mushaf-index": "node scripts/build-mushaf-index.mjs",
+    "validate-khatam": "node scripts/validate-khatam.mjs"
   },
   "private": true,
   "dependencies": {
