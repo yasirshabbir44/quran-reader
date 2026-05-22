@@ -13,276 +13,372 @@
 </main>
 } @else {
 <div class="landing" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
-  <header class="landing__header">
-    <div class="landing__brand">
-      <p class="landing__kicker">{{ 'homeKicker' | uiTranslate }}</p>
-      <h1 class="landing__title">{{ 'homeTitle' | uiTranslate }}</h1>
-      <p class="landing__subtitle">{{ 'homeSubtitle' | uiTranslate }}</p>
+  <header class="landing__hero">
+    <div class="landing__hero-top">
+      <div class="landing__brand">
+        <p class="landing__kicker">{{ 'homeKicker' | uiTranslate }}</p>
+        <h1 class="landing__title">{{ 'homeTitle' | uiTranslate }}</h1>
+        <p class="landing__subtitle">{{ 'homeSubtitle' | uiTranslate }}</p>
+        <p class="landing__date" aria-hidden="true">{{ todayLabel() }}</p>
+      </div>
+      <div class="landing__header-tools">
+        <span class="landing__offline-badge">{{ 'homeOfflineBadge' | uiTranslate }}</span>
+        <label class="landing__tool-label" for="home-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+        <select
+          id="home-ui-locale"
+          class="landing__select"
+          [ngModel]="ui.locale()"
+          [ngModelOptions]="{ standalone: true }"
+          (ngModelChange)="onLocaleChange($event)"
+        >
+          @for (opt of ui.availableLocales; track opt.code) {
+          <option [value]="opt.code">{{ opt.label }}</option>
+          }
+        </select>
+      </div>
     </div>
-    <div class="landing__header-tools">
-      <label class="landing__tool-label" for="home-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
-      <select
-        id="home-ui-locale"
-        class="landing__select"
-        [ngModel]="ui.locale()"
-        [ngModelOptions]="{ standalone: true }"
-        (ngModelChange)="onLocaleChange($event)"
-      >
-        @for (opt of ui.availableLocales; track opt.code) {
-        <option [value]="opt.code">{{ opt.label }}</option>
-        }
-      </select>
+
+    <div class="landing__stats" role="list" [attr.aria-label]="'homeStatsAria' | uiTranslate">
+      <div class="landing__stat" role="listitem">
+        <span class="landing__stat-value">{{ formatUiNum(surahs().length) }}</span>
+        <span class="landing__stat-label">{{ 'homeStatSurahs' | uiTranslate }}</span>
+      </div>
+      <div class="landing__stat" role="listitem">
+        <span class="landing__stat-value">{{ formatUiNum(totalVerses()) }}</span>
+        <span class="landing__stat-label">{{ 'homeStatVerses' | uiTranslate }}</span>
+      </div>
+      <div class="landing__stat" role="listitem">
+        <span class="landing__stat-value">{{ formatUiNum(604) }}</span>
+        <span class="landing__stat-label">{{ 'homeStatPages' | uiTranslate }}</span>
+      </div>
+      <div class="landing__stat" role="listitem">
+        <span class="landing__stat-value">{{ formatUiNum(30) }}</span>
+        <span class="landing__stat-label">{{ 'homeStatJuz' | uiTranslate }}</span>
+      </div>
+      @if (themeCount() > 0) {
+      <div class="landing__stat" role="listitem">
+        <span class="landing__stat-value">{{ formatUiNum(themeCount()) }}</span>
+        <span class="landing__stat-label">{{ 'homeStatThemes' | uiTranslate }}</span>
+      </div>
+      }
+      @if (blogCount() > 0) {
+      <div class="landing__stat" role="listitem">
+        <span class="landing__stat-value">{{ formatUiNum(blogCount()) }}</span>
+        <span class="landing__stat-label">{{ 'homeStatBlog' | uiTranslate }}</span>
+      </div>
+      }
     </div>
   </header>
 
-  <div class="landing__shell">
-    <nav class="landing__nav" [attr.aria-label]="'homeNavAria' | uiTranslate">
-      <p class="landing__nav-heading">{{ 'homeNavAria' | uiTranslate }}</p>
-      <ul class="landing__nav-list">
-        @if (savedPlace(); as bm) {
-        <li>
-          <a
-            class="landing__nav-link landing__nav-link--accent"
-            [routerLink]="verseLink(bm.surah, bm.ayah)"
-            [fragment]="verseFragment(bm.ayah)"
-          >
-            <span class="landing__nav-link-title">{{ 'homeNavContinue' | uiTranslate }}</span>
-            <span class="landing__nav-link-meta">
-              @if (continueReadingSurah(); as cs) {
-              {{
-                'homeNavContinueDetail'
-                  | uiTranslate
-                    : {
-                        name: cs.nameAr,
-                        ayah: formatUiNum(bm.ayah),
-                        total: formatUiNum(cs.versesCount),
-                      }
-              }}
-              } @else {
-              {{
-                'homeNavContinueHint'
-                  | uiTranslate: { surah: formatUiNum(bm.surah), ayah: formatUiNum(bm.ayah) }
-              }}
-              }
-            </span>
-          </a>
-        </li>
-        }
-        <li>
-          <a class="landing__nav-link" routerLink="/themes">
-            <span class="landing__nav-link-title">{{ 'homeNavThemes' | uiTranslate }}</span>
-            <span class="landing__nav-link-meta">{{
-              'homeNavThemesHint' | uiTranslate: { count: formatUiNum(themeCount() || 30) }
-            }}</span>
-          </a>
-        </li>
-        <li>
-          <a class="landing__nav-link" routerLink="/blog">
-            <span class="landing__nav-link-title">{{ 'homeNavBlog' | uiTranslate }}</span>
-            <span class="landing__nav-link-meta">{{ 'homeNavBlogHint' | uiTranslate }}</span>
-          </a>
-        </li>
-        <li>
-          <a class="landing__nav-link" href="#surah-index">
-            <span class="landing__nav-link-title">{{ 'homeNavIndex' | uiTranslate }}</span>
-          </a>
-        </li>
-        <li>
-          <a class="landing__nav-link" routerLink="/page/1">
-            <span class="landing__nav-link-title">{{ 'homeNavPages' | uiTranslate }}</span>
-            <span class="landing__nav-link-meta">{{ 'homeNavPagesHint' | uiTranslate }}</span>
-          </a>
-        </li>
-        <li>
-          <a class="landing__nav-link" routerLink="/juz/1">
-            <span class="landing__nav-link-title">{{ 'homeNavJuz' | uiTranslate }}</span>
-            <span class="landing__nav-link-meta">{{ 'homeNavJuzHint' | uiTranslate }}</span>
-          </a>
-        </li>
-        @if (daily()) {
-        <li>
-          <a class="landing__nav-link" href="#featured-today">
-            <span class="landing__nav-link-title">{{ 'homeNavFeatured' | uiTranslate }}</span>
-          </a>
-        </li>
-        }
-        @if (dailyTopic(); as topic) {
-        <li>
-          <a class="landing__nav-link" href="#topic-today">
-            <span class="landing__nav-link-title">{{ 'homeNavTopicToday' | uiTranslate }}</span>
-            <span class="landing__nav-link-meta">{{ topic.theme.name }}</span>
-          </a>
-        </li>
-        }
-      </ul>
-    </nav>
-
-    <main class="landing__main">
-      @if (daily(); as dv) {
-      <section id="featured-today" class="landing__featured" aria-labelledby="featured-heading">
-        <div class="landing__featured-intro">
-          <p class="landing__featured-kicker">{{ 'homeFeaturedKicker' | uiTranslate }}</p>
-          <h2 id="featured-heading" class="landing__section-title">
-            @if (featuredSurah(); as fs) {
-            {{ fs.nameAr }}
-            <span class="landing__featured-translit" dir="ltr" lang="en">{{ fs.nameTranslit }}</span>
-            }
-          </h2>
-          @if (featuredSurah(); as fs) {
-          <p class="landing__featured-meta">
-            {{ 'surahWord' | uiTranslate }} {{ formatUiNum(fs.number) }} ·
-            {{ formatUiNum(fs.versesCount) }} {{ 'versesWord' | uiTranslate }} ·
-            {{ revelationLabel(fs.revelationType) }}
-          </p>
-          }
-        </div>
-
-        <blockquote class="landing__verse-card">
-          <p class="landing__verse-ar" dir="rtl" lang="ar">{{ dv.arabic }}</p>
-          <p class="landing__verse-ref">
-            {{ 'homeFeaturedSurahLabel' | uiTranslate }}
-            <span dir="rtl" lang="ar">{{ dv.surahNameAr }}</span>
-            · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(dv.ayah) }}
-          </p>
-          <p class="landing__verse-en" dir="ltr" lang="en">{{ dv.translationEn }}</p>
-        </blockquote>
-
-        <div class="landing__featured-actions">
-          <a
-            class="landing__btn landing__btn--primary"
-            [routerLink]="verseLink(dv.surah, dv.ayah)"
-            [fragment]="verseFragment(dv.ayah)"
-          >
-            {{ 'homeFeaturedReadVerse' | uiTranslate }}
-          </a>
-          <a class="landing__btn landing__btn--ghost" [routerLink]="['/', dv.surah]">
-            {{ 'homeFeaturedReadSurah' | uiTranslate }}
-          </a>
-        </div>
-      </section>
-      }
-
-      @if (dailyTopic(); as topic) {
-      <section id="topic-today" class="landing__topic-today" aria-labelledby="topic-today-heading">
-        <div class="landing__topic-today-intro">
-          <p class="landing__topic-today-kicker">{{ 'homeTopicTodayKicker' | uiTranslate }}</p>
-          <h2 id="topic-today-heading" class="landing__section-title">
-            <a class="landing__topic-today-link" [routerLink]="['/themes', topic.theme.id]">
-              {{ topic.theme.name }}
-            </a>
-          </h2>
-          <p class="landing__topic-today-meta">{{ topic.categoryName }}</p>
-        </div>
-
-        <blockquote class="landing__verse-card">
-          <p class="landing__verse-ar" dir="rtl" lang="ar">{{ topic.verse.verse.ar }}</p>
-          <p class="landing__verse-ref">
-            {{ 'homeFeaturedSurahLabel' | uiTranslate }}
-            <span dir="rtl" lang="ar">{{ topic.verse.surahNameAr }}</span>
-            · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(topic.verse.ayah) }}
-          </p>
-          <p class="landing__verse-en" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
-            {{ dailyTopicTranslation(topic) }}
-          </p>
-        </blockquote>
-
-        <div class="landing__featured-actions">
-          <a
-            class="landing__btn landing__btn--primary"
-            [routerLink]="verseLink(topic.verse.surah, topic.verse.ayah)"
-            [fragment]="verseFragment(topic.verse.ayah)"
-          >
-            {{ 'homeTopicTodayReadVerse' | uiTranslate }}
-          </a>
-          <a class="landing__btn landing__btn--ghost" [routerLink]="['/themes', topic.theme.id]">
-            {{ 'homeTopicTodayBrowseTopic' | uiTranslate }}
-          </a>
-        </div>
-      </section>
-      }
-
-      <section class="landing__themes-promo" aria-labelledby="themes-promo-heading">
-        <div class="landing__themes-promo-inner">
-          <h2 id="themes-promo-heading" class="landing__section-title">{{ 'homeThemesPromoTitle' | uiTranslate }}</h2>
-          <p class="landing__index-subtitle">{{
-            'homeThemesPromoSubtitle' | uiTranslate: { count: formatUiNum(themeCount() || 30) }
-          }}</p>
-          <a class="landing__btn landing__btn--primary" routerLink="/themes">
-            {{ 'homeThemesPromoCta' | uiTranslate }}
-          </a>
-        </div>
-      </section>
-
-      <section class="landing__themes-promo landing__blog-promo" aria-labelledby="blog-promo-heading">
-        <div class="landing__themes-promo-inner">
-          <h2 id="blog-promo-heading" class="landing__section-title">{{ 'homeBlogPromoTitle' | uiTranslate }}</h2>
-          <p class="landing__index-subtitle">{{ 'homeBlogPromoSubtitle' | uiTranslate }}</p>
-          <a class="landing__btn landing__btn--primary" routerLink="/blog">
-            {{ 'homeBlogPromoCta' | uiTranslate }}
-          </a>
-        </div>
-      </section>
-
-      <section id="surah-index" class="landing__index" aria-labelledby="index-heading">
-        <div class="landing__index-head">
-          <div>
-            <h2 id="index-heading" class="landing__section-title">{{ 'homeIndexTitle' | uiTranslate }}</h2>
-            <p class="landing__index-subtitle">{{ 'homeIndexSubtitle' | uiTranslate }}</p>
-          </div>
-          <p class="landing__index-count" aria-live="polite">
-            {{
-              'homeIndexCount'
-                | uiTranslate: {
-                    shown: formatUiNum(filteredSurahs().length),
-                    total: formatUiNum(surahs().length),
+  @if (savedPlace(); as bm) {
+  <section class="landing__continue" aria-labelledby="continue-heading">
+    <div class="landing__continue-head">
+      <div>
+        <h2 id="continue-heading" class="landing__continue-title">{{ 'homeNavContinue' | uiTranslate }}</h2>
+        @if (continueReadingSurah(); as cs) {
+        <p class="landing__continue-meta">
+          {{
+            'homeNavContinueDetail'
+              | uiTranslate
+                : {
+                    name: cs.nameAr,
+                    ayah: formatUiNum(bm.ayah),
+                    total: formatUiNum(cs.versesCount),
                   }
-            }}
-          </p>
-        </div>
-
-        <div class="landing__search" role="search">
-          <label class="landing__tool-label" for="surah-index-search">{{ 'homeIndexSearchLabel' | uiTranslate }}</label>
-          <input
-            id="surah-index-search"
-            class="landing__search-input"
-            type="search"
-            autocomplete="off"
-            spellcheck="false"
-            [attr.placeholder]="'homeIndexSearchPlaceholder' | uiTranslate"
-            [ngModel]="indexQuery()"
-            (ngModelChange)="indexQuery.set($event)"
-          />
-        </div>
-
-        @if (filteredSurahs().length === 0) {
-        <p class="landing__index-empty">{{ 'homeIndexEmpty' | uiTranslate }}</p>
-        } @else {
-        <ul class="landing__grid">
-          @for (s of filteredSurahs(); track s.number) {
-          <li>
-            <a
-              class="landing__surah-card"
-              [routerLink]="['/', s.number]"
-              [attr.aria-label]="
-                'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }
-              "
-            >
-              <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
-              <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
-              <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
-              <span class="landing__surah-meta">
-                <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
-                <span class="landing__surah-verses">
-                  {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
-                </span>
-              </span>
-            </a>
-          </li>
-          }
-        </ul>
+          }}
+        </p>
         }
-      </section>
-    </main>
+      </div>
+      <span class="landing__continue-pct" aria-hidden="true">{{ formatUiNum(continueProgressPct()) }}%</span>
+    </div>
+    <div
+      class="landing__continue-bar"
+      role="progressbar"
+      [attr.aria-valuenow]="continueProgressPct()"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [attr.aria-label]="'homeContinueProgress' | uiTranslate: { pct: formatUiNum(continueProgressPct()) }"
+    >
+      <span class="landing__continue-bar-fill" [style.width.%]="continueProgressPct()"></span>
+    </div>
+    <a
+      class="landing__btn landing__btn--primary landing__continue-cta"
+      [routerLink]="verseLink(bm.surah, bm.ayah)"
+      [fragment]="verseFragment(bm.ayah)"
+    >
+      {{ 'homeContinueCta' | uiTranslate }}
+    </a>
+  </section>
+  }
+
+  <section class="landing__quick" aria-labelledby="quick-heading">
+    <h2 id="quick-heading" class="landing__quick-title">{{ 'homeQuickActionsTitle' | uiTranslate }}</h2>
+    <ul class="landing__quick-grid">
+      <li>
+        <a class="landing__quick-card" routerLink="/themes">
+          <span class="landing__quick-icon" aria-hidden="true">◈</span>
+          <span class="landing__quick-card-title">{{ 'homeNavThemes' | uiTranslate }}</span>
+          <span class="landing__quick-card-meta">{{
+            'homeNavThemesHint' | uiTranslate: { count: formatUiNum(themeCount() || 30) }
+          }}</span>
+        </a>
+      </li>
+      <li>
+        <a class="landing__quick-card" routerLink="/blog">
+          <span class="landing__quick-icon" aria-hidden="true">✦</span>
+          <span class="landing__quick-card-title">{{ 'homeNavBlog' | uiTranslate }}</span>
+          <span class="landing__quick-card-meta">{{ 'homeNavBlogHint' | uiTranslate }}</span>
+        </a>
+      </li>
+      <li>
+        <a class="landing__quick-card" routerLink="/page/1">
+          <span class="landing__quick-icon" aria-hidden="true">▤</span>
+          <span class="landing__quick-card-title">{{ 'homeNavPages' | uiTranslate }}</span>
+          <span class="landing__quick-card-meta">{{ 'homeNavPagesHint' | uiTranslate }}</span>
+        </a>
+      </li>
+      <li>
+        <a class="landing__quick-card" routerLink="/juz/1">
+          <span class="landing__quick-icon" aria-hidden="true">▥</span>
+          <span class="landing__quick-card-title">{{ 'homeNavJuz' | uiTranslate }}</span>
+          <span class="landing__quick-card-meta">{{ 'homeNavJuzHint' | uiTranslate }}</span>
+        </a>
+      </li>
+      <li>
+        <a class="landing__quick-card" href="#surah-index">
+          <span class="landing__quick-icon" aria-hidden="true">☰</span>
+          <span class="landing__quick-card-title">{{ 'homeNavIndex' | uiTranslate }}</span>
+          <span class="landing__quick-card-meta">{{ 'homeIndexSubtitle' | uiTranslate }}</span>
+        </a>
+      </li>
+      <li>
+        <a class="landing__quick-card" [routerLink]="['/', randomSurahNumber()]">
+          <span class="landing__quick-icon" aria-hidden="true">↻</span>
+          <span class="landing__quick-card-title">{{ 'homeQuickActionRandom' | uiTranslate }}</span>
+          <span class="landing__quick-card-meta">{{
+            'homeQuickActionRandomHint' | uiTranslate: { num: formatUiNum(randomSurahNumber()) }
+          }}</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="landing__jump" aria-labelledby="jump-heading">
+    <h2 id="jump-heading" class="landing__section-title landing__jump-title">{{ 'homeQuickJumpTitle' | uiTranslate }}</h2>
+    <p class="landing__jump-subtitle">{{ 'homeQuickJumpSubtitle' | uiTranslate }}</p>
+    <form class="landing__jump-form" (submit)="$event.preventDefault(); onQuickJump()">
+      <label class="landing__tool-label" for="home-quick-jump">{{ 'homeQuickJumpLabel' | uiTranslate }}</label>
+      <div class="landing__jump-row">
+        <input
+          id="home-quick-jump"
+          class="landing__search-input landing__jump-input"
+          type="number"
+          inputmode="numeric"
+          min="1"
+          max="114"
+          autocomplete="off"
+          [attr.placeholder]="'homeQuickJumpPlaceholder' | uiTranslate"
+          [ngModel]="quickJumpInput()"
+          (ngModelChange)="quickJumpInput.set($event); quickJumpError.set(false)"
+          [ngModelOptions]="{ standalone: true }"
+        />
+        <button type="submit" class="landing__btn landing__btn--primary">{{ 'homeQuickJumpButton' | uiTranslate }}</button>
+      </div>
+      @if (quickJumpError()) {
+      <p class="landing__jump-error" role="alert">{{ 'homeQuickJumpInvalid' | uiTranslate }}</p>
+      }
+    </form>
+  </section>
+
+  <section class="landing__popular" aria-labelledby="popular-heading">
+    <h2 id="popular-heading" class="landing__section-title">{{ 'homePopularTitle' | uiTranslate }}</h2>
+    <p class="landing__index-subtitle">{{ 'homePopularSubtitle' | uiTranslate }}</p>
+    <ul class="landing__popular-list">
+      @for (num of popularSurahs; track num) {
+      @if (surahByNumber(num); as s) {
+      <li>
+        <a
+          class="landing__popular-chip"
+          [routerLink]="['/', s.number]"
+          [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
+        >
+          <span class="landing__popular-num">{{ formatUiNum(s.number) }}</span>
+          <span class="landing__popular-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+        </a>
+      </li>
+      }
+      }
+    </ul>
+  </section>
+
+  <div class="landing__highlights">
+    @if (daily(); as dv) {
+    <section id="featured-today" class="landing__featured" aria-labelledby="featured-heading">
+      <div class="landing__featured-intro">
+        <p class="landing__featured-kicker">{{ 'homeFeaturedKicker' | uiTranslate }}</p>
+        <h2 id="featured-heading" class="landing__section-title">
+          @if (featuredSurah(); as fs) {
+          {{ fs.nameAr }}
+          <span class="landing__featured-translit" dir="ltr" lang="en">{{ fs.nameTranslit }}</span>
+          }
+        </h2>
+        @if (featuredSurah(); as fs) {
+        <p class="landing__featured-meta">
+          {{ 'surahWord' | uiTranslate }} {{ formatUiNum(fs.number) }} ·
+          {{ formatUiNum(fs.versesCount) }} {{ 'versesWord' | uiTranslate }} ·
+          {{ revelationLabel(fs.revelationType) }}
+        </p>
+        }
+      </div>
+
+      <blockquote class="landing__verse-card">
+        <p class="landing__verse-ar" dir="rtl" lang="ar">{{ dv.arabic }}</p>
+        <p class="landing__verse-ref">
+          {{ 'homeFeaturedSurahLabel' | uiTranslate }}
+          <span dir="rtl" lang="ar">{{ dv.surahNameAr }}</span>
+          · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(dv.ayah) }}
+        </p>
+        <p class="landing__verse-en" dir="ltr" lang="en">{{ dv.translationEn }}</p>
+      </blockquote>
+
+      <div class="landing__featured-actions">
+        <a
+          class="landing__btn landing__btn--primary"
+          [routerLink]="verseLink(dv.surah, dv.ayah)"
+          [fragment]="verseFragment(dv.ayah)"
+        >
+          {{ 'homeFeaturedReadVerse' | uiTranslate }}
+        </a>
+        <a class="landing__btn landing__btn--ghost" [routerLink]="['/', dv.surah]">
+          {{ 'homeFeaturedReadSurah' | uiTranslate }}
+        </a>
+      </div>
+    </section>
+    }
+
+    @if (dailyTopic(); as topic) {
+    <section id="topic-today" class="landing__topic-today" aria-labelledby="topic-today-heading">
+      <div class="landing__topic-today-intro">
+        <p class="landing__topic-today-kicker">{{ 'homeTopicTodayKicker' | uiTranslate }}</p>
+        <h2 id="topic-today-heading" class="landing__section-title">
+          <a class="landing__topic-today-link" [routerLink]="['/themes', topic.theme.id]">
+            {{ topic.theme.name }}
+          </a>
+        </h2>
+        <p class="landing__topic-today-meta">{{ topic.categoryName }}</p>
+      </div>
+
+      <blockquote class="landing__verse-card">
+        <p class="landing__verse-ar" dir="rtl" lang="ar">{{ topic.verse.verse.ar }}</p>
+        <p class="landing__verse-ref">
+          {{ 'homeFeaturedSurahLabel' | uiTranslate }}
+          <span dir="rtl" lang="ar">{{ topic.verse.surahNameAr }}</span>
+          · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(topic.verse.ayah) }}
+        </p>
+        <p class="landing__verse-en" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+          {{ dailyTopicTranslation(topic) }}
+        </p>
+      </blockquote>
+
+      <div class="landing__featured-actions">
+        <a
+          class="landing__btn landing__btn--primary"
+          [routerLink]="verseLink(topic.verse.surah, topic.verse.ayah)"
+          [fragment]="verseFragment(topic.verse.ayah)"
+        >
+          {{ 'homeTopicTodayReadVerse' | uiTranslate }}
+        </a>
+        <a class="landing__btn landing__btn--ghost" [routerLink]="['/themes', topic.theme.id]">
+          {{ 'homeTopicTodayBrowseTopic' | uiTranslate }}
+        </a>
+      </div>
+    </section>
+    }
   </div>
+
+  <section id="surah-index" class="landing__index" aria-labelledby="index-heading">
+    <div class="landing__index-head">
+      <div>
+        <h2 id="index-heading" class="landing__section-title">{{ 'homeIndexTitle' | uiTranslate }}</h2>
+        <p class="landing__index-subtitle">{{ 'homeIndexSubtitle' | uiTranslate }}</p>
+      </div>
+      <p class="landing__index-count" aria-live="polite">
+        {{
+          'homeIndexCount'
+            | uiTranslate: {
+                shown: formatUiNum(filteredSurahs().length),
+                total: formatUiNum(surahs().length),
+              }
+        }}
+      </p>
+    </div>
+
+    <div class="landing__filters" role="group" [attr.aria-label]="'homeFilterAria' | uiTranslate">
+      <button
+        type="button"
+        class="landing__filter-chip"
+        [class.landing__filter-chip--active]="revelationFilter() === 'all'"
+        (click)="setRevelationFilter('all')"
+      >
+        {{ 'homeFilterAll' | uiTranslate }} ({{ formatUiNum(surahs().length) }})
+      </button>
+      <button
+        type="button"
+        class="landing__filter-chip"
+        [class.landing__filter-chip--active]="revelationFilter() === 'meccan'"
+        (click)="setRevelationFilter('meccan')"
+      >
+        {{ 'factTypeMeccan' | uiTranslate }} ({{ formatUiNum(meccanCount()) }})
+      </button>
+      <button
+        type="button"
+        class="landing__filter-chip"
+        [class.landing__filter-chip--active]="revelationFilter() === 'medinan'"
+        (click)="setRevelationFilter('medinan')"
+      >
+        {{ 'factTypeMedinan' | uiTranslate }} ({{ formatUiNum(medinanCount()) }})
+      </button>
+    </div>
+
+    <div class="landing__search" role="search">
+      <label class="landing__tool-label" for="surah-index-search">{{ 'homeIndexSearchLabel' | uiTranslate }}</label>
+      <input
+        id="surah-index-search"
+        class="landing__search-input"
+        type="search"
+        autocomplete="off"
+        spellcheck="false"
+        [attr.placeholder]="'homeIndexSearchPlaceholder' | uiTranslate"
+        [ngModel]="indexQuery()"
+        (ngModelChange)="indexQuery.set($event)"
+      />
+    </div>
+
+    @if (filteredSurahs().length === 0) {
+    <p class="landing__index-empty">{{ 'homeIndexEmpty' | uiTranslate }}</p>
+    } @else {
+    <ul class="landing__grid">
+      @for (s of filteredSurahs(); track s.number) {
+      <li>
+        <a
+          class="landing__surah-card"
+          [routerLink]="['/', s.number]"
+          [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
+        >
+          <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
+          <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+          <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
+          <span class="landing__surah-meta">
+            <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
+            <span class="landing__surah-verses">
+              {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
+            </span>
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+    }
+  </section>
 </div>
 }
