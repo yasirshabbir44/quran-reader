@@ -16,9 +16,11 @@ import { combineLatest, map, switchMap } from 'rxjs';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import {
   ThematicIndexService,
+  type ThematicThemeListItem,
   type ThematicVerseDetail,
   type ThemeVersesResult,
 } from '../core/thematic-index/thematic-index.service';
+import type { ThematicTheme } from '../core/thematic-index/thematic-index.types';
 import { verseFragment } from '../core/routing/verse-deep-link.util';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
@@ -28,6 +30,44 @@ import {
   normalizeVerseTransliteration,
   type VersePresentationContext,
 } from '../core/verse-presentation/verse-presentation.strategy';
+
+const THEME_ICONS: Record<string, string> = {
+  hourglass: '⏳',
+  heart: '💚',
+  handshake: '🤝',
+  dove: '🕊️',
+  seed: '🌱',
+  prayer: '🕌',
+  droplet: '💧',
+  sparkles: '✨',
+  scroll: '📜',
+  scales: '⚖️',
+  gift: '🎁',
+  gavel: '⚖️',
+  parents: '👨‍👩‍👧',
+  rings: '💍',
+  house: '🏠',
+  sun: '☀️',
+  star: '⭐',
+  book: '📖',
+  shield: '🛡️',
+  hands: '🤲',
+  flame: '🔥',
+  moon: '🌙',
+  'open-book': '📗',
+  'hands-pray': '🙏',
+  leaf: '🍃',
+  ribbon: '🎗️',
+  cup: '☕',
+  child: '👶',
+  wheat: '🌾',
+  healing: '💚',
+  garden: '🌴',
+};
+
+export type ThemeDetailSortMode = 'surah' | 'curated';
+
+const RELATED_LIMIT = 5;
 
 @Component({
   selector: 'app-theme-detail',
@@ -52,22 +92,28 @@ export class ThemeDetailComponent implements OnInit {
   protected readonly loadError = signal(false);
   protected readonly notFound = signal(false);
   protected readonly result = signal<ThemeVersesResult | null>(null);
+  protected readonly relatedThemes = signal<readonly ThematicThemeListItem[]>([]);
   protected readonly savedPlace = signal<{ surah: number; ayah: number } | null>(null);
   protected readonly copiedKey = signal<string | null>(null);
 
   protected readonly themeId = computed(() => this.route.snapshot.paramMap.get('id') ?? '');
   protected readonly searchQuery = signal('');
+  protected readonly sortMode = signal<ThemeDetailSortMode>('surah');
 
-  protected readonly filteredVerses = computed(() => {
+  protected readonly hasSearch = computed(() => this.searchQuery().trim().length > 0);
+
+  protected readonly displayVerses = computed(() => {
     const data = this.result();
     if (!data) {
       return [];
     }
     const raw = this.searchQuery().trim().normalize('NFKC').toLowerCase();
-    if (!raw) {
-      return data.verses;
+    let verses = raw ? data.verses.filter((v) => this.verseMatchesQuery(v, raw)) : [...data.verses];
+
+    if (this.sortMode() === 'surah') {
+      verses = [...verses].sort((a, b) => a.surah - b.surah || a.ayah - b.ayah);
     }
-    return data.verses.filter((v) => this.verseMatchesQuery(v, raw));
+    return verses;
   });
 
   ngOnInit(): void {
@@ -83,6 +129,8 @@ export class ThemeDetailComponent implements OnInit {
           this.loadError.set(false);
           this.notFound.set(false);
           this.searchQuery.set('');
+          this.sortMode.set('surah');
+          this.relatedThemes.set([]);
           return combineLatest([
             this.thematicIndex.load(),
             this.thematicIndex.getVersesByTheme(id),
@@ -111,12 +159,17 @@ export class ThemeDetailComponent implements OnInit {
         this.title.setTitle(
           this.ui.translate('themesDetailDocumentTitle', { name: data.theme.name }),
         );
+        this.loadRelatedThemes(data.theme.categoryId, data.theme.id);
       });
   }
 
   protected formatUiNum(n: number): string {
     this.ui.locale();
     return n.toLocaleString(this.ui.numberLocaleTag());
+  }
+
+  protected themeIcon(theme: ThematicTheme): string {
+    return theme.icon ? (THEME_ICONS[theme.icon] ?? '✦') : '✦';
   }
 
   protected verseRefLabel(v: ThematicVerseDetail): string {
@@ -143,12 +196,20 @@ export class ThemeDetailComponent implements OnInit {
     return tr.en || null;
   }
 
-  protected verseLink(surah: number, ayah: number): readonly (string | number)[] {
+  protected verseLink(surah: number, _ayah: number): readonly (string | number)[] {
     return ['/', surah];
   }
 
   protected verseFragment(ayah: number): string {
     return verseFragment(ayah);
+  }
+
+  protected setSortMode(mode: ThemeDetailSortMode): void {
+    this.sortMode.set(mode);
+  }
+
+  protected clearSearch(): void {
+    this.searchQuery.set('');
   }
 
   protected onLocaleChange(code: string): void {
@@ -166,6 +227,15 @@ export class ThemeDetailComponent implements OnInit {
       fragment: verseFragment(v.ayah),
       queryParams: { startingVerse: v.ayah },
     });
+  }
+
+  protected openFirstVerse(): void {
+    const data = this.result();
+    if (!data || data.verses.length === 0) {
+      return;
+    }
+    const first = [...data.verses].sort((a, b) => a.surah - b.surah || a.ayah - b.ayah)[0]!;
+    this.openInReader(first);
   }
 
   protected isBookmarked(v: ThematicVerseDetail): boolean {
@@ -225,7 +295,22 @@ export class ThemeDetailComponent implements OnInit {
       }
       this.result.set(data);
       this.notFound.set(false);
+      this.loadRelatedThemes(data.theme.categoryId, data.theme.id);
     });
+  }
+
+  private loadRelatedThemes(categoryId: string, currentId: string): void {
+    this.thematicIndex
+      .getThemesByCategory()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((groups) => {
+        const siblings =
+          groups
+            .find((g) => g.category.id === categoryId)
+            ?.themes.filter((t) => t.id !== currentId)
+            .slice(0, RELATED_LIMIT) ?? [];
+        this.relatedThemes.set(siblings);
+      });
   }
 
   private verseKey(v: ThematicVerseDetail): string {

@@ -1,6 +1,7 @@
 @if (loadError()) {
 <main class="themes themes--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
   <div class="themes__state-card">
+    <p class="themes__state-icon" aria-hidden="true">◇</p>
     <p class="themes__state-text">{{ 'themesLoadError' | uiTranslate }}</p>
     <button type="button" class="themes__btn themes__btn--primary" (click)="retryLoad()">
       {{ 'retryLoadButton' | uiTranslate }}
@@ -9,8 +10,25 @@
   </div>
 </main>
 } @else if (loading()) {
-<main class="themes themes--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
-  <p class="themes__state-text">{{ 'themesLoading' | uiTranslate }}</p>
+<main
+  class="themes themes--loading"
+  [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
+  [attr.lang]="ui.locale()"
+  [attr.aria-busy]="true"
+  [attr.aria-label]="'themesLoading' | uiTranslate"
+>
+  <div class="themes__skeleton-header" aria-hidden="true"></div>
+  <div class="themes__skeleton-stats" aria-hidden="true">
+    @for (i of [1, 2, 3]; track i) {
+    <span class="themes__skeleton-stat"></span>
+    }
+  </div>
+  <div class="themes__skeleton-spotlight" aria-hidden="true"></div>
+  <ul class="themes__skeleton-grid" aria-hidden="true">
+    @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+    <li class="themes__skeleton-card"></li>
+    }
+  </ul>
 </main>
 } @else {
 <div class="themes" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
@@ -41,59 +59,89 @@
     </div>
   </header>
 
-  <div class="themes__index-head">
-    <div>
-      <h2 class="themes__index-title">{{ 'themesIndexTitle' | uiTranslate }}</h2>
-      <p class="themes__index-subtitle">{{ 'themesIndexSubtitle' | uiTranslate }}</p>
+  <div class="themes__stats" role="list" [attr.aria-label]="'themesStatsAria' | uiTranslate">
+    <div class="themes__stat" role="listitem">
+      <span class="themes__stat-value">{{ formatUiNum(categoryCount()) }}</span>
+      <span class="themes__stat-label">{{ 'themesStatCategories' | uiTranslate }}</span>
     </div>
-    <p class="themes__count" aria-live="polite">
-      {{
-        'themesCount'
-          | uiTranslate: { shown: formatUiNum(shownThemes()), total: formatUiNum(totalThemes()) }
-      }}
-    </p>
+    <div class="themes__stat" role="listitem">
+      <span class="themes__stat-value">{{ formatUiNum(totalThemes()) }}</span>
+      <span class="themes__stat-label">{{ 'themesStatTopics' | uiTranslate }}</span>
+    </div>
+    <div class="themes__stat" role="listitem">
+      <span class="themes__stat-value">{{ formatUiNum(totalVerses()) }}</span>
+      <span class="themes__stat-label">{{ 'themesStatVerses' | uiTranslate }}</span>
+    </div>
   </div>
 
-  <div class="themes__search" role="search">
-    <label class="themes__tool-label" for="themes-search">{{ 'themesSearchLabel' | uiTranslate }}</label>
-    <input
-      id="themes-search"
-      class="themes__search-input"
-      type="search"
-      autocomplete="off"
-      spellcheck="false"
-      [attr.placeholder]="'themesSearchPlaceholder' | uiTranslate"
-      [ngModel]="searchQuery()"
-      (ngModelChange)="searchQuery.set($event)"
-    />
-  </div>
+  @if (dailyTopic(); as topic) {
+  <section class="themes__spotlight" aria-labelledby="themes-spotlight-heading">
+    <div class="themes__spotlight-head">
+      <div>
+        <p class="themes__spotlight-kicker">{{ 'homeTopicTodayKicker' | uiTranslate }}</p>
+        <h2 id="themes-spotlight-heading" class="themes__spotlight-title">
+          <a class="themes__spotlight-link" [routerLink]="['/themes', topic.theme.id]">
+            {{ topic.theme.name }}
+          </a>
+        </h2>
+        <p class="themes__spotlight-meta">{{ topic.categoryName }}</p>
+      </div>
+      <span class="themes__spotlight-icon" aria-hidden="true">{{ themeIcon(topic.theme) }}</span>
+    </div>
 
-  @if (filteredGroups().length === 0) {
-  <p class="themes__empty">{{ 'themesEmpty' | uiTranslate }}</p>
-  } @else {
-  @for (group of filteredGroups(); track group.category.id) {
-  <section class="themes__group" [attr.aria-labelledby]="'cat-' + group.category.id">
-    <h2 [id]="'cat-' + group.category.id" class="themes__group-title">{{ group.category.name }}</h2>
-    <ul class="themes__grid">
-      @for (t of group.themes; track t.id) {
+    <blockquote class="themes__verse-card">
+      <p class="themes__verse-ar" dir="rtl" lang="ar">{{ topic.verse.verse.ar }}</p>
+      <p class="themes__verse-ref">
+        {{ 'homeFeaturedSurahLabel' | uiTranslate }}
+        <span dir="rtl" lang="ar">{{ topic.verse.surahNameAr }}</span>
+        · {{ dailyVerseRef(topic) }}
+      </p>
+      <p
+        class="themes__verse-tr"
+        [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
+        [attr.lang]="ui.locale()"
+      >
+        {{ dailyTopicTranslation(topic) }}
+      </p>
+    </blockquote>
+
+    <div class="themes__spotlight-actions">
+      <a
+        class="themes__btn themes__btn--primary"
+        [routerLink]="verseLink(topic.verse.surah, topic.verse.ayah)"
+        [fragment]="verseFragment(topic.verse.ayah)"
+      >
+        {{ 'homeTopicTodayReadVerse' | uiTranslate }}
+      </a>
+      <a class="themes__btn themes__btn--ghost" [routerLink]="['/themes', topic.theme.id]">
+        {{ 'homeTopicTodayBrowseTopic' | uiTranslate }}
+      </a>
+    </div>
+  </section>
+  }
+
+  @if (featuredThemes().length > 0 && !hasActiveFilters()) {
+  <section class="themes__featured" aria-labelledby="themes-featured-heading">
+    <div class="themes__featured-head">
+      <h2 id="themes-featured-heading" class="themes__section-title">
+        {{ 'themesFeaturedTitle' | uiTranslate }}
+      </h2>
+      <p class="themes__section-subtitle">{{ 'themesFeaturedSubtitle' | uiTranslate }}</p>
+    </div>
+    <ul class="themes__featured-list">
+      @for (t of featuredThemes(); track t.id) {
       <li>
         <a
-          class="themes__card"
+          class="themes__featured-chip"
           [routerLink]="['/themes', t.id]"
           [attr.aria-label]="
             'themesCardAria' | uiTranslate: { name: t.name, count: formatUiNum(t.verseCount) }
           "
         >
-          <span class="themes__card-icon" aria-hidden="true">{{ themeIcon(t) }}</span>
-          <span class="themes__card-name">{{ t.name }}</span>
-          @if (t.description) {
-          <span class="themes__card-desc">{{ t.description }}</span>
-          }
-          <span class="themes__card-meta">
-            <span class="themes__card-chip">{{ t.categoryName }}</span>
-            <span class="themes__card-verses">
-              {{ formatUiNum(t.verseCount) }} {{ 'themesVerseCountLabel' | uiTranslate }}
-            </span>
+          <span class="themes__featured-chip-icon" aria-hidden="true">{{ themeIcon(t) }}</span>
+          <span class="themes__featured-chip-name">{{ t.name }}</span>
+          <span class="themes__featured-chip-meta">
+            {{ formatUiNum(t.verseCount) }} {{ 'themesVerseCountLabel' | uiTranslate }}
           </span>
         </a>
       </li>
@@ -101,6 +149,194 @@
     </ul>
   </section>
   }
-  }
+
+  <section id="themes-browse" class="themes__browse" aria-labelledby="themes-index-heading">
+    <div class="themes__index-head">
+      <div>
+        <h2 id="themes-index-heading" class="themes__index-title">{{ 'themesIndexTitle' | uiTranslate }}</h2>
+        <p class="themes__index-subtitle">{{ 'themesIndexSubtitle' | uiTranslate }}</p>
+      </div>
+      <p class="themes__count" aria-live="polite">
+        {{
+          'themesCount'
+            | uiTranslate: { shown: formatUiNum(shownThemes()), total: formatUiNum(totalThemes()) }
+        }}
+      </p>
+    </div>
+
+    <div class="themes__toolbar">
+      <div class="themes__search" role="search">
+        <label class="themes__tool-label" for="themes-search">{{ 'themesSearchLabel' | uiTranslate }}</label>
+        <div class="themes__search-wrap">
+          <span class="themes__search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false">
+              <path
+                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+            </svg>
+          </span>
+          <input
+            id="themes-search"
+            class="themes__search-input"
+            type="search"
+            autocomplete="off"
+            spellcheck="false"
+            [attr.placeholder]="'themesSearchPlaceholder' | uiTranslate"
+            [ngModel]="searchQuery()"
+            (ngModelChange)="searchQuery.set($event)"
+          />
+          @if (searchQuery().trim()) {
+          <button
+            type="button"
+            class="themes__search-clear"
+            (click)="clearSearch()"
+            [attr.aria-label]="'themesSearchClearAria' | uiTranslate"
+          >
+            ×
+          </button>
+          }
+        </div>
+      </div>
+
+      <div class="themes__toolbar-row">
+        <div class="themes__sort" role="group" [attr.aria-label]="'themesSortLabel' | uiTranslate">
+          <span class="themes__tool-label">{{ 'themesSortLabel' | uiTranslate }}</span>
+          <div class="themes__sort-chips">
+            <button
+              type="button"
+              class="themes__filter-chip"
+              [class.themes__filter-chip--active]="sortMode() === 'name'"
+              (click)="setSortMode('name')"
+            >
+              {{ 'themesSortName' | uiTranslate }}
+            </button>
+            <button
+              type="button"
+              class="themes__filter-chip"
+              [class.themes__filter-chip--active]="sortMode() === 'verses'"
+              (click)="setSortMode('verses')"
+            >
+              {{ 'themesSortVerses' | uiTranslate }}
+            </button>
+          </div>
+        </div>
+
+        <div class="themes__view" role="group" [attr.aria-label]="'themesViewLabel' | uiTranslate">
+          <button
+            type="button"
+            class="themes__view-btn"
+            [class.themes__view-btn--active]="viewMode() === 'grid'"
+            (click)="setViewMode('grid')"
+            [attr.aria-label]="'themesViewGridAria' | uiTranslate"
+            [attr.aria-pressed]="viewMode() === 'grid'"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            class="themes__view-btn"
+            [class.themes__view-btn--active]="viewMode() === 'list'"
+            (click)="setViewMode('list')"
+            [attr.aria-label]="'themesViewListAria' | uiTranslate"
+            [attr.aria-pressed]="viewMode() === 'list'"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="themes__filters" role="group" [attr.aria-label]="'themesFilterAria' | uiTranslate">
+      <button
+        type="button"
+        class="themes__filter-chip"
+        [class.themes__filter-chip--active]="categoryFilter() === 'all'"
+        (click)="setCategoryFilter('all')"
+      >
+        {{ 'themesFilterAll' | uiTranslate }} ({{ formatUiNum(totalThemes()) }})
+      </button>
+      @for (chip of categoryChips(); track chip.id) {
+      <button
+        type="button"
+        class="themes__filter-chip"
+        [class.themes__filter-chip--active]="categoryFilter() === chip.id"
+        (click)="setCategoryFilter(chip.id)"
+      >
+        {{ chip.name }} ({{ formatUiNum(chip.count) }})
+      </button>
+      }
+    </div>
+
+    @if (hasActiveFilters()) {
+    <div class="themes__active-filters">
+      <button type="button" class="themes__clear-filters" (click)="clearFilters()">
+        {{ 'themesClearFilters' | uiTranslate }}
+      </button>
+    </div>
+    }
+
+    @if (filteredGroups().length === 0) {
+    <div class="themes__empty">
+      <p class="themes__empty-text">{{ 'themesEmpty' | uiTranslate }}</p>
+      @if (hasActiveFilters()) {
+      <button type="button" class="themes__btn themes__btn--primary" (click)="clearFilters()">
+        {{ 'themesClearFilters' | uiTranslate }}
+      </button>
+      }
+    </div>
+    } @else {
+    @for (group of filteredGroups(); track group.category.id) {
+    <section class="themes__group" [attr.aria-labelledby]="'cat-' + group.category.id">
+      <div class="themes__group-head">
+        <h3 [id]="'cat-' + group.category.id" class="themes__group-title">{{ group.category.name }}</h3>
+        <span class="themes__group-count">{{ formatUiNum(group.themes.length) }}</span>
+      </div>
+      <ul
+        class="themes__grid"
+        [class.themes__grid--list]="viewMode() === 'list'"
+      >
+        @for (t of group.themes; track t.id) {
+        <li>
+          <a
+            class="themes__card"
+            [class.themes__card--list]="viewMode() === 'list'"
+            [routerLink]="['/themes', t.id]"
+            [attr.aria-label]="
+              'themesCardAria' | uiTranslate: { name: t.name, count: formatUiNum(t.verseCount) }
+            "
+          >
+            <span class="themes__card-icon" aria-hidden="true">{{ themeIcon(t) }}</span>
+            <span class="themes__card-body">
+              <span class="themes__card-name">{{ t.name }}</span>
+              @if (t.description) {
+              <span class="themes__card-desc">{{ t.description }}</span>
+              }
+              <span class="themes__card-bar" aria-hidden="true">
+                <span class="themes__card-bar-fill" [style.width.%]="verseBarPercent(t)"></span>
+              </span>
+              <span class="themes__card-meta">
+                <span class="themes__card-chip">{{ t.categoryName }}</span>
+                <span class="themes__card-verses">
+                  {{ formatUiNum(t.verseCount) }} {{ 'themesVerseCountLabel' | uiTranslate }}
+                </span>
+              </span>
+            </span>
+            <span class="themes__card-chevron" aria-hidden="true">
+              <svg viewBox="0 0 24 24" focusable="false">
+                <path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+              </svg>
+            </span>
+          </a>
+        </li>
+        }
+      </ul>
+    </section>
+    }
+    }
+  </section>
 </div>
 }
