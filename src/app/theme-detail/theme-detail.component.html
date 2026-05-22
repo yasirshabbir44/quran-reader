@@ -25,7 +25,9 @@
 <div class="theme-detail" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
   <header class="theme-detail__header">
     <a class="theme-detail__back" routerLink="/themes" [attr.aria-label]="'themesBackToDirectory' | uiTranslate">
-      ←
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+      </svg>
     </a>
     <div class="theme-detail__intro">
       <p class="theme-detail__category">{{ data.categoryName }}</p>

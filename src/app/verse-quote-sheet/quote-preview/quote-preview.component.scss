@@ -24,7 +24,7 @@
 .quote-preview__placeholder {
   margin: 0;
   padding: 1.5rem;
-  font-family: 'Amiri', serif;
+  font-family: var(--reader-font-ui);
   font-size: 0.92rem;
   color: var(--reader-ink-muted);
   text-align: center;

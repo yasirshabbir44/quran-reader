@@ -16,6 +16,8 @@ import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.r
 import type { ReadingBookmark } from '../core/bookmark/reading-bookmark.repository';
 import { BlogService } from '../core/blog/blog.service';
 import { DailyVerseService, type DailyVerseRef } from '../core/daily-verse/daily-verse.service';
+import { KhatamService } from '../core/khatam/khatam.service';
+import { MushafIndexService } from '../core/mushaf/mushaf-index.service';
 import { QURAN_CORPUS_SOURCE } from '../core/quran/quran-corpus.source';
 import {
   QuranDataService,
@@ -54,8 +56,14 @@ export class HomeLandingComponent implements OnInit {
   private readonly bookmarkRepo = inject(READING_BOOKMARK_REPOSITORY);
   private readonly thematicIndex = inject(ThematicIndexService);
   private readonly blogService = inject(BlogService);
+  private readonly khatam = inject(KhatamService);
+  private readonly mushafIndex = inject(MushafIndexService);
 
   protected readonly ui = inject(UiLocaleService);
+  protected readonly khatamProgress = this.khatam.progress;
+  protected readonly khatamActive = this.khatam.isActive;
+  protected readonly khatamComplete = this.khatam.isComplete;
+  protected readonly khatamFurthest = this.khatam.furthest;
 
   protected readonly corpusLoading = signal(true);
   protected readonly corpusError = signal(false);
@@ -123,6 +131,15 @@ export class HomeLandingComponent implements OnInit {
     return Math.min(100, Math.round((bm.ayah / surah.versesCount) * 100));
   });
 
+  protected readonly khatamContinueSurah = computed(() => {
+    const ref = this.khatamFurthest();
+    const list = this.surahs();
+    if (list.length === 0) {
+      return null;
+    }
+    return list[ref.surah - 1] ?? null;
+  });
+
   protected readonly todayLabel = computed(() => {
     this.ui.locale();
     const date = new Date();
@@ -158,7 +175,17 @@ export class HomeLandingComponent implements OnInit {
     this.title.setTitle(this.ui.translate('documentTitleHome'));
     if (isPlatformBrowser(this.platformId)) {
       this.savedPlace.set(this.bookmarkRepo.read());
+      this.khatam.hydrateFromStorage();
     }
+
+    this.mushafIndex
+      .load()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((index) => {
+        if (index) {
+          this.khatam.bindMushafIndex(index);
+        }
+      });
 
     this.corpusSource
       .load()
@@ -254,8 +281,23 @@ export class HomeLandingComponent implements OnInit {
     this.quranData.retryLoad();
   }
 
+  protected startKhatam(): void {
+    this.khatam.startNew();
+  }
+
+  protected startNewKhatam(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    if (this.khatamActive() && !window.confirm(this.ui.translate('khatamNewConfirm'))) {
+      return;
+    }
+    this.khatam.startNew();
+  }
+
   private applyCorpus(payload: QuranFullPayload): void {
     this.surahs.set(payload.surahs);
+    this.khatam.bindCorpus(payload.surahs);
     this.daily.set(this.dailyVerse.verseForDate(payload));
     this.corpusLoading.set(false);
     this.corpusError.set(false);

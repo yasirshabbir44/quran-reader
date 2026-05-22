@@ -1,4 +1,5 @@
 @use './app/core/reader-layout/reader-color-themes' as themes;
+@use './app/core/reader-layout/reader-ui-system' as ui;
 
 *,
 *::before,
@@ -9,6 +10,7 @@
 html {
   scroll-behavior: smooth;
   @include themes.reader-theme-twilight;
+  @include ui.reader-ui-font-tokens;
 }
 
 html[data-reader-theme='night'] {
@@ -23,6 +25,14 @@ html[data-reader-theme='sepia'] {
   html {
     scroll-behavior: auto;
   }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 html,
@@ -32,7 +42,9 @@ body {
 }
 
 body {
-  font-family: 'Amiri', 'Amiri Quran', serif;
+  font-family: var(--reader-font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
   background:
     radial-gradient(120% 80% at 50% -10%, var(--reader-body-glow-gold), transparent 55%),
     radial-gradient(90% 60% at 100% 40%, var(--reader-body-glow-blue), transparent 50%),
@@ -40,10 +52,62 @@ body {
   background-attachment: fixed;
   color: var(--reader-body-ink);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   transition:
     background 0.35s ease,
     color 0.25s ease;
+}
+
+::selection {
+  background: var(--reader-accent-soft);
+  color: var(--reader-ink-intro-title);
+}
+
+a {
+  color: var(--reader-accent);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']) {
+  cursor: pointer;
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+@supports (scrollbar-color: auto) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--reader-border-strong) transparent;
+  }
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: var(--reader-radius-pill);
+  background: var(--reader-border-strong);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--reader-accent-border);
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 html[data-reader-theme='sepia'] .not-found {

@@ -8,6 +8,7 @@ import type { QuranFullPayload } from '../../../core/quran/quran-data.service';
 import { MushafIndexService } from '../../../core/mushaf/mushaf-index.service';
 import type { MushafIndexPayload } from '../../../core/mushaf/mushaf-index.types';
 import { READING_BOOKMARK_REPOSITORY } from '../../../core/bookmark/reading-bookmark.repository';
+import { KhatamService } from '../../../core/khatam/khatam.service';
 import { DailyReminderService } from '../../../core/notifications/daily-reminder.service';
 import { ReaderActiveAyahService } from '../navigation/reader-active-ayah.service';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
@@ -49,13 +50,21 @@ export class ReaderRouteCoordinatorService {
   private readonly bookmarkUi = inject(ReaderBookmarkUiService);
   private readonly scroll = inject(ReaderScrollStateService);
   private readonly mushafNav = inject(ReaderMushafNavService);
+  private readonly khatam = inject(KhatamService);
 
   private lastConsumedStartKey = '';
 
   bind(onTitleSync: () => void): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.khatam.hydrateFromStorage();
+    }
+
     const corpus$ = this.corpusSource.load().pipe(
       tap((payload) => {
         this.corpus.setCorpusPayload(payload);
+        if (payload) {
+          this.khatam.bindCorpus(payload.surahs);
+        }
         if (payload === null) {
           onTitleSync();
         }
@@ -66,6 +75,9 @@ export class ReaderRouteCoordinatorService {
       tap((payload) => {
         this.corpus.setMushafPayload(payload);
         this.mushafNav.setIndex(payload);
+        if (payload) {
+          this.khatam.bindMushafIndex(payload);
+        }
       }),
     );
 

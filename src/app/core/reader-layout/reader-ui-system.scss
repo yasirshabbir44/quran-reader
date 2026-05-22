@@ -1,0 +1,295 @@
+// Shared UI tokens, typography, and component patterns (index pages + chrome).
+
+@mixin reader-ui-font-tokens {
+  --reader-font-ui: 'Source Sans 3', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --reader-font-reading: 'Amiri', Georgia, 'Times New Roman', serif;
+  --reader-font-arabic: 'Amiri Quran', 'Amiri', 'Noto Naskh Arabic', serif;
+  --reader-radius-sm: 0.5rem;
+  --reader-radius-md: 0.75rem;
+  --reader-radius-lg: 1rem;
+  --reader-radius-xl: 1.25rem;
+  --reader-radius-pill: 999px;
+  --reader-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --reader-transition-fast: 0.15s ease;
+  --reader-transition-base: 0.22s var(--reader-ease-out);
+  --reader-focus-ring: 0 0 0 2px var(--reader-chrome-bg-solid), 0 0 0 4px var(--reader-focus);
+}
+
+@mixin ui-page-shell($max-width: 72rem) {
+  min-height: 100vh;
+  max-width: $max-width;
+  margin: 0 auto;
+  padding:
+    max(1.25rem, env(safe-area-inset-top))
+    max(1.15rem, env(safe-area-inset-right))
+    max(2.5rem, env(safe-area-inset-bottom))
+    max(1.15rem, env(safe-area-inset-left));
+  color: var(--reader-body-ink);
+  font-family: var(--reader-font-ui);
+  -webkit-font-smoothing: antialiased;
+}
+
+@mixin ui-page-shell-narrow {
+  @include ui-page-shell(42rem);
+}
+
+@mixin ui-page-shell-wide {
+  @include ui-page-shell(76rem);
+}
+
+@mixin ui-kicker {
+  margin: 0 0 0.35rem;
+  font-family: var(--reader-font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--reader-ink-intro-kicker);
+}
+
+@mixin ui-page-title {
+  margin: 0 0 0.4rem;
+  font-family: var(--reader-font-ui);
+  font-size: clamp(1.65rem, 4vw, 2.2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--reader-ink-intro-title);
+}
+
+@mixin ui-page-subtitle {
+  margin: 0;
+  font-size: clamp(0.92rem, 2.2vw, 1rem);
+  line-height: 1.55;
+  color: var(--reader-ink-muted);
+}
+
+@mixin ui-brand-hero {
+  flex: 1 1 16rem;
+  min-width: 0;
+  padding: 1.4rem 1.3rem;
+  border-radius: var(--reader-radius-xl);
+  border: 1px solid var(--reader-accent-border);
+  background:
+    radial-gradient(ellipse 100% 70% at 100% 0%, var(--reader-accent-soft), transparent 58%),
+    var(--reader-intro-bg);
+  box-shadow: 0 16px 44px var(--reader-shadow-card);
+}
+
+@mixin ui-back-btn {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  flex: 0 0 auto;
+  margin-top: 0.1rem;
+  border-radius: var(--reader-radius-sm);
+  text-decoration: none;
+  color: var(--reader-ink-ui);
+  background: var(--reader-overlay);
+  border: 1px solid var(--reader-border-strong);
+  transition:
+    background var(--reader-transition-fast),
+    border-color var(--reader-transition-fast),
+    color var(--reader-transition-fast),
+    transform var(--reader-transition-fast);
+
+  svg {
+    width: 1.2rem;
+    height: 1.2rem;
+    fill: currentColor;
+  }
+
+  :host-context([dir='rtl']) & svg,
+  [dir='rtl'] & svg {
+    transform: scaleX(-1);
+  }
+
+  &:hover {
+    background: var(--reader-elevated-hover);
+    border-color: var(--reader-accent-border);
+    color: var(--reader-ink-ui-hover);
+    transform: translateX(-1px);
+  }
+
+  :host-context([dir='rtl']) &:hover,
+  [dir='rtl'] &:hover {
+    transform: translateX(1px);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--reader-focus-ring);
+  }
+}
+
+@mixin ui-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem 1.5rem;
+  margin-bottom: 1.85rem;
+}
+
+@mixin ui-state-center {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  max-width: none;
+}
+
+@mixin ui-state-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 24rem;
+  padding: 1.5rem 1.35rem;
+  border-radius: var(--reader-radius-lg);
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-chrome-bg-panel);
+  box-shadow: 0 12px 36px var(--reader-shadow-soft);
+}
+
+@mixin ui-state-text {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--reader-ink-muted);
+}
+
+@mixin ui-btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.45rem 1.15rem;
+  border-radius: var(--reader-radius-pill);
+  font-family: var(--reader-font-ui);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition:
+    filter var(--reader-transition-fast),
+    background var(--reader-transition-fast),
+    color var(--reader-transition-fast),
+    border-color var(--reader-transition-fast),
+    transform var(--reader-transition-fast);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--reader-focus-ring);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@mixin ui-btn-primary {
+  @include ui-btn-base;
+  color: var(--reader-btn-on-accent);
+  background: linear-gradient(180deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
+  border-color: var(--reader-accent-border-strong);
+  box-shadow: 0 4px 14px var(--reader-accent-soft);
+
+  &:hover {
+    filter: brightness(1.06);
+  }
+}
+
+@mixin ui-btn-ghost {
+  @include ui-btn-base;
+  color: var(--reader-ink-action);
+  background: var(--reader-overlay);
+  border-color: var(--reader-border-strong);
+
+  &:hover {
+    background: var(--reader-elevated-hover);
+    border-color: var(--reader-accent-border);
+    color: var(--reader-ink-action-hover);
+  }
+}
+
+@mixin ui-filter-chip {
+  min-height: 2rem;
+  padding: 0.28rem 0.8rem;
+  border-radius: var(--reader-radius-pill);
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-overlay);
+  color: var(--reader-ink-ui);
+  font-family: var(--reader-font-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background var(--reader-transition-fast),
+    border-color var(--reader-transition-fast),
+    color var(--reader-transition-fast),
+    box-shadow var(--reader-transition-fast);
+
+  &:hover {
+    background: var(--reader-elevated-hover);
+    border-color: var(--reader-accent-border);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--reader-focus-ring);
+  }
+}
+
+@mixin ui-filter-chip-active {
+  color: var(--reader-btn-on-accent);
+  background: linear-gradient(180deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
+  border-color: var(--reader-accent-border-strong);
+  box-shadow: 0 4px 12px var(--reader-accent-soft);
+}
+
+@mixin ui-icon-badge {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--reader-radius-sm);
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--reader-accent);
+  background: var(--reader-accent-soft);
+  border: 1px solid var(--reader-accent-border);
+}
+
+@mixin ui-section-title {
+  margin: 0;
+  font-family: var(--reader-font-ui);
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+  color: var(--reader-ink-intro-title);
+}
+
+@mixin ui-verse-card {
+  margin: 0;
+  padding: 1.05rem 1.1rem;
+  border-radius: var(--reader-radius-md);
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-bismillah-bg);
+  box-shadow: inset 0 1px 0 var(--reader-overlay);
+}
+
+@mixin ui-verse-arabic {
+  font-family: var(--reader-font-arabic);
+  font-size: clamp(1.25rem, 3.2vw, 1.6rem);
+  line-height: 1.85;
+  color: var(--reader-ink-bismillah);
+}
+
+@mixin ui-verse-translation {
+  font-family: var(--reader-font-ui);
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--reader-ink-intro-body);
+}

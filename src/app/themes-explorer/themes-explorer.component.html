@@ -15,7 +15,11 @@
 } @else {
 <div class="themes" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
   <header class="themes__header">
-    <a class="themes__back" routerLink="/" [attr.aria-label]="'homeNavHomeAria' | uiTranslate">←</a>
+    <a class="themes__back" routerLink="/" [attr.aria-label]="'homeNavHomeAria' | uiTranslate">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+      </svg>
+    </a>
     <div class="themes__brand">
       <p class="themes__kicker">{{ 'themesKicker' | uiTranslate }}</p>
       <h1 class="themes__title">{{ 'themesTitle' | uiTranslate }}</h1>

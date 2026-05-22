@@ -1,4 +1,5 @@
 @use '../core/reader-layout/reader-index-layout' as idx;
+@use '../core/reader-layout/reader-ui-system' as ui;
 
 :host {
   display: block;
@@ -6,47 +7,33 @@
 }
 
 .landing {
-  min-height: 100vh;
-  padding:
-    max(1rem, env(safe-area-inset-top))
-    max(1rem, env(safe-area-inset-right))
-    max(2.5rem, env(safe-area-inset-bottom))
-    max(1rem, env(safe-area-inset-left));
-  color: var(--reader-body-ink);
-  max-width: 76rem;
-  margin: 0 auto;
+  @include ui.ui-page-shell-wide;
 }
 
 .landing--state {
-  display: grid;
-  place-items: center;
-  text-align: center;
-  max-width: none;
+  @include ui.ui-state-center;
 }
 
 .landing__state-card {
-  max-width: 24rem;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  border: 1px solid var(--reader-border-strong);
-  background: var(--reader-chrome-bg-panel);
+  @include ui.ui-state-card;
 }
 
 .landing__state-text {
-  margin: 0 0 1rem;
-  line-height: 1.6;
-  color: var(--reader-ink-muted);
+  @include ui.ui-state-text;
+  margin-bottom: 1rem;
 }
 
 .landing__hero {
   margin-bottom: 1.75rem;
   padding: 1.5rem 1.35rem 1.25rem;
-  border-radius: 1.25rem;
+  border-radius: var(--reader-radius-xl);
   border: 1px solid var(--reader-accent-border);
   background:
     radial-gradient(ellipse 120% 80% at 100% 0%, var(--reader-accent-soft), transparent 55%),
     var(--reader-intro-bg);
-  box-shadow: 0 18px 48px var(--reader-shadow-card);
+  box-shadow: 0 20px 52px var(--reader-shadow-card);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .landing__hero-top {
@@ -64,27 +51,18 @@
 }
 
 .landing__kicker {
-  margin: 0 0 0.35rem;
-  font-size: 0.82rem;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--reader-ink-intro-kicker);
+  @include ui.ui-kicker;
 }
 
 .landing__title {
-  margin: 0 0 0.35rem;
-  font-size: clamp(1.75rem, 4.5vw, 2.35rem);
-  font-weight: 700;
-  line-height: 1.15;
-  color: var(--reader-ink-intro-title);
+  @include ui.ui-page-title;
+  margin-bottom: 0.35rem;
+  font-size: clamp(1.85rem, 4.8vw, 2.45rem);
 }
 
 .landing__subtitle {
-  margin: 0;
+  @include ui.ui-page-subtitle;
   max-width: 36rem;
-  font-size: clamp(0.92rem, 2.2vw, 1.02rem);
-  line-height: 1.55;
-  color: var(--reader-ink-muted);
 }
 
 .landing__date {
@@ -152,8 +130,28 @@
   color: var(--reader-ink-subtle);
 }
 
-.landing__continue {
+.landing__reading-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
   margin-bottom: 1.5rem;
+  align-items: stretch;
+
+  @media (min-width: 720px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  &--single {
+    @media (min-width: 720px) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.landing__continue {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
   padding: 1.15rem 1.2rem;
   border-radius: 1rem;
   border: 1px solid var(--reader-accent-border-strong);
@@ -207,6 +205,74 @@
 
 .landing__continue-cta {
   width: 100%;
+  margin-top: auto;
+}
+
+.landing__khatam {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 1.15rem 1.2rem;
+  border-radius: 1rem;
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-chrome-bg-panel);
+  box-shadow: 0 10px 28px var(--reader-shadow-soft);
+}
+
+.landing__khatam-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.landing__khatam-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--reader-ink-intro-title);
+}
+
+.landing__khatam-meta {
+  margin: 0.3rem 0 0;
+  font-size: 0.86rem;
+  color: var(--reader-ink-muted);
+}
+
+.landing__khatam-pct {
+  flex-shrink: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--reader-ink-intro-tag);
+}
+
+.landing__khatam-bar {
+  height: 0.35rem;
+  margin-bottom: 1rem;
+  border-radius: 999px;
+  background: var(--reader-overlay);
+  overflow: hidden;
+}
+
+.landing__khatam-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
+  transition: width 0.35s ease;
+}
+
+.landing__khatam-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: auto;
+
+  .landing__btn--primary {
+    flex: 1 1 auto;
+    min-width: min(100%, 10rem);
+  }
 }
 
 .landing__quick {
@@ -264,9 +330,7 @@
 }
 
 .landing__quick-icon {
-  font-size: 1.1rem;
-  line-height: 1;
-  color: var(--reader-ink-intro-tag);
+  @include ui.ui-icon-badge;
 }
 
 .landing__quick-card-title {
@@ -375,7 +439,7 @@
 }
 
 .landing__popular-name {
-  font-family: 'Amiri Quran', 'Amiri', serif;
+  font-family: var(--reader-font-arabic);
   font-size: 1rem;
   line-height: 1.2;
 }
@@ -392,11 +456,7 @@
 }
 
 .landing__section-title {
-  margin: 0;
-  font-size: clamp(1.15rem, 3vw, 1.45rem);
-  font-weight: 700;
-  line-height: 1.35;
-  color: var(--reader-ink-intro-title);
+  @include ui.ui-section-title;
 }
 
 .landing__featured {
@@ -434,20 +494,13 @@
 }
 
 .landing__verse-card {
-  margin: 0;
+  @include ui.ui-verse-card;
   flex: 1;
-  padding: 1rem 1.05rem;
-  border-radius: 0.85rem;
-  border: 1px solid var(--reader-border-strong);
-  background: var(--reader-bismillah-bg);
 }
 
 .landing__verse-ar {
   margin: 0 0 0.7rem;
-  font-family: 'Amiri Quran', 'Amiri', serif;
-  font-size: clamp(1.25rem, 3.2vw, 1.6rem);
-  line-height: 1.85;
-  color: var(--reader-ink-bismillah);
+  @include ui.ui-verse-arabic;
 }
 
 .landing__verse-ref {
@@ -458,9 +511,7 @@
 
 .landing__verse-en {
   margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.55;
-  color: var(--reader-ink-intro-body);
+  @include ui.ui-verse-translation;
 }
 
 .landing__featured-actions {
@@ -470,47 +521,15 @@
 }
 
 .landing__btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.45rem;
-  padding: 0.4rem 1.1rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: pointer;
-  border: 1px solid transparent;
-  transition:
-    filter 0.15s ease,
-    background 0.15s ease,
-    color 0.15s ease;
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 3px;
-  }
+  @include ui.ui-btn-base;
 }
 
 .landing__btn--primary {
-  color: var(--reader-btn-on-accent);
-  background: linear-gradient(180deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
-  border-color: var(--reader-accent-border-strong);
-
-  &:hover {
-    filter: brightness(1.06);
-  }
+  @include ui.ui-btn-primary;
 }
 
 .landing__btn--ghost {
-  color: var(--reader-ink-action);
-  background: var(--reader-overlay);
-  border-color: var(--reader-border-strong);
-
-  &:hover {
-    background: var(--reader-elevated-hover);
-    color: var(--reader-ink-action-hover);
-  }
+  @include ui.ui-btn-ghost;
 }
 
 .landing__topic-today {
@@ -574,35 +593,11 @@
 }
 
 .landing__filter-chip {
-  min-height: 2rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid var(--reader-border-strong);
-  background: var(--reader-overlay);
-  color: var(--reader-ink-ui);
-  font: inherit;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
-
-  &:hover {
-    background: var(--reader-elevated-hover);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 2px;
-  }
+  @include ui.ui-filter-chip;
 }
 
 .landing__filter-chip--active {
-  color: var(--reader-btn-on-accent);
-  background: linear-gradient(180deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
-  border-color: var(--reader-accent-border-strong);
+  @include ui.ui-filter-chip-active;
 }
 
 .landing__search {
@@ -646,7 +641,7 @@
 
 .landing__surah-name {
   grid-column: 2;
-  font-family: 'Amiri Quran', 'Amiri', serif;
+  font-family: var(--reader-font-arabic);
   font-size: 1.15rem;
   line-height: 1.3;
   color: var(--reader-ink-intro-title);
