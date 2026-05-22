@@ -29,11 +29,19 @@ import {
   ThematicIndexService,
   type DailyThemeInspiration,
 } from '../core/thematic-index/thematic-index.service';
+import type { MushafIndexPayload } from '../core/mushaf/mushaf-index.types';
 import { normalizeVerseTranslations } from '../core/verse-presentation/verse-presentation.strategy';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
+import type { SurahNavItem } from '../surah-reader/models/surah-nav-item.model';
+import { filterSurahNavItems } from '../surah-reader/utils/surah-nav-filter.util';
+import {
+  filterSurahJuzGroups,
+  groupSurahsByJuz,
+} from './utils/surah-juz-groups.util';
 
 export type SurahRevelationFilter = 'all' | 'meccan' | 'medinan';
+export type SurahIndexLayout = 'list' | 'juz';
 
 /** Frequently opened surahs — quick access from the home dashboard. */
 const POPULAR_SURAHS: readonly number[] = [1, 18, 36, 55, 67, 112];
@@ -71,7 +79,9 @@ export class HomeLandingComponent implements OnInit {
   protected readonly daily = signal<DailyVerseRef | null>(null);
   protected readonly savedPlace = signal<ReadingBookmark | null>(null);
   protected readonly indexQuery = signal('');
+  protected readonly indexLayout = signal<SurahIndexLayout>('list');
   protected readonly revelationFilter = signal<SurahRevelationFilter>('all');
+  protected readonly mushafPayload = signal<MushafIndexPayload | null>(null);
   protected readonly quickJumpInput = signal('');
   protected readonly quickJumpError = signal(false);
   protected readonly themeCount = signal(0);
@@ -97,11 +107,22 @@ export class HomeLandingComponent implements OnInit {
     const filter = this.revelationFilter();
     const byType =
       filter === 'all' ? list : list.filter((s) => s.revelationType === filter);
-    const raw = this.indexQuery().trim().normalize('NFKC').toLowerCase();
-    if (!raw) {
+    const navItems = byType.map((s) => this.toSurahNavItem(s));
+    const filtered = filterSurahNavItems(navItems, this.indexQuery());
+    if (filtered.length === navItems.length) {
       return byType;
     }
-    return byType.filter((s) => this.surahMatchesQuery(s, raw));
+    const allowed = new Set(filtered.map((s) => s.number));
+    return byType.filter((s) => allowed.has(s.number));
+  });
+
+  protected readonly indexJuzGroups = computed(() => {
+    const index = this.mushafPayload();
+    if (!index) {
+      return [];
+    }
+    const groups = groupSurahsByJuz(this.surahs(), index);
+    return filterSurahJuzGroups(groups, this.filteredSurahs());
   });
 
   protected readonly featuredSurah = computed(() => {
@@ -183,6 +204,7 @@ export class HomeLandingComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((index) => {
         if (index) {
+          this.mushafPayload.set(index);
           this.khatam.bindMushafIndex(index);
         }
       });
@@ -256,6 +278,10 @@ export class HomeLandingComponent implements OnInit {
     this.revelationFilter.set(filter);
   }
 
+  protected setIndexLayout(layout: SurahIndexLayout): void {
+    this.indexLayout.set(layout);
+  }
+
   protected surahByNumber(num: number): QuranSurahPayload | null {
     return this.surahs().find((s) => s.number === num) ?? null;
   }
@@ -266,13 +292,13 @@ export class HomeLandingComponent implements OnInit {
       this.quickJumpError.set(true);
       return;
     }
-    const n = Number.parseInt(raw, 10);
-    if (!Number.isFinite(n) || n < 1 || n > 114) {
+    const resolved = this.resolveQuickJumpSurah(raw);
+    if (resolved === null) {
       this.quickJumpError.set(true);
       return;
     }
     this.quickJumpError.set(false);
-    void this.router.navigate(['/', n]);
+    void this.router.navigate(['/', resolved]);
   }
 
   protected retryCorpusLoad(): void {
@@ -303,17 +329,27 @@ export class HomeLandingComponent implements OnInit {
     this.corpusError.set(false);
   }
 
-  private surahMatchesQuery(s: QuranSurahPayload, needle: string): boolean {
-    if (String(s.number).includes(needle)) {
-      return true;
+  private toSurahNavItem(s: QuranSurahPayload): SurahNavItem {
+    return {
+      number: s.number,
+      nameAr: s.nameAr,
+      nameTranslit: s.nameTranslit,
+      versesCount: s.versesCount,
+      revelationType: s.revelationType,
+    };
+  }
+
+  private resolveQuickJumpSurah(raw: string): number | null {
+    const digits = raw.replace(/\D/g, '');
+    if (digits) {
+      const n = Number.parseInt(digits, 10);
+      if (Number.isFinite(n) && n >= 1 && n <= 114) {
+        return n;
+      }
     }
-    if (s.nameAr.includes(needle)) {
-      return true;
-    }
-    if (s.nameTranslit.toLowerCase().includes(needle)) {
-      return true;
-    }
-    return false;
+    const items = this.surahs().map((s) => this.toSurahNavItem(s));
+    const matches = filterSurahNavItems(items, raw);
+    return matches.length === 1 ? matches[0]!.number : null;
   }
 
   private dailyVerseDateKey(date: Date): string {

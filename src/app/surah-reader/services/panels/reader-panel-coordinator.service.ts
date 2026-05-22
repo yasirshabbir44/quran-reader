@@ -50,4 +50,10 @@ export class ReaderPanelCoordinatorService {
   anyOverlayOpen(): boolean {
     return this.settingsOpen() || this.surahNav.open() || this.mushafNav.open();
   }
+
+  closeAllOverlays(): void {
+    this.closeSettings();
+    this.surahNav.close();
+    this.mushafNav.close();
+  }
 }
