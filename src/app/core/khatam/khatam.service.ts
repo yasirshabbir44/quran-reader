@@ -24,6 +24,7 @@ export class KhatamService implements KhatamRepository {
   private ordinalByKey: ReadonlyMap<string, number> = new Map();
   private totalVerses = 0;
   private juzEndOrdinals: ReadonlyMap<number, number> = new Map();
+  private pendingMushafIndex: MushafIndexPayload | null = null;
 
   readonly session = this.sessionSignal.asReadonly();
 
@@ -88,15 +89,22 @@ export class KhatamService implements KhatamRepository {
     const { ordinalByKey, total } = buildVerseOrdinals(surahs);
     this.ordinalByKey = ordinalByKey;
     this.totalVerses = total;
+    this.applyJuzEndOrdinals();
     this.reconcileCompletion();
   }
 
   bindMushafIndex(index: MushafIndexPayload): void {
-    if (this.ordinalByKey.size === 0) {
+    this.pendingMushafIndex = index;
+    this.applyJuzEndOrdinals();
+    this.reconcileCompletion();
+  }
+
+  private applyJuzEndOrdinals(): void {
+    const index = this.pendingMushafIndex;
+    if (!index || this.ordinalByKey.size === 0) {
       return;
     }
     this.juzEndOrdinals = buildJuzEndOrdinals(index, this.ordinalByKey);
-    this.reconcileCompletion();
   }
 
   startNew(): void {
