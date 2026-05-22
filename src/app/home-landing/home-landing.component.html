@@ -70,46 +70,117 @@
     </div>
   </header>
 
-  @if (savedPlace(); as bm) {
-  <section class="landing__continue" aria-labelledby="continue-heading">
-    <div class="landing__continue-head">
+  <div
+    class="landing__reading-row"
+    [class.landing__reading-row--single]="!savedPlace()"
+  >
+    @if (savedPlace(); as bm) {
+    <section class="landing__continue" aria-labelledby="continue-heading">
+      <div class="landing__continue-head">
+        <div>
+          <h2 id="continue-heading" class="landing__continue-title">{{ 'homeNavContinue' | uiTranslate }}</h2>
+          @if (continueReadingSurah(); as cs) {
+          <p class="landing__continue-meta">
+            {{
+              'homeNavContinueDetail'
+                | uiTranslate
+                  : {
+                      name: cs.nameAr,
+                      ayah: formatUiNum(bm.ayah),
+                      total: formatUiNum(cs.versesCount),
+                    }
+            }}
+          </p>
+          }
+        </div>
+        <span class="landing__continue-pct" aria-hidden="true">{{ formatUiNum(continueProgressPct()) }}%</span>
+      </div>
+      <div
+        class="landing__continue-bar"
+        role="progressbar"
+        [attr.aria-valuenow]="continueProgressPct()"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-label]="'homeContinueProgress' | uiTranslate: { pct: formatUiNum(continueProgressPct()) }"
+      >
+        <span class="landing__continue-bar-fill" [style.width.%]="continueProgressPct()"></span>
+      </div>
+      <a
+        class="landing__btn landing__btn--primary landing__continue-cta"
+        [routerLink]="verseLink(bm.surah, bm.ayah)"
+        [fragment]="verseFragment(bm.ayah)"
+      >
+        {{ 'homeContinueCta' | uiTranslate }}
+      </a>
+    </section>
+    }
+
+    <section class="landing__khatam" aria-labelledby="khatam-heading">
+    <div class="landing__khatam-head">
       <div>
-        <h2 id="continue-heading" class="landing__continue-title">{{ 'homeNavContinue' | uiTranslate }}</h2>
-        @if (continueReadingSurah(); as cs) {
-        <p class="landing__continue-meta">
+        <h2 id="khatam-heading" class="landing__khatam-title">{{ 'khatamTitle' | uiTranslate }}</h2>
+        @if (khatamComplete()) {
+        <p class="landing__khatam-meta">{{ 'khatamCompleteMessage' | uiTranslate }}</p>
+        } @else if (khatamActive()) {
+        @if (khatamContinueSurah(); as ks) {
+        <p class="landing__khatam-meta">
           {{
-            'homeNavContinueDetail'
+            'khatamProgressDetail'
               | uiTranslate
                 : {
-                    name: cs.nameAr,
-                    ayah: formatUiNum(bm.ayah),
-                    total: formatUiNum(cs.versesCount),
+                    name: ks.nameAr,
+                    surah: formatUiNum(khatamFurthest().surah),
+                    ayah: formatUiNum(khatamFurthest().ayah),
+                    juz: formatUiNum(khatamProgress().juzCompleted),
+                    totalJuz: formatUiNum(khatamProgress().totalJuz),
                   }
           }}
         </p>
         }
+        } @else {
+        <p class="landing__khatam-meta">{{ 'khatamStartHint' | uiTranslate }}</p>
+        }
       </div>
-      <span class="landing__continue-pct" aria-hidden="true">{{ formatUiNum(continueProgressPct()) }}%</span>
+      @if (khatamActive() || khatamComplete()) {
+      <span class="landing__khatam-pct" aria-hidden="true">{{ formatUiNum(khatamProgress().percent) }}%</span>
+      }
     </div>
+    @if (khatamActive() || khatamComplete()) {
     <div
-      class="landing__continue-bar"
+      class="landing__khatam-bar"
       role="progressbar"
-      [attr.aria-valuenow]="continueProgressPct()"
+      [attr.aria-valuenow]="khatamProgress().percent"
       aria-valuemin="0"
       aria-valuemax="100"
-      [attr.aria-label]="'homeContinueProgress' | uiTranslate: { pct: formatUiNum(continueProgressPct()) }"
+      [attr.aria-label]="'khatamProgressAria' | uiTranslate: { pct: formatUiNum(khatamProgress().percent) }"
     >
-      <span class="landing__continue-bar-fill" [style.width.%]="continueProgressPct()"></span>
+      <span class="landing__khatam-bar-fill" [style.width.%]="khatamProgress().percent"></span>
     </div>
-    <a
-      class="landing__btn landing__btn--primary landing__continue-cta"
-      [routerLink]="verseLink(bm.surah, bm.ayah)"
-      [fragment]="verseFragment(bm.ayah)"
-    >
-      {{ 'homeContinueCta' | uiTranslate }}
-    </a>
-  </section>
-  }
+    }
+    <div class="landing__khatam-actions">
+      @if (khatamActive()) {
+      <a
+        class="landing__btn landing__btn--primary"
+        [routerLink]="verseLink(khatamFurthest().surah, khatamFurthest().ayah)"
+        [fragment]="verseFragment(khatamFurthest().ayah)"
+      >
+        {{ 'khatamContinueCta' | uiTranslate }}
+      </a>
+      <button type="button" class="landing__btn landing__btn--ghost" (click)="startNewKhatam()">
+        {{ 'khatamNewCta' | uiTranslate }}
+      </button>
+      } @else if (khatamComplete()) {
+      <button type="button" class="landing__btn landing__btn--primary" (click)="startNewKhatam()">
+        {{ 'khatamStartNewAfterComplete' | uiTranslate }}
+      </button>
+      } @else {
+      <button type="button" class="landing__btn landing__btn--primary" (click)="startKhatam()">
+        {{ 'khatamStartCta' | uiTranslate }}
+      </button>
+      }
+    </div>
+    </section>
+  </div>
 
   <section class="landing__quick" aria-labelledby="quick-heading">
     <h2 id="quick-heading" class="landing__quick-title">{{ 'homeQuickActionsTitle' | uiTranslate }}</h2>
@@ -149,6 +220,13 @@
           <span class="landing__quick-icon" aria-hidden="true">☰</span>
           <span class="landing__quick-card-title">{{ 'homeNavIndex' | uiTranslate }}</span>
           <span class="landing__quick-card-meta">{{ 'homeIndexSubtitle' | uiTranslate }}</span>
+        </a>
+      </li>
+      <li>
+        <a class="landing__quick-card" href="#khatam-heading">
+          <span class="landing__quick-icon" aria-hidden="true">◎</span>
+          <span class="landing__quick-card-title">{{ 'homeNavKhatam' | uiTranslate }}</span>
+          <span class="landing__quick-card-meta">{{ 'homeNavKhatamHint' | uiTranslate }}</span>
         </a>
       </li>
       <li>

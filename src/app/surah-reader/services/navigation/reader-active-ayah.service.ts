@@ -2,6 +2,7 @@ import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import type { VerseRef } from '../../../core/mushaf/mushaf-index.types';
 import { verseElementId } from '../../../core/routing/verse-location.util';
+import { KhatamService } from '../../../core/khatam/khatam.service';
 import { ReaderBookmarkUiService } from '../bookmark/reader-bookmark-ui.service';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
 import { ReaderScrollStateService } from './reader-scroll-state.service';
@@ -15,6 +16,7 @@ export class ReaderActiveAyahService {
   private readonly scroll = inject(ReaderScrollStateService);
   private readonly fragments = inject(ReaderVerseFragmentService);
   private readonly bookmarkUi = inject(ReaderBookmarkUiService);
+  private readonly khatam = inject(KhatamService);
 
   readonly activeVerse = signal<VerseRef>({ surah: 67, ayah: 1 });
   readonly jumpModel = signal('');
@@ -68,6 +70,7 @@ export class ReaderActiveAyahService {
       this.fragments.scheduleFragmentSync(ref);
     }
     this.bookmarkUi.scheduleScrollSave(ref.surah, ref.ayah);
+    this.khatam.recordProgress(ref.surah, ref.ayah);
   }
 
   navigateToVerse(ref: VerseRef): void {
