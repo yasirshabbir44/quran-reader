@@ -171,6 +171,7 @@ export class ReaderActiveAyahService {
     }
     this.scroll.scrollToVerse(ref, false);
     this.activeVerse.set(ref);
+    this.khatam.recordProgress(ref.surah, ref.ayah);
     this.jumpModel.set(this.jumpValueFor(ref));
     this.pendingStartVerse = null;
     this.fragments.replaceFragmentInUrl(ref);
