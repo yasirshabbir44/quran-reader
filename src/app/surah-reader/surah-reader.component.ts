@@ -81,6 +81,7 @@ import { ReaderWordStudyPanelComponent } from './ui/reader-word-study-panel/read
       'breakpoints.tafsirSplitLayout() && tafsir.expandedAyah() !== null',
     '[class.reader--mobile-chrome]': 'breakpoints.mobileChrome()',
     '[class.reader--tafsir-sheet-open]': 'tafsir.mobileSheetOpen()',
+    '[class.reader--focus-mode]': 'viewPrefs.focusMode()',
   },
 })
 export class SurahReaderComponent implements OnInit {
@@ -137,6 +138,9 @@ export class SurahReaderComponent implements OnInit {
   ngOnInit(): void {
     if (!isPlatformBrowser(this.platformId)) {
       return;
+    }
+    if (this.viewPrefs.focusMode()) {
+      this.dismissReaderChrome();
     }
     this.document.defaultView?.addEventListener('visibilitychange', this.onVisibilityChange);
     this.destroyRef.onDestroy(() => {
@@ -234,6 +238,10 @@ export class SurahReaderComponent implements OnInit {
 
   @HostListener('document:keydown.escape')
   protected onEscapeClosePanels(): void {
+    if (this.viewPrefs.focusMode()) {
+      this.setFocusMode(false);
+      return;
+    }
     if (this.verseActions.quoteSheetVerse()) {
       this.verseActions.closeQuoteSheet();
       return;
@@ -459,6 +467,21 @@ export class SurahReaderComponent implements OnInit {
     if (input instanceof HTMLInputElement) {
       this.viewPrefs.setShowTransliteration(input.checked);
     }
+  }
+
+  protected onFocusModeCheckboxChange(event: Event): void {
+    const input = event.target;
+    if (input instanceof HTMLInputElement) {
+      this.setFocusMode(input.checked);
+    }
+  }
+
+  protected setFocusMode(enabled: boolean): void {
+    this.viewPrefs.setFocusMode(enabled);
+    if (enabled) {
+      this.dismissReaderChrome();
+    }
+    this.scroll.syncTopbarHeightFromDom();
   }
 
   protected setReadingMode(mode: 'verse-by-verse' | 'reading'): void {
@@ -690,11 +713,11 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected showTafsirInline(v: ReaderDisplayVerse): boolean {
-    return this.tafsir.showInline(v);
+    return !this.viewPrefs.focusMode() && this.tafsir.showInline(v);
   }
 
   protected showWordStudyInline(v: ReaderDisplayVerse): boolean {
-    return this.wordStudy.isOpen(v);
+    return !this.viewPrefs.focusMode() && this.wordStudy.isOpen(v);
   }
 
   protected useTafsirMobileSheet(): boolean {
@@ -723,6 +746,7 @@ export class SurahReaderComponent implements OnInit {
 
   private panelsPinnedOpen(): boolean {
     return (
+      this.viewPrefs.focusMode() ||
       this.panels.settingsOpen() ||
       this.surahNav.open() ||
       this.mushafNav.open() ||
@@ -732,12 +756,20 @@ export class SurahReaderComponent implements OnInit {
 
   private isSwipeBlocked(): boolean {
     return (
+      this.viewPrefs.focusMode() ||
       this.panels.settingsOpen() ||
       this.surahNav.open() ||
       this.mushafNav.open() ||
       !!this.verseActions.quoteSheetVerse() ||
       this.tafsir.mobileSheetOpen()
     );
+  }
+
+  private dismissReaderChrome(): void {
+    this.panels.closeAllOverlays();
+    this.tafsir.close();
+    this.wordStudy.close();
+    this.verseActions.closeQuoteSheet();
   }
 
   private syncDocumentTitle(): void {

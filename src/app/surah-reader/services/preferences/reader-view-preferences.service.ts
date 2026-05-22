@@ -14,7 +14,9 @@ import {
   parseTranslationSelection,
 } from '../../utils/translation-query.util';
 import {
+  persistFocusModePref,
   persistTransliterationPref,
+  readStoredFocusModePref,
   readStoredTransliterationPref,
 } from '../../utils/reader-prefs-storage.util';
 
@@ -36,15 +38,20 @@ export class ReaderViewPreferencesService {
   readonly showTransliteration = signal(
     readStoredTransliterationPref(this.browserStorage()),
   );
+  readonly focusMode = signal(readStoredFocusModePref(this.browserStorage()));
 
   readonly showTranslations = computed(
     () =>
+      !this.focusMode() &&
       this.readingMode() === 'verse-by-verse' &&
       (this.showTranslationEn() || this.showTranslationUr()),
   );
 
   readonly showTransliterationBlock = computed(
-    () => this.readingMode() === 'verse-by-verse' && this.showTransliteration(),
+    () =>
+      !this.focusMode() &&
+      this.readingMode() === 'verse-by-verse' &&
+      this.showTransliteration(),
   );
 
   applyFromQueryParams(qm: { get: (name: string) => string | null }): void {
@@ -80,11 +87,17 @@ export class ReaderViewPreferencesService {
     persistTransliterationPref(checked, this.browserStorage());
   }
 
+  setFocusMode(enabled: boolean): void {
+    this.focusMode.set(enabled);
+    persistFocusModePref(enabled, this.browserStorage());
+  }
+
   resetViewSettings(): void {
     this.readingMode.set('verse-by-verse');
     this.showTranslationEn.set(true);
     this.showTranslationUr.set(true);
     this.setShowTransliteration(true);
+    this.setFocusMode(false);
     this.syncQueryParams();
   }
 
