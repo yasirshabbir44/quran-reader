@@ -575,6 +575,61 @@ a.reader__settings-btn {
   fill: currentColor;
 }
 
+.reader__khatam-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.12rem;
+  min-width: 2.75rem;
+  max-width: 3.5rem;
+  padding: 0.28rem 0.45rem 0.32rem;
+  border-radius: 0.55rem;
+  border: 1px solid var(--reader-accent-border-strong);
+  background: var(--reader-accent-fill-soft);
+  color: var(--reader-accent);
+  cursor: pointer;
+  font-family: var(--reader-font-ui);
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    border-color: var(--reader-accent-glow);
+    background: color-mix(in srgb, var(--reader-accent-fill-soft) 80%, var(--reader-accent) 20%);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--reader-focus);
+    outline-offset: 2px;
+  }
+}
+
+.reader__khatam-chip-track {
+  display: block;
+  height: 0.2rem;
+  border-radius: 999px;
+  background: var(--reader-overlay);
+  overflow: hidden;
+}
+
+.reader__khatam-chip-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--reader-accent-gradient-start),
+    var(--reader-accent-gradient-end)
+  );
+  transition: width 0.35s ease;
+}
+
+.reader__khatam-chip-label {
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
 .reader__nav-backdrop {
   position: fixed;
   inset: 0;
