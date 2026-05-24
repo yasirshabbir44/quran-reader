@@ -17,6 +17,7 @@ import type { ReadingBookmark } from '../core/bookmark/reading-bookmark.reposito
 import { BlogService } from '../core/blog/blog.service';
 import { DailyVerseService, type DailyVerseRef } from '../core/daily-verse/daily-verse.service';
 import { KhatamService } from '../core/khatam/khatam.service';
+import { KhatamProgressCardComponent } from '../core/khatam/ui/khatam-progress-card.component';
 import { MushafIndexService } from '../core/mushaf/mushaf-index.service';
 import { QURAN_CORPUS_SOURCE } from '../core/quran/quran-corpus.source';
 import {
@@ -49,7 +50,7 @@ const POPULAR_SURAHS: readonly number[] = [1, 18, 36, 55, 67, 112];
 @Component({
   selector: 'app-home-landing',
   standalone: true,
-  imports: [RouterLink, FormsModule, UiTranslatePipe],
+  imports: [RouterLink, FormsModule, UiTranslatePipe, KhatamProgressCardComponent],
   templateUrl: './home-landing.component.html',
   styleUrl: './home-landing.component.scss',
 })
@@ -68,9 +69,7 @@ export class HomeLandingComponent implements OnInit {
   private readonly mushafIndex = inject(MushafIndexService);
 
   protected readonly ui = inject(UiLocaleService);
-  protected readonly khatamProgress = this.khatam.progress;
   protected readonly khatamActive = this.khatam.isActive;
-  protected readonly khatamComplete = this.khatam.isComplete;
   protected readonly khatamFurthest = this.khatam.furthest;
 
   protected readonly corpusLoading = signal(true);
@@ -311,13 +310,7 @@ export class HomeLandingComponent implements OnInit {
     this.khatam.startNew();
   }
 
-  protected startNewKhatam(): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-    if (this.khatamActive() && !window.confirm(this.ui.translate('khatamNewConfirm'))) {
-      return;
-    }
+  protected resetKhatam(): void {
     this.khatam.startNew();
   }
 

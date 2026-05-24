@@ -1,0 +1,306 @@
+.khatam-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-family: var(--reader-font-ui, system-ui, sans-serif);
+
+  &--hero {
+    min-height: 100%;
+    padding: 1.15rem 1.2rem;
+    border-radius: 1rem;
+    border: 1px solid var(--reader-border-strong, rgba(255, 255, 255, 0.12));
+    background: var(--reader-chrome-bg-panel, rgba(255, 255, 255, 0.04));
+    box-shadow: 0 10px 28px var(--reader-shadow-soft, rgba(0, 0, 0, 0.2));
+  }
+
+  &--compact {
+    margin-top: 0.65rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  &--complete {
+    border-color: color-mix(in srgb, var(--reader-accent, #c9a227) 35%, transparent);
+    .khatam-card__bar-fill {
+      background: linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--reader-accent-gradient-start, #d4af37) 80%, #fff),
+        color-mix(in srgb, var(--reader-accent-gradient-end, #8b6914) 80%, #fff)
+      );
+    }
+  }
+}
+
+.khatam-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.khatam-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.khatam-card__glyph {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 0.45rem;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--reader-accent, #c9a227) 18%, transparent);
+  color: var(--reader-accent, #c9a227);
+
+  svg {
+    width: 1.05rem;
+    height: 1.05rem;
+    fill: currentColor;
+  }
+}
+
+.khatam-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--reader-ink-intro-title, #f2ebe0);
+  line-height: 1.25;
+}
+
+.khatam-card--compact .khatam-card__title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: inherit;
+}
+
+.khatam-card__meta {
+  margin: 0.3rem 0 0;
+  font-size: 0.86rem;
+  color: var(--reader-ink-muted, #b8b0a0);
+  line-height: 1.45;
+
+  &--celebrate {
+    color: var(--reader-ink-intro-tag, #e8d9a8);
+    font-weight: 600;
+  }
+
+  &--juz {
+    margin-top: 0.15rem;
+    font-size: 0.8rem;
+    color: var(--reader-accent, #c9a227);
+  }
+}
+
+.khatam-card--compact .khatam-card__meta {
+  font-size: 0.82rem;
+}
+
+.khatam-card__pct-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+.khatam-card__pct {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--reader-ink-intro-tag, #e8d9a8);
+}
+
+.khatam-card__badge {
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--reader-accent, #c9a227) 22%, transparent);
+  color: var(--reader-accent, #c9a227);
+
+  &--done {
+    animation: khatam-badge-pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes khatam-badge-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.khatam-card__bar {
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--reader-overlay, rgba(255, 255, 255, 0.08));
+  overflow: hidden;
+}
+
+.khatam-card--compact .khatam-card__bar {
+  height: 0.3rem;
+}
+
+.khatam-card__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--reader-accent-gradient-start, #d4af37),
+    var(--reader-accent-gradient-end, #8b6914)
+  );
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.khatam-card__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(7.5rem, 1fr));
+  gap: 0.45rem 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.khatam-card__stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.khatam-card__stat-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--reader-ink-subtle, #9a9285);
+  font-weight: 600;
+}
+
+.khatam-card__stat-value {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--reader-ink-muted, #ddd7ca);
+  line-height: 1.35;
+}
+
+.khatam-card__juz-grid {
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+  gap: 0.28rem;
+}
+
+.khatam-card__juz-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.28rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+  &--done {
+    background: color-mix(in srgb, var(--reader-accent, #c9a227) 28%, transparent);
+    border-color: color-mix(in srgb, var(--reader-accent, #c9a227) 40%, transparent);
+  }
+
+  &--current {
+    background: color-mix(in srgb, var(--reader-accent, #c9a227) 14%, transparent);
+    border-color: var(--reader-accent, #c9a227);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--reader-accent, #c9a227) 50%, transparent);
+    transform: scale(1.06);
+  }
+}
+
+.khatam-card__juz-num {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--reader-ink-subtle, #9a9285);
+  line-height: 1;
+
+  .khatam-card__juz-cell--done &,
+  .khatam-card__juz-cell--current & {
+    color: var(--reader-ink-intro-title, #f2ebe0);
+  }
+}
+
+.khatam-card__juz-legend {
+  margin: -0.2rem 0 0;
+  font-size: 0.72rem;
+  color: var(--reader-ink-subtle, #8a8378);
+  line-height: 1.35;
+}
+
+.khatam-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  margin-top: auto;
+}
+
+.khatam-card__btn {
+  flex: 1 1 auto;
+  min-width: min(100%, 8.5rem);
+  min-height: 2.35rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  &--primary {
+    background: linear-gradient(
+      135deg,
+      var(--reader-accent-gradient-start, #d4af37),
+      var(--reader-accent-gradient-end, #8b6914)
+    );
+    color: #1a1608;
+    border-color: transparent;
+  }
+
+  &--ghost {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.14);
+    color: var(--reader-ink-muted, #ddd7ca);
+  }
+}
+
+.khatam-card--compact .khatam-card__btn {
+  min-height: 1.85rem;
+  padding: 0.16rem 0.68rem;
+  font-size: 0.76rem;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.khatam-card--hero .khatam-card__actions .khatam-card__btn--primary {
+  min-width: min(100%, 10rem);
+}
+
+.khatam-card__hint {
+  margin: 0;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: var(--reader-ink-subtle, #8a8378);
+}
+
+.khatam-card--compact .khatam-card__hint {
+  margin-top: 0.15rem;
+}
