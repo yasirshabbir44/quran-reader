@@ -12,6 +12,9 @@ export type KhatamProgress = {
   readonly percent: number;
   readonly versesRead: number;
   readonly totalVerses: number;
+  readonly versesRemaining: number;
   readonly juzCompleted: number;
   readonly totalJuz: number;
+  readonly currentJuz: number | null;
+  readonly daysSinceStart: number | null;
 };
