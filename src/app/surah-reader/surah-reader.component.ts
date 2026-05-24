@@ -17,6 +17,7 @@ import type { ReaderDisplayVerse } from './models/reader-display-verse.model';
 import type { ReaderViewKind } from './models/reader-view-kind.model';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import { KhatamService } from '../core/khatam/khatam.service';
+import { KhatamProgressCardComponent } from '../core/khatam/ui/khatam-progress-card.component';
 import { DailyReminderService } from '../core/notifications/daily-reminder.service';
 import { NotificationPreferencesService } from '../core/notifications/notification-preferences.service';
 import type { DailyReminderKind } from '../core/notifications/notification-storage';
@@ -68,6 +69,7 @@ import { ReaderWordStudyPanelComponent } from './ui/reader-word-study-panel/read
     VerseQuoteSheetComponent,
     ReaderTafsirPanelComponent,
     ReaderWordStudyPanelComponent,
+    KhatamProgressCardComponent,
   ],
   providers: [...READER_FEATURE_PROVIDERS],
   templateUrl: './surah-reader.component.html',
@@ -421,14 +423,14 @@ export class SurahReaderComponent implements OnInit {
     this.khatam.startNew();
   }
 
-  protected startNewKhatam(): void {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
-    if (this.khatam.isActive() && !window.confirm(this.ui.translate('khatamNewConfirm'))) {
-      return;
-    }
+  protected resetKhatam(): void {
     this.khatam.startNew();
+  }
+
+  protected openKhatamFromTopbar(): void {
+    if (!this.panels.settingsOpen()) {
+      this.toggleSettingsPanel();
+    }
   }
 
   protected goToKhatamPlace(): void {

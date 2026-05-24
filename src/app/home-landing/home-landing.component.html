@@ -115,70 +115,17 @@
     </section>
     }
 
-    <section class="landing__khatam" aria-labelledby="khatam-heading">
-    <div class="landing__khatam-head">
-      <div>
-        <h2 id="khatam-heading" class="landing__khatam-title">{{ 'khatamTitle' | uiTranslate }}</h2>
-        @if (khatamComplete()) {
-        <p class="landing__khatam-meta">{{ 'khatamCompleteMessage' | uiTranslate }}</p>
-        } @else if (khatamActive()) {
-        @if (khatamContinueSurah(); as ks) {
-        <p class="landing__khatam-meta">
-          {{
-            'khatamProgressDetail'
-              | uiTranslate
-                : {
-                    name: ks.nameAr,
-                    surah: formatUiNum(khatamFurthest().surah),
-                    ayah: formatUiNum(khatamFurthest().ayah),
-                    juz: formatUiNum(khatamProgress().juzCompleted),
-                    totalJuz: formatUiNum(khatamProgress().totalJuz),
-                  }
-          }}
-        </p>
-        }
-        } @else {
-        <p class="landing__khatam-meta">{{ 'khatamStartHint' | uiTranslate }}</p>
-        }
-      </div>
-      @if (khatamActive() || khatamComplete()) {
-      <span class="landing__khatam-pct" aria-hidden="true">{{ formatUiNum(khatamProgress().percent) }}%</span>
-      }
-    </div>
-    @if (khatamActive() || khatamComplete()) {
-    <div
-      class="landing__khatam-bar"
-      role="progressbar"
-      [attr.aria-valuenow]="khatamProgress().percent"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      [attr.aria-label]="'khatamProgressAria' | uiTranslate: { pct: formatUiNum(khatamProgress().percent) }"
-    >
-      <span class="landing__khatam-bar-fill" [style.width.%]="khatamProgress().percent"></span>
-    </div>
-    }
-    <div class="landing__khatam-actions">
-      @if (khatamActive()) {
-      <a
-        class="landing__btn landing__btn--primary"
-        [routerLink]="verseLink(khatamFurthest().surah, khatamFurthest().ayah)"
-        [fragment]="verseFragment(khatamFurthest().ayah)"
-      >
-        {{ 'khatamContinueCta' | uiTranslate }}
-      </a>
-      <button type="button" class="landing__btn landing__btn--ghost" (click)="startNewKhatam()">
-        {{ 'khatamNewCta' | uiTranslate }}
-      </button>
-      } @else if (khatamComplete()) {
-      <button type="button" class="landing__btn landing__btn--primary" (click)="startNewKhatam()">
-        {{ 'khatamStartNewAfterComplete' | uiTranslate }}
-      </button>
-      } @else {
-      <button type="button" class="landing__btn landing__btn--primary" (click)="startKhatam()">
-        {{ 'khatamStartCta' | uiTranslate }}
-      </button>
-      }
-    </div>
+    <section class="landing__khatam-wrap" [attr.aria-label]="'khatamTitle' | uiTranslate">
+      <app-khatam-progress-card
+        variant="hero"
+        headingId="khatam-heading"
+        [formatUiNum]="formatUiNum.bind(this)"
+        [placeNameAr]="khatamContinueSurah()?.nameAr ?? null"
+        [continueRouterLink]="khatamActive() ? verseLink(khatamFurthest().surah, khatamFurthest().ayah) : null"
+        [continueFragment]="khatamActive() ? verseFragment(khatamFurthest().ayah) : null"
+        (start)="startKhatam()"
+        (startNew)="resetKhatam()"
+      />
     </section>
   </div>
 
