@@ -1,0 +1,287 @@
+<section
+  id="reader-settings-panel"
+  class="reader__settings-panel"
+  [class.reader__settings-panel--open]="panels.settingsOpen()"
+  [attr.aria-hidden]="!panels.settingsOpen()"
+  [attr.aria-label]="'settingsTitle' | uiTranslate"
+>
+  <div class="reader__settings-head">
+    <h2 class="reader__settings-title">{{ 'settingsTitle' | uiTranslate }}</h2>
+    <button
+      type="button"
+      class="reader__settings-close"
+      (click)="closeSettingsPanel()"
+      [attr.aria-label]="'settingsCloseAria' | uiTranslate"
+    >
+      ✕
+    </button>
+  </div>
+  <div class="reader__settings-scroll">
+  <fieldset class="reader__fieldset reader__fieldset--focus">
+    <legend class="reader__legend">{{ 'focusModeLegend' | uiTranslate }}</legend>
+    <label class="reader__check reader__check--focus">
+      <input
+        type="checkbox"
+        [checked]="viewPrefs.focusMode()"
+        (change)="onFocusModeCheckboxChange($event)"
+      />
+      <span>{{ 'focusModeOption' | uiTranslate }}</span>
+    </label>
+    <p class="reader__settings-hint">{{ 'focusModeHint' | uiTranslate }}</p>
+  </fieldset>
+  <fieldset class="reader__fieldset reader__fieldset--theme">
+    <legend class="reader__legend">{{ 'colorThemeLegend' | uiTranslate }}</legend>
+    <div class="reader__segment reader__segment--theme" role="group" [attr.aria-label]="'colorThemeAria' | uiTranslate">
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="viewPrefs.colorTheme() === 'twilight'"
+        [attr.aria-pressed]="viewPrefs.colorTheme() === 'twilight'"
+        (click)="setColorTheme('twilight')"
+      >
+        {{ 'themeTwilight' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="viewPrefs.colorTheme() === 'night'"
+        [attr.aria-pressed]="viewPrefs.colorTheme() === 'night'"
+        (click)="setColorTheme('night')"
+      >
+        {{ 'themeNight' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="viewPrefs.colorTheme() === 'sepia'"
+        [attr.aria-pressed]="viewPrefs.colorTheme() === 'sepia'"
+        (click)="setColorTheme('sepia')"
+      >
+        {{ 'themeSepia' | uiTranslate }}
+      </button>
+    </div>
+  </fieldset>
+  <div class="reader__settings-grid">
+    <label class="reader__tool-label reader__tool-label--compact" for="reader-mode">{{ 'readingModeLabel' | uiTranslate }}</label>
+    <select
+      id="reader-mode"
+      class="reader__select reader__select--compact"
+      [ngModel]="viewPrefs.readingMode()"
+      [ngModelOptions]="{ standalone: true }"
+      (ngModelChange)="setReadingMode($event)"
+    >
+      <option value="verse-by-verse">{{ 'modeVerseByVerse' | uiTranslate }}</option>
+      <option value="reading">{{ 'modeReading' | uiTranslate }}</option>
+    </select>
+
+    <label class="reader__tool-label reader__tool-label--compact">{{ 'translationsLabel' | uiTranslate }}</label>
+    <div class="reader__settings-checks">
+      <label class="reader__check">
+        <input type="checkbox" [checked]="viewPrefs.showTranslationEn()" (change)="onTranslationCheckboxChange('en', $event)" />
+        <span>{{ 'translationEnOption' | uiTranslate }}</span>
+      </label>
+      <label class="reader__check">
+        <input type="checkbox" [checked]="viewPrefs.showTranslationUr()" (change)="onTranslationCheckboxChange('ur', $event)" />
+        <span>{{ 'translationUrOption' | uiTranslate }}</span>
+      </label>
+      <label class="reader__check">
+        <input type="checkbox" [checked]="viewPrefs.showTransliteration()" (change)="onTransliterationCheckboxChange($event)" />
+        <span>{{ 'transliterationOption' | uiTranslate }}</span>
+      </label>
+    </div>
+  </div>
+  <div class="reader__settings-tools">
+    <fieldset class="reader__fieldset">
+      <legend class="reader__legend">{{ 'fontSizeLegend' | uiTranslate }}</legend>
+      <div class="reader__segment" role="group" [attr.aria-label]="'fontSizeAria' | uiTranslate">
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.font() === 's'"
+          [attr.aria-pressed]="viewPrefs.font() === 's'"
+          (click)="setFont('s')"
+        >
+          {{ 'fontSmall' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.font() === 'm'"
+          [attr.aria-pressed]="viewPrefs.font() === 'm'"
+          (click)="setFont('m')"
+        >
+          {{ 'fontMedium' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.font() === 'l'"
+          [attr.aria-pressed]="viewPrefs.font() === 'l'"
+          (click)="setFont('l')"
+        >
+          {{ 'fontLarge' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.font() === 'xl'"
+          [attr.aria-pressed]="viewPrefs.font() === 'xl'"
+          (click)="setFont('xl')"
+        >
+          {{ 'fontXL' | uiTranslate }}
+        </button>
+      </div>
+    </fieldset>
+
+    <fieldset class="reader__fieldset">
+      <legend class="reader__legend">{{ 'lineHeightLegend' | uiTranslate }}</legend>
+      <div class="reader__segment" role="group" [attr.aria-label]="'lineHeightAria' | uiTranslate">
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.line() === 'normal'"
+          [attr.aria-pressed]="viewPrefs.line() === 'normal'"
+          (click)="setLine('normal')"
+        >
+          {{ 'lineNormal' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.line() === 'relaxed'"
+          [attr.aria-pressed]="viewPrefs.line() === 'relaxed'"
+          (click)="setLine('relaxed')"
+        >
+          {{ 'lineRelaxed' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.line() === 'loose'"
+          [attr.aria-pressed]="viewPrefs.line() === 'loose'"
+          (click)="setLine('loose')"
+        >
+          {{ 'lineLoose' | uiTranslate }}
+        </button>
+      </div>
+    </fieldset>
+
+    <fieldset class="reader__fieldset">
+      <legend class="reader__legend">{{ 'textWidthLegend' | uiTranslate }}</legend>
+      <div class="reader__segment" role="group" [attr.aria-label]="'textWidthAria' | uiTranslate">
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.width() === 'narrow'"
+          [attr.aria-pressed]="viewPrefs.width() === 'narrow'"
+          (click)="setWidth('narrow')"
+        >
+          {{ 'widthNarrow' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.width() === 'medium'"
+          [attr.aria-pressed]="viewPrefs.width() === 'medium'"
+          (click)="setWidth('medium')"
+        >
+          {{ 'widthMedium' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.width() === 'wide'"
+          [attr.aria-pressed]="viewPrefs.width() === 'wide'"
+          (click)="setWidth('wide')"
+        >
+          {{ 'widthWide' | uiTranslate }}
+        </button>
+      </div>
+    </fieldset>
+  </div>
+  <app-khatam-progress-card
+    variant="compact"
+    [formatUiNum]="formatUiNum.bind(this)"
+    (start)="startKhatam()"
+    (startNew)="resetKhatam()"
+    (continue)="goToKhatamPlace()"
+  />
+  <div class="reader__settings-bookmark">
+    <p class="reader__tool-label reader__tool-label--compact">{{ 'bookmarkToolsGroup' | uiTranslate }}</p>
+    <div class="reader__settings-bookmark-actions">
+      <button type="button" class="reader__seg-btn" (click)="saveBookmarkAtCurrentLine()">
+        {{ 'bookmarkSaveTitle' | uiTranslate }}
+      </button>
+      @if (bookmarkUi.savedPlace()) {
+      <button type="button" class="reader__seg-btn" (click)="goToSavedBookmark()">
+        {{ 'bookmarkGoTitle' | uiTranslate }}
+      </button>
+      }
+    </div>
+    <p class="reader__settings-hint reader__settings-hint--bookmark">{{ 'bookmarkHint' | uiTranslate }}</p>
+  </div>
+  <fieldset class="reader__settings-reminders reader__fieldset">
+    <legend class="reader__legend">{{ 'dailyRemindersLegend' | uiTranslate }}</legend>
+    <label class="reader__check reader__check--reminder">
+      <input
+        type="checkbox"
+        [checked]="notifyPrefs.enabled()"
+        [disabled]="notificationsUnsupported()"
+        (change)="onDailyReminderToggle($event)"
+      />
+      <span>{{ 'dailyRemindersEnable' | uiTranslate }}</span>
+    </label>
+    @if (notifyPermissionError(); as err) {
+    <p class="reader__settings-hint reader__settings-hint--notify-error">
+      @if (err === 'denied') {
+      {{ 'dailyRemindersPermissionDenied' | uiTranslate }}
+      } @else {
+      {{ 'dailyRemindersPermissionUnsupported' | uiTranslate }}
+      }
+    </p>
+    }
+    @if (notifyPrefs.enabled()) {
+    <div class="reader__settings-reminder-time">
+      <label class="reader__tool-label reader__tool-label--compact" for="daily-reminder-time">
+        {{ 'dailyRemindersTimeLabel' | uiTranslate }}
+      </label>
+      <input
+        id="daily-reminder-time"
+        type="time"
+        class="reader__time-input"
+        [value]="reminderTimeValue()"
+        (change)="onReminderTimeChange($event)"
+      />
+    </div>
+    <p class="reader__tool-label reader__tool-label--compact">{{ 'dailyRemindersKindLegend' | uiTranslate }}</p>
+    <div class="reader__segment" role="group" [attr.aria-label]="'dailyRemindersKindLegend' | uiTranslate">
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="notifyPrefs.kind() === 'verse-of-day'"
+        [attr.aria-pressed]="notifyPrefs.kind() === 'verse-of-day'"
+        (click)="setReminderKind('verse-of-day')"
+      >
+        {{ 'dailyRemindersKindVerse' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="reader__seg-btn"
+        [class.reader__seg-btn--active]="notifyPrefs.kind() === 'saved-place'"
+        [attr.aria-pressed]="notifyPrefs.kind() === 'saved-place'"
+        (click)="setReminderKind('saved-place')"
+      >
+        {{ 'dailyRemindersKindSaved' | uiTranslate }}
+      </button>
+    </div>
+    <button type="button" class="reader__action-link reader__settings-reminder-test" (click)="checkReminderNow()">
+      {{ 'dailyRemindersTest' | uiTranslate }}
+    </button>
+    }
+    <p class="reader__settings-hint reader__settings-hint--reminders">{{ 'dailyRemindersHint' | uiTranslate }}</p>
+  </fieldset>
+  <div class="reader__settings-actions">
+    <button type="button" class="reader__action-link" (click)="resetReaderViewSettings()">{{ 'resetViewSettings' | uiTranslate }}</button>
+  </div>
+  </div>
+</section>

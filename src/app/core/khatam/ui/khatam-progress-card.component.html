@@ -1,0 +1,156 @@
+<div
+  class="khatam-card"
+  [class.khatam-card--hero]="variant() === 'hero'"
+  [class.khatam-card--compact]="variant() === 'compact'"
+  [class.khatam-card--complete]="khatam.isComplete()"
+  [class.khatam-card--active]="khatam.isActive()"
+>
+  <header class="khatam-card__head">
+    <div class="khatam-card__title-block">
+      <div class="khatam-card__title-row">
+        <span class="khatam-card__glyph" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false">
+            <path
+              d="M6 4.5h12a1.5 1.5 0 0 1 1.5 1.5v12A1.5 1.5 0 0 1 18 19.5H6A1.5 1.5 0 0 1 4.5 18V6A1.5 1.5 0 0 1 6 4.5Zm1.5 3v9h9v-9h-9Zm2.25 1.5h4.5v1.5h-4.5v-1.5Zm0 3h4.5v1.5h-4.5v-1.5Z"
+            />
+          </svg>
+        </span>
+        <h2 class="khatam-card__title" [id]="headingId()">{{ 'khatamTitle' | uiTranslate }}</h2>
+      </div>
+      @if (khatam.isComplete()) {
+      <p class="khatam-card__meta khatam-card__meta--celebrate">{{ 'khatamCompleteMessage' | uiTranslate }}</p>
+      } @else if (khatam.isActive()) {
+      @if (placeNameAr(); as name) {
+      <p class="khatam-card__meta">
+        {{
+          'khatamProgressDetail'
+            | uiTranslate
+              : {
+                  name,
+                  surah: format(khatam.furthest().surah),
+                  ayah: format(khatam.furthest().ayah),
+                  juz: format(khatam.progress().juzCompleted),
+                  totalJuz: format(khatam.progress().totalJuz),
+                }
+        }}
+      </p>
+      } @else {
+      <p class="khatam-card__meta">
+        {{
+          'khatamReaderProgress'
+            | uiTranslate
+              : {
+                  pct: format(khatam.progress().percent),
+                  juz: format(khatam.progress().juzCompleted),
+                  totalJuz: format(khatam.progress().totalJuz),
+                }
+        }}
+      </p>
+      }
+      @if (khatam.progress().currentJuz; as cj) {
+      <p class="khatam-card__meta khatam-card__meta--juz">{{ 'khatamCurrentJuz' | uiTranslate: { juz: format(cj) } }}</p>
+      }
+      } @else {
+      <p class="khatam-card__meta">{{ 'khatamStartHint' | uiTranslate }}</p>
+      }
+    </div>
+    @if (khatam.isActive() || khatam.isComplete()) {
+    <div class="khatam-card__pct-wrap">
+      @if (khatam.isComplete()) {
+      <span class="khatam-card__badge khatam-card__badge--done">{{ 'khatamCompleteBadge' | uiTranslate }}</span>
+      }
+      <span class="khatam-card__pct" aria-hidden="true">{{ format(khatam.progress().percent) }}%</span>
+    </div>
+    }
+  </header>
+
+  @if (khatam.isActive() || khatam.isComplete()) {
+  <div
+    class="khatam-card__bar"
+    role="progressbar"
+    [attr.aria-valuenow]="khatam.progress().percent"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    [attr.aria-label]="'khatamProgressAria' | uiTranslate: { pct: format(khatam.progress().percent) }"
+  >
+    <span class="khatam-card__bar-fill" [style.width.%]="khatam.progress().percent"></span>
+  </div>
+
+  <ul class="khatam-card__stats" [attr.aria-label]="'khatamStatsAria' | uiTranslate">
+    <li class="khatam-card__stat">
+      <span class="khatam-card__stat-label">{{ 'khatamStatVerses' | uiTranslate }}</span>
+      <span class="khatam-card__stat-value">
+        {{
+          'khatamVersesStat'
+            | uiTranslate
+              : {
+                  read: format(khatam.progress().versesRead),
+                  total: format(khatam.progress().totalVerses),
+                }
+        }}
+      </span>
+    </li>
+    @if (khatam.isActive() && khatam.progress().versesRemaining > 0) {
+    <li class="khatam-card__stat">
+      <span class="khatam-card__stat-label">{{ 'khatamStatRemaining' | uiTranslate }}</span>
+      <span class="khatam-card__stat-value">
+        {{ 'khatamVersesRemaining' | uiTranslate: { count: format(khatam.progress().versesRemaining) } }}
+      </span>
+    </li>
+    }
+    @if (khatam.progress().daysSinceStart !== null && khatam.isActive()) {
+    <li class="khatam-card__stat">
+      <span class="khatam-card__stat-label">{{ 'khatamStatDuration' | uiTranslate }}</span>
+      <span class="khatam-card__stat-value">{{ daysLabel() }}</span>
+    </li>
+    }
+  </ul>
+
+  @if (showJuzGrid()) {
+  <div class="khatam-card__juz-grid" role="img" [attr.aria-label]="juzGridAriaLabel()">
+    @for (state of khatam.juzSegments(); track $index) {
+    <span
+      class="khatam-card__juz-cell"
+      [class.khatam-card__juz-cell--done]="state === 'done'"
+      [class.khatam-card__juz-cell--current]="state === 'current'"
+      [attr.title]="format($index + 1)"
+    >
+      <span class="khatam-card__juz-num">{{ format($index + 1) }}</span>
+    </span>
+    }
+  </div>
+  <p class="khatam-card__juz-legend">{{ 'khatamJuzGridLegend' | uiTranslate }}</p>
+  }
+  }
+
+  <div class="khatam-card__actions">
+    @if (khatam.isActive()) {
+    @if (continueRouterLink(); as link) {
+    <a
+      class="khatam-card__btn khatam-card__btn--primary"
+      [routerLink]="link"
+      [fragment]="continueFragment() ?? undefined"
+    >
+      {{ 'khatamContinueCta' | uiTranslate }}
+    </a>
+    } @else {
+    <button type="button" class="khatam-card__btn khatam-card__btn--primary" (click)="onContinue()">
+      {{ 'khatamContinueCta' | uiTranslate }}
+    </button>
+    }
+    <button type="button" class="khatam-card__btn khatam-card__btn--ghost" (click)="onStartNew()">
+      {{ 'khatamNewCta' | uiTranslate }}
+    </button>
+    } @else if (khatam.isComplete()) {
+    <button type="button" class="khatam-card__btn khatam-card__btn--primary" (click)="onStartNew()">
+      {{ 'khatamStartNewAfterComplete' | uiTranslate }}
+    </button>
+    } @else {
+    <button type="button" class="khatam-card__btn khatam-card__btn--primary" (click)="onStart()">
+      {{ 'khatamStartCta' | uiTranslate }}
+    </button>
+    }
+  </div>
+
+  <p class="khatam-card__hint">{{ 'khatamReaderHint' | uiTranslate }}</p>
+</div>

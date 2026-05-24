@@ -10,8 +10,11 @@ import {
   juzCompletedCount,
   verseOrdinal,
 } from './khatam-progress.util';
+import { buildJuzSegmentStates, daysSinceIsoDate } from './khatam-juz-grid.util';
+import type { KhatamJuzSegmentState } from './khatam-juz-grid.util';
 import type { KhatamRepository } from './khatam.repository';
 import type { KhatamProgress, KhatamSession } from './khatam.types';
+import { verseRefKey } from '../mushaf/mushaf-slice.util';
 
 const LS_KEY = 'quran-reader-khatam';
 const TOTAL_JUZ = 30;
@@ -24,6 +27,7 @@ export class KhatamService implements KhatamRepository {
   private ordinalByKey: ReadonlyMap<string, number> = new Map();
   private totalVerses = 0;
   private juzEndOrdinals: ReadonlyMap<number, number> = new Map();
+  private verseJuzByKey: Readonly<Record<string, number>> = {};
   private pendingMushafIndex: MushafIndexPayload | null = null;
 
   readonly session = this.sessionSignal.asReadonly();
@@ -40,6 +44,23 @@ export class KhatamService implements KhatamRepository {
 
   readonly furthest = computed(() => this.sessionSignal()?.furthest ?? { surah: 1, ayah: 1 });
 
+  readonly startedAt = computed(() => this.sessionSignal()?.startedAt ?? null);
+
+  readonly completedAt = computed(() => this.sessionSignal()?.completedAt ?? null);
+
+  readonly juzSegments = computed((): readonly KhatamJuzSegmentState[] => {
+    const s = this.sessionSignal();
+    const p = this.progress();
+    if (!s) {
+      return buildJuzSegmentStates(0, null, false);
+    }
+    return buildJuzSegmentStates(
+      p.juzCompleted,
+      p.currentJuz,
+      s.completedAt !== null,
+    );
+  });
+
   readonly progress = computed((): KhatamProgress => {
     const s = this.sessionSignal();
     const total = this.totalVerses;
@@ -48,21 +69,29 @@ export class KhatamService implements KhatamRepository {
         percent: 0,
         versesRead: 0,
         totalVerses: total,
+        versesRemaining: total,
         juzCompleted: 0,
         totalJuz: TOTAL_JUZ,
+        currentJuz: null,
+        daysSinceStart: daysSinceIsoDate(s?.startedAt),
       };
     }
     const furthestOrd = verseOrdinal(s.furthest, this.ordinalByKey);
     const versesRead = Math.min(total, Math.max(0, furthestOrd));
+    const versesRemaining = Math.max(0, total - versesRead);
     const percent =
       total > 0 ? Math.min(100, Math.round((versesRead / total) * 100)) : 0;
     const juzDone = juzCompletedCount(furthestOrd, this.juzEndOrdinals);
+    const currentJuz = this.currentJuzForRef(s.furthest);
     return {
       percent,
       versesRead,
       totalVerses: total,
+      versesRemaining,
       juzCompleted: juzDone,
       totalJuz: TOTAL_JUZ,
+      currentJuz,
+      daysSinceStart: daysSinceIsoDate(s.startedAt),
     };
   });
 
@@ -95,6 +124,7 @@ export class KhatamService implements KhatamRepository {
 
   bindMushafIndex(index: MushafIndexPayload): void {
     this.pendingMushafIndex = index;
+    this.verseJuzByKey = index.verseJuz;
     this.applyJuzEndOrdinals();
     this.reconcileCompletion();
   }
@@ -105,6 +135,11 @@ export class KhatamService implements KhatamRepository {
       return;
     }
     this.juzEndOrdinals = buildJuzEndOrdinals(index, this.ordinalByKey);
+  }
+
+  private currentJuzForRef(ref: { surah: number; ayah: number }): number | null {
+    const juz = this.verseJuzByKey[verseRefKey(ref)];
+    return typeof juz === 'number' && juz >= 1 && juz <= TOTAL_JUZ ? juz : null;
   }
 
   startNew(): void {
