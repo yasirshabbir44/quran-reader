@@ -1164,9 +1164,6 @@
               class="verses__quran"
               [attr.aria-label]="'verseQuranAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
             >
-              @if (!viewPrefs.focusMode()) {
-              <span class="verses__section-label verses__section-label--quran">{{ 'verseQuranSectionLabel' | uiTranslate }}</span>
-              }
               <p class="verses__text">{{ v.ar }}</p>
               @if (showTransliterationBlock() && verseTranslit(v); as translit) {
               <div class="verses__translit-block" dir="ltr" lang="en">
