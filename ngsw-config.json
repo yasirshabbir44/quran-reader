@@ -11,6 +11,9 @@
           "/favicon.svg",
           "/manifest.webmanifest",
           "/notification-sync.js",
+          "/robots.txt",
+          "/sitemap.xml",
+          "/og-image.svg",
           "/index.html",
           "/*.css",
           "/*.js"
