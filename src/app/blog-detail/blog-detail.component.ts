@@ -7,11 +7,12 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { combineLatest, map, switchMap } from 'rxjs';
 import { BlogService, type BlogPostListItem } from '../core/blog/blog.service';
 import type { BlogContentSection } from '../core/blog/blog.types';
+import { articleJsonLd } from '../core/seo/seo-jsonld';
+import { SeoService } from '../core/seo/seo.service';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 
@@ -24,7 +25,7 @@ import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 })
 export class BlogDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly title = inject(Title);
+  private readonly seo = inject(SeoService);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly blog = inject(BlogService);
 
@@ -59,7 +60,7 @@ export class BlogDetailComponent implements OnInit {
         if (!exists) {
           this.loading.set(false);
           this.notFound.set(true);
-          this.title.setTitle(this.ui.translate('blogNotFoundTitle'));
+          this.syncNotFoundSeo();
           return;
         }
         if (!data) {
@@ -67,11 +68,7 @@ export class BlogDetailComponent implements OnInit {
         }
         this.loading.set(false);
         this.post.set(data);
-        this.title.setTitle(
-          this.ui.translate('blogDetailDocumentTitle', {
-            title: this.blog.pickLocalized(data.title),
-          }),
-        );
+        this.syncPostSeo(data);
       });
   }
 
@@ -79,11 +76,7 @@ export class BlogDetailComponent implements OnInit {
     this.ui.setLocale(code as UiLocaleCode);
     const data = this.post();
     if (data) {
-      this.title.setTitle(
-        this.ui.translate('blogDetailDocumentTitle', {
-          title: this.blog.pickLocalized(data.title),
-        }),
-      );
+      this.syncPostSeo(data);
     }
   }
 
@@ -118,10 +111,44 @@ export class BlogDetailComponent implements OnInit {
       this.loading.set(false);
       if (!data) {
         this.notFound.set(true);
+        this.syncNotFoundSeo();
         return;
       }
       this.post.set(data);
       this.notFound.set(false);
+      this.syncPostSeo(data);
+    });
+  }
+
+  private syncPostSeo(data: BlogPostListItem): void {
+    const title = this.blog.pickLocalized(data.title);
+    const excerpt = this.blog.pickLocalized(data.excerpt);
+    const path = `/blog/${data.id}`;
+    const origin = this.seo.siteOrigin();
+    this.seo.apply({
+      title: this.ui.translate('blogDetailDocumentTitle', { title }),
+      description: excerpt,
+      path,
+      type: 'article',
+      image: data.image,
+      imageAlt: this.blog.pickLocalized(data.imageAlt),
+      jsonLd: articleJsonLd({
+        origin,
+        path,
+        headline: title,
+        description: excerpt,
+        image: data.image,
+        datePublished: data.publishedAt,
+      }),
+    });
+  }
+
+  private syncNotFoundSeo(): void {
+    this.seo.apply({
+      title: this.ui.translate('blogNotFoundTitle'),
+      description: this.ui.translate('seoNotFoundDescription'),
+      path: `/blog/${this.route.snapshot.paramMap.get('id') ?? ''}`,
+      noindex: true,
     });
   }
 }

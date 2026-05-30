@@ -10,10 +10,11 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { combineLatest, map, switchMap } from 'rxjs';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
+import { collectionPageJsonLd } from '../core/seo/seo-jsonld';
+import { SeoService } from '../core/seo/seo.service';
 import {
   ThematicIndexService,
   type ThematicThemeListItem,
@@ -80,7 +81,7 @@ export class ThemeDetailComponent implements OnInit {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly title = inject(Title);
+  private readonly seo = inject(SeoService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly thematicIndex = inject(ThematicIndexService);
   private readonly bookmarkRepo = inject(READING_BOOKMARK_REPOSITORY);
@@ -148,7 +149,7 @@ export class ThemeDetailComponent implements OnInit {
         if (!themeExists) {
           this.loading.set(false);
           this.notFound.set(true);
-          this.title.setTitle(this.ui.translate('themesNotFoundTitle'));
+          this.syncNotFoundSeo();
           return;
         }
         if (!data) {
@@ -156,9 +157,7 @@ export class ThemeDetailComponent implements OnInit {
         }
         this.loading.set(false);
         this.result.set(data);
-        this.title.setTitle(
-          this.ui.translate('themesDetailDocumentTitle', { name: data.theme.name }),
-        );
+        this.syncThemeSeo(data);
         this.loadRelatedThemes(data.theme.categoryId, data.theme.id);
       });
   }
@@ -216,9 +215,7 @@ export class ThemeDetailComponent implements OnInit {
     this.ui.setLocale(code as UiLocaleCode);
     const data = this.result();
     if (data) {
-      this.title.setTitle(
-        this.ui.translate('themesDetailDocumentTitle', { name: data.theme.name }),
-      );
+      this.syncThemeSeo(data);
     }
   }
 
@@ -348,5 +345,33 @@ export class ThemeDetailComponent implements OnInit {
       origin,
       formatUiNum: (n) => this.formatUiNum(n),
     };
+  }
+
+  private syncThemeSeo(data: ThemeVersesResult): void {
+    const path = `/themes/${data.theme.id}`;
+    const origin = this.seo.siteOrigin();
+    this.seo.apply({
+      title: this.ui.translate('themesDetailDocumentTitle', { name: data.theme.name }),
+      description: this.ui.translate('seoThemeDetailDescription', {
+        name: data.theme.name,
+        description: data.theme.description ?? data.categoryName,
+      }),
+      path,
+      jsonLd: collectionPageJsonLd({
+        origin,
+        path,
+        name: data.theme.name,
+        description: data.theme.description ?? data.categoryName,
+      }),
+    });
+  }
+
+  private syncNotFoundSeo(): void {
+    this.seo.apply({
+      title: this.ui.translate('themesNotFoundTitle'),
+      description: this.ui.translate('seoNotFoundDescription'),
+      path: `/themes/${this.themeId()}`,
+      noindex: true,
+    });
   }
 }

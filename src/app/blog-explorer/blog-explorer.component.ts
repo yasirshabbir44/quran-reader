@@ -8,9 +8,10 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { BlogService, type BlogCategoryGroup, type BlogPostListItem } from '../core/blog/blog.service';
+import { collectionPageJsonLd } from '../core/seo/seo-jsonld';
+import { SeoService } from '../core/seo/seo.service';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 
@@ -22,7 +23,7 @@ import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
   styleUrl: './blog-explorer.component.scss',
 })
 export class BlogExplorerComponent implements OnInit {
-  private readonly title = inject(Title);
+  private readonly seo = inject(SeoService);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly blog = inject(BlogService);
 
@@ -56,7 +57,7 @@ export class BlogExplorerComponent implements OnInit {
   );
 
   ngOnInit(): void {
-    this.title.setTitle(this.ui.translate('blogDocumentTitle'));
+    this.syncSeo();
     this.blog
       .load()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -79,7 +80,7 @@ export class BlogExplorerComponent implements OnInit {
 
   protected onLocaleChange(code: UiLocaleCode): void {
     this.ui.setLocale(code);
-    this.title.setTitle(this.ui.translate('blogDocumentTitle'));
+    this.syncSeo();
   }
 
   protected formatUiNum(n: number): string {
@@ -117,6 +118,21 @@ export class BlogExplorerComponent implements OnInit {
       this.groups.set(groups);
       this.loading.set(false);
       this.loadError.set(groups.length === 0);
+    });
+  }
+
+  private syncSeo(): void {
+    const origin = this.seo.siteOrigin();
+    this.seo.apply({
+      title: this.ui.translate('blogDocumentTitle'),
+      description: this.ui.translate('seoBlogIndexDescription'),
+      path: '/blog',
+      jsonLd: collectionPageJsonLd({
+        origin,
+        path: '/blog',
+        name: this.ui.translate('blogTitle'),
+        description: this.ui.translate('seoBlogIndexDescription'),
+      }),
     });
   }
 
