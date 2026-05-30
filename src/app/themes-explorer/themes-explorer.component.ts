@@ -8,9 +8,10 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { verseFragment } from '../core/routing/verse-deep-link.util';
+import { collectionPageJsonLd } from '../core/seo/seo-jsonld';
+import { SeoService } from '../core/seo/seo.service';
 import {
   ThematicIndexService,
   type DailyThemeInspiration,
@@ -69,7 +70,7 @@ const FEATURED_COUNT = 6;
   styleUrl: './themes-explorer.component.scss',
 })
 export class ThemesExplorerComponent implements OnInit {
-  private readonly title = inject(Title);
+  private readonly seo = inject(SeoService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly thematicIndex = inject(ThematicIndexService);
 
@@ -148,7 +149,7 @@ export class ThemesExplorerComponent implements OnInit {
   );
 
   ngOnInit(): void {
-    this.title.setTitle(this.ui.translate('themesDocumentTitle'));
+    this.syncSeo();
 
     this.thematicIndex
       .getDailyInspiration()
@@ -179,7 +180,7 @@ export class ThemesExplorerComponent implements OnInit {
 
   protected onLocaleChange(code: UiLocaleCode): void {
     this.ui.setLocale(code);
-    this.title.setTitle(this.ui.translate('themesDocumentTitle'));
+    this.syncSeo();
   }
 
   protected formatUiNum(n: number): string {
@@ -267,5 +268,20 @@ export class ThemesExplorerComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  private syncSeo(): void {
+    const origin = this.seo.siteOrigin();
+    this.seo.apply({
+      title: this.ui.translate('themesDocumentTitle'),
+      description: this.ui.translate('seoThemesIndexDescription'),
+      path: '/themes',
+      jsonLd: collectionPageJsonLd({
+        origin,
+        path: '/themes',
+        name: this.ui.translate('themesTitle'),
+        description: this.ui.translate('seoThemesIndexDescription'),
+      }),
+    });
   }
 }

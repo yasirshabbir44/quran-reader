@@ -10,10 +10,11 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import type { ReadingBookmark } from '../core/bookmark/reading-bookmark.repository';
+import { websiteJsonLd } from '../core/seo/seo-jsonld';
+import { SeoService } from '../core/seo/seo.service';
 import { BlogService } from '../core/blog/blog.service';
 import { DailyVerseService, type DailyVerseRef } from '../core/daily-verse/daily-verse.service';
 import { KhatamService } from '../core/khatam/khatam.service';
@@ -56,7 +57,7 @@ const POPULAR_SURAHS: readonly number[] = [1, 18, 36, 55, 67, 112];
 })
 export class HomeLandingComponent implements OnInit {
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly title = inject(Title);
+  private readonly seo = inject(SeoService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly corpusSource = inject(QURAN_CORPUS_SOURCE);
@@ -192,7 +193,7 @@ export class HomeLandingComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.title.setTitle(this.ui.translate('documentTitleHome'));
+    this.syncSeo();
     if (isPlatformBrowser(this.platformId)) {
       this.savedPlace.set(this.bookmarkRepo.read());
       this.khatam.hydrateFromStorage();
@@ -253,7 +254,7 @@ export class HomeLandingComponent implements OnInit {
 
   protected onLocaleChange(code: string): void {
     this.ui.setLocale(code as UiLocaleCode);
-    this.title.setTitle(this.ui.translate('documentTitleHome'));
+    this.syncSeo();
   }
 
   protected revelationLabel(type: QuranSurahPayload['revelationType']): string {
@@ -312,6 +313,16 @@ export class HomeLandingComponent implements OnInit {
 
   protected resetKhatam(): void {
     this.khatam.startNew();
+  }
+
+  private syncSeo(): void {
+    const origin = this.seo.siteOrigin();
+    this.seo.apply({
+      title: this.ui.translate('documentTitleHome'),
+      description: this.ui.translate('seoHomeDescription'),
+      path: '/',
+      jsonLd: websiteJsonLd(origin),
+    });
   }
 
   private applyCorpus(payload: QuranFullPayload): void {
