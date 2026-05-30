@@ -14,6 +14,7 @@ export class QuoteImageFontLoader {
       fonts.load('48px "Amiri Quran"'),
       fonts.load('48px "Amiri"'),
       fonts.load('32px "Noto Naskh Arabic"'),
+      fonts.load('32px "Noto Nastaliq Urdu"'),
       fonts.load('24px Georgia'),
     ]);
     await fonts.ready;
