@@ -1,3 +1,5 @@
+@use '../../../core/reader-layout/reader-ui-system' as ui;
+
 :host {
   display: block;
   padding: 1.05rem 1rem 1.1rem 1.15rem;
@@ -86,10 +88,11 @@
 }
 
 .verses__word-study-ar {
+  @include ui.script-text-shaping;
   font-family: var(--reader-font-arabic);
-  font-size: 1.15rem;
-  line-height: 1.5;
-  color: var(--reader-ink);
+  font-size: 1.25rem;
+  line-height: 1.65;
+  color: var(--reader-ink-arabic, var(--reader-ink));
 }
 
 .verses__word-study-tr,
