@@ -514,9 +514,11 @@
 }
 
 .theme-detail__ref-ar {
+  @include ui.script-text-shaping;
   font-family: var(--reader-font-arabic);
-  font-size: 1rem;
-  line-height: 1.3;
+  font-size: 1.05rem;
+  line-height: 1.45;
+  color: var(--reader-ink-arabic, var(--reader-ink));
 }
 
 .theme-detail__ref-num {
@@ -533,7 +535,7 @@
 .theme-detail__ar {
   margin: 0 0 0.65rem;
   @include ui.ui-verse-arabic;
-  font-size: clamp(1.3rem, 3.2vw, 1.65rem);
+  font-size: clamp(1.4rem, 3.5vw, 1.75rem);
 }
 
 .theme-detail__translit {
