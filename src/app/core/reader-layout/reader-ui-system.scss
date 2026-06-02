@@ -3,7 +3,7 @@
 @mixin reader-ui-font-tokens {
   --reader-font-ui: 'Source Sans 3', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --reader-font-reading: 'Amiri', Georgia, 'Times New Roman', serif;
-  --reader-font-arabic: 'Amiri Quran', 'Amiri', 'Noto Naskh Arabic', serif;
+  --reader-font-arabic: 'Amiri Quran', 'Noto Naskh Arabic', 'Amiri', serif;
   --reader-font-urdu: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif;
   --reader-radius-sm: 0.5rem;
   --reader-radius-md: 0.75rem;
@@ -285,17 +285,20 @@
 @mixin script-text-shaping {
   letter-spacing: normal;
   word-spacing: normal;
-  font-feature-settings: 'liga' 1, 'calt' 1;
+  font-feature-settings: 'liga' 1, 'calt' 1, 'mark' 1, 'mkmk' 1;
+  font-variant-ligatures: common-ligatures contextual;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
 }
 
 @mixin ui-verse-arabic {
   @include script-text-shaping;
   font-family: var(--reader-font-arabic);
-  font-size: clamp(1.25rem, 3.2vw, 1.6rem);
-  line-height: 1.85;
-  color: var(--reader-ink-bismillah);
+  font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+  line-height: 2;
+  color: var(--reader-ink-arabic, var(--reader-ink-bismillah));
 }
 
 @mixin ui-verse-urdu {
