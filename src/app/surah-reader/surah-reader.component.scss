@@ -79,41 +79,41 @@
 
 
 .reader.reader--font-s {
-  --verse-fs: clamp(1.22rem, 3.1vw, 1.48rem);
+  --verse-fs: clamp(1.32rem, 3.4vw, 1.6rem);
   --tr-fs: 1rem;
   --tafsir-fs: 1rem;
 }
 
 .reader.reader--font-m {
-  --verse-fs: clamp(1.38rem, 3.6vw, 1.72rem);
+  --verse-fs: clamp(1.5rem, 3.9vw, 1.88rem);
   --tr-fs: 1.0625rem;
   --tafsir-fs: 1rem;
 }
 
 .reader.reader--font-l {
-  --verse-fs: clamp(1.52rem, 3.9vw, 1.95rem);
+  --verse-fs: clamp(1.65rem, 4.2vw, 2.1rem);
   --tr-fs: 1.125rem;
   --tafsir-fs: 1.0625rem;
 }
 
 .reader.reader--font-xl {
-  --verse-fs: clamp(1.68rem, 4.2vw, 2.15rem);
+  --verse-fs: clamp(1.82rem, 4.5vw, 2.3rem);
   --tr-fs: 1.1875rem;
   --tafsir-fs: 1.125rem;
 }
 
 .reader.reader--line-normal {
-  --verse-lh: 2.1;
+  --verse-lh: 2.3;
   --tafsir-lh: 1.65;
 }
 
 .reader.reader--line-relaxed {
-  --verse-lh: 2.38;
+  --verse-lh: 2.55;
   --tafsir-lh: 1.75;
 }
 
 .reader.reader--line-loose {
-  --verse-lh: 2.62;
+  --verse-lh: 2.8;
   --tafsir-lh: 1.85;
 }
 
@@ -189,8 +189,8 @@
 }
 
 .reader {
-  --verse-fs: clamp(1.38rem, 3.6vw, 1.72rem);
-  --verse-lh: 2.15;
+  --verse-fs: clamp(1.5rem, 3.9vw, 1.88rem);
+  --verse-lh: 2.35;
   --tr-fs: 1.0625rem;
   --tafsir-fs: 1rem;
   --tafsir-lh: 1.7;
@@ -295,11 +295,12 @@
 
 .reader__title {
   margin: 0;
+  @include ui.script-text-shaping;
   font-family: var(--reader-font-arabic);
   font-size: clamp(2.1rem, 5.5vw, 2.85rem);
   font-weight: 400;
-  color: var(--reader-ink);
-  line-height: 1.38;
+  color: var(--reader-ink-arabic, var(--reader-ink));
+  line-height: 1.45;
   text-shadow: 0 1px 24px var(--reader-title-shadow);
 }
 
@@ -1881,10 +1882,9 @@ a.reader__settings-btn {
 .verses__bismillah-text {
   margin: 0;
   text-align: center;
-  @include ui.script-text-shaping;
-  font-family: var(--reader-font-arabic);
-  font-size: clamp(1.4rem, 4.2vw, 1.85rem);
-  color: var(--reader-ink-bismillah);
+  @include ui.ui-verse-arabic;
+  font-size: clamp(1.5rem, 4.5vw, 2rem);
+  color: var(--reader-ink-arabic, var(--reader-ink-bismillah));
 }
 
 .verses__item {
@@ -1900,8 +1900,13 @@ a.reader__settings-btn {
   border: 1px solid var(--reader-border);
   box-shadow: 0 4px 24px var(--reader-shadow-card);
   scroll-margin-top: calc(3px + var(--reader-topbar-h) + 4.5rem);
-  opacity: var(--reader-verse-inactive-opacity, 0.6);
-  transition: opacity 0.35s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+
+  &:not(.verses__item--active) {
+    background: var(--reader-surface-muted);
+    border-color: var(--reader-border);
+    box-shadow: 0 2px 12px var(--reader-shadow-card);
+  }
 
   &:hover {
     border-color: var(--reader-accent-fill-mid);
@@ -1915,7 +1920,6 @@ a.reader__settings-btn {
   }
 
   &--active {
-    opacity: 1;
     border-color: var(--reader-verse-active-border);
     background: var(--reader-verse-active-bg);
     box-shadow:
@@ -2258,6 +2262,17 @@ a.reader__settings-btn {
   line-height: calc(var(--tafsir-lh) + 0.12);
 }
 
+.verses__tafsir[lang='ur'] .verses__tafsir-p {
+  @include ui.ui-verse-urdu;
+  font-size: max(1.0625rem, calc(var(--tafsir-fs) + 0.0625rem));
+  line-height: calc(var(--tafsir-lh) + 0.22);
+  color: var(--reader-ink-intro-body);
+}
+
+.verses__tafsir[lang='ur'] .verses__tafsir-block-body {
+  gap: 0.9rem;
+}
+
 .verses__tafsir-attribution {
   margin: 0.75rem 0 0;
   font-family: var(--reader-font-ui);
@@ -2335,7 +2350,7 @@ a.reader__settings-btn {
   font-size: var(--verse-fs);
   line-height: var(--verse-lh);
   text-align: center;
-  color: var(--reader-ink);
+  color: var(--reader-ink-arabic, var(--reader-ink));
   font-weight: 400;
   text-wrap: pretty;
 }
@@ -2867,15 +2882,18 @@ a.reader__settings-btn {
   }
 
   .verses__item {
-    --reader-verse-inactive-opacity: 0.72;
     margin-bottom: 0.15rem;
     padding: 0.65rem 0.25rem 0.85rem;
     background: none;
     border: 0;
     box-shadow: none;
 
+    &:not(.verses__item--active) {
+      opacity: 0.78;
+    }
+
     &--active {
-      --reader-verse-inactive-opacity: 1;
+      opacity: 1;
     }
   }
 
