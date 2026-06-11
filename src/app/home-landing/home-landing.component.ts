@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import type { ReadingBookmark } from '../core/bookmark/reading-bookmark.repository';
 import { websiteJsonLd } from '../core/seo/seo-jsonld';
@@ -19,6 +19,7 @@ import { BlogService } from '../core/blog/blog.service';
 import { DailyVerseService, type DailyVerseRef } from '../core/daily-verse/daily-verse.service';
 import { KhatamService } from '../core/khatam/khatam.service';
 import { KhatamProgressCardComponent } from '../core/khatam/ui/khatam-progress-card.component';
+import { GlobalSearchComponent } from '../core/ui/global-search/global-search.component';
 import { MushafIndexService } from '../core/mushaf/mushaf-index.service';
 import { QURAN_CORPUS_SOURCE } from '../core/quran/quran-corpus.source';
 import {
@@ -30,6 +31,7 @@ import { verseFragment } from '../core/routing/verse-deep-link.util';
 import {
   ThematicIndexService,
   type DailyThemeInspiration,
+  type ThematicThemeListItem,
 } from '../core/thematic-index/thematic-index.service';
 import type { MushafIndexPayload } from '../core/mushaf/mushaf-index.types';
 import { normalizeVerseTranslations } from '../core/verse-presentation/verse-presentation.strategy';
@@ -51,14 +53,13 @@ const POPULAR_SURAHS: readonly number[] = [1, 18, 36, 55, 67, 112];
 @Component({
   selector: 'app-home-landing',
   standalone: true,
-  imports: [RouterLink, FormsModule, UiTranslatePipe, KhatamProgressCardComponent],
+  imports: [RouterLink, FormsModule, UiTranslatePipe, KhatamProgressCardComponent, GlobalSearchComponent],
   templateUrl: './home-landing.component.html',
   styleUrl: './home-landing.component.scss',
 })
 export class HomeLandingComponent implements OnInit {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly seo = inject(SeoService);
-  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly corpusSource = inject(QURAN_CORPUS_SOURCE);
   private readonly quranData = inject(QuranDataService);
@@ -82,8 +83,7 @@ export class HomeLandingComponent implements OnInit {
   protected readonly indexLayout = signal<SurahIndexLayout>('list');
   protected readonly revelationFilter = signal<SurahRevelationFilter>('all');
   protected readonly mushafPayload = signal<MushafIndexPayload | null>(null);
-  protected readonly quickJumpInput = signal('');
-  protected readonly quickJumpError = signal(false);
+  protected readonly themeItems = signal<readonly ThematicThemeListItem[]>([]);
   protected readonly themeCount = signal(0);
   protected readonly blogCount = signal(0);
   protected readonly dailyTopic = signal<DailyThemeInspiration | null>(null);
@@ -182,6 +182,10 @@ export class HomeLandingComponent implements OnInit {
     }
   });
 
+  protected readonly surahNavItems = computed(() =>
+    this.surahs().map((s) => this.toSurahNavItem(s)),
+  );
+
   protected readonly randomSurahNumber = computed(() => {
     const list = this.surahs();
     if (list.length === 0) {
@@ -222,12 +226,11 @@ export class HomeLandingComponent implements OnInit {
       });
 
     this.thematicIndex
-      .load()
+      .getThemes()
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((payload) => {
-        if (payload) {
-          this.themeCount.set(payload.themes.length);
-        }
+      .subscribe((themes) => {
+        this.themeItems.set(themes);
+        this.themeCount.set(themes.length);
       });
 
     this.thematicIndex
@@ -286,21 +289,6 @@ export class HomeLandingComponent implements OnInit {
     return this.surahs().find((s) => s.number === num) ?? null;
   }
 
-  protected onQuickJump(): void {
-    const raw = this.quickJumpInput().trim();
-    if (!raw) {
-      this.quickJumpError.set(true);
-      return;
-    }
-    const resolved = this.resolveQuickJumpSurah(raw);
-    if (resolved === null) {
-      this.quickJumpError.set(true);
-      return;
-    }
-    this.quickJumpError.set(false);
-    void this.router.navigate(['/', resolved]);
-  }
-
   protected retryCorpusLoad(): void {
     this.corpusLoading.set(true);
     this.corpusError.set(false);
@@ -341,19 +329,6 @@ export class HomeLandingComponent implements OnInit {
       versesCount: s.versesCount,
       revelationType: s.revelationType,
     };
-  }
-
-  private resolveQuickJumpSurah(raw: string): number | null {
-    const digits = raw.replace(/\D/g, '');
-    if (digits) {
-      const n = Number.parseInt(digits, 10);
-      if (Number.isFinite(n) && n >= 1 && n <= 114) {
-        return n;
-      }
-    }
-    const items = this.surahs().map((s) => this.toSurahNavItem(s));
-    const matches = filterSurahNavItems(items, raw);
-    return matches.length === 1 ? matches[0]!.number : null;
   }
 
   private dailyVerseDateKey(date: Date): string {
