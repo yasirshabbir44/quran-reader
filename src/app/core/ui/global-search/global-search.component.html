@@ -1,0 +1,78 @@
+<div class="global-search" role="search">
+  <label class="global-search__label" for="global-search-input">{{ 'homeGlobalSearchLabel' | uiTranslate }}</label>
+  <div class="global-search__field">
+    <svg class="global-search__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path
+        d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5Zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14Z"
+      />
+    </svg>
+    <input
+      id="global-search-input"
+      class="global-search__input"
+      type="search"
+      autocomplete="off"
+      spellcheck="false"
+      role="combobox"
+      aria-autocomplete="list"
+      [attr.aria-expanded]="open()"
+      aria-controls="global-search-suggestions"
+      [attr.placeholder]="'homeGlobalSearchPlaceholder' | uiTranslate"
+      [ngModel]="query()"
+      (ngModelChange)="onQueryChange($event)"
+      (focus)="onFocus()"
+      (blur)="onBlur()"
+      (keydown)="onKeydown($event)"
+    />
+  </div>
+
+  @if (open() && hasQuery()) {
+  <div id="global-search-suggestions" class="global-search__suggestions" role="listbox">
+    @if (results().length === 0) {
+    <p class="global-search__empty" role="status">{{ 'homeGlobalSearchNoResults' | uiTranslate }}</p>
+    } @else {
+      @if (surahResults().length > 0) {
+      <p class="global-search__section">{{ 'homeGlobalSearchSurahSection' | uiTranslate }}</p>
+      <ul class="global-search__list">
+        @for (result of surahResults(); track result.routerLink.join(':')) {
+        <li role="presentation">
+          <a
+            class="global-search__item"
+            role="option"
+            [class.global-search__item--active]="isActive(result)"
+            [attr.aria-selected]="isActive(result)"
+            [routerLink]="result.routerLink"
+            (mousedown)="$event.preventDefault()"
+            (click)="navigateTo(result)"
+          >
+            <span class="global-search__item-label" dir="rtl" lang="ar">{{ result.label }}</span>
+            <span class="global-search__item-meta" dir="ltr" lang="en">{{ result.meta }}</span>
+          </a>
+        </li>
+        }
+      </ul>
+      }
+      @if (themeResults().length > 0) {
+      <p class="global-search__section">{{ 'homeGlobalSearchThemeSection' | uiTranslate }}</p>
+      <ul class="global-search__list">
+        @for (result of themeResults(); track result.routerLink.join(':')) {
+        <li role="presentation">
+          <a
+            class="global-search__item"
+            role="option"
+            [class.global-search__item--active]="isActive(result)"
+            [attr.aria-selected]="isActive(result)"
+            [routerLink]="result.routerLink"
+            (mousedown)="$event.preventDefault()"
+            (click)="navigateTo(result)"
+          >
+            <span class="global-search__item-label">{{ result.label }}</span>
+            <span class="global-search__item-meta">{{ result.meta }}</span>
+          </a>
+        </li>
+        }
+      </ul>
+      }
+    }
+  </div>
+  }
+</div>
