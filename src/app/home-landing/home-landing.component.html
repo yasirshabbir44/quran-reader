@@ -38,6 +38,10 @@
       </div>
     </div>
 
+    <div class="landing__search-hero">
+      <app-global-search [surahs]="surahNavItems()" [themes]="themeItems()" />
+    </div>
+
     <div class="landing__stats" role="list" [attr.aria-label]="'homeStatsAria' | uiTranslate">
       <div class="landing__stat" role="listitem">
         <span class="landing__stat-value">{{ formatUiNum(surahs().length) }}</span>
@@ -186,31 +190,6 @@
         </a>
       </li>
     </ul>
-  </section>
-
-  <section class="landing__jump" aria-labelledby="jump-heading">
-    <h2 id="jump-heading" class="landing__section-title landing__jump-title">{{ 'homeQuickJumpTitle' | uiTranslate }}</h2>
-    <p class="landing__jump-subtitle">{{ 'homeQuickJumpSubtitle' | uiTranslate }}</p>
-    <form class="landing__jump-form" (submit)="$event.preventDefault(); onQuickJump()">
-      <label class="landing__tool-label" for="home-quick-jump">{{ 'homeQuickJumpLabel' | uiTranslate }}</label>
-      <div class="landing__jump-row">
-        <input
-          id="home-quick-jump"
-          class="landing__search-input landing__jump-input"
-          type="search"
-          autocomplete="off"
-          spellcheck="false"
-          [attr.placeholder]="'homeQuickJumpPlaceholder' | uiTranslate"
-          [ngModel]="quickJumpInput()"
-          (ngModelChange)="quickJumpInput.set($event); quickJumpError.set(false)"
-          [ngModelOptions]="{ standalone: true }"
-        />
-        <button type="submit" class="landing__btn landing__btn--primary">{{ 'homeQuickJumpButton' | uiTranslate }}</button>
-      </div>
-      @if (quickJumpError()) {
-      <p class="landing__jump-error" role="alert">{{ 'homeQuickJumpInvalid' | uiTranslate }}</p>
-      }
-    </form>
   </section>
 
   <section class="landing__popular" aria-labelledby="popular-heading">
