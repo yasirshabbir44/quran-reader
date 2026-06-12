@@ -230,7 +230,6 @@
           class="theme-detail__ref"
           [routerLink]="verseLink(v.surah, v.ayah)"
           [fragment]="verseFragment(v.ayah)"
-          [queryParams]="{ startingVerse: v.ayah }"
         >
           <span class="theme-detail__ref-ar" dir="rtl" lang="ar">{{ v.surahNameAr }}</span>
           <span class="theme-detail__ref-num" dir="ltr" lang="en">{{ verseRefLabel(v) }}</span>
