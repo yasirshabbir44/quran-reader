@@ -1,4 +1,13 @@
 {
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/surah-mulk-reader/browser",
+  "redirects": [
+    {
+      "source": "/surah/:n",
+      "destination": "/:n",
+      "permanent": true
+    }
+  ],
   "rewrites": [{ "source": "/((?!.*\\.).*)", "destination": "/index.html" }],
   "headers": [
     {

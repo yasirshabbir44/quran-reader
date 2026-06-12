@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/surah-mulk-reader",
+            "outputPath": "dist/surah-mulk-reader/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -73,6 +73,62 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/surah-mulk-reader/server",
+            "main": "src/server.ts",
+            "tsConfig": "tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "buildOptimizer": true,
+              "outputHashing": "media",
+              "optimization": true
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@angular-devkit/build-angular:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "surah-mulk-reader:build:development",
+              "serverTarget": "surah-mulk-reader:server:development"
+            },
+            "production": {
+              "browserTarget": "surah-mulk-reader:build:production",
+              "serverTarget": "surah-mulk-reader:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@angular-devkit/build-angular:prerender",
+          "options": {
+            "routesFile": "prerender-routes.txt",
+            "discoverRoutes": false
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "surah-mulk-reader:build:production",
+              "serverTarget": "surah-mulk-reader:server:production"
+            },
+            "development": {
+              "browserTarget": "surah-mulk-reader:build:development",
+              "serverTarget": "surah-mulk-reader:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

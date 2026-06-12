@@ -222,7 +222,6 @@ export class ThemeDetailComponent implements OnInit {
   protected openInReader(v: ThematicVerseDetail): void {
     void this.router.navigate(['/', v.surah], {
       fragment: verseFragment(v.ayah),
-      queryParams: { startingVerse: v.ayah },
     });
   }
 

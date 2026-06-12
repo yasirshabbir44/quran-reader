@@ -9,15 +9,20 @@
     "prestart": "node scripts/ensure-node-for-angular.mjs",
     "start": "ng serve",
     "prebuild": "node scripts/ensure-node-for-angular.mjs && node scripts/build-seo-files.mjs",
-    "build": "ng build",
+    "build": "ng build && node scripts/prerender-seo-html.mjs",
     "prewatch": "node scripts/ensure-node-for-angular.mjs",
     "watch": "ng build --watch --configuration development",
     "build-quran-data": "node scripts/build-quran-data.mjs",
     "build-thematic-index": "node scripts/build-thematic-index.mjs",
     "build-blog-index": "node scripts/build-blog-index.mjs",
     "build-seo-files": "node scripts/build-seo-files.mjs",
+    "prerender-seo-html": "node scripts/prerender-seo-html.mjs",
     "build-mushaf-index": "node scripts/build-mushaf-index.mjs",
-    "validate-khatam": "node scripts/validate-khatam.mjs"
+    "validate-khatam": "node scripts/validate-khatam.mjs",
+    "dev:ssr": "ng run surah-mulk-reader:serve-ssr",
+    "serve:ssr": "node dist/surah-mulk-reader/server/main.js",
+    "build:ssr": "ng build && ng run surah-mulk-reader:server",
+    "prerender": "ng run surah-mulk-reader:prerender"
   },
   "private": true,
   "dependencies": {
@@ -28,10 +33,13 @@
     "@angular/forms": "^20.3.21",
     "@angular/platform-browser": "^20.3.21",
     "@angular/platform-browser-dynamic": "^20.3.21",
+    "@angular/platform-server": "^20.3.21",
     "@angular/router": "^20.3.21",
     "@angular/service-worker": "^20.3.21",
+    "@angular/ssr": "^20.3.26",
     "@vercel/analytics": "^2.0.1",
     "dexie": "^4.4.2",
+    "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"
@@ -40,6 +48,9 @@
     "@angular-devkit/build-angular": "^20.3.26",
     "@angular/cli": "^20.3.26",
     "@angular/compiler-cli": "^20.3.21",
+    "@types/express": "^5.0.1",
+    "@types/node": "^20.17.19",
+    "browser-sync": "^3.0.0",
     "typescript": "~5.9.3"
   }
 }

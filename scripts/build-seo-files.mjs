@@ -101,9 +101,23 @@ Allow: /
 Sitemap: ${siteUrl}/sitemap.xml
 `;
 
+  const prerenderRoutes = [
+    '/',
+    '/blog',
+    '/themes',
+    ...Array.from({ length: 114 }, (_, i) => `/${i + 1}`),
+    ...mushaf.pages.map((page) => `/page/${page.page}`),
+    ...(mushaf.juz ?? []).map((juz) => `/juz/${juz.juz}`),
+    ...blog.posts.map((post) => `/blog/${post.id}`),
+    ...themes.themes.map((theme) => `/themes/${theme.id}`),
+  ];
+
   writeFileSync(join(PUBLIC, 'sitemap.xml'), sitemap, 'utf8');
   writeFileSync(join(PUBLIC, 'robots.txt'), robots, 'utf8');
-  console.log(`Wrote sitemap.xml and robots.txt — ${entries.length} URLs for ${siteUrl}`);
+  writeFileSync(join(ROOT, 'prerender-routes.txt'), `${prerenderRoutes.join('\n')}\n`, 'utf8');
+  console.log(
+    `Wrote sitemap.xml, robots.txt, and prerender-routes.txt — ${entries.length} URLs for ${siteUrl}`,
+  );
 }
 
 main();
