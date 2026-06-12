@@ -13,6 +13,7 @@ import {
   DefaultVersePresentationStrategy,
   VERSE_PRESENTATION_STRATEGY,
 } from './core/verse-presentation/verse-presentation.strategy';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -34,6 +35,6 @@ export const appConfig: ApplicationConfig = {
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
-    }),
+    }), provideClientHydration(withEventReplay()),
   ],
 };
