@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { Injectable, inject } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { SEO_SITE } from './seo.config';
 
@@ -22,6 +22,7 @@ export class SeoService {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly doc = inject(DOCUMENT);
+  private readonly platformId = inject(PLATFORM_ID);
 
   private canonicalEl: HTMLLinkElement | null = null;
   private jsonLdEl: HTMLScriptElement | null = null;
@@ -102,9 +103,11 @@ export class SeoService {
   }
 
   private resolveOrigin(): string {
-    const origin = this.doc.defaultView?.location?.origin;
-    if (origin && origin !== 'null') {
-      return origin.replace(/\/$/, '');
+    if (isPlatformBrowser(this.platformId)) {
+      const origin = this.doc.defaultView?.location?.origin;
+      if (origin && origin !== 'null') {
+        return origin.replace(/\/$/, '');
+      }
     }
     return SEO_SITE.siteUrl.replace(/\/$/, '');
   }
