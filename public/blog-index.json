@@ -105,6 +105,104 @@
       }
     }
   ],
+  "tags": [
+    {
+      "id": "tafseer",
+      "name": {
+        "en": "Tafseer",
+        "ur": "تفسیر",
+        "ar": "التفسير"
+      }
+    },
+    {
+      "id": "fiqh",
+      "name": {
+        "en": "Fiqh",
+        "ur": "فقہ",
+        "ar": "الفقه"
+      }
+    },
+    {
+      "id": "daily-life",
+      "name": {
+        "en": "Daily Life",
+        "ur": "روزمرہ زندگی",
+        "ar": "الحياة اليومية"
+      }
+    },
+    {
+      "id": "women-in-islam",
+      "name": {
+        "en": "Women in Islam",
+        "ur": "خواتین اور اسلام",
+        "ar": "المرأة في الإسلام"
+      }
+    },
+    {
+      "id": "aqeedah",
+      "name": {
+        "en": "Aqeedah",
+        "ur": "عقیدہ",
+        "ar": "العقيدة"
+      }
+    },
+    {
+      "id": "stories",
+      "name": {
+        "en": "Stories",
+        "ur": "کہانیاں",
+        "ar": "قصص"
+      }
+    },
+    {
+      "id": "worship",
+      "name": {
+        "en": "Worship",
+        "ur": "عبادات",
+        "ar": "العبادات"
+      }
+    },
+    {
+      "id": "hadith",
+      "name": {
+        "en": "Hadith & Sunnah",
+        "ur": "حدیث و سنت",
+        "ar": "الحديث والسنة"
+      }
+    },
+    {
+      "id": "quran",
+      "name": {
+        "en": "Quran",
+        "ur": "قرآن",
+        "ar": "القرآن"
+      }
+    },
+    {
+      "id": "history",
+      "name": {
+        "en": "History",
+        "ur": "تاریخ",
+        "ar": "التاريخ"
+      }
+    },
+    {
+      "id": "prophets",
+      "name": {
+        "en": "Prophets",
+        "ur": "انبیاء",
+        "ar": "الأنبياء"
+      }
+    },
+    {
+      "id": "companions",
+      "name": {
+        "en": "Companions",
+        "ur": "صحابہ",
+        "ar": "الصحابة"
+      }
+    }
+  ],
   "posts": [
     {
       "id": "types-of-hadith",
@@ -117,6 +215,10 @@
         "ar": "أنواع الحديث"
       },
       "readMinutes": 3,
+      "tags": [
+        "hadith",
+        "fiqh"
+      ],
       "title": {
         "en": "Types of Hadith",
         "ur": "حدیث کی اقسام",
@@ -157,6 +259,10 @@
         "ar": "أهمية الحديث مع القرآن"
       },
       "readMinutes": 3,
+      "tags": [
+        "hadith",
+        "fiqh"
+      ],
       "relatedSurah": 59,
       "title": {
         "en": "Importance of Hadith with the Quran",
@@ -208,6 +314,10 @@
         "ar": "معجزات النبي محمد ﷺ"
       },
       "readMinutes": 3,
+      "tags": [
+        "hadith",
+        "fiqh"
+      ],
       "relatedSurah": 54,
       "title": {
         "en": "Miracles of Prophet Muhammad",
@@ -249,6 +359,9 @@
         "ar": "البرزخ في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah"
+      ],
       "relatedSurah": 23,
       "title": {
         "en": "Barzakh in Islam",
@@ -290,6 +403,9 @@
         "ar": "الكفارة في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah"
+      ],
       "relatedSurah": 5,
       "title": {
         "en": "Kaffarah in Islam",
@@ -331,6 +447,10 @@
         "ar": "ما هي الصدقة الجارية؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "daily-life",
+        "fiqh"
+      ],
       "title": {
         "en": "What Is Sadaqah Jariyah?",
         "ur": "صدقہ جاریہ کیا ہے؟",
@@ -371,6 +491,10 @@
         "ar": "حقوق الطفل في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "daily-life",
+        "fiqh"
+      ],
       "relatedSurah": 31,
       "title": {
         "en": "Rights of Children in Islam",
@@ -412,6 +536,11 @@
         "ar": "حقوق المرأة في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "daily-life",
+        "fiqh",
+        "women-in-islam"
+      ],
       "relatedSurah": 4,
       "title": {
         "en": "Rights of Women in Islam",
@@ -453,6 +582,10 @@
         "ar": "أفضل الأعمال في ذي الحجة"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "relatedSurah": 22,
       "title": {
         "en": "Best Deeds in Dhul Hijjah",
@@ -494,6 +627,9 @@
         "ar": "ما هو محرم؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "history"
+      ],
       "relatedSurah": 9,
       "title": {
         "en": "What Is Muharram?",
@@ -535,6 +671,9 @@
         "ar": "تسجيل تاريخ الميلاد بالهجري"
       },
       "readMinutes": 3,
+      "tags": [
+        "history"
+      ],
       "title": {
         "en": "Recording Birth Dates in Islamic Calendar",
         "ur": "پیدائش کی اسلامی تاریخ لکھنے کی اہمیت",
@@ -575,6 +714,9 @@
         "ar": "فهم التقويم القمري الإسلامي"
       },
       "readMinutes": 3,
+      "tags": [
+        "history"
+      ],
       "relatedSurah": 9,
       "title": {
         "en": "Understanding the Islamic Lunar Calendar",
@@ -616,6 +758,9 @@
         "ar": "أصل التقويم الهجري"
       },
       "readMinutes": 3,
+      "tags": [
+        "history"
+      ],
       "title": {
         "en": "Origin of the Hijri Calendar",
         "ur": "ہجری تقویم کی ابتدا",
@@ -656,6 +801,9 @@
         "ar": "رؤية الهلال والتواريخ الإسلامية"
       },
       "readMinutes": 3,
+      "tags": [
+        "history"
+      ],
       "relatedSurah": 2,
       "title": {
         "en": "Moon Sighting and Islamic Dates",
@@ -697,6 +845,9 @@
         "ar": "الإمام الحسين وكربلاء"
       },
       "readMinutes": 3,
+      "tags": [
+        "history"
+      ],
       "title": {
         "en": "Imam Hussain and Karbala",
         "ur": "امام حسین اور کربلا",
@@ -849,6 +1000,11 @@
             "ar": "تعلّمنا أن كل ابتلاء مع التقوى والصبر طريق إلى الكرامة. لم ينتقم يوسف ولم يساوم، ونسب الفضل لله. قراءة سورة يوسف في الشدة تذكّر أن حكمة الله تختبئ وراء ما يبدو خسارة."
           }
         }
+      ],
+      "tags": [
+        "stories",
+        "tafseer",
+        "quran"
       ]
     },
     {
@@ -862,6 +1018,10 @@
         "ar": "بر الوالدين في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "daily-life",
+        "fiqh"
+      ],
       "relatedSurah": 17,
       "title": {
         "en": "Honoring Parents in Islam",
@@ -903,6 +1063,9 @@
         "ar": "أصل سجادة الصلاة"
       },
       "readMinutes": 3,
+      "tags": [
+        "history"
+      ],
       "title": {
         "en": "Origin of the Prayer Mat",
         "ur": "جائے نماز کی تاریخ",
@@ -1021,6 +1184,11 @@
             "ar": "تذكير بأن الثبات على الحق محفوظ عند الله. في زمن الالتباس، يمثل أصحاب الكهف شباباً اختاروا الإيمان على الموافقة."
           }
         }
+      ],
+      "tags": [
+        "stories",
+        "tafseer",
+        "quran"
       ]
     },
     {
@@ -1034,6 +1202,10 @@
         "ar": "علامات ليلة القدر"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "relatedSurah": 97,
       "title": {
         "en": "Signs of Laylatul Qadr",
@@ -1075,6 +1247,10 @@
         "ar": "ذكر الصلاة في القرآن"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "relatedSurah": 2,
       "title": {
         "en": "How Salah Is Mentioned in the Quran",
@@ -1116,6 +1292,10 @@
         "ar": "متى يجوز جمع الصلوات؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "title": {
         "en": "When Can Salah Be Combined?",
         "ur": "نمازیں کب جمع کی جا سکتی ہیں؟",
@@ -1156,6 +1336,9 @@
         "ar": "ما هي القنطرة؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah"
+      ],
       "title": {
         "en": "What Is Al-Qantarah?",
         "ur": "القنطرہ کیا ہے؟",
@@ -1279,6 +1462,10 @@
             "ar": "تعلّمنا أن الإعداد والوحدة والتوكل معاً سبب للنصر. بذل الصحابة ما عندهم، فجاء نصر الله ظاهراً وباطناً."
           }
         }
+      ],
+      "tags": [
+        "history",
+        "stories"
       ]
     },
     {
@@ -1292,6 +1479,10 @@
         "ar": "فلسطين في القرآن"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "relatedSurah": 17,
       "title": {
         "en": "Palestine in the Quran",
@@ -1333,6 +1524,10 @@
         "ar": "العين في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah",
+        "daily-life"
+      ],
       "relatedSurah": 113,
       "title": {
         "en": "Evil Eye in Islam",
@@ -1374,6 +1569,10 @@
         "ar": "لماذا نزلت سورة الكافرون؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "relatedSurah": 109,
       "title": {
         "en": "Why Was Surah Al-Kafirun Revealed?",
@@ -1425,6 +1624,9 @@
         "ar": "أسماء الملائكة في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah"
+      ],
       "title": {
         "en": "Names of Angels in Islam",
         "ur": "اسلام میں فرشتوں کے نام",
@@ -1465,6 +1667,9 @@
         "ar": "أنواع الكفر"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah"
+      ],
       "title": {
         "en": "Types of Kufr",
         "ur": "کفر کی اقسام",
@@ -1505,6 +1710,10 @@
         "ar": "الشرك في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah",
+        "tafseer"
+      ],
       "relatedSurah": 4,
       "title": {
         "en": "Shirk in Islam",
@@ -1639,6 +1848,10 @@
             "ar": "تعلّمنا أن الهجرة ليست فراراً بل بناء أساس. وهجرتنا اليومية من الذنب إلى الطاعة، والله مع من يسلك الطريق الصعب."
           }
         }
+      ],
+      "tags": [
+        "history",
+        "stories"
       ]
     },
     {
@@ -1652,6 +1865,10 @@
         "ar": "الطهارة والنظافة في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "daily-life",
+        "fiqh"
+      ],
       "relatedSurah": 2,
       "title": {
         "en": "Taharah and Cleanliness in Islam",
@@ -1693,6 +1910,10 @@
         "ar": "دروس من خطبة الوداع"
       },
       "readMinutes": 3,
+      "tags": [
+        "hadith",
+        "fiqh"
+      ],
       "title": {
         "en": "Lessons from the Prophet's Last Sermon",
         "ur": "خطبہ حجۃ الوداع کے اسباق",
@@ -1816,6 +2037,11 @@
             "ar": "تعلّمنا أن التوكل لا يعني الكسل — ركضت هاجر وبحثت. ويأتي نصر الله بعد بذل الجهد."
           }
         }
+      ],
+      "tags": [
+        "prophets",
+        "stories",
+        "history"
       ]
     },
     {
@@ -1829,6 +2055,10 @@
         "ar": "هل خلق الله الكون؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah",
+        "tafseer"
+      ],
       "relatedSurah": 21,
       "title": {
         "en": "Was the Universe Created by Allah?",
@@ -1870,6 +2100,9 @@
         "ar": "سلسلة الأنبياء من ذرية إبراهيم"
       },
       "readMinutes": 3,
+      "tags": [
+        "history"
+      ],
       "title": {
         "en": "Prophetic Lineage from Abraham",
         "ur": "ابراہیم علیہ السلام سے انبیاء کی نسل",
@@ -1910,6 +2143,11 @@
         "ar": "أحكام الزواج في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "daily-life",
+        "fiqh",
+        "women-in-islam"
+      ],
       "relatedSurah": 4,
       "title": {
         "en": "Marriage Rules in Islam",
@@ -2021,6 +2259,11 @@
             "ar": "تعلّمنا الشجاعة في قول الحق للطغاة، والصبر في التحضير، والتوكل حين تنفد الحيل."
           }
         }
+      ],
+      "tags": [
+        "prophets",
+        "stories",
+        "history"
       ]
     },
     {
@@ -2034,6 +2277,9 @@
         "ar": "المسيح في القرآن"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah"
+      ],
       "relatedSurah": 3,
       "title": {
         "en": "The Messiah in the Quran",
@@ -2075,6 +2321,11 @@
         "ar": "إبراهيم عليه السلام في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "prophets",
+        "stories",
+        "history"
+      ],
       "relatedSurah": 14,
       "title": {
         "en": "Prophet Ibrahim in Islam",
@@ -2116,6 +2367,10 @@
         "ar": "أواخر عشر آيات من سورة الكهف"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "relatedSurah": 18,
       "title": {
         "en": "Last 10 Verses of Surah Al-Kahf",
@@ -2167,6 +2422,11 @@
         "ar": "بنو إسرائيل في القرآن"
       },
       "readMinutes": 3,
+      "tags": [
+        "stories",
+        "tafseer",
+        "quran"
+      ],
       "relatedSurah": 2,
       "title": {
         "en": "Bani Israel in the Quran",
@@ -2283,6 +2543,11 @@
             "ar": "تعلّمنا أن الإيمان لا يُقاس بالجاه أو العرق، بل بالإخلاص والصبر ومحبة الله."
           }
         }
+      ],
+      "tags": [
+        "companions",
+        "stories",
+        "history"
       ]
     },
     {
@@ -2296,6 +2561,10 @@
         "ar": "أوائل عشر آيات من سورة الكهف"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "relatedSurah": 18,
       "title": {
         "en": "First 10 Verses of Surah Al-Kahf",
@@ -2337,6 +2606,10 @@
         "ar": "كيف تصلى صلاة الجنازة؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "title": {
         "en": "How to Pray Janazah",
         "ur": "نمازِ جنازہ کیسے پڑھیں؟",
@@ -2377,6 +2650,11 @@
         "ar": "الأنبياء الإبراهيميون في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "prophets",
+        "stories",
+        "history"
+      ],
       "title": {
         "en": "Abrahamic Prophets in Islam",
         "ur": "اسلام میں ابراہیمی انبیاء",
@@ -2417,6 +2695,9 @@
         "ar": "الكلمة في الإسلام"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah"
+      ],
       "title": {
         "en": "The Kalima in Islam",
         "ur": "اسلام میں کلمہ",
@@ -2457,6 +2738,9 @@
         "ar": "القيامة: يوم الحساب"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah"
+      ],
       "relatedSurah": 99,
       "title": {
         "en": "Qayamah: The Day of Judgment",
@@ -2498,6 +2782,11 @@
         "ar": "كيف تصلي المرأة في الإسلام؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh",
+        "women-in-islam"
+      ],
       "title": {
         "en": "How Women Pray in Islam",
         "ur": "اسلام میں خواتین نماز کیسے پڑھتی ہیں؟",
@@ -2631,6 +2920,10 @@
             "ar": "حفظ القرآن حقيقة تاريخية ومعجزة حية — يدعو كل مسلم إلى التمسك بالكتاب."
           }
         }
+      ],
+      "tags": [
+        "history",
+        "stories"
       ]
     },
     {
@@ -2644,6 +2937,10 @@
         "ar": "ما معنى الأحرف السبعة؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "title": {
         "en": "What Are the Seven Ahruf?",
         "ur": "قرآن کے سات احرف کیا ہیں؟",
@@ -2684,6 +2981,10 @@
         "ar": "ما هي صلاة النفل؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "title": {
         "en": "What Is Nafl Prayer?",
         "ur": "نفل نماز کیا ہے؟",
@@ -2724,6 +3025,10 @@
         "ar": "ما هي صلاة السنة؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "title": {
         "en": "What Is Sunnah Prayer?",
         "ur": "سنت نماز کیا ہے؟",
@@ -2764,6 +3069,10 @@
         "ar": "كيف تحفظ القرآن؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "title": {
         "en": "How to Memorize the Quran",
         "ur": "قرآن حفظ کیسے کریں؟",
@@ -2804,6 +3113,10 @@
         "ar": "كيف تؤدى صلاة الجمعة؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "relatedSurah": 62,
       "title": {
         "en": "How to Perform Jumu'ah Prayer",
@@ -2855,6 +3168,9 @@
         "ar": "شرح القضاء والقدر"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah"
+      ],
       "relatedSurah": 54,
       "title": {
         "en": "Al-Qadha wal-Qadr Explained",
@@ -2896,6 +3212,10 @@
         "ar": "ما هو التجويد؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "relatedSurah": 73,
       "title": {
         "en": "What Is Tajweed?",
@@ -2947,6 +3267,10 @@
         "ar": "كم عدد صفحات القرآن؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "title": {
         "en": "How Many Pages Are in the Quran?",
         "ur": "قرآن کے کتنے صفحات ہیں؟",
@@ -2987,6 +3311,10 @@
         "ar": "ما هي ليلة الجائزة؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "title": {
         "en": "What Is Laylatul Jaiza?",
         "ur": "لیلۃ الجائزہ کیا ہے؟",
@@ -3027,6 +3355,10 @@
         "ar": "حفص وورش: هل هما قرآنان مختلفان؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "title": {
         "en": "Hafs vs Warsh: Are They Different Qurans?",
         "ur": "حفص اور ورش: کیا یہ دو قرآن ہیں؟",
@@ -3067,6 +3399,10 @@
         "ar": "الآية 10:94 بين الشك واليقين"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "relatedSurah": 10,
       "title": {
         "en": "Quran 10:94 - Doubt and Certainty",
@@ -3108,6 +3444,10 @@
         "ar": "آخر ثلاث آيات من سورة الحشر"
       },
       "readMinutes": 3,
+      "tags": [
+        "tafseer",
+        "quran"
+      ],
       "relatedSurah": 59,
       "title": {
         "en": "Last 3 Verses of Surah Al-Hashr",
@@ -3149,6 +3489,10 @@
         "ar": "ما هو الاعتكاف؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "worship",
+        "fiqh"
+      ],
       "relatedSurah": 2,
       "title": {
         "en": "What Is I'tikaf?",
@@ -3200,6 +3544,10 @@
         "ar": "هل لبس الكوفية واجب على الرجال؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "daily-life",
+        "fiqh"
+      ],
       "title": {
         "en": "Is Wearing a Kufi Required for Men?",
         "ur": "کیا مردوں کے لیے ٹوپی لازمی ہے؟",
@@ -3240,6 +3588,10 @@
         "ar": "كيف يكون الله؟"
       },
       "readMinutes": 3,
+      "tags": [
+        "aqeedah",
+        "tafseer"
+      ],
       "relatedSurah": 42,
       "title": {
         "en": "What Does Allah Look Like?",

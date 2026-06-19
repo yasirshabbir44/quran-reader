@@ -31,6 +31,42 @@ const CATEGORY_COLORS = {
   history: ['#3d2e1a', '#1a1208'],
 };
 
+const CATEGORY_TAGS = {
+  'quranic-stories': ['stories', 'tafseer', 'quran'],
+  prophets: ['prophets', 'stories', 'history'],
+  companions: ['companions', 'stories', 'history'],
+  'islamic-history': ['history', 'stories'],
+  'islamic-beliefs': ['aqeedah'],
+  'quranic-teachings': ['tafseer', 'quran'],
+  salah: ['worship', 'fiqh'],
+  sawm: ['worship', 'fiqh'],
+  'sunnah-hadith': ['hadith', 'fiqh'],
+  tawhid: ['aqeedah', 'tafseer'],
+  hajj: ['worship', 'fiqh'],
+  lifestyle: ['daily-life', 'fiqh'],
+  history: ['history'],
+};
+
+const ARTICLE_TAG_OVERRIDES = {
+  'how-women-pray-islam': ['women-in-islam'],
+  'marriage-rules-islam': ['women-in-islam'],
+  'rights-of-women-islam': ['women-in-islam'],
+  'rights-of-children-islam': ['daily-life'],
+  'honor-parents-islam': ['daily-life'],
+  'kufi-hat-men-islam': ['daily-life'],
+  'taharah-cleanliness': ['daily-life'],
+  'evil-eye-islam': ['daily-life'],
+  'sadaqah-jariyah': ['daily-life'],
+  'types-of-hadith': ['hadith'],
+  'hadith-and-quran-importance': ['hadith'],
+};
+
+function resolvePostTags(postId, categoryId) {
+  const base = CATEGORY_TAGS[categoryId] ?? [];
+  const extra = ARTICLE_TAG_OVERRIDES[postId] ?? [];
+  return [...new Set([...base, ...extra])];
+}
+
 function escapeXml(s) {
   return String(s)
     .replace(/&/g, '&amp;')
@@ -125,6 +161,7 @@ function topicToPost(article) {
       ar: article.title.ar,
     },
     readMinutes,
+    tags: resolvePostTags(article.id, article.categoryId),
     ...(article.relatedSurah ? { relatedSurah: article.relatedSurah } : {}),
     title: loc(article.title),
     excerpt: loc(article.excerpt),
@@ -149,6 +186,7 @@ function loadStoryPosts() {
   }
   return JSON.parse(readFileSync(STORIES_PATH, 'utf8')).map((post) => ({
     ...post,
+    tags: resolvePostTags(post.id, post.categoryId),
     readMinutes: calcStoryReadMinutes(post.sections),
   }));
 }
@@ -165,12 +203,13 @@ function main() {
 
   const payload = {
     categories: seed.categories,
+    tags: seed.tags,
     posts: allPosts,
   };
 
   writeFileSync(OUT, JSON.stringify(payload, null, 2) + '\n', 'utf8');
   console.log(
-    `Wrote ${OUT} — ${allPosts.length} posts (${storyPosts.length} stories + ${topicPosts.length} topics), ${seed.categories.length} categories.`,
+    `Wrote ${OUT} — ${allPosts.length} posts (${storyPosts.length} stories + ${topicPosts.length} topics), ${seed.categories.length} categories, ${seed.tags.length} tags.`,
   );
 }
 

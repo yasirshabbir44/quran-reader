@@ -9,16 +9,22 @@ import {
   shareReplay,
   switchMap,
 } from 'rxjs';
-import type { BlogCategory, BlogIndexPayload, BlogLocalizedText, BlogPost } from './blog.types';
+import type { BlogCategory, BlogIndexPayload, BlogLocalizedText, BlogPost, BlogTag } from './blog.types';
 import { UiLocaleService, type UiLocaleCode } from '../ui/ui-locale.service';
 
 export interface BlogPostListItem extends BlogPost {
   readonly categoryName: string;
+  readonly tagNames: readonly string[];
 }
 
 export interface BlogCategoryGroup {
   readonly category: BlogCategory;
   readonly posts: readonly BlogPostListItem[];
+}
+
+export interface BlogTagWithCount {
+  readonly tag: BlogTag;
+  readonly count: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -43,29 +49,35 @@ export class BlogService {
     this.loadGeneration.next(this.loadGeneration.value + 1);
   }
 
+  getTags(): Observable<readonly BlogTagWithCount[]> {
+    return this.index$.pipe(
+      map((payload) => {
+        if (!payload) {
+          return [];
+        }
+        const counts = new Map<string, number>();
+        for (const post of payload.posts) {
+          for (const tagId of post.tags) {
+            counts.set(tagId, (counts.get(tagId) ?? 0) + 1);
+          }
+        }
+        return payload.tags
+          .filter((tag) => (counts.get(tag.id) ?? 0) > 0)
+          .map((tag) => ({
+            tag,
+            count: counts.get(tag.id) ?? 0,
+          }));
+      }),
+    );
+  }
+
   getPostsByCategory(): Observable<readonly BlogCategoryGroup[]> {
     return this.index$.pipe(
       map((payload) => {
         if (!payload) {
           return [];
         }
-        const categoryById = new Map(payload.categories.map((c) => [c.id, c]));
-        const groups = new Map<string, BlogPostListItem[]>();
-
-        for (const post of payload.posts) {
-          const category = categoryById.get(post.categoryId);
-          if (!category) {
-            continue;
-          }
-          const item: BlogPostListItem = {
-            ...post,
-            categoryName: this.pickLocalized(category.name),
-          };
-          const list = groups.get(post.categoryId) ?? [];
-          list.push(item);
-          groups.set(post.categoryId, list);
-        }
-
+        const groups = this.groupPosts(payload);
         return payload.categories
           .filter((c) => (groups.get(c.id)?.length ?? 0) > 0)
           .map((category) => ({
@@ -88,14 +100,7 @@ export class BlogService {
         if (!payload) {
           return [];
         }
-        const categoryById = new Map(payload.categories.map((c) => [c.id, c]));
-        return payload.posts.map((post) => {
-          const category = categoryById.get(post.categoryId);
-          return {
-            ...post,
-            categoryName: category ? this.pickLocalized(category.name) : '',
-          };
-        });
+        return payload.posts.map((post) => this.toListItem(post, payload));
       }),
     );
   }
@@ -114,21 +119,6 @@ export class BlogService {
     );
   }
 
-  private resolvePost(payload: BlogIndexPayload | null, id: string): BlogPostListItem | null {
-    if (!payload) {
-      return null;
-    }
-    const post = payload.posts.find((p) => p.id === id);
-    if (!post) {
-      return null;
-    }
-    const category = payload.categories.find((c) => c.id === post.categoryId);
-    return {
-      ...post,
-      categoryName: category ? this.pickLocalized(category.name) : '',
-    };
-  }
-
   pickLocalized(text: BlogLocalizedText, locale?: UiLocaleCode): string {
     const code = locale ?? this.ui.locale();
     if (code === 'ur') {
@@ -138,5 +128,45 @@ export class BlogService {
       return text.ar || text.en;
     }
     return text.en;
+  }
+
+  tagLabel(tag: BlogTag): string {
+    return this.pickLocalized(tag.name);
+  }
+
+  private groupPosts(payload: BlogIndexPayload): Map<string, BlogPostListItem[]> {
+    const groups = new Map<string, BlogPostListItem[]>();
+    for (const post of payload.posts) {
+      const item = this.toListItem(post, payload);
+      const list = groups.get(post.categoryId) ?? [];
+      list.push(item);
+      groups.set(post.categoryId, list);
+    }
+    return groups;
+  }
+
+  private toListItem(post: BlogPost, payload: BlogIndexPayload): BlogPostListItem {
+    const category = payload.categories.find((c) => c.id === post.categoryId);
+    const tagById = new Map(payload.tags.map((t) => [t.id, t]));
+    return {
+      ...post,
+      tags: post.tags ?? [],
+      categoryName: category ? this.pickLocalized(category.name) : '',
+      tagNames: (post.tags ?? []).map((id) => {
+        const tag = tagById.get(id);
+        return tag ? this.pickLocalized(tag.name) : id;
+      }),
+    };
+  }
+
+  private resolvePost(payload: BlogIndexPayload | null, id: string): BlogPostListItem | null {
+    if (!payload) {
+      return null;
+    }
+    const post = payload.posts.find((p) => p.id === id);
+    if (!post) {
+      return null;
+    }
+    return this.toListItem(post, payload);
   }
 }
