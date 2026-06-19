@@ -1,5 +1,20 @@
 const t = (en, ur, ar) => ({ en, ur, ar });
 
+export const tags = [
+  { id: 'tafseer', name: t('Tafseer', 'تفسیر', 'التفسير') },
+  { id: 'fiqh', name: t('Fiqh', 'فقہ', 'الفقه') },
+  { id: 'daily-life', name: t('Daily Life', 'روزمرہ زندگی', 'الحياة اليومية') },
+  { id: 'women-in-islam', name: t('Women in Islam', 'خواتین اور اسلام', 'المرأة في الإسلام') },
+  { id: 'aqeedah', name: t('Aqeedah', 'عقیدہ', 'العقيدة') },
+  { id: 'stories', name: t('Stories', 'کہانیاں', 'قصص') },
+  { id: 'worship', name: t('Worship', 'عبادات', 'العبادات') },
+  { id: 'hadith', name: t('Hadith & Sunnah', 'حدیث و سنت', 'الحديث والسنة') },
+  { id: 'quran', name: t('Quran', 'قرآن', 'القرآن') },
+  { id: 'history', name: t('History', 'تاریخ', 'التاريخ') },
+  { id: 'prophets', name: t('Prophets', 'انبیاء', 'الأنبياء') },
+  { id: 'companions', name: t('Companions', 'صحابہ', 'الصحابة') },
+];
+
 export const categories = [
   { id: 'quranic-stories', name: t('Quranic Stories', 'قرآنی کہانیاں', 'قصص قرآنية') },
   { id: 'prophets', name: t('Prophets', 'انبیاء', 'الأنبياء') },
@@ -1488,4 +1503,4 @@ export const topicArticles = [
   },
 ];
 
-export default { categories, topicArticles };
+export default { categories, tags, topicArticles };
