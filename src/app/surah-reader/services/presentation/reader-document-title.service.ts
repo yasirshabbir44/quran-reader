@@ -54,11 +54,12 @@ export class ReaderDocumentTitleService {
         }),
       });
     } else if (this.corpus.error()) {
+      // Keep indexable — prerendered HTML already has index,follow; a transient
+      // corpus load failure must not downgrade robots for crawlers that render JS.
       this.seo.apply({
         title: this.ui.translate('documentTitleError'),
         description: this.ui.translate('seoNotFoundDescription'),
         path: '/',
-        noindex: true,
       });
     } else {
       this.seo.apply({
