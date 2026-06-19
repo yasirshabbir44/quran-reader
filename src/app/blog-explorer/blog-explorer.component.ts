@@ -9,6 +9,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { BLOG_FEATURED_STORY_IDS } from '../core/blog/blog.constants';
 import { BlogService, type BlogCategoryGroup, type BlogPostListItem } from '../core/blog/blog.service';
 import { collectionPageJsonLd } from '../core/seo/seo-jsonld';
 import { SeoService } from '../core/seo/seo.service';
@@ -32,14 +33,32 @@ export class BlogExplorerComponent implements OnInit {
   protected readonly loading = signal(true);
   protected readonly loadError = signal(false);
   protected readonly groups = signal<readonly BlogCategoryGroup[]>([]);
+  protected readonly allPosts = signal<readonly BlogPostListItem[]>([]);
   protected readonly searchQuery = signal('');
+  protected readonly selectedCategoryId = signal<string | null>(null);
+
+  protected readonly featuredPosts = computed(() => {
+    const byId = new Map(this.allPosts().map((p) => [p.id, p]));
+    return BLOG_FEATURED_STORY_IDS.map((id) => byId.get(id)).filter(
+      (p): p is BlogPostListItem => p != null,
+    );
+  });
+
+  protected readonly categoryFilters = computed(() => this.groups());
 
   protected readonly filteredGroups = computed(() => {
     const raw = this.searchQuery().trim().normalize('NFKC').toLowerCase();
-    const source = this.groups();
+    const categoryId = this.selectedCategoryId();
+    let source = this.groups();
+
+    if (categoryId) {
+      source = source.filter((g) => g.category.id === categoryId);
+    }
+
     if (!raw) {
       return source;
     }
+
     return source
       .map((g) => ({
         category: g.category,
@@ -51,6 +70,8 @@ export class BlogExplorerComponent implements OnInit {
   protected readonly totalPosts = computed(() =>
     this.groups().reduce((n, g) => n + g.posts.length, 0),
   );
+
+  protected readonly totalCategories = computed(() => this.groups().length);
 
   protected readonly shownPosts = computed(() =>
     this.filteredGroups().reduce((n, g) => n + g.posts.length, 0),
@@ -68,6 +89,11 @@ export class BlogExplorerComponent implements OnInit {
           return;
         }
         this.blog
+          .getAllPosts()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((posts) => this.allPosts.set(posts));
+
+        this.blog
           .getPostsByCategory()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((groups) => {
@@ -81,6 +107,14 @@ export class BlogExplorerComponent implements OnInit {
   protected onLocaleChange(code: UiLocaleCode): void {
     this.ui.setLocale(code);
     this.syncSeo();
+  }
+
+  protected selectCategory(categoryId: string | null): void {
+    this.selectedCategoryId.set(categoryId);
+  }
+
+  protected isCategorySelected(categoryId: string): boolean {
+    return this.selectedCategoryId() === categoryId;
   }
 
   protected formatUiNum(n: number): string {
@@ -100,6 +134,10 @@ export class BlogExplorerComponent implements OnInit {
     return this.blog.pickLocalized(group.category.name);
   }
 
+  protected categoryPostCount(group: BlogCategoryGroup): number {
+    return group.posts.length;
+  }
+
   protected formatDate(iso: string): string {
     this.ui.locale();
     const tag = this.ui.locale() === 'ur' ? 'ur-PK' : this.ui.locale() === 'ar' ? 'ar-SA' : 'en-US';
@@ -114,6 +152,7 @@ export class BlogExplorerComponent implements OnInit {
     this.loading.set(true);
     this.loadError.set(false);
     this.blog.retryLoad();
+    this.blog.getAllPosts().subscribe((posts) => this.allPosts.set(posts));
     this.blog.getPostsByCategory().subscribe((groups) => {
       this.groups.set(groups);
       this.loading.set(false);

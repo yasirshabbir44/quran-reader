@@ -2,6 +2,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -15,6 +16,11 @@ import { articleJsonLd } from '../core/seo/seo-jsonld';
 import { SeoService } from '../core/seo/seo.service';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
+
+export interface BlogTocEntry {
+  readonly id: string;
+  readonly label: string;
+}
 
 @Component({
   selector: 'app-blog-detail',
@@ -35,6 +41,21 @@ export class BlogDetailComponent implements OnInit {
   protected readonly loadError = signal(false);
   protected readonly notFound = signal(false);
   protected readonly post = signal<BlogPostListItem | null>(null);
+  protected readonly relatedPosts = signal<readonly BlogPostListItem[]>([]);
+
+  protected readonly tocEntries = computed((): readonly BlogTocEntry[] => {
+    const article = this.post();
+    if (!article) {
+      return [];
+    }
+    return article.sections
+      .map((section, index) => ({ section, index }))
+      .filter(({ section }) => section.type === 'heading')
+      .map(({ section, index }) => ({
+        id: `section-${index}`,
+        label: this.blog.pickLocalized(section.text),
+      }));
+  });
 
   ngOnInit(): void {
     this.route.paramMap
@@ -44,6 +65,7 @@ export class BlogDetailComponent implements OnInit {
           this.loading.set(true);
           this.loadError.set(false);
           this.notFound.set(false);
+          this.relatedPosts.set([]);
           return combineLatest([this.blog.load(), this.blog.getPost(id)]).pipe(
             map(([index, data]) => ({ id, index, data })),
           );
@@ -69,6 +91,7 @@ export class BlogDetailComponent implements OnInit {
         this.loading.set(false);
         this.post.set(data);
         this.syncPostSeo(data);
+        this.loadRelatedPosts(data);
       });
   }
 
@@ -96,10 +119,11 @@ export class BlogDetailComponent implements OnInit {
   }
 
   protected sectionText(section: BlogContentSection): string {
-    if (section.type === 'quote') {
-      return this.blog.pickLocalized(section.text);
-    }
     return this.blog.pickLocalized(section.text);
+  }
+
+  protected sectionAnchor(index: number): string {
+    return `section-${index}`;
   }
 
   protected retryLoad(): void {
@@ -117,7 +141,15 @@ export class BlogDetailComponent implements OnInit {
       this.post.set(data);
       this.notFound.set(false);
       this.syncPostSeo(data);
+      this.loadRelatedPosts(data);
     });
+  }
+
+  private loadRelatedPosts(data: BlogPostListItem): void {
+    this.blog
+      .getRelatedPosts(data.id, data.categoryId, 3)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((posts) => this.relatedPosts.set(posts));
   }
 
   private syncPostSeo(data: BlogPostListItem): void {

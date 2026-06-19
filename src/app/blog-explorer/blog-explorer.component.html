@@ -24,6 +24,7 @@
       <p class="blog__kicker">{{ 'blogKicker' | uiTranslate }}</p>
       <h1 class="blog__title">{{ 'blogTitle' | uiTranslate }}</h1>
       <p class="blog__subtitle">{{ 'blogSubtitle' | uiTranslate }}</p>
+      <p class="blog__intro">{{ 'blogIntro' | uiTranslate }}</p>
     </div>
     <div class="blog__header-tools">
       <label class="blog__tool-label" for="blog-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
@@ -41,6 +42,61 @@
     </div>
   </header>
 
+  <section class="blog__stats" [attr.aria-label]="'blogStatsAria' | uiTranslate">
+    <div class="blog__stat">
+      <span class="blog__stat-value">{{ formatUiNum(totalPosts()) }}</span>
+      <span class="blog__stat-label">{{ 'blogStatArticles' | uiTranslate }}</span>
+    </div>
+    <div class="blog__stat">
+      <span class="blog__stat-value">{{ formatUiNum(totalCategories()) }}</span>
+      <span class="blog__stat-label">{{ 'blogStatCategories' | uiTranslate }}</span>
+    </div>
+    <div class="blog__stat">
+      <span class="blog__stat-value">3</span>
+      <span class="blog__stat-label">{{ 'blogStatLanguages' | uiTranslate }}</span>
+    </div>
+  </section>
+
+  @if (featuredPosts().length > 0 && !selectedCategoryId() && !searchQuery().trim()) {
+  <section class="blog__featured" aria-labelledby="blog-featured-heading">
+    <div class="blog__featured-head">
+      <h2 id="blog-featured-heading" class="blog__featured-title">{{ 'blogFeaturedTitle' | uiTranslate }}</h2>
+      <p class="blog__featured-subtitle">{{ 'blogFeaturedSubtitle' | uiTranslate }}</p>
+    </div>
+    <ul class="blog__featured-grid">
+      @for (post of featuredPosts(); track post.id) {
+      <li>
+        <a
+          class="blog__featured-card"
+          [routerLink]="['/blog', post.id]"
+          [attr.aria-label]="'blogCardAria' | uiTranslate: { title: postTitle(post) }"
+        >
+          <span class="blog__featured-media">
+            <img
+              class="blog__featured-img"
+              [src]="post.image"
+              [alt]="blog.pickLocalized(post.imageAlt)"
+              width="320"
+              height="180"
+              loading="lazy"
+              decoding="async"
+            />
+          </span>
+          <span class="blog__featured-body">
+            <span class="blog__featured-category">{{ post.categoryName }}</span>
+            <span class="blog__featured-card-title">{{ postTitle(post) }}</span>
+            <span class="blog__featured-excerpt">{{ postExcerpt(post) }}</span>
+            <span class="blog__featured-meta">
+              {{ formatUiNum(post.readMinutes) }} {{ 'blogReadMinutes' | uiTranslate }}
+            </span>
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+  }
+
   <div class="blog__index-head">
     <div>
       <h2 class="blog__index-title">{{ 'blogIndexTitle' | uiTranslate }}</h2>
@@ -52,6 +108,28 @@
           | uiTranslate: { shown: formatUiNum(shownPosts()), total: formatUiNum(totalPosts()) }
       }}
     </p>
+  </div>
+
+  <div class="blog__filters" role="group" [attr.aria-label]="'blogFilterAria' | uiTranslate">
+    <button
+      type="button"
+      class="blog__filter"
+      [class.blog__filter--active]="selectedCategoryId() === null"
+      (click)="selectCategory(null)"
+    >
+      {{ 'blogFilterAll' | uiTranslate }}
+    </button>
+    @for (group of categoryFilters(); track group.category.id) {
+    <button
+      type="button"
+      class="blog__filter"
+      [class.blog__filter--active]="isCategorySelected(group.category.id)"
+      (click)="selectCategory(group.category.id)"
+    >
+      {{ categoryName(group) }}
+      <span class="blog__filter-count">{{ formatUiNum(categoryPostCount(group)) }}</span>
+    </button>
+    }
   </div>
 
   <div class="blog__search" role="search">
@@ -73,7 +151,12 @@
   } @else {
   @for (group of filteredGroups(); track group.category.id) {
   <section class="blog__group" [attr.aria-labelledby]="'blog-cat-' + group.category.id">
-    <h2 [id]="'blog-cat-' + group.category.id" class="blog__group-title">{{ categoryName(group) }}</h2>
+    <div class="blog__group-head">
+      <h2 [id]="'blog-cat-' + group.category.id" class="blog__group-title">{{ categoryName(group) }}</h2>
+      <span class="blog__group-count">
+        {{ formatUiNum(categoryPostCount(group)) }} {{ 'blogGroupArticles' | uiTranslate }}
+      </span>
+    </div>
     <ul class="blog__grid">
       @for (post of group.posts; track post.id) {
       <li>
@@ -102,6 +185,11 @@
               <span class="blog__card-read">
                 {{ formatUiNum(post.readMinutes) }} {{ 'blogReadMinutes' | uiTranslate }}
               </span>
+              @if (post.relatedSurah) {
+              <span class="blog__card-surah">
+                {{ 'blogCardSurah' | uiTranslate: { num: formatUiNum(post.relatedSurah) } }}
+              </span>
+              }
             </span>
           </span>
         </a>
