@@ -134,6 +134,40 @@
   font-style: italic;
 }
 
+.blog-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+.blog-detail__tag {
+  display: inline-flex;
+  padding: 0.28rem 0.65rem;
+  border-radius: var(--reader-radius-pill);
+  border: 1px solid var(--reader-accent-border);
+  background: var(--reader-accent-soft);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--reader-ink-muted);
+  text-decoration: none;
+  transition:
+    border-color var(--reader-transition-fast),
+    color var(--reader-transition-fast);
+
+  &:hover {
+    border-color: var(--reader-accent-border-strong);
+    color: var(--reader-ink-intro-title);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--reader-accent-soft);
+  }
+}
+
 .blog-detail__surah-link {
   @include ui.ui-btn-primary;
   min-height: 2.25rem;
