@@ -9,6 +9,11 @@ export interface BlogCategory {
   readonly name: BlogLocalizedText;
 }
 
+export interface BlogTag {
+  readonly id: string;
+  readonly name: BlogLocalizedText;
+}
+
 export interface BlogQuoteSection {
   readonly type: 'quote';
   readonly arabic?: string;
@@ -41,10 +46,12 @@ export interface BlogPost {
   readonly title: BlogLocalizedText;
   readonly excerpt: BlogLocalizedText;
   readonly relatedSurah?: number;
+  readonly tags: readonly string[];
   readonly sections: readonly BlogContentSection[];
 }
 
 export interface BlogIndexPayload {
   readonly categories: readonly BlogCategory[];
+  readonly tags: readonly BlogTag[];
   readonly posts: readonly BlogPost[];
 }

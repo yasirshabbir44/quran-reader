@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { combineLatest, map, switchMap } from 'rxjs';
 import { BlogService, type BlogPostListItem } from '../core/blog/blog.service';
-import type { BlogContentSection } from '../core/blog/blog.types';
+import type { BlogContentSection, BlogTag } from '../core/blog/blog.types';
 import { articleJsonLd } from '../core/seo/seo-jsonld';
 import { SeoService } from '../core/seo/seo.service';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
@@ -42,6 +42,7 @@ export class BlogDetailComponent implements OnInit {
   protected readonly notFound = signal(false);
   protected readonly post = signal<BlogPostListItem | null>(null);
   protected readonly relatedPosts = signal<readonly BlogPostListItem[]>([]);
+  protected readonly tags = signal<readonly BlogTag[]>([]);
 
   protected readonly tocEntries = computed((): readonly BlogTocEntry[] => {
     const article = this.post();
@@ -58,6 +59,13 @@ export class BlogDetailComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.blog
+      .load()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((payload) => {
+        this.tags.set(payload?.tags ?? []);
+      });
+
     this.route.paramMap
       .pipe(
         switchMap((params) => {
@@ -124,6 +132,11 @@ export class BlogDetailComponent implements OnInit {
 
   protected sectionAnchor(index: number): string {
     return `section-${index}`;
+  }
+
+  protected tagLabel(tagId: string): string {
+    const tag = this.tags().find((t) => t.id === tagId);
+    return tag ? this.blog.tagLabel(tag) : tagId;
   }
 
   protected retryLoad(): void {

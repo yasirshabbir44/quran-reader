@@ -52,22 +52,56 @@
       <span class="blog__stat-label">{{ 'blogStatCategories' | uiTranslate }}</span>
     </div>
     <div class="blog__stat">
-      <span class="blog__stat-value">3</span>
-      <span class="blog__stat-label">{{ 'blogStatLanguages' | uiTranslate }}</span>
+      <span class="blog__stat-value">{{ formatUiNum(totalTags()) }}</span>
+      <span class="blog__stat-label">{{ 'blogStatTags' | uiTranslate }}</span>
     </div>
   </section>
 
-  @if (featuredPosts().length > 0 && !selectedCategoryId() && !searchQuery().trim()) {
+  <div class="blog__layout-bar">
+    <span class="blog__layout-label">{{ 'blogViewLabel' | uiTranslate }}</span>
+    <div class="blog__view" role="group" [attr.aria-label]="'blogViewLabel' | uiTranslate">
+      <button
+        type="button"
+        class="blog__view-btn"
+        [class.blog__view-btn--active]="viewMode() === 'grid'"
+        (click)="setViewMode('grid')"
+        [attr.aria-label]="'blogViewGridAria' | uiTranslate"
+        [attr.aria-pressed]="viewMode() === 'grid'"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z" />
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="blog__view-btn"
+        [class.blog__view-btn--active]="viewMode() === 'list'"
+        (click)="setViewMode('list')"
+        [attr.aria-label]="'blogViewListAria' | uiTranslate"
+        [attr.aria-pressed]="viewMode() === 'list'"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  @if (featuredPosts().length > 0 && !hasActiveFilters()) {
   <section class="blog__featured" aria-labelledby="blog-featured-heading">
     <div class="blog__featured-head">
       <h2 id="blog-featured-heading" class="blog__featured-title">{{ 'blogFeaturedTitle' | uiTranslate }}</h2>
       <p class="blog__featured-subtitle">{{ 'blogFeaturedSubtitle' | uiTranslate }}</p>
     </div>
-    <ul class="blog__featured-grid">
+    <ul
+      class="blog__featured-grid"
+      [class.blog__featured-grid--list]="viewMode() === 'list'"
+    >
       @for (post of featuredPosts(); track post.id) {
       <li>
         <a
           class="blog__featured-card"
+          [class.blog__featured-card--list]="viewMode() === 'list'"
           [routerLink]="['/blog', post.id]"
           [attr.aria-label]="'blogCardAria' | uiTranslate: { title: postTitle(post) }"
         >
@@ -102,12 +136,35 @@
       <h2 class="blog__index-title">{{ 'blogIndexTitle' | uiTranslate }}</h2>
       <p class="blog__index-subtitle">{{ 'blogIndexSubtitle' | uiTranslate }}</p>
     </div>
-    <p class="blog__count" aria-live="polite">
-      {{
-        'blogCount'
-          | uiTranslate: { shown: formatUiNum(shownPosts()), total: formatUiNum(totalPosts()) }
-      }}
-    </p>
+    <div class="blog__index-actions">
+      <p class="blog__count" aria-live="polite">
+        @if (hasActiveFilters()) {
+        {{
+          'blogCountFiltered'
+            | uiTranslate: { shown: formatUiNum(displayedPosts()), total: formatUiNum(shownPosts()) }
+        }}
+        } @else {
+        {{
+          'blogCountPaged'
+            | uiTranslate: { shown: formatUiNum(displayedPosts()), total: formatUiNum(totalPosts()) }
+        }}
+        }
+      </p>
+    </div>
+  </div>
+
+  <div class="blog__search" role="search">
+    <label class="blog__tool-label" for="blog-search">{{ 'blogSearchLabel' | uiTranslate }}</label>
+    <input
+      id="blog-search"
+      class="blog__search-input"
+      type="search"
+      autocomplete="off"
+      spellcheck="false"
+      [attr.placeholder]="'blogSearchPlaceholder' | uiTranslate"
+      [ngModel]="searchQuery()"
+      (ngModelChange)="onSearchChange($event)"
+    />
   </div>
 
   <div class="blog__filters" role="group" [attr.aria-label]="'blogFilterAria' | uiTranslate">
@@ -132,71 +189,107 @@
     }
   </div>
 
-  <div class="blog__search" role="search">
-    <label class="blog__tool-label" for="blog-search">{{ 'blogSearchLabel' | uiTranslate }}</label>
-    <input
-      id="blog-search"
-      class="blog__search-input"
-      type="search"
-      autocomplete="off"
-      spellcheck="false"
-      [attr.placeholder]="'blogSearchPlaceholder' | uiTranslate"
-      [ngModel]="searchQuery()"
-      (ngModelChange)="searchQuery.set($event)"
-    />
+  @if (tagFilters().length > 0) {
+  <div class="blog__tags" role="group" [attr.aria-label]="'blogTagFilterAria' | uiTranslate">
+    <button
+      type="button"
+      class="blog__tag"
+      [class.blog__tag--active]="selectedTagId() === null"
+      (click)="selectTag(null)"
+    >
+      {{ 'blogTagFilterAll' | uiTranslate }}
+    </button>
+    @for (entry of tagFilters(); track entry.tag.id) {
+    <button
+      type="button"
+      class="blog__tag"
+      [class.blog__tag--active]="isTagSelected(entry.tag.id)"
+      (click)="selectTag(entry.tag.id)"
+    >
+      {{ tagName(entry) }}
+      <span class="blog__tag-count">{{ formatUiNum(entry.count) }}</span>
+    </button>
+    }
   </div>
+  }
 
-  @if (filteredGroups().length === 0) {
+  @if (hasActiveFilters()) {
+  <div class="blog__active-filters">
+    <button type="button" class="blog__clear-filters" (click)="clearFilters()">
+      {{ 'blogClearFilters' | uiTranslate }}
+    </button>
+  </div>
+  }
+
+  @if (filteredPosts().length === 0) {
   <p class="blog__empty">{{ 'blogEmpty' | uiTranslate }}</p>
   } @else {
-  @for (group of filteredGroups(); track group.category.id) {
-  <section class="blog__group" [attr.aria-labelledby]="'blog-cat-' + group.category.id">
-    <div class="blog__group-head">
-      <h2 [id]="'blog-cat-' + group.category.id" class="blog__group-title">{{ categoryName(group) }}</h2>
-      <span class="blog__group-count">
-        {{ formatUiNum(categoryPostCount(group)) }} {{ 'blogGroupArticles' | uiTranslate }}
-      </span>
-    </div>
-    <ul class="blog__grid">
-      @for (post of group.posts; track post.id) {
-      <li>
-        <a
-          class="blog__card"
-          [routerLink]="['/blog', post.id]"
-          [attr.aria-label]="'blogCardAria' | uiTranslate: { title: postTitle(post) }"
-        >
-          <span class="blog__card-media">
-            <img
-              class="blog__card-img"
-              [src]="post.image"
-              [alt]="blog.pickLocalized(post.imageAlt)"
-              width="400"
-              height="225"
-              loading="lazy"
-              decoding="async"
-            />
+  <ul
+    class="blog__grid"
+    [class.blog__grid--list]="viewMode() === 'list'"
+  >
+    @for (post of visiblePosts(); track post.id) {
+    <li>
+      <a
+        class="blog__card"
+        [class.blog__card--list]="viewMode() === 'list'"
+        [routerLink]="['/blog', post.id]"
+        [attr.aria-label]="'blogCardAria' | uiTranslate: { title: postTitle(post) }"
+      >
+        <span class="blog__card-media">
+          <img
+            class="blog__card-img"
+            [src]="post.image"
+            [alt]="blog.pickLocalized(post.imageAlt)"
+            width="400"
+            height="225"
+            loading="lazy"
+            decoding="async"
+          />
+        </span>
+        <span class="blog__card-body">
+          <span class="blog__card-category">{{ post.categoryName }}</span>
+          @if (post.tagNames.length > 0) {
+          <span class="blog__card-tags">
+            @for (tag of post.tagNames.slice(0, 2); track tag) {
+            <span class="blog__card-tag">{{ tag }}</span>
+            }
           </span>
-          <span class="blog__card-body">
-            <span class="blog__card-category">{{ post.categoryName }}</span>
-            <span class="blog__card-title">{{ postTitle(post) }}</span>
-            <span class="blog__card-excerpt">{{ postExcerpt(post) }}</span>
-            <span class="blog__card-meta">
-              <time [attr.datetime]="post.publishedAt">{{ formatDate(post.publishedAt) }}</time>
-              <span class="blog__card-read">
-                {{ formatUiNum(post.readMinutes) }} {{ 'blogReadMinutes' | uiTranslate }}
-              </span>
-              @if (post.relatedSurah) {
-              <span class="blog__card-surah">
-                {{ 'blogCardSurah' | uiTranslate: { num: formatUiNum(post.relatedSurah) } }}
-              </span>
-              }
+          }
+          <span class="blog__card-title">{{ postTitle(post) }}</span>
+          <span class="blog__card-excerpt">{{ postExcerpt(post) }}</span>
+          <span class="blog__card-meta">
+            <time [attr.datetime]="post.publishedAt">{{ formatDate(post.publishedAt) }}</time>
+            <span class="blog__card-read">
+              {{ formatUiNum(post.readMinutes) }} {{ 'blogReadMinutes' | uiTranslate }}
             </span>
+            @if (post.relatedSurah) {
+            <span class="blog__card-surah">
+              {{ 'blogCardSurah' | uiTranslate: { num: formatUiNum(post.relatedSurah) } }}
+            </span>
+            }
           </span>
-        </a>
-      </li>
-      }
-    </ul>
-  </section>
+        </span>
+      </a>
+    </li>
+    }
+  </ul>
+
+  @if (hasMorePosts()) {
+  <div class="blog__pagination">
+    <button type="button" class="blog__btn blog__btn--primary blog__load-more" (click)="loadMore()">
+      {{
+        'blogLoadMore'
+          | uiTranslate: { count: formatUiNum(remainingPosts() > BLOG_PAGE_SIZE ? BLOG_PAGE_SIZE : remainingPosts()) }
+      }}
+    </button>
+    <p class="blog__pagination-status">
+      {{
+        'blogPaginationStatus'
+          | uiTranslate: { shown: formatUiNum(displayedPosts()), total: formatUiNum(shownPosts()) }
+      }}
+    </p>
+  </div>
   }
   }
 </div>

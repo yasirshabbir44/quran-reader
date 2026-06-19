@@ -71,6 +71,17 @@
       </span>
     </p>
     <p class="blog-detail__excerpt">{{ blog.pickLocalized(article.excerpt) }}</p>
+    @if (article.tags.length > 0) {
+    <ul class="blog-detail__tags" [attr.aria-label]="'blogTagsAria' | uiTranslate">
+      @for (tagId of article.tags; track tagId) {
+      <li>
+        <a class="blog-detail__tag" [routerLink]="['/blog']" [queryParams]="{ tag: tagId }">
+          {{ tagLabel(tagId) }}
+        </a>
+      </li>
+      }
+    </ul>
+    }
     @if (article.relatedSurah) {
     <a class="blog-detail__surah-link" [routerLink]="['/', article.relatedSurah]">
       {{ 'blogReadRelatedSurah' | uiTranslate: { num: formatUiNum(article.relatedSurah) } }}
