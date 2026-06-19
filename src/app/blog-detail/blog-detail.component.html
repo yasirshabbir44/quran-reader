@@ -29,6 +29,11 @@
         <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
       </svg>
     </a>
+    <nav class="blog-detail__breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/blog">{{ 'blogTitle' | uiTranslate }}</a>
+      <span class="blog-detail__breadcrumb-sep" aria-hidden="true">/</span>
+      <span>{{ article.categoryName }}</span>
+    </nav>
     <div class="blog-detail__header-tools">
       <label class="blog-detail__tool-label" for="blog-detail-locale">{{ 'languageLabel' | uiTranslate }}</label>
       <select
@@ -73,29 +78,75 @@
     }
   </div>
 
-  <div class="blog-detail__content">
-    @for (section of article.sections; track $index) {
-    @switch (section.type) {
-    @case ('heading') {
-    <h2 class="blog-detail__h2">{{ sectionText(section) }}</h2>
+  <div class="blog-detail__layout">
+    @if (tocEntries().length > 1) {
+    <aside class="blog-detail__toc" aria-labelledby="blog-detail-toc-heading">
+      <h2 id="blog-detail-toc-heading" class="blog-detail__toc-title">{{ 'blogTocTitle' | uiTranslate }}</h2>
+      <ol class="blog-detail__toc-list">
+        @for (entry of tocEntries(); track entry.id) {
+        <li>
+          <a class="blog-detail__toc-link" [href]="'#' + entry.id">{{ entry.label }}</a>
+        </li>
+        }
+      </ol>
+    </aside>
     }
-    @case ('paragraph') {
-    <p class="blog-detail__p">{{ sectionText(section) }}</p>
-    }
-    @case ('quote') {
-    <blockquote class="blog-detail__quote">
-      @if (section.arabic) {
-      <p class="blog-detail__quote-ar" dir="rtl" lang="ar">{{ section.arabic }}</p>
+
+    <div class="blog-detail__content">
+      @for (section of article.sections; track $index) {
+      @switch (section.type) {
+      @case ('heading') {
+      <h2 class="blog-detail__h2" [id]="sectionAnchor($index)">{{ sectionText(section) }}</h2>
       }
-      <p class="blog-detail__quote-text">{{ sectionText(section) }}</p>
-      @if (section.ref) {
-      <footer class="blog-detail__quote-ref" dir="ltr" lang="en">{{ section.ref }}</footer>
+      @case ('paragraph') {
+      <p class="blog-detail__p">{{ sectionText(section) }}</p>
       }
-    </blockquote>
-    }
-    }
-    }
+      @case ('quote') {
+      <blockquote class="blog-detail__quote">
+        @if (section.arabic) {
+        <p class="blog-detail__quote-ar" dir="rtl" lang="ar">{{ section.arabic }}</p>
+        }
+        <p class="blog-detail__quote-text">{{ sectionText(section) }}</p>
+        @if (section.ref) {
+        <footer class="blog-detail__quote-ref" dir="ltr" lang="en">{{ section.ref }}</footer>
+        }
+      </blockquote>
+      }
+      }
+      }
+    </div>
   </div>
+
+  @if (relatedPosts().length > 0) {
+  <section class="blog-detail__related" aria-labelledby="blog-detail-related-heading">
+    <h2 id="blog-detail-related-heading" class="blog-detail__related-title">
+      {{ 'blogRelatedTitle' | uiTranslate }}
+    </h2>
+    <ul class="blog-detail__related-grid">
+      @for (related of relatedPosts(); track related.id) {
+      <li>
+        <a class="blog-detail__related-card" [routerLink]="['/blog', related.id]">
+          <img
+            class="blog-detail__related-img"
+            [src]="related.image"
+            [alt]="blog.pickLocalized(related.imageAlt)"
+            width="200"
+            height="112"
+            loading="lazy"
+            decoding="async"
+          />
+          <span class="blog-detail__related-body">
+            <span class="blog-detail__related-card-title">{{ blog.pickLocalized(related.title) }}</span>
+            <span class="blog-detail__related-meta">
+              {{ formatUiNum(related.readMinutes) }} {{ 'blogReadMinutes' | uiTranslate }}
+            </span>
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+  }
 
   <footer class="blog-detail__footer">
     <a class="blog-detail__btn blog-detail__btn--primary" routerLink="/blog">
