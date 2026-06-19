@@ -79,22 +79,54 @@ export class BlogService {
   }
 
   getPost(id: string): Observable<BlogPostListItem | null> {
+    return this.index$.pipe(map((payload) => this.resolvePost(payload, id)));
+  }
+
+  getAllPosts(): Observable<readonly BlogPostListItem[]> {
     return this.index$.pipe(
       map((payload) => {
         if (!payload) {
-          return null;
+          return [];
         }
-        const post = payload.posts.find((p) => p.id === id);
-        if (!post) {
-          return null;
-        }
-        const category = payload.categories.find((c) => c.id === post.categoryId);
-        return {
-          ...post,
-          categoryName: category ? this.pickLocalized(category.name) : '',
-        };
+        const categoryById = new Map(payload.categories.map((c) => [c.id, c]));
+        return payload.posts.map((post) => {
+          const category = categoryById.get(post.categoryId);
+          return {
+            ...post,
+            categoryName: category ? this.pickLocalized(category.name) : '',
+          };
+        });
       }),
     );
+  }
+
+  getRelatedPosts(
+    postId: string,
+    categoryId: string,
+    limit = 3,
+  ): Observable<readonly BlogPostListItem[]> {
+    return this.getAllPosts().pipe(
+      map((posts) =>
+        posts
+          .filter((p) => p.id !== postId && p.categoryId === categoryId)
+          .slice(0, limit),
+      ),
+    );
+  }
+
+  private resolvePost(payload: BlogIndexPayload | null, id: string): BlogPostListItem | null {
+    if (!payload) {
+      return null;
+    }
+    const post = payload.posts.find((p) => p.id === id);
+    if (!post) {
+      return null;
+    }
+    const category = payload.categories.find((c) => c.id === post.categoryId);
+    return {
+      ...post,
+      categoryName: category ? this.pickLocalized(category.name) : '',
+    };
   }
 
   pickLocalized(text: BlogLocalizedText, locale?: UiLocaleCode): string {

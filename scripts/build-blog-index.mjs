@@ -132,12 +132,25 @@ function topicToPost(article) {
   };
 }
 
+function calcStoryReadMinutes(sections) {
+  let words = 0;
+  for (const s of sections) {
+    if (s.text?.en) {
+      words += s.text.en.split(/\s+/).filter(Boolean).length;
+    }
+  }
+  return Math.max(4, Math.min(18, Math.round(words / 200) + 2));
+}
+
 function loadStoryPosts() {
   if (!existsSync(STORIES_PATH)) {
     console.warn(`No stories at ${STORIES_PATH}; skipping story posts.`);
     return [];
   }
-  return JSON.parse(readFileSync(STORIES_PATH, 'utf8'));
+  return JSON.parse(readFileSync(STORIES_PATH, 'utf8')).map((post) => ({
+    ...post,
+    readMinutes: calcStoryReadMinutes(post.sections),
+  }));
 }
 
 function main() {

@@ -17,17 +17,43 @@
       "ar": "قصة النبي يوسف: الصبر في كل ابتلاء"
     },
     "excerpt": {
-      "en": "Betrayed by brothers, sold into slavery, and imprisoned unjustly — yet Yusuf (AS) never lost trust in Allah. Surah Yusuf is called the best of stories.",
-      "ur": "بھائیوں کی طرف سے دھوکہ، غلامی، اور ناحق قید — پھر بھی یوسف علیہ السلام نے اللہ پر بھروسہ نہیں چھوڑا۔",
-      "ar": "خانه إخوته وباعوه عبداً وسجن ظلماً — ولم يفقد يوسف الثقة بالله قط."
+      "en": "Betrayed by brothers, sold into slavery, and imprisoned unjustly — yet Yusuf (AS) never lost trust in Allah. Surah Yusuf is called the best of stories, teaching patience, forgiveness, and divine wisdom through every trial.",
+      "ur": "بھائیوں کی طرف سے دھوکہ، غلامی، اور ناحق قید — پھر بھی یوسف علیہ السلام نے اللہ پر بھروسہ نہیں چھوڑا۔ سورہ یوسف \"کہانیوں میں سب سے بہتر\" ہے۔",
+      "ar": "خانه إخوته وباعوه عبداً وسجن ظلماً — ولم يفقد يوسف الثقة بالله قط. سورة يوسف هي «أحسن القصص»."
     },
     "sections": [
       {
         "type": "paragraph",
         "text": {
-          "en": "The Quran dedicates an entire surah — Surah Yusuf (12) — to one narrative, calling it \"the best of stories\" (ahsan al-qasas). Prophet Yusuf (AS) was the beloved son of Ya'qub (AS). Out of jealousy, his brothers threw him into a well and told their father he had been killed by a wolf.",
-          "ur": "قرآن نے پوری ایک سورہ — سورہ یوسف — ایک واقعے کے لیے وقف کی ہے اور اسے \"کہانیوں میں سب سے بہتر\" قرار دیا۔ حضرت یوسف علیہ السلام حضرت یعقوب علیہ السلام کے پیارے بیٹے تھے۔ حسد کی وجہ سے بھائیوں نے انہیں کنویں میں پھینک دیا۔",
-          "ar": "خصّ القرآن سورة كاملة — سورة يوسف — لقصة واحدة، وسمّاها «أحسن القصص». كان يوسف ابن يعقوب الحبيب، فألقاه إخوته في البئر حسداً."
+          "en": "The Quran dedicates an entire surah — Surah Yusuf (12) — to one narrative, calling it \"the best of stories\" (ahsan al-qasas). Prophet Yusuf (AS) was the beloved son of Ya'qub (AS), given special affection that stirred jealousy among his ten older brothers. The surah was revealed during the Year of Sorrow in Makkah, comforting the Prophet Muhammad (peace be upon him) with the example of another prophet who endured betrayal and rose to honor.",
+          "ur": "قرآن نے پوری ایک سورہ — سورہ یوسف — ایک واقعے کے لیے وقف کی ہے اور اسے \"کہانیوں میں سب سے بہتر\" قرار دیا۔ حضرت یوسف علیہ السلام حضرت یعقوب علیہ السلام کے پیارے بیٹے تھے۔ یہ سورہ مکہ میں غم کے سال میں نازل ہوئی۔",
+          "ar": "خصّ القرآن سورة يوسف لقصة واحدة وسمّاها «أحسن القصص». كان يوسف ابن يعقوب الحبيب، وأُنزلت السورة في عام الحزن لتسلية النبي ﷺ."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "The dream that changed everything",
+          "ur": "وہ خواب جس نے سب کچھ بدل دیا",
+          "ar": "الرؤيا التي غيّرت كل شيء"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "As a youth, Yusuf (AS) saw eleven stars, the sun, and the moon prostrating to him. He shared the dream with his father, who warned him not to tell his brothers lest they plot against him. Ya'qub (AS) recognized that Allah would choose Yusuf for prophethood and honor — but the path would pass through severe trials first.",
+          "ur": "نوعمر یوسف علیہ السلام نے گیارہ ستاروں، سورج اور چاند کو اپنے سامنے سجدہ کرتے دیکھا۔ انہوں نے خواب باپ کو بتایا۔ حضرت یعقوب علیہ السلام نے کہا بھائیوں کو نہ بتانا — مگر اللہ نے یوسف کو عزت کا راستہ دکھایا۔",
+          "ar": "رأى يوسف في شبابه أحد عشر كوكباً والشمس والقمر ساجدين له. حذّره يعقوب من إخوته، وعلم أن الله سيكرّمه لكن بعد ابتلاء."
+        }
+      },
+      {
+        "type": "quote",
+        "arabic": "إِنَّ رَبِّي لَطِيفٌ لِّمَا يَشَاءُ",
+        "ref": "12:100",
+        "text": {
+          "en": "\"Indeed, my Lord is subtle in what He wills\" — a verse Yusuf would later speak when reunited with his family, reflecting how Allah's plan unfolds in ways we cannot foresee.",
+          "ur": "\"بے شک میرا رب جو چاہے نرمی سے کرتا ہے\" — یہ آیت یوسف علیہ السلام نے ملاقات پر کہی، جب اللہ کا منصوبہ ظاہر ہوا۔",
+          "ar": "«إن ربي لطيف لما يشاء» — آية قالها يوسف عند اللقاء، تذكير بأن الله يدبر الأمور بلطف."
         }
       },
       {
@@ -41,9 +67,25 @@
       {
         "type": "paragraph",
         "text": {
-          "en": "A passing caravan found Yusuf and sold him in Egypt. He served in the house of Al-'Aziz, where he was tempted by the wife of his master but chose prison over sin — saying, \"My Lord, prison is dearer to me than what they invite me to.\" (12:33). Allah granted him wisdom, and years later he interpreted the king's dream, was released, and rose to manage Egypt's storehouses during famine.",
-          "ur": "ایک قافلے نے یوسف کو مصر میں بیچ دیا۔ عزیز کے گھر میں انہوں نے گناہ کی دعوت کو رد کیا اور کہا: \"اے میرے رب! مجھے قید گھر ان کی دعوت سے زیادہ پسند ہے۔\" اللہ نے انہیں حکمت دی اور بعد میں بادشاہ کے خواب کی تعبیر سے آزاد ہوئے۔",
-          "ar": "وجدهت قافلة فباعوه في مصر. رفض فتنة امرأة العزيز واختار السجن، ثم آتاه الله الحكم وفسر رؤيا الملك وولّاه خزائن الأرض."
+          "en": "Out of jealousy, his brothers threw Yusuf into a well and told their father he had been killed by a wolf. A passing caravan found him and sold him in Egypt. He served in the house of Al-'Aziz, where he was tempted by the wife of his master but chose prison over sin — saying, \"My Lord, prison is dearer to me than what they invite me to.\" (12:33). Even in prison, he interpreted dreams for fellow inmates, never despairing of Allah's mercy.",
+          "ur": "حسد کی وجہ سے بھائیوں نے انہیں کنویں میں پھینک دیا۔ قافلے نے مصر میں بیچ دیا۔ عزیز کی بیوی نے فتنے میں ڈالا مگر یوسف علیہ السلام نے قید کو ترجیح دی۔ قید خانے میں بھی انہوں نے خوابوں کی تعبیر سے اللہ کی رحمت پر بھروسہ رکھا۔",
+          "ar": "ألقاه إخوته في البئر حسداً، فباعته قافلة في مصر. رفض فتنة امرأة العزيز واختار السجن، وفسر الأحلام فيه ولم ييأس من رحمة الله."
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "Allah granted him wisdom, and years later he interpreted the king's dream of seven fat cows eaten by seven lean ones — predicting seven years of plenty followed by seven years of famine. He was released, given authority over Egypt's storehouses, and placed in a position to save countless lives during the years of drought.",
+          "ur": "اللہ نے انہیں حکمت دی۔ بادشاہ کے خواب کی تعبیر سے آزاد ہوئے اور مصر کے خزانوں کا نگراں بنے۔ قحط کے سالوں میں لاکھوں جانیں بچائیں۔",
+          "ar": "آتاه الله الحكم وفسر رؤيا الملك فأُطلق سراحه وولّاه خزائن مصر، فأنقذ الناس في سنوات القحط."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Forgiveness and reunion",
+          "ur": "معافی اور ملاقات",
+          "ar": "العفو واللقاء"
         }
       },
       {
@@ -59,9 +101,25 @@
       {
         "type": "paragraph",
         "text": {
-          "en": "When famine struck, his brothers came to Egypt seeking grain — not recognizing him. Yusuf eventually revealed himself, forgave them, and the family was reunited. Ya'qub's sight was restored when the shirt Yusuf had sent reached him, just as Yusuf had promised. The story teaches that every hardship, when borne with taqwa and sabr, becomes a path to honor.",
-          "ur": "قحط پڑا تو بھائی اناج لینے آئے — انہیں پہچانا نہیں۔ یوسف نے خود کو ظاہر کیا، معاف کیا، اور خاندان مل گیا۔ یعقوب کی بینائی لوٹ آئی جب قمیض پہنچی۔ یہ کہانی سکھاتی ہے کہ تقویٰ اور صبر ہر مشکل کو عزت کا راستہ بنا دیتے ہیں۔",
-          "ar": "جاء إخوته طلباً للغلّ فعفا عنهم وأظهر نفسه، وعادت البصيرة إلى يعقوب بقميص يوسف. تعلّمنا أن كل ابتلاء مع التقوى والصبر طريق إلى الكرامة."
+          "en": "When famine struck, his brothers came to Egypt seeking grain — not recognizing him. Yusuf tested them, then eventually revealed himself: \"I am Yusuf, and this is my brother.\" He forgave them completely, saying, \"No blame will there be upon you today.\" Ya'qub's sight was restored when the shirt Yusuf had sent reached him. The family settled in Egypt under Yusuf's care.",
+          "ur": "قحط پڑا تو بھائی اناج لینے آئے — انہیں پہچانا نہیں۔ یوسف علیہ السلام نے آزمایا، پھر خود کو ظاہر کیا اور مکمل معافی دی: \"آج تم پر کوئی الزام نہیں۔\" یعقوب کی بینائی لوٹ آئی جب قمیض پہنچی۔",
+          "ar": "جاء إخوته طلباً للغلّ فعفا عنهم وأظهر نفسه: «أنا يوسف». عادت البصيرة إلى يعقوب بقميص يوسف."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Lessons for today",
+          "ur": "آج کے لیے سبق",
+          "ar": "دروس لليوم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "The story teaches that every hardship, when borne with taqwa and sabr, becomes a path to honor. Yusuf never compromised his integrity, never sought revenge, and always attributed success to Allah. Reading Surah Yusuf on difficult days reminds believers that divine wisdom often hides inside what looks like loss — and that forgiveness can heal what bitterness cannot.",
+          "ur": "یہ کہانی سکھاتی ہے کہ تقویٰ اور صبر ہر مشکل کو عزت کا راستہ بنا دیتے ہیں۔ یوسف علیہ السلام نے کبھی سمجھوتہ نہیں کیا، بدلہ نہیں لیا، اور کامیابی اللہ کو سونپی۔ مشکل دنوں میں سورہ یوسف پڑھنا یاد دلاتا ہے کہ اللہ کی حکمت نقصان کے پیچھے چھپی ہوتی ہے۔",
+          "ar": "تعلّمنا أن كل ابتلاء مع التقوى والصبر طريق إلى الكرامة. لم ينتقم يوسف ولم يساوم، ونسب الفضل لله. قراءة سورة يوسف في الشدة تذكّر أن حكمة الله تختبئ وراء ما يبدو خسارة."
         }
       }
     ]
@@ -84,17 +142,25 @@
       "ar": "أصحاب الكهف: إيمان بقي بعد الإمبراطورية"
     },
     "excerpt": {
-      "en": "Young believers fled a tyrant king and slept in a cave for centuries. Allah preserved them as a sign for all time — recited every Friday in Surah Al-Kahf.",
-      "ur": "نوجوان مومن ظالم بادشاہ سے بھاگے اور غار میں صدیوں سوئے رہے۔ اللہ نے انہیں ہمیشہ کی نشانی بنا دیا۔",
-      "ar": "هرب شباب مؤمنون من ملك جبار فناموا في كهف قروناً، فجعلهم الله آية إلى يوم القيامة."
+      "en": "Young believers fled a tyrant king and slept in a cave for centuries. Allah preserved them as a sign for all time — recited every Friday in Surah Al-Kahf, with protection from trials until the Day of Judgment.",
+      "ur": "نوجوان مومن ظالم بادشاہ سے بھاگے اور غار میں صدیوں سوئے رہے۔ اللہ نے انہیں ہمیشہ کی نشانی بنا دیا — ہر جمعہ سورہ کہف میں پڑھی جاتی ہے۔",
+      "ar": "هرب شباب مؤمنون من ملك جبار فناموا في كهف قروناً، فجعلهم الله آية — تُقرأ سورة الكهف كل جمعة."
     },
     "sections": [
       {
         "type": "paragraph",
         "text": {
-          "en": "Surah Al-Kahf opens with the story of young men who lived under a ruler who demanded worship besides Allah. They refused idolatry, declared faith in the One God, and withdrew to a cave for protection. Their number is not fixed in the Quran — tradition mentions seven, with a dog at the entrance.",
-          "ur": "سورہ کہف کا آغاز ان نوجوانوں سے ہے جو ایک ایسے حکمران کے زیر اقتدار تھے جو اللہ کے سوا عبادت چاہتا تھا۔ انہوں نے شرک سے انکار کیا اور غار میں پناہ لی۔",
-          "ar": "افتتحت سورة الكهف بقصة فتية رفضوا عبادة غير الله ولجأوا إلى كهف، وذكر القرآن كلباً عند مدخلهم."
+          "en": "Surah Al-Kahf opens with the story of young men who lived under a ruler who demanded worship besides Allah. They were from a society steeped in idolatry and corruption. When they declared faith in the One God — \"Our Lord is the Lord of the heavens and the earth\" — they faced persecution and withdrew to a cave for protection. Their number is not fixed in the Quran; tradition mentions seven, with a dog at the entrance.",
+          "ur": "سورہ کہف کا آغاز ان نوجوانوں سے ہے جو ایک ایسے حکمران کے زیر اقتدار تھے جو اللہ کے سوا عبادت چاہتا تھا۔ انہوں نے توحید کا اعلان کیا اور ظلم سے بچنے غار میں پناہ لی۔",
+          "ar": "افتتحت سورة الكهف بقصة فتية رفضوا عبادة غير الله وأعلنوا توحيداً، فلجأوا إلى كهف، وذكر القرآن كلباً عند مدخلهم."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Divine sleep and protection",
+          "ur": "اللہ کی طرف سے نیند اور حفاظت",
+          "ar": "النوم والحفظ الإلهي"
         }
       },
       {
@@ -102,17 +168,49 @@
         "arabic": "وَنُقَلِّبُهُمْ ذَاتَ الْيَمِينِ وَذَاتَ الشِّمَالِ",
         "ref": "18:18",
         "text": {
-          "en": "\"And We turned them to the right and to the left, while their dog stretched his forelegs at the entrance.\"",
-          "ur": "\"اور ہم انہیں دائیں بائیں پھیرتے رہے، اور ان کا کتا دہلیز پر اگلے پاؤں پھیلائے ہوئے تھا۔\"",
-          "ar": "«ونقلّبهم ذات اليمين وذات الشمال وكلبهم باسط ذراعيه بالوصيد»"
+          "en": "\"And We turned them to the right and to the left, while their dog stretched his forelegs at the entrance.\" Allah caused them to sleep peacefully, turning their bodies so they would not stiffen, while their loyal dog guarded the entrance.",
+          "ur": "\"اور ہم انہیں دائیں بائیں پھیرتے رہے، اور ان کا کتا دہلیز پر اگلے پاؤں پھیلائے ہوئے تھا۔\" اللہ نے انہیں پرسکون نیند سونایا۔",
+          "ar": "«ونقلّبهم ذات اليمين وذات الشمال وكلبهم باسط ذراعيه بالوصيد» — أنعم الله عليهم بنوم حفظ."
         }
       },
       {
         "type": "paragraph",
         "text": {
-          "en": "Allah caused them to sleep for 309 years (or the equivalent in lunar reckoning). When they awoke, they thought they had slept only a day. One of them went to buy food with old coins — and the townspeople were astonished. The story reminds believers that standing for truth may require sacrifice, but Allah protects those who stand firm.",
-          "ur": "اللہ نے انہیں تین سو نو سال سونایا۔ جب جاگے تو سمجھے ایک دن سوئے۔ ایک نے پرانی سکوں سے کھانا خریدا — لوگ حیران رہ گئے۔ یہ کہانی سکھاتی ہے کہ حق پر ڈٹنے والے اللہ کی حفاظت میں ہیں۔",
-          "ar": "أنامهم الله ثلاثمائة وتسع سنين، فظنوا أنهم ناموا يوماً. بعث أحدهم ليشتري طعاماً بدراهم قديمة فعجب الناس. تذكير بأن الثبات على الحق محفوظ عند الله."
+          "en": "Allah caused them to sleep for 309 years according to the lunar calendar (or 300 solar years). The sun did not burn them: it rose to the right of the cave and set to their left. When they awoke, they thought they had slept only a day or part of a day. One of them went to buy food with old coins — and the townspeople were astonished, for the currency belonged to a civilization long gone.",
+          "ur": "اللہ نے انہیں تین سو نو سال سونایا۔ سورج انہیں نہ جلانے دیتا۔ جب جاگے تو سمجھے ایک دن سوئے۔ ایک نے پرانی سکوں سے کھانا خریدا — لوگ حیران رہ گئے۔",
+          "ar": "أنامهم الله ثلاثمائة وتسع سنين، فظنوا أنهم ناموا يوماً. بعث أحدهم ليشتري طعاماً بدراهم قديمة فعجب الناس."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Why Muslims read Surah Al-Kahf on Friday",
+          "ur": "مسلمان جمعہ کو سورہ کہف کیوں پڑھتے ہیں",
+          "ar": "لماذا يقرأ المسلمون سورة الكهف يوم الجمعة"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "The Prophet (peace be upon him) encouraged reciting Surah Al-Kahf every Friday. It contains four major narratives — the People of the Cave, the owner of two gardens, Musa and Khidr, and Dhul-Qarnayn — each addressing trials of faith, wealth, knowledge, and power. The first ten and last ten verses offer special protection from the Dajjal (Antichrist) according to authentic hadith.",
+          "ur": "نبی کریم ﷺ نے ہر جمعہ سورہ کہف پڑھنے کی ترغیب دی۔ اس میں چار بڑے واقعات ہیں — اصحاب کہف، دو باغوں والے، موسیٰ و خضر، اور ذوالقرنین۔ پہلی اور آخری دس آیات دجال سے حفاظت کی نشانی ہیں۔",
+          "ar": "حث النبي ﷺ على قراءة سورة الكهف كل جمعة. تضم أربع قصصاً عن ابتلاء الإيمان والمال والعلم والسلطة. وورد في الحديث أن قراءتها نور بين الجمعتين."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Lessons for today",
+          "ur": "آج کے لیے سبق",
+          "ar": "دروس لليوم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "The story reminds believers that standing for truth may require sacrifice — leaving comfort, facing isolation, even fleeing persecution. But Allah protects those who stand firm. In an age of moral confusion, the People of the Cave represent youth who chose conviction over conformity, and whose faith outlasted empires.",
+          "ur": "یہ کہانی سکھاتی ہے کہ حق پر ڈٹنے والے اللہ کی حفاظت میں ہیں۔ آج کے دور میں اصحاب کہف نوجوانوں کی مثال ہیں جنہوں نے ہجوم کی بجائے یقین کو منتخب کیا۔",
+          "ar": "تذكير بأن الثبات على الحق محفوظ عند الله. في زمن الالتباس، يمثل أصحاب الكهف شباباً اختاروا الإيمان على الموافقة."
         }
       }
     ]
@@ -134,17 +232,33 @@
       "ar": "غزوة بدر: حين وقف 313 في وجه جيش"
     },
     "excerpt": {
-      "en": "On 17 Ramadan, 2 AH, the outnumbered Muslims of Madinah faced the Quraysh at Badr. Angels fought alongside the believers — a turning point in Islamic history.",
-      "ur": "۱۷ رمضان ۲ ہجری کو مدینہ کے مسلمانوں نے بدر میں قریش کا مقابلہ کیا۔ فرشتے مومنوں کے ساتھ لڑے۔",
-      "ar": "في 17 رمضان سنة 2 هـ، واجه المسلمون قريشاً في بدر رغم قلة العدد، وكانت نقطة تحول في التاريخ."
+      "en": "On 17 Ramadan, 2 AH, roughly 313 Muslims faced over 1,000 Quraysh warriors at Badr. Angels fought alongside the believers — a decisive victory that changed the course of Islamic history.",
+      "ur": "۱۷ رمضان ۲ ہجری کو تقریباً ۳۱۳ مسلمانوں نے ایک ہزار سے زیادہ قریشی جنگجوؤں کا بدر میں مقابلہ کیا — فرشتے مومنوں کے ساتھ لڑے۔",
+      "ar": "في 17 رمضان سنة 2 هـ، واجه نحو 313 مسلماً أكثر من ألف من قريش في بدر — وكان النصر حاسماً."
     },
     "sections": [
       {
         "type": "paragraph",
         "text": {
-          "en": "After the Hijrah, the Muslims of Madinah were still economically tied to Makkah. When a trade caravan led by Abu Sufyan passed near Madinah, the Prophet (peace be upon him) marched with about 313 men to intercept it — not primarily seeking battle, but responding to years of persecution.",
-          "ur": "ہجرت کے بعد مدینہ کے مسلمان مکہ سے معاشی طور پر جڑے تھے۔ جب ابو سفیان کی قافلہ گزرا تو نبی کریم ﷺ تقریباً ۳۱۳ صحابہ کے ساتھ نکلے — بنیادی طور پر جنگ نہیں، بلکہ سالوں کے ظلم کا جواب تھا۔",
+          "en": "After the Hijrah to Madinah, the Muslims were still economically tied to Makkah. Caravans passing between Syria and Makkah were the lifeblood of trade — and the Quraysh had confiscated the emigrants' property when they left. When a large trade caravan led by Abu Sufyan passed near Madinah, the Prophet (peace be upon him) marched with about 313 men to intercept it — responding to years of persecution, not primarily seeking bloodshed.",
+          "ur": "ہجرت کے بعد مدینہ کے مسلمان مکہ سے معاشی طور پر جڑے تھے۔ جب ابو سفیان کی قافلہ گزرا تو نبی کریم ﷺ تقریباً ۳۱۳ صحابہ کے ساتھ نکلے — سالوں کے ظلم کا جواب، نہ کہ خونریزی کی تلاش۔",
           "ar": "بعد الهجرة سار النبي ﷺ بقرابة 313 رجلاً لاعتراض قافلة قريش، استجابة لسنوات من الاضطهاد في مكة."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "The night before battle",
+          "ur": "جنگ سے پہلے کی رات",
+          "ar": "ليلة ما قبل المعركة"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "Abu Sufyan escaped by changing the caravan's route, but the Quraysh army — over 1,000 warriors with 600 armored soldiers and cavalry — marched to defend tribal honor. The Muslims reached the wells of Badr first and used them strategically. That night, the Prophet (peace be upon him) spent hours in prayer under a simple shelter, weeping and begging Allah: \"O Allah, if this small group perishes, You will not be worshipped on earth.\"",
+          "ur": "ابو سفیان بھاگ نکلا مگر قریش کی فوج — ایک ہزار سے زیادہ جنگجو — آگے بڑھی۔ مسلمان پہلے بدر کے کنویں پر پہنچے۔ نبی کریم ﷺ نے رات دعا میں گزاری: \"اے اللہ! اگر یہ چھوٹا گروہ ہلاک ہو گیا تو زمین پر تیری عبادت باقی نہیں رہے گی۔\"",
+          "ar": "هرب أبو سفيان، لكن جيش قريش — أكثر من ألف — تقدّم. سبق المسلمون آبار بدر. بات النبي ﷺ يدعو باكياً: «اللهم إن هُلكت هذه العصابة لا تُعبد على الأرض»."
         }
       },
       {
@@ -158,17 +272,41 @@
       {
         "type": "paragraph",
         "text": {
-          "en": "The Muslims reached the wells of Badr first and used them strategically. The Quraysh army — over 1,000 strong — arrived for battle. The Prophet (peace be upon him) spent the night in prayer, weeping and begging Allah for victory. Allah revealed: \"Already has He given you victory at Badr when you were few in number.\" (3:123)",
-          "ur": "مسلمان پہلے بدر کے کنویں پر پہنچے۔ قریش کی فوج ایک ہزار سے زیادہ تھی۔ نبی کریم ﷺ نے رات دعا میں گزاری۔ اللہ نے فرمایا: \"تمہیں بدر میں فتح دے دی جب تم تھوڑے تھے۔\"",
-          "ar": "سبق المسلمون آبار بدر، وجاءت قريش بأكثر من ألف. بات النبي ﷺ يدعو، وأنزل الله: «لقد نصركم الله في بدر وأنتم أذلة»."
+          "en": "Allah revealed: \"Already has He given you victory at Badr when you were contemptibly small.\" (3:123). Despite being outnumbered more than three to one, the Muslims won decisively. Angels fought unseen alongside them — the Quran mentions \"angels sent down\" (8:9). Seventy Quraysh leaders were killed, including Abu Jahl; fourteen Muslims were martyred, including Mus'ab ibn Umair (RA), who had taught the Ansar Islam.",
+          "ur": "اللہ نے فرمایا: \"تمہیں بدر میں فتح دے دی جب تم تھوڑے تھے۔\" تین گنا سے زیادہ کم ہونے کے باوجود فتح ہوئی۔ فرشتے بھی مدد کرتے تھے۔ ستر قریشی ہلاک، چودہ شہداء — بشمول مصعب بن عمیر رضی اللہ عنہ۔",
+          "ar": "أنزل الله: «لقد نصركم الله في بدر وأنتم أذلة». انتصر المسلمون رغم قلة العدد، وذكر القرآن الملائكة. قُتل سبعون من قريش واستُشهد أربعة عشر."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Aftermath and significance",
+          "ur": "نتائج اور اہمیت",
+          "ar": "النتائج والأهمية"
         }
       },
       {
         "type": "paragraph",
         "text": {
-          "en": "Despite being outnumbered more than three to one, the Muslims won decisively. Seventy Quraysh were killed; fourteen Muslims were martyred. The battle proved that sincerity and divine help matter more than numbers — and established Madinah as a power that could not be ignored.",
-          "ur": "تین گنا سے زیادہ کم ہونے کے باوجود مسلمانوں نے فتح حاصل کی۔ ستر قریشی ہلاک، چودہ شہداء ہوئے۔ یہ ثابت ہوا کہ اخلاص اور اللہ کی مدد تعداد سے بڑی ہے۔",
-          "ar": "انتصر المسلمون رغم قلة العدد. قُتل سبعون من قريش واستُشهد أربعة عشر. أثبتت بدر أن النصر من عند الله لا من كثرة العدد."
+          "en": "Badr proved that sincerity and divine help matter more than numbers. It established Madinah as a power that could not be ignored, boosted Muslim morale, and demonstrated that the new community would defend itself. Prisoners were treated with dignity — many later embraced Islam. The battle is remembered every Ramadan as a moment when faith met force and faith prevailed.",
+          "ur": "بدر نے ثابت کیا کہ اخلاص اور اللہ کی مدد تعداد سے بڑی ہے۔ مدینہ کو ایک طاقت کے طور پر قائم کیا۔ قیدیوں کے ساتھ حسن سلوک کیا — بہت سے بعد میں مسلمان ہوئے۔",
+          "ar": "أثبتت بدر أن النصر من عند الله لا من كثرة العدد. رسّخت المدينة كقوة، وعومل الأسرى بكرامة فأسلم كثير منهم."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Lessons for today",
+          "ur": "آج کے لیے سبق",
+          "ar": "دروس لليوم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "Badr teaches that preparation, unity, and trust in Allah together create victory. The companions gave whatever they had — some with only a sword, others with a handful of dates. When believers stand together with sincere intention, Allah's help arrives in ways visible and unseen.",
+          "ur": "بدر سکھاتا ہے کہ تیاری، اتحاد اور اللہ پر بھروسہ مل کر فتح لاتے ہیں۔ صحابہ نے جو کچھ تھا دے دیا — اللہ کی مدد ظاہر اور پوشیدہ دونوں طرح آتی ہے۔",
+          "ar": "تعلّمنا أن الإعداد والوحدة والتوكل معاً سبب للنصر. بذل الصحابة ما عندهم، فجاء نصر الله ظاهراً وباطناً."
         }
       }
     ]
@@ -190,7 +328,7 @@
       "ar": "الهجرة: رحلة غيّرت العالم"
     },
     "excerpt": {
-      "en": "In 622 CE, the Prophet (peace be upon him) and Abu Bakr (RA) left Makkah by night, hiding in the Cave of Thawr while pursuers searched outside. The Islamic calendar begins from this migration.",
+      "en": "In 622 CE, the Prophet (peace be upon him) and Abu Bakr (RA) left Makkah by night, hiding in the Cave of Thawr while pursuers searched outside. The Islamic calendar begins from this migration that birthed the first Muslim community.",
       "ur": "۶۲۲ء میں نبی کریم ﷺ اور حضرت ابوبکر صدیق رضی اللہ عنہ راتوں رات مکہ چھوڑ گئے۔ اسلامی تقویم اسی ہجرت سے شروع ہوتی ہے۔",
       "ar": "في 622م غادر النبي ﷺ وأبو بكر مكة ليلاً واختبآ في غار ثور. من هذه الهجرة يبدأ التاريخ الهجري."
     },
@@ -198,9 +336,33 @@
       {
         "type": "paragraph",
         "text": {
-          "en": "After years of preaching in Makkah, persecution intensified. The Quraysh plotted to kill the Prophet (peace be upon him) — one man from each clan would strike together so no single tribe could be blamed. Jibreel (AS) informed him, and he asked Ali (RA) to sleep in his bed as a decoy while he slipped away with Abu Bakr (RA).",
-          "ur": "مکہ میں سالوں دعوت کے بعد ظلم بڑھ گیا۔ قریش نے قتل کی سازش کی۔ جبریل علیہ السلام نے خبر دی۔ نبی کریم ﷺ نے حضرت علی رضی اللہ عنہ کو اپنی جگہ سونے کو کہا اور حضرت ابوبکر صدیق رضی اللہ عنہ کے ساتھ روانہ ہوئے۔",
-          "ar": "تآمرت قريش لقتل النبي ﷺ، فأخبره جبريل. ترك علياً في فراشه وخرج مع أبي بكر ليلاً."
+          "en": "After thirteen years of preaching in Makkah, persecution intensified. The Quraysh boycotted Muslims, tortured believers like Bilal and Sumayyah, and blocked trade. The Prophet (peace be upon him) sent groups of Muslims to Abyssinia for safety, then sought a new home in Yathrib (Madinah) through the pledges of Aqabah, where the Ansar promised to protect him.",
+          "ur": "مکہ میں تیرہ سال دعوت کے بعد ظلم بڑھ گیا۔ قریش نے مقاطعہ کیا، بلال اور سمیہ جیسے مومنوں کو عذاب دیا۔ نبی کریم ﷺ نے بعض مسلمانوں کو حبشہ بھیجا، پھر یثرب (مدینہ) کے انصار سے عقبہ کے بیعوں میں پناہ کی درخواست کی۔",
+          "ar": "بعد ثلاث عشرة سنة في مكة تشدّد الاضطهاد. أرسل النبي ﷺ جماعات إلى الحبشة، ثم طلب النصر من الأنصار في يثرب ببيعة العقبة."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "The plot and the escape",
+          "ur": "سازش اور فرار",
+          "ar": "المؤامرة والهروب"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "When the Quraysh learned that Madinah would shelter the Prophet (peace be upon him), they plotted to kill him — one man from each clan would strike together so no single tribe could be blamed. Jibreel (AS) informed him, and he asked Ali (RA) to sleep in his bed as a decoy while he slipped away with Abu Bakr (RA). They left Makkah heading south, not north toward Madinah, to confuse trackers.",
+          "ur": "جب قریش کو معلوم ہوا کہ مدینہ پناہ دے گا تو قتل کی سازش کی — ہر قبیلے کا ایک آدمی۔ جبریل علیہ السلام نے خبر دی۔ نبی کریم ﷺ نے حضرت علی رضی اللہ عنہ کو اپنی جگہ سونے کو کہا اور حضرت ابوبکر صدیق رضی اللہ عنہ کے ساتھ جنوب کی طرف روانہ ہوئے۔",
+          "ar": "تآمرت قريش لقتل النبي ﷺ — رجل من كل قبيلة. أخبره جبريل. ترك علياً في فراشه وخرج مع أبي بكر جنوباً لإرباك الطاردين."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "The Cave of Thawr",
+          "ur": "غار ثور",
+          "ar": "غار ثور"
         }
       },
       {
@@ -208,7 +370,7 @@
         "arabic": "لَا تَحْزَنْ إِنَّ اللَّهَ مَعَنَا",
         "ref": "9:40",
         "text": {
-          "en": "Abu Bakr whispered in fear at the cave entrance. The Prophet (peace be upon him) replied: \"Do not grieve; indeed Allah is with us.\"",
+          "en": "Abu Bakr whispered in fear at the cave entrance: \"If one of them looks down at his feet, he will see us.\" The Prophet (peace be upon him) replied: \"Do not grieve; indeed Allah is with us.\"",
           "ur": "غار ثور میں حضرت ابوبکر صدیق رضی اللہ عنہ نے کہا: \"اے اللہ کے رسول! اگر کوئی نیچے جھانک لے؟\" آپ ﷺ نے فرمایا: \"غم نہ کرو، اللہ ہمارے ساتھ ہے۔\"",
           "ar": "قال أبو بكر في الغار: «يا رسول الله لو أن أحدهم نظر إلى أقدامه». فقال: «لا تحزن إن الله معنا»."
         }
@@ -216,9 +378,41 @@
       {
         "type": "paragraph",
         "text": {
-          "en": "A spider wove a web and a dove nested at the cave mouth — so pursuers assumed no one had entered. The two traveled south to Madinah (then Yathrib), where the Ansar welcomed them. The Hijrah marks the birth of the first Muslim community-state and the start of the Islamic lunar calendar.",
-          "ur": "مکڑی نے جالا بنا دیا اور کبوتر نے انڈے دیے — تلاش کرنے والوں نے سوچا کوئی اندر نہیں گیا۔ دونوں مدینہ (یثرب) پہنچے جہاں انصار نے خیرمقدم کیا۔ ہجرت پہلی مسلم جمہوریت کی بنیاد ہے۔",
-          "ar": "نسجت عنكبوت وبيضت حمامة عند فم الغار، فلم يدخل الطالبون. وصلوا إلى يثرب فآواهم الأنصار. من الهجرة بدأ التاريخ الإسلامي."
+          "en": "A spider wove a web and a dove nested at the cave mouth — so pursuers assumed no one had entered recently. Abu Bakr's son Abdullah tracked the search parties and reported back. A guide named Abdullah ibn Urayqit, known for his reliability despite not being Muslim yet, led them through desert routes to Madinah.",
+          "ur": "مکڑی نے جالا بنا دیا اور کبوتر نے انڈے دیے — تلاش کرنے والوں نے سوچا کوئی اندر نہیں گیا۔ حضرت ابوبکر صدیق رضی اللہ عنہ کے بیٹے عبداللہ نے خبریں پہنچائیں۔ عبداللہ بن اریقط نے راستہ دکھایا۔",
+          "ar": "نسجت عنكبوت وبيضت حمامة عند فم الغار. أخبر ابن أبي بكر الطاردين، ودلّهم عبد الله بن أريقط على الطريق إلى المدينة."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Arrival in Madinah and the Hijri calendar",
+          "ur": "مدینہ پہنچنا اور ہجری تقویم",
+          "ar": "الوصول إلى المدينة والتقويم الهجري"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "The Ansar welcomed them with songs of joy. The Hijrah marks the birth of the first Muslim community-state — with a constitution (the Charter of Madinah), shared governance, and collective defense. Caliph Umar (RA) later chose the Hijrah as the starting point of the Islamic lunar calendar because it separated truth from falsehood and marked Islam's emergence as a civilization.",
+          "ur": "انصار نے خوشی سے استقبال کیا۔ ہجرت پہلی مسلم جمہوریت کی بنیاد ہے — مدینہ کے دستور، مشترکہ انتظام اور دفاع کے ساتھ۔ حضرت عمر رضی اللہ عنہ نے ہجرت کو اسلامی تقویم کا آغاز بنایا۔",
+          "ar": "آواهم الأنصار بالترحيب. الهجرة ولادة أول مجتمع مسلم — بمواثقة المدينة وحكم مشترك. اختار عمر بداية التاريخ الهجري منها."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Lessons for today",
+          "ur": "آج کے لیے سبق",
+          "ar": "دروس لليوم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "The Hijrah teaches that sometimes faith requires leaving what is familiar for what is necessary. It was not running away — it was building a foundation. Every Muslim's personal hijrah is migrating from sin toward obedience, from comfort toward purpose, trusting that Allah is with those who take the difficult right path.",
+          "ur": "ہجرت سکھاتی ہے کہ کبھی کبھی ایمان کے لیے وطن چھوڑنا ضروری ہوتا ہے۔ یہ بھاگنا نہیں — بنیاد رکھنا تھا۔ ہر مسلمان کی ذاتی ہجرت گناہ سے اطاعت کی طرف ہے۔",
+          "ar": "تعلّمنا أن الهجرة ليست فراراً بل بناء أساس. وهجرتنا اليومية من الذنب إلى الطاعة، والله مع من يسلك الطريق الصعب."
         }
       }
     ]
@@ -240,25 +434,81 @@
       "ar": "هاجر وزمزم: ثقة بين الصفا والمروة"
     },
     "excerpt": {
-      "en": "Left alone in the desert with her infant Isma'il, Hajar ran between two hills seeking water — until the spring of Zamzam burst forth. Every Hajj and Umrah reenacts her search.",
-      "ur": "صحرا میں تنہا ہاجر نے اپنے شیرخوار اسماعیل کے لیے صفا اور مروہ کے درمیان دوڑ لگائی — پھر زمزم پھوٹ پڑا۔",
-      "ar": "تُركت هاجر في الصحراء مع إسماعيل رضيعاً، فركضت بين الصفا والمروة حتى انفجر زمزم."
+      "en": "Left alone in the desert with her infant Isma'il, Hajar ran between Safa and Marwa seeking water — until the spring of Zamzam burst forth. Every Hajj and Umrah reenacts her faithful search.",
+      "ur": "صحرا میں تنہا ہاجر نے اپنے شیرخوار اسماعیل کے لیے صفا اور مروہ کے درمیان دوڑ لگائی — پھر زمزم پھوٹ پڑا۔ ہر حج و عمرہ میں اس کی سعی دہرائی جاتی ہے۔",
+      "ar": "تُركت هاجر في الصحراء مع إسماعيل رضيعاً، فركضت بين الصفا والمروة حتى انفجر زمزم — يُحييها المسلمون في كل حج."
     },
     "sections": [
       {
         "type": "paragraph",
         "text": {
-          "en": "Ibrahim (AS) left his wife Hajar and infant son Isma'il in the barren valley of Makkah by Allah's command — a test of trust for both. When provisions ran out and the baby cried from thirst, Hajar ran seven times between the hills of Safa and Marwa, searching for any sign of water or travelers.",
-          "ur": "حضرت ابراہیم علیہ السلام نے اللہ کے حکم سے اپنی بیوی ہاجر اور بیٹے اسماعیل کو مکہ کی ویران وادی میں چھوڑ دیا — یہ دونوں کے لیے بھروسے کی آزمائش تھی۔ پانی ختم ہوا تو ہاجر نے صفا اور مروہ کے درمیان سات بار دوڑ لگائی۔",
-          "ar": "ترك إبراهيم هاجر وإسماعيل في وادي مكة بأمر الله. لما نفد الماء ركضت هاجر سبع مرات بين الصفا والمروة."
+          "en": "Ibrahim (AS) left his wife Hajar and infant son Isma'il in the barren valley of Makkah by Allah's command — a test of trust for both. Makkah had no water, no crops, and no inhabitants. When Ibrahim turned to leave, Hajar asked, \"Has Allah commanded you this?\" He said yes. She replied, \"Then He will not abandon us.\" This single sentence captures the essence of tawakkul (trust in Allah).",
+          "ur": "حضرت ابراہیم علیہ السلام نے اللہ کے حکم سے اپنی بیوی ہاجر اور بیٹے اسماعیل کو مکہ کی ویران وادی میں چھوڑ دیا۔ جب وہ جاتے ہوئے مڑے تو ہاجر نے پوچھا: \"کیا اللہ نے یہ حکم دیا؟\" انہوں نے کہا ہاں۔ انہوں نے جواب دیا: \"پھر وہ ہمیں نہیں چھوڑے گا۔\"",
+          "ar": "ترك إبراهيم هاجر وإسماعيل في وادي مكة بأمر الله. سألته: «آمرك الله؟» فقال نعم. قالت: «إذاً لن يضيعنا»."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "The search between two hills",
+          "ur": "دو پہاڑیوں کے درمیان تلاش",
+          "ar": "السعي بين الجبلين"
         }
       },
       {
         "type": "paragraph",
         "text": {
-          "en": "At Marwa, Jibreel (AS) struck the ground and the well of Zamzam gushed forth. Hajar gathered sand around it to contain the water — saying \"Zam zam\" (stop, stop). The well still flows in Masjid al-Haram today. Sa'i between Safa and Marwa during Hajj and Umrah commemorates her desperate, faithful search.",
-          "ur": "مروہ پر جبریل علیہ السلام نے زمین پر مارا اور زمزم پھوٹ پڑا۔ ہاجر نے پانی روکنے کے لیے \"زم زم\" کہا۔ آج بھی یہ کنواں مسجد الحرام میں بہ رہا ہے۔ حج و عمرہ میں صفا مروہ کی سعی اسی یاد میں ہے۔",
-          "ar": "ضرب جبريل الأرض فانبجست زمزم. قالت هاجر «زم زم» لئلا يذهب الماء. يُحيي المسلمون سعيها في الحج والعمرة بين الصفا والمروة."
+          "en": "When provisions ran out and baby Isma'il cried from thirst, Hajar ran seven times between the hills of Safa and Marwa — climbing each hill, scanning the horizon for travelers or water, then descending to the valley and climbing the other hill. She did this desperately, not passively waiting for help.",
+          "ur": "پانی ختم ہوا تو بچے کی پیاس سے رونے پر ہاجر نے صفا اور مروہ کے درمیان سات بار دوڑ لگائی — ہر پہاڑی چڑھ کر افق دیکھتیں، پھر دوسری طرف۔",
+          "ar": "لما نفد الماء ركضت هاجر سبع مرات بين الصفا والمروة — تصعد كلّهما وتنظر الأفق طلباً للماء."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "The miracle of Zamzam",
+          "ur": "زمزم کا معجزہ",
+          "ar": "معجزة زمزم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "At Marwa, Jibreel (AS) struck the ground with his heel and the well of Zamzam gushed forth. Hajar gathered sand around it saying \"Zam zam\" (stop, stop) to contain the flowing water. The well still flows in Masjid al-Haram today, supplying millions of pilgrims annually. The Jurhum tribe later settled near the water source, and Isma'il (AS) grew among them.",
+          "ur": "مروہ پر جبریل علیہ السلام نے زمین پر مارا اور زمزم پھوٹ پڑا۔ ہاجر نے \"زم زم\" کہہ کر پانی روکا۔ آج بھی یہ کنواں مسجد الحرام میں لاکھوں حاجیوں کو پانی دیتا ہے۔",
+          "ar": "ضرب جبريل الأرض فانبجست زمزم. قالت هاجر «زم زم» لئلا يذهب الماء. يجري زمزم حتى اليوم ويسقي ملايين الحجاج."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Sa'i: a ritual of devotion",
+          "ur": "سعی: عبادت کا ایک رکن",
+          "ar": "السعي: شعيرة من العبادات"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "Sa'i between Safa and Marwa during Hajj and Umrah commemorates Hajar's search. It is one of the essential rites of pilgrimage — a physical reenactment of a mother's love, desperation, and unwavering trust. The Quran mentions Safa and Marwa among the symbols of Allah (sha'a'ir Allah), confirming this act as worship.",
+          "ur": "حج و عمرہ میں صفا مروہ کی سعی ہاجر کی تلاش کی یاد میں ہے — ایک ماں کی محبت، بے بسی اور یقین کا عملی اظہار۔ قرآن نے صفا و مروہ کو اللہ کی نشانیوں میں شمار کیا۔",
+          "ar": "يُحيي المسلمون سعيها في الحج والعمرة — تجسيد لمحبة الأم وثقتها. ذكر القرآن الصفا والمروة من شعائر الله."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Lessons for today",
+          "ur": "آج کے لیے سبق",
+          "ar": "دروس لليوم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "Hajar's story teaches that trust in Allah does not mean inaction — she ran, searched, and tried with all her strength. It teaches that Allah's help often comes after our effort reaches its limit. And it reminds every parent that sincere dua combined with action can turn barren valleys into places of eternal blessing.",
+          "ur": "ہاجر کی کہانی سکھاتی ہے کہ توکل کا مطلب بے عملی نہیں — انہوں نے دوڑ کر تلاش کی۔ اللہ کی مدد اکثر ہماری کوشش کے بعد آتی ہے۔",
+          "ar": "تعلّمنا أن التوكل لا يعني الكسل — ركضت هاجر وبحثت. ويأتي نصر الله بعد بذل الجهد."
         }
       }
     ]
@@ -301,6 +551,48 @@
           "ur": "حضرت ہارون علیہ السلام کے ساتھ موسیٰ نے معجزات پیش کیے — لاٹھی سانپ بن گئی۔ جادوگر سجدہ میں گر پڑے: \"ہم موسیٰ اور ہارون کے رب پر ایمان لائے۔\" فرعون نے پیچھا کیا تو سمندر پھٹا اور فرعون کی فوج ڈوب گئی۔",
           "ar": "أتى موسى وهرون بآيات: العصا حية واليد بيضاء. سجد السحرة لله. لما طاردهم فرعون انشق البحر وغرق الجيش — لا يبقى طاغية على هوان الله."
         }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "The burning bush and the mission",
+          "ur": "جلتی ہوئی جھاڑی اور مشن",
+          "ar": "الشجرة المشتعلة والرسالة"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "After accidentally killing an Egyptian while defending an Israelite, Musa (AS) fled to Madyan, married, and lived as a shepherd for years. At Mount Tur, Allah spoke to him directly from a burning bush: \"Go to Pharaoh — indeed he has transgressed.\" Musa (AS) asked for his brother Harun (AS) as support.",
+          "ur": "ایک مصری کو قتل کرنے کے بعد موسیٰ علیہ السلام مدین کی طرف گئے۔ طور پر اللہ نے جلتی جھاڑی سے کلام کیا۔ انہوں نے اپنے بھائی ہارون کو مدد کے لیے مانگا۔",
+          "ar": "فرّ موسى إلى مدين. كلّمه الله من الشجرة: «اذهب إلى فرعون إنه طغى». طلب هارون أخاً ومعيناً."
+        }
+      },
+      {
+        "type": "quote",
+        "arabic": "قَالَ رَبِّ اشْرَحْ لِي صَدْرِي",
+        "ref": "20:25",
+        "text": {
+          "en": "\"My Lord, expand for me my chest\" — Musa's dua before confronting Pharaoh.",
+          "ur": "\"اے میرے رب! میرا سینہ کھول دے\" — فرعون سے ملنے سے پہلے موسیٰ علیہ السلام کی دعا۔",
+          "ar": "«رب اشرح لي صدري» — دعاء موسى قبل مواجهة فرعون."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Lessons for today",
+          "ur": "آج کے لیے سبق",
+          "ar": "دروس لليوم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "Musa's story teaches courage in speaking truth to power, patience through decades of preparation, and trust when escape seems impossible. It reminds us that tyranny has an expiration date — and that Allah's help arrives when human options run out.",
+          "ur": "موسیٰ علیہ السلام کی کہانی سچ بولنے کی ہمت، طویل تیاری میں صبر، اور مایوسی کے وقت بھروسہ سکھاتی ہے۔",
+          "ar": "تعلّمنا الشجاعة في قول الحق للطغاة، والصبر في التحضير، والتوكل حين تنفد الحيل."
+        }
       }
     ]
   },
@@ -340,6 +632,54 @@
           "en": "When the adhan was established, the Prophet (peace be upon him) chose Bilal for his beautiful, resonant voice — making him the first mu'adhin in Islam. He called the faithful to prayer from the mosque of the Prophet in Madinah. At the Conquest of Makkah in 8 AH, Bilal climbed the Ka'bah to give the adhan — a moment that symbolized how Islam elevates dignity regardless of origin.",
           "ur": "اذان کے آغاز پر نبی کریم ﷺ نے بلال رضی اللہ عنہ کو ان کی خوبصورت آواز کی وجہ سے منتخب کیا — اسلام کے پہلے مؤذن۔ فتح مکہ پر انہوں نے کعبہ پر اذان دی — یہ لمحہ دکھاتا ہے کہ اسلام نسل و نسب سے بالا ہے۔",
           "ar": "اختاره النبي ﷺ أول مؤذن لحسن صوته. أذّن على الكعبة يوم الفتح — رمز لرفعة الإسلام للإنسان بغض النظر عن أصله."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "The first call to prayer",
+          "ur": "اذان کی پہلی دعوت",
+          "ar": "أول نداء للصلاة"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "When the adhan was established, companions suggested using a bell like Christians or a horn like Jews. The Prophet (peace be upon him) chose Bilal (RA) for his beautiful, resonant voice — making him the first mu'adhin in Islam. His adhan rang from the mosque of the Prophet in Madinah, calling a community that had once enslaved him to stand equal before Allah in prayer.",
+          "ur": "اذان کے آغاز پر نبی کریم ﷺ نے بلال رضی اللہ عنہ کو ان کی خوبصورت آواز کی وجہ سے منتخب کیا — اسلام کے پہلے مؤذن۔ ان کی اذان مسجد نبوی سے بلند ہوتی تھی۔",
+          "ar": "اختاره النبي ﷺ أول مؤذن لحسن صوته. كان ينادي من مسجد النبي في المدينة."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Adhan on the Ka'bah",
+          "ur": "کعبہ پر اذان",
+          "ar": "الأذان على الكعبة"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "At the Conquest of Makkah in 8 AH, Bilal climbed the Ka'bah to give the adhan — a moment that symbolized how Islam elevates dignity regardless of race or origin. The same voice that once cried \"Ahad, Ahad\" under torture now proclaimed the oneness of Allah from the holiest site in Islam. Bilal later migrated to Syria and refused to give adhan after the Prophet's passing, saying he could not call people to prayer without him.",
+          "ur": "فتح مکہ پر انہوں نے کعبہ پر اذان دی — یہ لمحہ دکھاتا ہے کہ اسلام نسل و نسب سے بالا ہے۔ وہی آواز جو عذاب میں \"احد، احد\" کہتی تھی، اب کعبہ سے اللہ کی توحید پکارتی تھی۔",
+          "ar": "أذّن على الكعبة يوم الفتح — رمز لرفعة الإسلام. امتنع عن الأذان بعد وفاة النبي ﷺ قائلاً إنه لا يستطيع النداء بدونه."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Lessons for today",
+          "ur": "آج کے لیے سبق",
+          "ar": "دروس لليوم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "Bilal's life teaches that faith is not measured by social status, ethnicity, or wealth. His steadfastness under torture, his honored role as mu'adhin, and his humility after fame show what Islam values: sincerity, patience, and devotion to Allah above all else.",
+          "ur": "بلال رضی اللہ عنہ کی زندگی سکھاتی ہے کہ ایمان نسل، مال یا مرتبے سے نہیں ناپا جاتا — اخلاص، صبر اور اللہ کی محبت سب سے بڑی ہے۔",
+          "ar": "تعلّمنا أن الإيمان لا يُقاس بالجاه أو العرق، بل بالإخلاص والصبر ومحبة الله."
         }
       }
     ]
@@ -398,6 +738,54 @@
           "en": "\"Indeed, it is We who sent down the Reminder and indeed, We will be its guardian.\"",
           "ur": "\"بے شک ہم نے یہ ذکر نازل کیا ہے اور بے شک ہم ہی اس کی حفاظت کرنے والے ہیں۔\"",
           "ar": "«إنا نحن نزلنا الذكر وإنا له لحافظون»"
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Memorization and written records",
+          "ur": "حفظ اور تحریری ریکارڈ",
+          "ar": "الحفظ والتدوين"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "From the earliest days, the Quran existed in two forms simultaneously: in the hearts of huffaz (memorizers) and in writing on whatever materials were available. The Prophet (peace be upon him) appointed scribes like Zayd ibn Thabit, Mu'awiyah, and Ubayy ibn Ka'b to record revelations. By the time of the Prophet's passing, the entire Quran was memorized by dozens of companions and written in scattered written fragments — but not yet bound as a single book.",
+          "ur": "قرآن ابتدا سے دو شکلوں میں موجود تھا — حفاظ کے سینوں میں اور تحریر میں۔ نبی کریم ﷺ نے زید بن ثابت جیسے کاتب مقرر کیے۔ وفات کے وقت پورا قرآن درجنوں صحابہ نے حفظ کیا تھا۔",
+          "ar": "كان القرآن محفوظاً في الصدور والسطور. عيّن النبي ﷺ كُتّاباً مثل زيد بن ثابت. حفظه عشرات الصحابة عند وفاته."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Preservation today",
+          "ur": "آج کی حفاظت",
+          "ar": "الحفظ اليوم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "Today over 80 million people worldwide have memorized the entire Quran. Manuscripts from the 7th and 8th centuries match the text Muslims recite today letter for letter. Digital tools, printed mushafs in every language, and continuous oral transmission through tajweed chains all serve Allah's promise in Surah Al-Hijr: He Himself guards this Book.",
+          "ur": "آج دنیا بھر میں ۸ کروڑ سے زیادہ لوگوں نے پورا قرآن حفظ کیا ہے۔ ساتویں صدی کے مخطوطات آج کے متن سے میل کھاتے ہیں۔",
+          "ar": "حفظ القرآن اليوم لدى أكثر من 80 مليوناً. المخطوطات القديمة تطابق النص الحالي حرفاً بحرف."
+        }
+      },
+      {
+        "type": "heading",
+        "text": {
+          "en": "Lessons for today",
+          "ur": "آج کے لیے سبق",
+          "ar": "دروس لليوم"
+        }
+      },
+      {
+        "type": "paragraph",
+        "text": {
+          "en": "The preservation of the Quran is both a historical fact and a living miracle. It invites every Muslim to engage with the Book — through recitation, memorization, reflection, and daily practice — trusting that the same divine protection continues for those who hold it close.",
+          "ur": "قرآن کی حفاظت تاریخی حقیقت بھی ہے اور زندہ معجزہ بھی — ہر مسلمان کو کتاب سے تعلق رکھنے کی دعوت دیتی ہے۔",
+          "ar": "حفظ القرآن حقيقة تاريخية ومعجزة حية — يدعو كل مسلم إلى التمسك بالكتاب."
         }
       }
     ]
