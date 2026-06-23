@@ -553,6 +553,13 @@ export class SurahReaderComponent implements OnInit {
     );
   }
 
+  protected copyVerseLink(v: ReaderDisplayVerse): void {
+    this.verseActions.copyVerseLink(
+      v,
+      this.verseActions.presentationContext(this.formatUiNum, v),
+    );
+  }
+
   protected shareAyah(v: ReaderDisplayVerse): void {
     this.verseActions.shareAyah(
       v,
@@ -736,6 +743,10 @@ export class SurahReaderComponent implements OnInit {
 
   protected verseCopied(v: ReaderDisplayVerse): boolean {
     return this.verseActions.copiedAyah() === `${v.surah}:${v.ayah}`;
+  }
+
+  protected verseLinkCopied(v: ReaderDisplayVerse): boolean {
+    return this.verseActions.copiedLinkAyah() === `${v.surah}:${v.ayah}`;
   }
 
   protected showTranslations(): boolean {

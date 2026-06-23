@@ -1,0 +1,92 @@
+@if (loadError()) {
+<main class="adhkar adhkar--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="adhkar__state-card">
+    <p class="adhkar__state-text">{{ 'adhkarLoadError' | uiTranslate }}</p>
+    <button type="button" class="adhkar__btn adhkar__btn--primary" (click)="retryLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+    <a class="adhkar__btn adhkar__btn--ghost" routerLink="/">{{ 'adhkarBackHome' | uiTranslate }}</a>
+  </div>
+</main>
+} @else if (loading()) {
+<main class="adhkar adhkar--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <p class="adhkar__state-text">{{ 'adhkarLoading' | uiTranslate }}</p>
+</main>
+} @else {
+<div class="adhkar" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <header class="adhkar__header">
+    <a class="adhkar__back" routerLink="/" [attr.aria-label]="'homeNavHomeAria' | uiTranslate">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+      </svg>
+    </a>
+    <div class="adhkar__brand">
+      <p class="adhkar__kicker">{{ 'adhkarKicker' | uiTranslate }}</p>
+      <h1 class="adhkar__title">{{ 'adhkarTitle' | uiTranslate }}</h1>
+      <p class="adhkar__subtitle">{{ 'adhkarSubtitle' | uiTranslate }}</p>
+      <p class="adhkar__intro">{{ 'adhkarIntro' | uiTranslate }}</p>
+    </div>
+    <div class="adhkar__header-tools">
+      <label class="adhkar__tool-label" for="adhkar-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="adhkar-ui-locale"
+        class="adhkar__select"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+  </header>
+
+  <section class="adhkar__stats" [attr.aria-label]="'adhkarStatsAria' | uiTranslate">
+    <div class="adhkar__stat">
+      <span class="adhkar__stat-value">{{ formatUiNum(collections().length) }}</span>
+      <span class="adhkar__stat-label">{{ 'adhkarStatCollections' | uiTranslate }}</span>
+    </div>
+    <div class="adhkar__stat">
+      <span class="adhkar__stat-value">{{ formatUiNum(totalItems()) }}</span>
+      <span class="adhkar__stat-label">{{ 'adhkarStatItems' | uiTranslate }}</span>
+    </div>
+    <div class="adhkar__stat">
+      <span class="adhkar__stat-value">{{ formatUiNum(3) }}</span>
+      <span class="adhkar__stat-label">{{ 'adhkarStatLanguages' | uiTranslate }}</span>
+    </div>
+  </section>
+
+  <section class="adhkar__grid" aria-labelledby="adhkar-grid-heading">
+    <h2 id="adhkar-grid-heading" class="adhkar__grid-title">{{ 'adhkarIndexTitle' | uiTranslate }}</h2>
+    <p class="adhkar__grid-subtitle">{{ 'adhkarIndexSubtitle' | uiTranslate }}</p>
+    <ul class="adhkar__cards">
+      @for (collection of collections(); track collection.id) {
+      <li>
+        <a
+          class="adhkar__card"
+          [routerLink]="['/adhkar', collection.id]"
+          [attr.aria-label]="
+            'adhkarCardAria'
+              | uiTranslate
+                : {
+                    name: adhkar.pickLocalized(collection.title),
+                    count: formatUiNum(collection.itemCount),
+                  }
+          "
+        >
+          <span class="adhkar__card-icon" aria-hidden="true">{{ collectionIcon(collection.icon) }}</span>
+          <span class="adhkar__card-body">
+            <span class="adhkar__card-title">{{ adhkar.pickLocalized(collection.title) }}</span>
+            <span class="adhkar__card-desc">{{ adhkar.pickLocalized(collection.description) }}</span>
+            <span class="adhkar__card-meta">
+              {{ formatUiNum(collection.itemCount) }} {{ 'adhkarItemCountLabel' | uiTranslate }}
+            </span>
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+</div>
+}

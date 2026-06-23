@@ -10,11 +10,15 @@ import { ThemeDetailComponent } from './theme-detail/theme-detail.component';
 import { ThemesExplorerComponent } from './themes-explorer/themes-explorer.component';
 import { BlogExplorerComponent } from './blog-explorer/blog-explorer.component';
 import { BlogDetailComponent } from './blog-detail/blog-detail.component';
+import { AdhkarExplorerComponent } from './adhkar-explorer/adhkar-explorer.component';
+import { AdhkarDetailComponent } from './adhkar-detail/adhkar-detail.component';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', component: HomeLandingComponent },
   { path: 'blog', component: BlogExplorerComponent },
   { path: 'blog/:id', component: BlogDetailComponent },
+  { path: 'adhkar', component: AdhkarExplorerComponent },
+  { path: 'adhkar/:id', component: AdhkarDetailComponent },
   { path: 'themes', component: ThemesExplorerComponent },
   { path: 'themes/:id', component: ThemeDetailComponent },
   { path: 'surah/:n', redirectTo: legacySurahRedirect },

@@ -16,6 +16,7 @@ export class ReaderVerseActionsService {
 
   readonly quoteSheetVerse = signal<ReaderDisplayVerse | null>(null);
   readonly copiedAyah = signal<string | null>(null);
+  readonly copiedLinkAyah = signal<string | null>(null);
 
   copyAyah(v: ReaderDisplayVerse, ctx: VersePresentationContext): void {
     if (!isPlatformBrowser(this.platformId) || !navigator.clipboard?.writeText) {
@@ -28,6 +29,22 @@ export class ReaderVerseActionsService {
       setTimeout(() => {
         if (this.copiedAyah() === key) {
           this.copiedAyah.set(null);
+        }
+      }, 1600);
+    });
+  }
+
+  copyVerseLink(v: ReaderDisplayVerse, ctx: VersePresentationContext): void {
+    if (!isPlatformBrowser(this.platformId) || !navigator.clipboard?.writeText) {
+      return;
+    }
+    const url = this.versePresentation.buildVerseLink(v, ctx);
+    const key = `${v.surah}:${v.ayah}`;
+    void navigator.clipboard.writeText(url).then(() => {
+      this.copiedLinkAyah.set(key);
+      setTimeout(() => {
+        if (this.copiedLinkAyah() === key) {
+          this.copiedLinkAyah.set(null);
         }
       }, 1600);
     });
