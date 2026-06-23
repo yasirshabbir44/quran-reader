@@ -1,0 +1,224 @@
+@use '../core/reader-layout/reader-index-layout' as idx;
+@use '../core/reader-layout/reader-ui-system' as ui;
+
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.adhkar-detail {
+  @include ui.ui-page-shell;
+  max-width: 46rem;
+}
+
+.adhkar-detail--state {
+  @include ui.ui-state-center;
+}
+
+.adhkar-detail__state-card {
+  @include ui.ui-state-card;
+}
+
+.adhkar-detail__state-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.adhkar-detail__state-text {
+  @include ui.ui-state-text;
+}
+
+.adhkar-detail__header {
+  @include ui.ui-page-header;
+  margin-bottom: 1rem;
+}
+
+.adhkar-detail__back {
+  @include ui.ui-back-btn;
+}
+
+.adhkar-detail__breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--reader-body-ink);
+
+  a {
+    color: var(--reader-accent);
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.adhkar-detail__breadcrumb-sep {
+  opacity: 0.5;
+}
+
+.adhkar-detail__header-tools {
+  @include idx.page-header-tools;
+}
+
+.adhkar-detail__tool-label {
+  @include idx.index-tool-label;
+}
+
+.adhkar-detail__select {
+  @include idx.page-select;
+}
+
+.adhkar-detail__title {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--reader-heading-ink);
+}
+
+.adhkar-detail__meta {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--reader-accent);
+}
+
+.adhkar-detail__excerpt {
+  margin: 0 0 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--reader-body-ink);
+}
+
+.adhkar-detail__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.adhkar-detail__item {
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+  border: 1px solid var(--reader-border-subtle);
+  background: var(--reader-surface-raised);
+}
+
+.adhkar-detail__item-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.adhkar-detail__item-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--reader-accent) 14%, transparent);
+  color: var(--reader-accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.adhkar-detail__repeat {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--reader-body-ink);
+  opacity: 0.85;
+}
+
+.adhkar-detail__arabic {
+  margin: 0 0 0.65rem;
+  font-family: var(--reader-arabic-font, 'Amiri Quran', serif);
+  font-size: clamp(1.15rem, 3.5vw, 1.45rem);
+  line-height: 1.85;
+  color: var(--reader-heading-ink);
+  text-align: right;
+}
+
+.adhkar-detail__translit {
+  margin: 0 0 0.55rem;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--reader-body-ink);
+  opacity: 0.9;
+}
+
+.adhkar-detail__translation {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--reader-body-ink);
+}
+
+.adhkar-detail__source {
+  margin: 0.65rem 0 0;
+  font-size: 0.76rem;
+  color: var(--reader-body-ink);
+  opacity: 0.75;
+}
+
+.adhkar-detail__related {
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--reader-border-subtle);
+}
+
+.adhkar-detail__related-title {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.adhkar-detail__related-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.adhkar-detail__related-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.8rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid var(--reader-border-subtle);
+  background: var(--reader-surface-raised);
+  color: inherit;
+  text-decoration: none;
+
+  &:hover {
+    border-color: var(--reader-accent);
+  }
+}
+
+.adhkar-detail__related-name {
+  font-weight: 600;
+}
+
+.adhkar-detail__related-meta {
+  font-size: 0.78rem;
+  color: var(--reader-accent);
+}
+
+.adhkar-detail__btn {
+  @include ui.ui-btn-base;
+}
+
+.adhkar-detail__btn--primary {
+  @include ui.ui-btn-primary;
+}

@@ -574,12 +574,16 @@
 }
 
 .landing__juz-groups {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
   gap: 1.35rem;
 }
 
 .landing__juz-block {
+  list-style: none;
   padding: 0.85rem 0.75rem 0.25rem;
   border-radius: var(--reader-radius-lg);
   border: 1px solid var(--reader-border);

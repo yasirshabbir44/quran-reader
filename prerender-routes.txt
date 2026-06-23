@@ -1,5 +1,6 @@
 /
 /blog
+/adhkar
 /themes
 /1
 /2
@@ -814,6 +815,9 @@
 /blog/what-is-itikaf
 /blog/kufi-hat-men-islam
 /blog/what-does-allah-look-like
+/adhkar/morning
+/adhkar/evening
+/adhkar/night
 /themes/patience
 /themes/gratitude
 /themes/honesty-truth

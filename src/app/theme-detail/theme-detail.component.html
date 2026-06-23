@@ -273,6 +273,14 @@
           </button>
           <button
             type="button"
+            class="theme-detail__action"
+            (click)="copyVerseLink(v)"
+            [attr.aria-label]="'copyLinkAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+          >
+            {{ isLinkCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLinkLabel' | uiTranslate) }}
+          </button>
+          <button
+            type="button"
             class="theme-detail__action theme-detail__action--bookmark"
             [class.theme-detail__action--bookmark-active]="isBookmarked(v)"
             (click)="saveBookmark(v)"

@@ -321,7 +321,7 @@
 ></button>
 }
 
-<aside
+<nav
   id="surah-nav-panel"
   class="reader__surah-nav"
   [class.reader__surah-nav--open]="surahNav.open()"
@@ -383,15 +383,14 @@
     @if (surahNav.filteredList().length === 0 && surahNav.query().trim()) {
     <p class="reader__surah-nav-empty">{{ 'surahNavNoResults' | uiTranslate }}</p>
     } @else {
-    <ul class="reader__surah-nav-grid" role="listbox" [attr.aria-label]="'surahNavListAria' | uiTranslate">
+    <ul class="reader__surah-nav-grid" [attr.aria-label]="'surahNavListAria' | uiTranslate">
       @for (s of surahNav.filteredList(); track s.number) {
-      <li role="presentation">
+      <li>
         <button
           type="button"
           class="reader__surah-nav-card"
-          role="option"
           [class.reader__surah-nav-card--active]="s.number === corpus.surahNumber()"
-          [attr.aria-selected]="s.number === corpus.surahNumber()"
+          [attr.aria-current]="s.number === corpus.surahNumber() ? 'true' : null"
           (click)="selectSurahFromNav(s.number)"
           [attr.aria-label]="
             'surahNavSelectAria'
@@ -416,9 +415,9 @@
     </ul>
     }
   </div>
-</aside>
+</nav>
 
-<aside
+<nav
   id="mushaf-nav-panel"
   class="reader__surah-nav"
   [class.reader__surah-nav--open]="mushafNav.open()"
@@ -454,14 +453,14 @@
 
   <div class="reader__surah-nav-body reader__settings-scroll">
     @if (mushafNav.kind() === 'page') {
-    <ul class="reader__surah-nav-grid" role="listbox">
+    <ul class="reader__surah-nav-grid" [attr.aria-label]="'pageNavListAria' | uiTranslate">
       @for (p of mushafNav.filteredPages(); track p.page) {
-      <li role="presentation">
+      <li>
         <button
           type="button"
           class="reader__surah-nav-card"
-          role="option"
           [class.reader__surah-nav-card--active]="p.page === corpus.pageNumber() && viewKind() === 'page'"
+          [attr.aria-current]="p.page === corpus.pageNumber() && viewKind() === 'page' ? 'true' : null"
           (click)="selectPageFromNav(p.page)"
         >
           <span class="reader__surah-nav-card-num">{{ formatUiNum(p.page) }}</span>
@@ -473,14 +472,14 @@
       }
     </ul>
     } @else {
-    <ul class="reader__surah-nav-grid" role="listbox">
+    <ul class="reader__surah-nav-grid" [attr.aria-label]="'juzNavListAria' | uiTranslate">
       @for (j of mushafNav.filteredJuz(); track j.juz) {
-      <li role="presentation">
+      <li>
         <button
           type="button"
           class="reader__surah-nav-card"
-          role="option"
           [class.reader__surah-nav-card--active]="j.juz === corpus.juzNumber() && viewKind() === 'juz'"
+          [attr.aria-current]="j.juz === corpus.juzNumber() && viewKind() === 'juz' ? 'true' : null"
           (click)="selectJuzFromNav(j.juz)"
         >
           <span class="reader__surah-nav-card-num">{{ formatUiNum(j.juz) }}</span>
@@ -493,7 +492,7 @@
     </ul>
     }
   </div>
-</aside>
+</nav>
 
 <section
   id="reader-settings-panel"
@@ -1086,6 +1085,15 @@
                 [attr.title]="'shareLabel' | uiTranslate"
               >
                 {{ 'shareLabel' | uiTranslate }}
+              </button>
+              <button
+                type="button"
+                class="verses__action-btn"
+                (click)="copyVerseLink(v)"
+                [attr.aria-label]="'copyLinkAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                [attr.title]="verseLinkCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLinkLabel' | uiTranslate)"
+              >
+                {{ verseLinkCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLinkLabel' | uiTranslate) }}
               </button>
               <button
                 type="button"
