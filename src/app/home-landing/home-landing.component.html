@@ -153,6 +153,13 @@
         </a>
       </li>
       <li>
+        <a class="landing__quick-card" routerLink="/adhkar">
+          <span class="landing__quick-icon" aria-hidden="true">🤲</span>
+          <span class="landing__quick-card-title">{{ 'homeNavAdhkar' | uiTranslate }}</span>
+          <span class="landing__quick-card-meta">{{ 'homeNavAdhkarHint' | uiTranslate }}</span>
+        </a>
+      </li>
+      <li>
         <a class="landing__quick-card" routerLink="/page/1">
           <span class="landing__quick-icon" aria-hidden="true">▤</span>
           <span class="landing__quick-card-title">{{ 'homeNavPages' | uiTranslate }}</span>
@@ -382,67 +389,71 @@
     @if (filteredSurahs().length === 0) {
     <p class="landing__index-empty">{{ 'homeIndexEmpty' | uiTranslate }}</p>
     } @else if (indexLayout() === 'juz' && mushafPayload()) {
-    <div class="landing__juz-groups">
-      @for (group of indexJuzGroups(); track group.juz) {
-      <section class="landing__juz-block" [attr.aria-labelledby]="'juz-block-' + group.juz">
-        <div class="landing__juz-block-head">
-          <h3 [id]="'juz-block-' + group.juz" class="landing__juz-block-title">
-            {{ 'homeJuzGroupTitle' | uiTranslate: { juz: formatUiNum(group.juz) } }}
-          </h3>
-          <a
-            class="landing__juz-block-link"
-            [routerLink]="['/juz', group.juz]"
-            [attr.aria-label]="'homeJuzGroupReadAria' | uiTranslate: { juz: formatUiNum(group.juz) }"
-          >
-            {{ 'homeJuzGroupRead' | uiTranslate }}
-          </a>
-        </div>
-        <ul class="landing__grid landing__grid--compact">
-          @for (s of group.surahs; track s.number) {
-          <li>
+    <nav class="landing__juz-nav" aria-labelledby="index-heading">
+      <ul class="landing__juz-groups">
+        @for (group of indexJuzGroups(); track group.juz) {
+        <li class="landing__juz-block">
+          <div class="landing__juz-block-head">
+            <h3 [id]="'juz-block-' + group.juz" class="landing__juz-block-title">
+              {{ 'homeJuzGroupTitle' | uiTranslate: { juz: formatUiNum(group.juz) } }}
+            </h3>
             <a
-              class="landing__surah-card"
-              [routerLink]="['/', s.number]"
-              [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
+              class="landing__juz-block-link"
+              [routerLink]="['/juz', group.juz]"
+              [attr.aria-label]="'homeJuzGroupReadAria' | uiTranslate: { juz: formatUiNum(group.juz) }"
             >
-              <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
-              <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
-              <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
-              <span class="landing__surah-meta">
-                <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
-                <span class="landing__surah-verses">
-                  {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
-                </span>
-              </span>
+              {{ 'homeJuzGroupRead' | uiTranslate }}
             </a>
-          </li>
-          }
-        </ul>
-      </section>
-      }
-    </div>
+          </div>
+          <ul class="landing__grid landing__grid--compact">
+            @for (s of group.surahs; track s.number) {
+            <li>
+              <a
+                class="landing__surah-card"
+                [routerLink]="['/', s.number]"
+                [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
+              >
+                <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
+                <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+                <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
+                <span class="landing__surah-meta">
+                  <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
+                  <span class="landing__surah-verses">
+                    {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
+                  </span>
+                </span>
+              </a>
+            </li>
+            }
+          </ul>
+        </li>
+        }
+      </ul>
+    </nav>
     } @else {
-    <ul class="landing__grid">
-      @for (s of filteredSurahs(); track s.number) {
-      <li>
-        <a
-          class="landing__surah-card"
-          [routerLink]="['/', s.number]"
-          [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
-        >
-          <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
-          <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
-          <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
-          <span class="landing__surah-meta">
-            <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
-            <span class="landing__surah-verses">
-              {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
+    <nav class="landing__surah-nav" aria-labelledby="index-heading">
+      <ul class="landing__grid">
+        @for (s of filteredSurahs(); track s.number) {
+        <li>
+          <a
+            class="landing__surah-card"
+            [routerLink]="['/', s.number]"
+            [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
+          >
+            <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
+            <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+            <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
+            <span class="landing__surah-meta">
+              <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
+              <span class="landing__surah-verses">
+                {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
+              </span>
             </span>
-          </span>
-        </a>
-      </li>
-      }
-    </ul>
+          </a>
+        </li>
+        }
+      </ul>
+    </nav>
     }
   </section>
 </div>

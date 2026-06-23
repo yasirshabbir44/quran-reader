@@ -5,6 +5,14 @@
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  articleJsonLd,
+  collectionPageJsonLd,
+  homeJsonLd,
+  surahJsonLd,
+  versesForJuz,
+  versesForMushafPage,
+} from './seo-jsonld.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -12,6 +20,7 @@ const DIST = join(ROOT, 'dist', 'surah-mulk-reader', 'browser');
 const SEO_CONFIG = join(ROOT, 'src', 'app', 'core', 'seo', 'seo.config.ts');
 const EN_I18N = join(ROOT, 'src', 'app', 'i18n', 'en.json');
 const BLOG_INDEX = join(ROOT, 'public', 'blog-index.json');
+const ADHKAR_INDEX = join(ROOT, 'public', 'adhkar-index.json');
 const THEMATIC_INDEX = join(ROOT, 'public', 'thematic-index.json');
 const MUSHAF_INDEX = join(ROOT, 'public', 'mushaf-index.json');
 const QURAN_FULL = join(ROOT, 'public', 'quran-full.json');
@@ -70,7 +79,8 @@ function upsertJsonLd(html, jsonLd) {
     /<script type="application\/ld\+json">[\s\S]*?<\/script>\s*/g,
     '',
   );
-  const script = `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>`;
+  const payload = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
+  const script = `<script type="application/ld+json">${JSON.stringify(payload.length === 1 ? payload[0] : payload)}</script>`;
   return cleaned.replace('</head>', `    ${script}\n  </head>`);
 }
 
@@ -116,11 +126,14 @@ function main() {
   const template = readFileSync(join(DIST, 'index.html'), 'utf8');
   const i18n = JSON.parse(readFileSync(EN_I18N, 'utf8'));
   const blog = JSON.parse(readFileSync(BLOG_INDEX, 'utf8'));
+  const adhkar = JSON.parse(readFileSync(ADHKAR_INDEX, 'utf8'));
   const themes = JSON.parse(readFileSync(THEMATIC_INDEX, 'utf8'));
   const mushaf = JSON.parse(readFileSync(MUSHAF_INDEX, 'utf8'));
   const quran = JSON.parse(readFileSync(QURAN_FULL, 'utf8'));
 
   let count = 0;
+
+  const totalVerses = quran.surahs.reduce((sum, s) => sum + s.versesCount, 0);
 
   writeRouteHtml(
     '/',
@@ -128,13 +141,12 @@ function main() {
       title: i18n.documentTitleHome,
       description: i18n.seoHomeDescription,
       path: '/',
-      jsonLd: {
-        '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        name: 'QuranDaily',
-        url: siteUrl,
+      jsonLd: homeJsonLd({
+        origin: siteUrl,
+        surahs: quran.surahs,
+        totalVerses,
         description: i18n.seoHomeDescription,
-      },
+      }),
     }),
   );
   count++;
@@ -145,6 +157,12 @@ function main() {
       title: i18n.blogDocumentTitle,
       description: i18n.seoBlogIndexDescription,
       path: '/blog',
+      jsonLd: collectionPageJsonLd({
+        origin: siteUrl,
+        path: '/blog',
+        name: i18n.blogDocumentTitle,
+        description: i18n.seoBlogIndexDescription,
+      }),
     }),
   );
   count++;
@@ -155,6 +173,22 @@ function main() {
       title: i18n.themesDocumentTitle,
       description: i18n.seoThemesIndexDescription,
       path: '/themes',
+      jsonLd: collectionPageJsonLd({
+        origin: siteUrl,
+        path: '/themes',
+        name: i18n.themesDocumentTitle,
+        description: i18n.seoThemesIndexDescription,
+      }),
+    }),
+  );
+  count++;
+
+  writeRouteHtml(
+    '/adhkar',
+    applySeo(template, {
+      title: i18n.adhkarDocumentTitle,
+      description: i18n.seoAdhkarDescription,
+      path: '/adhkar',
     }),
   );
   count++;
@@ -174,45 +208,49 @@ function main() {
         }),
         path: `/${surah.number}`,
         type: 'book',
-        jsonLd: {
-          '@context': 'https://schema.org',
-          '@type': 'Chapter',
-          name: surah.nameTranslit,
-          alternateName: surah.nameAr,
-          position: surah.number,
-          isPartOf: {
-            '@type': 'Book',
-            name: 'The Holy Quran',
-            inLanguage: 'ar',
-            url: siteUrl,
-          },
-          url: `${siteUrl}/${surah.number}`,
-          numberOfPages: surah.versesCount,
-        },
+        jsonLd: surahJsonLd({ origin: siteUrl, surah }),
       }),
     );
     count++;
   }
 
   for (const page of mushaf.pages) {
+    const description = translate(i18n.seoPageDescription, { page: page.page });
     writeRouteHtml(
       `/page/${page.page}`,
       applySeo(template, {
         title: translate(i18n.documentTitlePage, { page: page.page }),
-        description: translate(i18n.seoPageDescription, { page: page.page }),
+        description,
         path: `/page/${page.page}`,
+        jsonLd: collectionPageJsonLd({
+          origin: siteUrl,
+          path: `/page/${page.page}`,
+          name: `Quran Mushaf Page ${page.page}`,
+          description,
+          isPartOfBook: true,
+          verses: versesForMushafPage(quran, mushaf, page.page),
+        }),
       }),
     );
     count++;
   }
 
   for (const juz of mushaf.juz ?? []) {
+    const description = translate(i18n.seoJuzDescription, { juz: juz.juz });
     writeRouteHtml(
       `/juz/${juz.juz}`,
       applySeo(template, {
         title: translate(i18n.documentTitleJuz, { juz: juz.juz }),
-        description: translate(i18n.seoJuzDescription, { juz: juz.juz }),
+        description,
         path: `/juz/${juz.juz}`,
+        jsonLd: collectionPageJsonLd({
+          origin: siteUrl,
+          path: `/juz/${juz.juz}`,
+          name: `Juz ${juz.juz}`,
+          description,
+          isPartOfBook: true,
+          verses: versesForJuz(quran, mushaf, juz.juz),
+        }),
       }),
     );
     count++;
@@ -228,20 +266,41 @@ function main() {
         description: excerpt,
         path: `/blog/${post.id}`,
         type: 'article',
+        jsonLd: articleJsonLd({
+          origin: siteUrl,
+          path: `/blog/${post.id}`,
+          headline: title,
+          description: excerpt,
+          image: post.image ?? '/og-image.svg',
+          datePublished: post.publishedAt,
+        }),
+      }),
+    );
+    count++;
+  }
+
+  for (const collection of adhkar.collections) {
+    const title = collection.title?.en ?? collection.id;
+    const description = collection.description?.en ?? '';
+    writeRouteHtml(
+      `/adhkar/${collection.id}`,
+      applySeo(template, {
+        title: translate(i18n.adhkarDetailDocumentTitle, { title }),
+        description,
+        path: `/adhkar/${collection.id}`,
+        type: 'article',
         jsonLd: {
           '@context': 'https://schema.org',
           '@type': 'Article',
           headline: title,
-          description: excerpt,
-          image: post.image?.startsWith('http') ? post.image : `${siteUrl}${post.image}`,
-          datePublished: post.publishedAt,
+          description,
           author: { '@type': 'Organization', name: 'QuranDaily' },
           publisher: {
             '@type': 'Organization',
             name: 'QuranDaily',
             logo: { '@type': 'ImageObject', url: `${siteUrl}/favicon.svg` },
           },
-          mainEntityOfPage: `${siteUrl}/blog/${post.id}`,
+          mainEntityOfPage: `${siteUrl}/adhkar/${collection.id}`,
         },
       }),
     );
@@ -260,14 +319,12 @@ function main() {
           description: theme.description,
         }),
         path: `/themes/${theme.id}`,
-        jsonLd: {
-          '@context': 'https://schema.org',
-          '@type': 'CollectionPage',
+        jsonLd: collectionPageJsonLd({
+          origin: siteUrl,
+          path: `/themes/${theme.id}`,
           name: theme.name,
           description: theme.description,
-          url: `${siteUrl}/themes/${theme.id}`,
-          isPartOf: { '@type': 'WebSite', name: 'QuranDaily', url: siteUrl },
-        },
+        }),
       }),
     );
     count++;
