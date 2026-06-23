@@ -15,6 +15,7 @@ export interface VersePresentationContext {
  */
 export interface VersePresentationStrategy {
   buildCopyText(verse: QuranVerseRow, ctx: VersePresentationContext): string;
+  buildVerseLink(verse: QuranVerseRow, ctx: VersePresentationContext): string;
   buildShareData(verse: QuranVerseRow, ctx: VersePresentationContext): ShareData;
 }
 
@@ -46,6 +47,10 @@ export class DefaultVersePresentationStrategy implements VersePresentationStrate
     }
     parts.push(tr.en, tr.ur, `${ctx.surahNameAr} ${ref}`);
     return parts.join('\n\n');
+  }
+
+  buildVerseLink(verse: QuranVerseRow, ctx: VersePresentationContext): string {
+    return buildVerseDeepLink(ctx.origin, ctx.surahNumber, verse.ayah);
   }
 
   buildShareData(verse: QuranVerseRow, ctx: VersePresentationContext): ShareData {

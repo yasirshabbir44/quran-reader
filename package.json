@@ -15,6 +15,7 @@
     "build-quran-data": "node scripts/build-quran-data.mjs",
     "build-thematic-index": "node scripts/build-thematic-index.mjs",
     "build-blog-index": "node scripts/build-blog-index.mjs",
+    "build-adhkar-index": "node scripts/build-adhkar-index.mjs",
     "build-seo-files": "node scripts/build-seo-files.mjs",
     "prerender-seo-html": "node scripts/prerender-seo-html.mjs",
     "build-mushaf-index": "node scripts/build-mushaf-index.mjs",

@@ -96,6 +96,7 @@ export class ThemeDetailComponent implements OnInit {
   protected readonly relatedThemes = signal<readonly ThematicThemeListItem[]>([]);
   protected readonly savedPlace = signal<{ surah: number; ayah: number } | null>(null);
   protected readonly copiedKey = signal<string | null>(null);
+  protected readonly copiedLinkKey = signal<string | null>(null);
 
   protected readonly themeId = computed(() => this.route.snapshot.paramMap.get('id') ?? '');
   protected readonly searchQuery = signal('');
@@ -263,6 +264,22 @@ export class ThemeDetailComponent implements OnInit {
     });
   }
 
+  protected copyVerseLink(v: ThematicVerseDetail): void {
+    if (!isPlatformBrowser(this.platformId) || !navigator.clipboard?.writeText) {
+      return;
+    }
+    const url = this.versePresentation.buildVerseLink(v.verse, this.presentationContext(v));
+    const key = this.verseKey(v);
+    void navigator.clipboard.writeText(url).then(() => {
+      this.copiedLinkKey.set(key);
+      setTimeout(() => {
+        if (this.copiedLinkKey() === key) {
+          this.copiedLinkKey.set(null);
+        }
+      }, 1600);
+    });
+  }
+
   protected shareVerse(v: ThematicVerseDetail): void {
     if (!isPlatformBrowser(this.platformId) || typeof navigator.share !== 'function') {
       return;
@@ -276,6 +293,10 @@ export class ThemeDetailComponent implements OnInit {
 
   protected isCopied(v: ThematicVerseDetail): boolean {
     return this.copiedKey() === this.verseKey(v);
+  }
+
+  protected isLinkCopied(v: ThematicVerseDetail): boolean {
+    return this.copiedLinkKey() === this.verseKey(v);
   }
 
   protected retryLoad(): void {

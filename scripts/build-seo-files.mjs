@@ -12,6 +12,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const SEO_CONFIG = join(ROOT, 'src', 'app', 'core', 'seo', 'seo.config.ts');
 const BLOG_INDEX = join(ROOT, 'public', 'blog-index.json');
+const ADHKAR_INDEX = join(ROOT, 'public', 'adhkar-index.json');
 const THEMATIC_INDEX = join(ROOT, 'public', 'thematic-index.json');
 const MUSHAF_INDEX = join(ROOT, 'public', 'mushaf-index.json');
 const PUBLIC = join(ROOT, 'public');
@@ -54,6 +55,7 @@ function main() {
   const siteUrl = readSiteUrl();
   const today = new Date().toISOString().slice(0, 10);
   const blog = JSON.parse(readFileSync(BLOG_INDEX, 'utf8'));
+  const adhkar = JSON.parse(readFileSync(ADHKAR_INDEX, 'utf8'));
   const themes = JSON.parse(readFileSync(THEMATIC_INDEX, 'utf8'));
   const mushaf = JSON.parse(readFileSync(MUSHAF_INDEX, 'utf8'));
 
@@ -61,6 +63,7 @@ function main() {
 
   entries.push(urlEntry(`${siteUrl}/`, { changefreq: 'daily', priority: 1.0, lastmod: today }));
   entries.push(urlEntry(`${siteUrl}/blog`, { changefreq: 'weekly', priority: 0.9, lastmod: today }));
+  entries.push(urlEntry(`${siteUrl}/adhkar`, { changefreq: 'weekly', priority: 0.9, lastmod: today }));
   entries.push(urlEntry(`${siteUrl}/themes`, { changefreq: 'weekly', priority: 0.9, lastmod: today }));
 
   for (let n = 1; n <= 114; n++) {
@@ -85,6 +88,12 @@ function main() {
     );
   }
 
+  for (const collection of adhkar.collections) {
+    entries.push(
+      urlEntry(`${siteUrl}/adhkar/${collection.id}`, { changefreq: 'monthly', priority: 0.7 }),
+    );
+  }
+
   for (const theme of themes.themes) {
     entries.push(urlEntry(`${siteUrl}/themes/${theme.id}`, { changefreq: 'monthly', priority: 0.7 }));
   }
@@ -104,11 +113,13 @@ Sitemap: ${siteUrl}/sitemap.xml
   const prerenderRoutes = [
     '/',
     '/blog',
+    '/adhkar',
     '/themes',
     ...Array.from({ length: 114 }, (_, i) => `/${i + 1}`),
     ...mushaf.pages.map((page) => `/page/${page.page}`),
     ...(mushaf.juz ?? []).map((juz) => `/juz/${juz.juz}`),
     ...blog.posts.map((post) => `/blog/${post.id}`),
+    ...adhkar.collections.map((collection) => `/adhkar/${collection.id}`),
     ...themes.themes.map((theme) => `/themes/${theme.id}`),
   ];
 

@@ -1,6 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { UiLocaleService } from '../../../core/ui/ui-locale.service';
-import { surahJsonLd } from '../../../core/seo/seo-jsonld';
+import {
+  juzCollectionJsonLd,
+  mushafPageCollectionJsonLd,
+  surahJsonLd,
+} from '../../../core/seo/seo-jsonld';
 import { SeoService } from '../../../core/seo/seo.service';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
 
@@ -14,19 +18,35 @@ export class ReaderDocumentTitleService {
     const kind = this.corpus.viewKind();
     if (kind === 'page') {
       const page = this.corpus.pageNumber();
+      const description = this.ui.translate('seoPageDescription', { page: formatUiNum(page) });
+      const verses = this.corpus.displayVerses().map((v) => ({ surah: v.surah, ayah: v.ayah }));
       this.seo.apply({
         title: this.ui.translate('documentTitlePage', { page: formatUiNum(page) }),
-        description: this.ui.translate('seoPageDescription', { page: formatUiNum(page) }),
+        description,
         path: `/page/${page}`,
+        jsonLd: mushafPageCollectionJsonLd({
+          origin: this.seo.siteOrigin(),
+          page,
+          description,
+          verses,
+        }),
       });
       return;
     }
     if (kind === 'juz') {
       const juz = this.corpus.juzNumber();
+      const description = this.ui.translate('seoJuzDescription', { juz: formatUiNum(juz) });
+      const verses = this.corpus.displayVerses().map((v) => ({ surah: v.surah, ayah: v.ayah }));
       this.seo.apply({
         title: this.ui.translate('documentTitleJuz', { juz: formatUiNum(juz) }),
-        description: this.ui.translate('seoJuzDescription', { juz: formatUiNum(juz) }),
+        description,
         path: `/juz/${juz}`,
+        jsonLd: juzCollectionJsonLd({
+          origin: this.seo.siteOrigin(),
+          juz,
+          description,
+          verses,
+        }),
       });
       return;
     }
@@ -51,6 +71,7 @@ export class ReaderDocumentTitleService {
           nameTranslit: s.nameTranslit,
           number: s.number,
           versesCount: s.versesCount,
+          verses: s.verses.map((v) => ({ surah: s.number, ayah: v.ayah })),
         }),
       });
     } else if (this.corpus.error()) {

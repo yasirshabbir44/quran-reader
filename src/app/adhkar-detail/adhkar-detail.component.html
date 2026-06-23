@@ -1,0 +1,104 @@
+@if (loadError()) {
+<main class="adhkar-detail adhkar-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="adhkar-detail__state-card">
+    <p class="adhkar-detail__state-text">{{ 'adhkarLoadError' | uiTranslate }}</p>
+    <button type="button" class="adhkar-detail__btn adhkar-detail__btn--primary" (click)="retryLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+  </div>
+</main>
+} @else if (loading()) {
+<main class="adhkar-detail adhkar-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <p class="adhkar-detail__state-text">{{ 'adhkarDetailLoading' | uiTranslate }}</p>
+</main>
+} @else if (notFound()) {
+<main class="adhkar-detail adhkar-detail--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="adhkar-detail__state-card">
+    <h1 class="adhkar-detail__state-title">{{ 'adhkarNotFoundTitle' | uiTranslate }}</h1>
+    <p class="adhkar-detail__state-text">{{ 'adhkarNotFoundBody' | uiTranslate }}</p>
+    <a class="adhkar-detail__btn adhkar-detail__btn--primary" routerLink="/adhkar">
+      {{ 'adhkarBackToDirectory' | uiTranslate }}
+    </a>
+  </div>
+</main>
+} @else if (collection(); as group) {
+<article class="adhkar-detail" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <header class="adhkar-detail__header">
+    <a class="adhkar-detail__back" routerLink="/adhkar" [attr.aria-label]="'adhkarBackToDirectory' | uiTranslate">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+      </svg>
+    </a>
+    <nav class="adhkar-detail__breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/adhkar">{{ 'adhkarTitle' | uiTranslate }}</a>
+      <span class="adhkar-detail__breadcrumb-sep" aria-hidden="true">/</span>
+      <span>{{ adhkar.pickLocalized(group.title) }}</span>
+    </nav>
+    <div class="adhkar-detail__header-tools">
+      <label class="adhkar-detail__tool-label" for="adhkar-detail-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="adhkar-detail-locale"
+        class="adhkar-detail__select"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+  </header>
+
+  <div class="adhkar-detail__intro">
+    <h1 class="adhkar-detail__title">{{ adhkar.pickLocalized(group.title) }}</h1>
+    <p class="adhkar-detail__meta">
+      {{ formatUiNum(group.itemCount) }} {{ 'adhkarItemCountLabel' | uiTranslate }}
+    </p>
+    <p class="adhkar-detail__excerpt">{{ adhkar.pickLocalized(group.description) }}</p>
+  </div>
+
+  <ol class="adhkar-detail__list" [attr.aria-label]="'adhkarDetailItemsTitle' | uiTranslate">
+    @for (item of group.items; track item.id; let i = $index) {
+    <li class="adhkar-detail__item" [id]="'adhkar-item-' + (i + 1)">
+      <div class="adhkar-detail__item-head">
+        <span class="adhkar-detail__item-num" aria-hidden="true">{{ formatUiNum(i + 1) }}</span>
+        @if (item.repeat) {
+        <span class="adhkar-detail__repeat">
+          {{ 'adhkarRepeatLabel' | uiTranslate: { count: formatUiNum(item.repeat) } }}
+        </span>
+        }
+      </div>
+      <p class="adhkar-detail__arabic" dir="rtl" lang="ar">{{ item.arabic }}</p>
+      @if (item.transliteration) {
+      <p class="adhkar-detail__translit">{{ item.transliteration }}</p>
+      }
+      <p class="adhkar-detail__translation">{{ itemTranslation(item) }}</p>
+      @if (item.source) {
+      <p class="adhkar-detail__source">{{ 'adhkarSourceLabel' | uiTranslate }}: {{ item.source }}</p>
+      }
+    </li>
+    }
+  </ol>
+
+  @if (relatedCollections().length > 0) {
+  <section class="adhkar-detail__related" aria-labelledby="adhkar-related-heading">
+    <h2 id="adhkar-related-heading" class="adhkar-detail__related-title">
+      {{ 'adhkarDetailRelatedTitle' | uiTranslate }}
+    </h2>
+    <ul class="adhkar-detail__related-list">
+      @for (related of relatedCollections(); track related.id) {
+      <li>
+        <a class="adhkar-detail__related-link" [routerLink]="['/adhkar', related.id]">
+          <span class="adhkar-detail__related-name">{{ adhkar.pickLocalized(related.title) }}</span>
+          <span class="adhkar-detail__related-meta">
+            {{ formatUiNum(related.itemCount) }} {{ 'adhkarItemCountLabel' | uiTranslate }}
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+  }
+</article>
+}

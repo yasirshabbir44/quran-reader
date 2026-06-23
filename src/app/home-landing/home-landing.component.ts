@@ -13,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
 import type { ReadingBookmark } from '../core/bookmark/reading-bookmark.repository';
-import { websiteJsonLd } from '../core/seo/seo-jsonld';
+import { homeJsonLd } from '../core/seo/seo-jsonld';
 import { SeoService } from '../core/seo/seo.service';
 import { BlogService } from '../core/blog/blog.service';
 import { DailyVerseService, type DailyVerseRef } from '../core/daily-verse/daily-verse.service';
@@ -305,11 +305,21 @@ export class HomeLandingComponent implements OnInit {
 
   private syncSeo(): void {
     const origin = this.seo.siteOrigin();
+    const description = this.ui.translate('seoHomeDescription');
+    const surahs = this.surahs();
+    const totalVerses = surahs.length
+      ? surahs.reduce((sum, s) => sum + s.versesCount, 0)
+      : 6236;
     this.seo.apply({
       title: this.ui.translate('documentTitleHome'),
-      description: this.ui.translate('seoHomeDescription'),
+      description,
       path: '/',
-      jsonLd: websiteJsonLd(origin),
+      jsonLd: homeJsonLd({
+        origin,
+        surahs,
+        totalVerses,
+        description,
+      }),
     });
   }
 
@@ -319,6 +329,7 @@ export class HomeLandingComponent implements OnInit {
     this.daily.set(this.dailyVerse.verseForDate(payload));
     this.corpusLoading.set(false);
     this.corpusError.set(false);
+    this.syncSeo();
   }
 
   private toSurahNavItem(s: QuranSurahPayload): SurahNavItem {
