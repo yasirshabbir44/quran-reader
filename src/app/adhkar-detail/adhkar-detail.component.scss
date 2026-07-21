@@ -281,6 +281,7 @@
   font-size: clamp(1.35rem, 4.2vw, 1.7rem);
   line-height: 2;
   text-align: right;
+  white-space: pre-line;
 }
 
 .adhkar-detail__translit {
@@ -312,6 +313,11 @@
   background: color-mix(in srgb, var(--reader-accent-soft) 55%, var(--reader-surface-inset));
 }
 
+.adhkar-detail__meaning--ar {
+  border-color: var(--reader-accent-border);
+  background: color-mix(in srgb, var(--reader-accent-soft) 55%, var(--reader-surface-inset));
+}
+
 .adhkar-detail__meaning-label {
   display: block;
   margin-bottom: 0.4rem;
@@ -334,6 +340,13 @@
   @include ui.ui-verse-urdu;
   font-size: clamp(1.05rem, 2.8vw, 1.18rem);
   line-height: 2;
+  color: var(--reader-ink);
+}
+
+.adhkar-detail__meaning--ar .adhkar-detail__meaning-text {
+  @include ui.ui-verse-arabic;
+  font-size: clamp(1.02rem, 2.6vw, 1.12rem);
+  line-height: 1.85;
   color: var(--reader-ink);
 }
 

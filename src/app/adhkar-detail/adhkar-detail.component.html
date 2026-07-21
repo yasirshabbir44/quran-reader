@@ -131,6 +131,16 @@
       }
 
       <div class="adhkar-detail__meanings">
+        @if (ui.locale() === 'ar') {
+        <div class="adhkar-detail__meaning adhkar-detail__meaning--ar" dir="rtl" lang="ar">
+          <span class="adhkar-detail__meaning-label">{{ 'adhkarMeaningArabic' | uiTranslate }}</span>
+          <p class="adhkar-detail__meaning-text">{{ item.translation.ar }}</p>
+        </div>
+        <div class="adhkar-detail__meaning adhkar-detail__meaning--en" dir="ltr" lang="en">
+          <span class="adhkar-detail__meaning-label">{{ 'adhkarMeaningEnglish' | uiTranslate }}</span>
+          <p class="adhkar-detail__meaning-text">{{ item.translation.en }}</p>
+        </div>
+        } @else if (ui.locale() === 'ur') {
         <div class="adhkar-detail__meaning adhkar-detail__meaning--ur" dir="rtl" lang="ur">
           <span class="adhkar-detail__meaning-label">{{ 'adhkarMeaningUrdu' | uiTranslate }}</span>
           <p class="adhkar-detail__meaning-text">{{ item.translation.ur }}</p>
@@ -139,6 +149,16 @@
           <span class="adhkar-detail__meaning-label">{{ 'adhkarMeaningEnglish' | uiTranslate }}</span>
           <p class="adhkar-detail__meaning-text">{{ item.translation.en }}</p>
         </div>
+        } @else {
+        <div class="adhkar-detail__meaning adhkar-detail__meaning--en" dir="ltr" lang="en">
+          <span class="adhkar-detail__meaning-label">{{ 'adhkarMeaningEnglish' | uiTranslate }}</span>
+          <p class="adhkar-detail__meaning-text">{{ item.translation.en }}</p>
+        </div>
+        <div class="adhkar-detail__meaning adhkar-detail__meaning--ur" dir="rtl" lang="ur">
+          <span class="adhkar-detail__meaning-label">{{ 'adhkarMeaningUrdu' | uiTranslate }}</span>
+          <p class="adhkar-detail__meaning-text">{{ item.translation.ur }}</p>
+        </div>
+        }
       </div>
 
       @if (item.source) {

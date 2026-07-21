@@ -247,7 +247,14 @@
           <span dir="rtl" lang="ar">{{ dv.surahNameAr }}</span>
           · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(dv.ayah) }}
         </p>
-        <p class="landing__verse-en" dir="ltr" lang="en">{{ dv.translationEn }}</p>
+        <p
+          class="landing__verse-en"
+          [class.landing__verse-en--ur]="dailyVerseTranslationMeta(dv).lang === 'ur'"
+          [attr.dir]="dailyVerseTranslationMeta(dv).dir"
+          [attr.lang]="dailyVerseTranslationMeta(dv).lang"
+        >
+          {{ dailyVerseTranslation(dv) }}
+        </p>
       </blockquote>
 
       <div class="landing__featured-actions">
@@ -271,10 +278,10 @@
         <p class="landing__topic-today-kicker">{{ 'homeTopicTodayKicker' | uiTranslate }}</p>
         <h2 id="topic-today-heading" class="landing__section-title">
           <a class="landing__topic-today-link" [routerLink]="['/themes', topic.theme.id]">
-            {{ topic.theme.name }}
+            {{ localizedThemeTitle(topic.theme) }}
           </a>
         </h2>
-        <p class="landing__topic-today-meta">{{ topic.categoryName }}</p>
+        <p class="landing__topic-today-meta">{{ localizedTopicCategory(topic) }}</p>
       </div>
 
       <blockquote class="landing__verse-card">
@@ -284,7 +291,12 @@
           <span dir="rtl" lang="ar">{{ topic.verse.surahNameAr }}</span>
           · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(topic.verse.ayah) }}
         </p>
-        <p class="landing__verse-en" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+        <p
+          class="landing__verse-en"
+          [class.landing__verse-en--ur]="dailyTopicTranslationMeta(topic).lang === 'ur'"
+          [attr.dir]="dailyTopicTranslationMeta(topic).dir"
+          [attr.lang]="dailyTopicTranslationMeta(topic).lang"
+        >
           {{ dailyTopicTranslation(topic) }}
         </p>
       </blockquote>

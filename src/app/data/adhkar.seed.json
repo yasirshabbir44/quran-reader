@@ -87,12 +87,12 @@
         },
         {
           "id": "three-quls",
-          "arabic": "قُلۡ هُوَ ٱللَّهُ أَحَدٌ ٱللَّهُ ٱلصَّمَدُ لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ قُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ مِن شَرِّ مَا خَلَقَ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ وَمِن شَرِّ ٱلنَّفَّـٰثَٰتِ فِي ٱلۡعُقَدِ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ قُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ مَلِكِ ٱلنَّاسِ إِلَٰهِ ٱلنَّاسِ مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ",
+          "arabic": "قُلۡ هُوَ ٱللَّهُ أَحَدٌ ٱللَّهُ ٱلصَّمَدُ لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ\n\nقُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ مِن شَرِّ مَا خَلَقَ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ وَمِن شَرِّ ٱلنَّفَّـٰثَٰتِ فِي ٱلۡعُقَدِ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ\n\nقُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ مَلِكِ ٱلنَّاسِ إِلَٰهِ ٱلنَّاسِ مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ",
           "transliteration": "Qul huwallahu ahad... Allahu as-samad... Qul a'udhu birabbil-falaq... Qul a'udhu birabbin-nas.",
           "translation": {
             "en": "Surah Al-Ikhlas, Al-Falaq, and An-Nas — each three times in the morning. Say, \"He is Allah, [who is] One Allah, the Eternal Refuge He neither begets nor is born Nor is there to Him any equivalent Say, \"I seek refuge in the Lord of daybreak From the evil of that which He created And from the evil of darkness when it settles And from the evil of the blowers in knots And from the evil of an envier when he envies Say, \"I seek refuge in the Lord of mankind The Sovereign of mankind The God of mankind From the evil of the retreating whisperer Who whispers [evil] into the breasts of mankind From among the jinn and mankind",
             "ur": "سورہ اخلاص، فلق اور ناس — ہر ایک صبح تین بار۔ کہو، وہ اللہ ہے، یکتا اللہ سب سے بے نیاز ہے اور سب اس کے محتاج ہیں نہ اس کی کوئی اولاد ہے اور نہ وہ کسی کی اولاد اور کوئی اس کا ہمسر نہیں ہے کہو، میں پناہ مانگتا ہوں صبح کے رب کی ہر اُس چیز کے شر سے جو اُس نے پیدا کی ہے اور رات کی تاریکی کے شر سے جب کہ وہ چھا جائے اور گرہوں میں پھونکنے والوں (یا والیوں) کے شر سے اور حاسد کے شر سے جب کہ وہ حسد کرے کہو، میں پناہ مانگتا ہوں انسانوں کے رب انسانوں کے بادشاہ انسانوں کے حقیقی معبود کی اُس وسوسہ ڈالنے والے کے شر سے جو بار بار پلٹ کر آتا ہے جو لوگوں کے دلوں میں وسوسے ڈالتا ہے خواہ وہ جنوں میں سے ہو یا انسانوں میں سے",
-            "ar": "سورة الإخلاص والفلق والناس — كل واحدة ثلاث مرات صباحًا."
+            "ar": "سورة الإخلاص والفلق والناس — كل واحدة ثلاث مرات صباحًا. قل هو الله أحد… قل أعوذ برب الفلق… قل أعوذ برب الناس."
           },
           "repeat": 3,
           "source": "Abu Dawud 5082"
@@ -104,7 +104,7 @@
           "translation": {
             "en": "Ayat al-Kursi (2:255), once in the morning for protection until evening. Allah - there is no deity except Him, the Ever-Living, the Sustainer of [all] existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is [presently] before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great",
             "ur": "آیت الکرسی (۲:۲۵۵)، صبح ایک بار — شام تک حفاظت۔ اللہ، وہ زندہ جاوید ہستی، جو تمام کائنات کو سنبھالے ہوئے ہے، اُس کے سوا کوئی خدا نہیں ہے وہ نہ سوتا ہے اور نہ اُسے اونگھ لگتی ہے زمین اور آسمانوں میں جو کچھ ہے، اُسی کا ہے کون ہے جو اُس کی جناب میں اُس کی اجازت کے بغیر سفارش کر سکے؟ جو کچھ بندوں کے سامنے ہے اسے بھی وہ جانتا ہے اور جو کچھ اُن سے اوجھل ہے، اس سے بھی وہ واقف ہے اور اُس کی معلومات میں سے کوئی چیز اُن کی گرفت ادراک میں نہیں آسکتی الّا یہ کہ کسی چیز کا علم وہ خود ہی اُن کو دینا چاہے اُس کی حکومت آسمانوں اور زمین پر چھائی ہوئی ہے اور اُن کی نگہبانی اس کے لیے کوئی تھکا دینے والا کام نہیں ہے بس وہی ایک بزرگ و برتر ذات ہے",
-            "ar": "آية الكرسي (٢:٢٥٥)، مرة في الصباح للحفظ حتى المساء."
+            "ar": "آية الكرسي (٢:٢٥٥) — الله لا إله إلا هو الحي القيوم… تُقرأ مرة في الصباح للحفظ حتى المساء."
           },
           "repeat": 1,
           "source": "Al-Hakim; Hasan"
@@ -127,7 +127,7 @@
           "transliteration": "Raditu billahi rabban, wa bil-islami dinan, wa bi Muhammadin nabiyyan.",
           "translation": {
             "en": "I am pleased with Allah as my Lord, with Islam as my religion, and with Muhammad as my Prophet.",
-            "ur": "میں اللہ کو اپنے رب، اسلام کو اپنے دین اور محمد کو اپنے نبی پر راضی ہوں۔",
+            "ur": "میں اللہ کو رب، اسلام کو دین اور محمد ﷺ کو نبی مان کر راضی ہوں۔",
             "ar": "رضيت بالله ربًا، وبالإسلام دينًا، وبمحمد نبيًا."
           },
           "repeat": 3,
@@ -209,12 +209,12 @@
         },
         {
           "id": "three-quls",
-          "arabic": "قُلۡ هُوَ ٱللَّهُ أَحَدٌ ٱللَّهُ ٱلصَّمَدُ لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ قُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ مِن شَرِّ مَا خَلَقَ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ وَمِن شَرِّ ٱلنَّفَّـٰثَٰتِ فِي ٱلۡعُقَدِ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ قُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ مَلِكِ ٱلنَّاسِ إِلَٰهِ ٱلنَّاسِ مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ",
+          "arabic": "قُلۡ هُوَ ٱللَّهُ أَحَدٌ ٱللَّهُ ٱلصَّمَدُ لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ\n\nقُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ مِن شَرِّ مَا خَلَقَ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ وَمِن شَرِّ ٱلنَّفَّـٰثَٰتِ فِي ٱلۡعُقَدِ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ\n\nقُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ مَلِكِ ٱلنَّاسِ إِلَٰهِ ٱلنَّاسِ مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ",
           "transliteration": "Qul huwallahu ahad... Allahu as-samad... Qul a'udhu birabbil-falaq... Qul a'udhu birabbin-nas.",
           "translation": {
             "en": "Surah Al-Ikhlas, Al-Falaq, and An-Nas — each three times in the evening. Say, \"He is Allah, [who is] One Allah, the Eternal Refuge He neither begets nor is born Nor is there to Him any equivalent Say, \"I seek refuge in the Lord of daybreak From the evil of that which He created And from the evil of darkness when it settles And from the evil of the blowers in knots And from the evil of an envier when he envies Say, \"I seek refuge in the Lord of mankind The Sovereign of mankind The God of mankind From the evil of the retreating whisperer Who whispers [evil] into the breasts of mankind From among the jinn and mankind",
             "ur": "سورہ اخلاص، فلق اور ناس — ہر ایک شام تین بار۔ کہو، وہ اللہ ہے، یکتا اللہ سب سے بے نیاز ہے اور سب اس کے محتاج ہیں نہ اس کی کوئی اولاد ہے اور نہ وہ کسی کی اولاد اور کوئی اس کا ہمسر نہیں ہے کہو، میں پناہ مانگتا ہوں صبح کے رب کی ہر اُس چیز کے شر سے جو اُس نے پیدا کی ہے اور رات کی تاریکی کے شر سے جب کہ وہ چھا جائے اور گرہوں میں پھونکنے والوں (یا والیوں) کے شر سے اور حاسد کے شر سے جب کہ وہ حسد کرے کہو، میں پناہ مانگتا ہوں انسانوں کے رب انسانوں کے بادشاہ انسانوں کے حقیقی معبود کی اُس وسوسہ ڈالنے والے کے شر سے جو بار بار پلٹ کر آتا ہے جو لوگوں کے دلوں میں وسوسے ڈالتا ہے خواہ وہ جنوں میں سے ہو یا انسانوں میں سے",
-            "ar": "سورة الإخلاص والفلق والناس — كل واحدة ثلاث مرات مساءً."
+            "ar": "سورة الإخلاص والفلق والناس — كل واحدة ثلاث مرات مساءً. قل هو الله أحد… قل أعوذ برب الفلق… قل أعوذ برب الناس."
           },
           "repeat": 3,
           "source": "Abu Dawud 5082"
@@ -226,7 +226,7 @@
           "translation": {
             "en": "Ayat al-Kursi (2:255), once in the evening for protection until morning. Allah - there is no deity except Him, the Ever-Living, the Sustainer of [all] existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is [presently] before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great",
             "ur": "آیت الکرسی (۲:۲۵۵)، شام ایک بار — صبح تک حفاظت۔ اللہ، وہ زندہ جاوید ہستی، جو تمام کائنات کو سنبھالے ہوئے ہے، اُس کے سوا کوئی خدا نہیں ہے وہ نہ سوتا ہے اور نہ اُسے اونگھ لگتی ہے زمین اور آسمانوں میں جو کچھ ہے، اُسی کا ہے کون ہے جو اُس کی جناب میں اُس کی اجازت کے بغیر سفارش کر سکے؟ جو کچھ بندوں کے سامنے ہے اسے بھی وہ جانتا ہے اور جو کچھ اُن سے اوجھل ہے، اس سے بھی وہ واقف ہے اور اُس کی معلومات میں سے کوئی چیز اُن کی گرفت ادراک میں نہیں آسکتی الّا یہ کہ کسی چیز کا علم وہ خود ہی اُن کو دینا چاہے اُس کی حکومت آسمانوں اور زمین پر چھائی ہوئی ہے اور اُن کی نگہبانی اس کے لیے کوئی تھکا دینے والا کام نہیں ہے بس وہی ایک بزرگ و برتر ذات ہے",
-            "ar": "آية الكرسي (٢:٢٥٥)، مرة في المساء للحفظ حتى الصباح."
+            "ar": "آية الكرسي (٢:٢٥٥) — الله لا إله إلا هو الحي القيوم… تُقرأ مرة في المساء للحفظ حتى الصباح."
           },
           "repeat": 1,
           "source": "Al-Hakim; Hasan"
@@ -249,7 +249,7 @@
           "transliteration": "Raditu billahi rabban, wa bil-islami dinan, wa bi Muhammadin nabiyyan.",
           "translation": {
             "en": "I am pleased with Allah as my Lord, with Islam as my religion, and with Muhammad as my Prophet.",
-            "ur": "میں اللہ کو اپنے رب، اسلام کو اپنے دین اور محمد کو اپنے نبی پر راضی ہوں۔",
+            "ur": "میں اللہ کو رب، اسلام کو دین اور محمد ﷺ کو نبی مان کر راضی ہوں۔",
             "ar": "رضيت بالله ربًا، وبالإسلام دينًا، وبمحمد نبيًا."
           },
           "repeat": 3,
@@ -313,14 +313,14 @@
           "translation": {
             "en": "Ayat al-Kursi (2:255), before sleeping — a guardian from Allah remains with you until morning. Allah - there is no deity except Him, the Ever-Living, the Sustainer of [all] existence. Neither drowsiness overtakes Him nor sleep. To Him belongs whatever is in the heavens and whatever is on the earth. Who is it that can intercede with Him except by His permission? He knows what is [presently] before them and what will be after them, and they encompass not a thing of His knowledge except for what He wills. His Kursi extends over the heavens and the earth, and their preservation tires Him not. And He is the Most High, the Most Great",
             "ur": "آیت الکرسی (۲:۲۵۵)، سونے سے پہلے — اللہ کا حافظ صبح تک ساتھ رہتا ہے۔ اللہ، وہ زندہ جاوید ہستی، جو تمام کائنات کو سنبھالے ہوئے ہے، اُس کے سوا کوئی خدا نہیں ہے وہ نہ سوتا ہے اور نہ اُسے اونگھ لگتی ہے زمین اور آسمانوں میں جو کچھ ہے، اُسی کا ہے کون ہے جو اُس کی جناب میں اُس کی اجازت کے بغیر سفارش کر سکے؟ جو کچھ بندوں کے سامنے ہے اسے بھی وہ جانتا ہے اور جو کچھ اُن سے اوجھل ہے، اس سے بھی وہ واقف ہے اور اُس کی معلومات میں سے کوئی چیز اُن کی گرفت ادراک میں نہیں آسکتی الّا یہ کہ کسی چیز کا علم وہ خود ہی اُن کو دینا چاہے اُس کی حکومت آسمانوں اور زمین پر چھائی ہوئی ہے اور اُن کی نگہبانی اس کے لیے کوئی تھکا دینے والا کام نہیں ہے بس وہی ایک بزرگ و برتر ذات ہے",
-            "ar": "آية الكرسي (٢:٢٥٥)، قبل النوم — يبقى معك حافظ من الله حتى الصباح."
+            "ar": "آية الكرسي (٢:٢٥٥) — الله لا إله إلا هو الحي القيوم… قبل النوم يبقى معك حافظ من الله حتى الصباح."
           },
           "repeat": 1,
           "source": "Bukhari 5010"
         },
         {
           "id": "three-quls",
-          "arabic": "قُلۡ هُوَ ٱللَّهُ أَحَدٌ ٱللَّهُ ٱلصَّمَدُ لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ قُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ مِن شَرِّ مَا خَلَقَ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ وَمِن شَرِّ ٱلنَّفَّـٰثَٰتِ فِي ٱلۡعُقَدِ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ قُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ مَلِكِ ٱلنَّاسِ إِلَٰهِ ٱلنَّاسِ مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ",
+          "arabic": "قُلۡ هُوَ ٱللَّهُ أَحَدٌ ٱللَّهُ ٱلصَّمَدُ لَمۡ يَلِدۡ وَلَمۡ يُولَدۡ وَلَمۡ يَكُن لَّهُۥ كُفُوًا أَحَدُۢ\n\nقُلۡ أَعُوذُ بِرَبِّ ٱلۡفَلَقِ مِن شَرِّ مَا خَلَقَ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ وَمِن شَرِّ ٱلنَّفَّـٰثَٰتِ فِي ٱلۡعُقَدِ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ\n\nقُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ مَلِكِ ٱلنَّاسِ إِلَٰهِ ٱلنَّاسِ مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ",
           "transliteration": "Qul huwallahu ahad... Allahu as-samad... Qul a'udhu birabbil-falaq... Qul a'udhu birabbin-nas.",
           "translation": {
             "en": "Surah Al-Ikhlas, Al-Falaq, and An-Nas — three times before sleep, then blow into the palms and wipe over the body. Say, \"He is Allah, [who is] One Allah, the Eternal Refuge He neither begets nor is born Nor is there to Him any equivalent Say, \"I seek refuge in the Lord of daybreak From the evil of that which He created And from the evil of darkness when it settles And from the evil of the blowers in knots And from the evil of an envier when he envies Say, \"I seek refuge in the Lord of mankind The Sovereign of mankind The God of mankind From the evil of the retreating whisperer Who whispers [evil] into the breasts of mankind From among the jinn and mankind",
@@ -332,13 +332,14 @@
         },
         {
           "id": "tasbih-tahmid-takbir-sleep",
-          "arabic": "سُبْحَانَ اللَّهِ، الْحَمْدُ لِلَّهِ، اللَّهُ أَكْبَرُ",
+          "arabic": "سُبْحَانَ اللَّهِ (٣٣)، الْحَمْدُ لِلَّهِ (٣٣)، اللَّهُ أَكْبَرُ (٣٤)",
           "transliteration": "Subhanallah (33), Alhamdulillah (33), Allahu akbar (34).",
           "translation": {
-            "en": "Before sleep, say SubhanAllah thirty-three times, Alhamdulillah thirty-three times, and Allahu Akbar thirty-four times.",
-            "ur": "سونے سے پہلے سبحان اللہ تینتیس بار، الحمد للہ تینتیس بار، اور اللہ اکبر چونتیس بار کہیں۔",
-            "ar": "قبل النوم: سبحان الله ثلاثًا وثلاثين، والحمد لله ثلاثًا وثلاثين، والله أكبر أربعًا وثلاثين."
+            "en": "Before sleep, say SubhanAllah thirty-three times, Alhamdulillah thirty-three times, and Allahu Akbar thirty-four times (100 in total).",
+            "ur": "سونے سے پہلے سبحان اللہ تینتیس بار، الحمد للہ تینتیس بار، اور اللہ اکبر چونتیس بار کہیں (کل سو مرات)۔",
+            "ar": "قبل النوم: سبحان الله ثلاثًا وثلاثين، والحمد لله ثلاثًا وثلاثين، والله أكبر أربعًا وثلاثين (المجموع ١٠٠)."
           },
+          "repeat": 100,
           "source": "Bukhari 5362"
         },
         {
@@ -348,7 +349,7 @@
           "translation": {
             "en": "The last two verses of Surah Al-Baqarah (2:285–286) before sleeping — they are sufficient for the night. The Messenger has believed in what was revealed to him from his Lord, and [so have] the believers. All of them have believed in Allah and His angels and His books and His messengers, [saying], \"We make no distinction between any of His messengers.\" And they say, \"We hear and we obey. [We seek] Your forgiveness, our Lord, and to You is the [final] destination Allah does not charge a soul except [with that within] its capacity. It will have [the consequence of] what [good] it has gained, and it will bear [the consequence of] what [evil] it has earned. \"Our Lord, do not impose blame upon us if we have forgotten or erred. Our Lord, and lay not upon us a burden like that which You laid upon those before us. Our Lord, and burden us not with that which we have no ability to bear. And pardon us; and forgive us; and have mercy upon us. You are our protector, so give us victory over the disbelieving people",
             "ur": "سورہ بقرہ کی آخری دو آیات (۲:۲۸۵–۲۸۶) سونے سے پہلے — رات کے لیے کافی حفاظت۔ رسول اُس ہدایت پر ایمان لایا ہے جو اس کے رب کی طرف سے اس پر نازل ہوئی ہے اور جو لوگ اِس رسول کے ماننے والے ہیں، انہوں نے بھی اس ہدایت کو دل سے تسلیم کر لیا ہے یہ سب اللہ اور اس کے فرشتوں اوراس کی کتابوں اور اس کے رسولوں کو مانتے ہیں اور ان کا قول یہ ہے کہ: \"ہم اللہ کے رسولوں کو ایک دوسرے سے الگ نہیں کرتے، ہم نے حکم سنا اور اطاعت قبول کی مالک! ہم تجھ سے خطا بخشی کے طالب ہیں اور ہمیں تیری ہی طرف پلٹنا ہے اللہ کسی متنفس پر اُس کی مقدرت سے بڑھ کر ذمہ داری کا بوجھ نہیں ڈالتا ہر شخص نے جو نیکی کمائی ہے، اس کا پھل اسی کے لیے ہے اور جو بدی سمیٹی ہے، اس کا وبال اسی پر ہے (ایمان لانے والو! تم یوں دعا کیا کرو) اے ہمارے رب! ہم سے بھول چوک میں جو قصور ہو جائیں، ان پر گرفت نہ کر مالک! ہم پر وہ بوجھ نہ ڈال، جو تو نے ہم سے پہلے لوگوں پر ڈالے تھے پروردگار! جس بار کو اٹھانے کی طاقت ہم میں نہیں ہے، وہ ہم پر نہ رکھ، ہمارے ساتھ نرمی کر، ہم سے در گزر فرما، ہم پر رحم کر، تو ہمارا مولیٰ ہے، کافروں کے مقابلے میں ہماری مدد کر",
-            "ar": "آخر آيتين من سورة البقرة (٢:٢٨٥–٢٨٦) قبل النوم — يكفيانه من كل شيء."
+            "ar": "آخر آيتين من سورة البقرة (٢:٢٨٥–٢٨٦) قبل النوم — قال النبي ﷺ إنهما تكفيان من قام بهما من كل شيء."
           },
           "source": "Bukhari 5009"
         }

@@ -457,6 +457,10 @@
   @include ui.ui-verse-translation;
 }
 
+.landing__verse-en--ur {
+  @include ui.ui-verse-urdu;
+}
+
 .landing__featured-actions {
   display: flex;
   flex-wrap: wrap;

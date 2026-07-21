@@ -1,4 +1,10 @@
 import type { ThematicThemeListItem } from '../thematic-index/thematic-index.service';
+import {
+  localizedCategoryName,
+  localizedThemeDescription,
+  localizedThemeName,
+} from '../thematic-index/theme-locale-labels';
+import type { UiLocaleCode } from '../ui/ui-locale.service';
 import type { SurahNavItem } from '../../surah-reader/models/surah-nav-item.model';
 import { filterSurahNavItems } from '../../surah-reader/utils/surah-nav-filter.util';
 
@@ -14,23 +20,33 @@ export interface GlobalSearchResult {
 const MAX_SURAH_RESULTS = 6;
 const MAX_THEME_RESULTS = 4;
 
-function themeMatchesQuery(theme: ThematicThemeListItem, needle: string): boolean {
-  if (theme.name.toLowerCase().includes(needle)) {
-    return true;
-  }
-  if (theme.categoryName.toLowerCase().includes(needle)) {
-    return true;
-  }
-  if (theme.description?.toLowerCase().includes(needle)) {
-    return true;
-  }
-  return false;
+function themeMatchesQuery(
+  theme: ThematicThemeListItem,
+  needle: string,
+  locale: UiLocaleCode,
+): boolean {
+  const name = localizedThemeName(theme.id, theme.name, locale).toLowerCase();
+  const category = localizedCategoryName(theme.categoryId, theme.categoryName, locale).toLowerCase();
+  const description = (
+    localizedThemeDescription(theme.id, theme.description, locale) ??
+    theme.description ??
+    ''
+  ).toLowerCase();
+  return (
+    name.includes(needle) ||
+    theme.name.toLowerCase().includes(needle) ||
+    category.includes(needle) ||
+    theme.categoryName.toLowerCase().includes(needle) ||
+    description.includes(needle) ||
+    (theme.description?.toLowerCase().includes(needle) ?? false)
+  );
 }
 
 export function buildGlobalSearchResults(
   query: string,
   surahs: readonly SurahNavItem[],
   themes: readonly ThematicThemeListItem[],
+  locale: UiLocaleCode = 'en',
 ): readonly GlobalSearchResult[] {
   const raw = query.trim().normalize('NFKC');
   if (!raw) {
@@ -39,7 +55,9 @@ export function buildGlobalSearchResults(
   const needle = raw.toLowerCase();
 
   const surahMatches = filterSurahNavItems(surahs, raw).slice(0, MAX_SURAH_RESULTS);
-  const themeMatches = themes.filter((t) => themeMatchesQuery(t, needle)).slice(0, MAX_THEME_RESULTS);
+  const themeMatches = themes
+    .filter((t) => themeMatchesQuery(t, needle, locale))
+    .slice(0, MAX_THEME_RESULTS);
 
   const results: GlobalSearchResult[] = [];
 
@@ -55,8 +73,8 @@ export function buildGlobalSearchResults(
   for (const t of themeMatches) {
     results.push({
       kind: 'theme',
-      label: t.name,
-      meta: t.categoryName,
+      label: localizedThemeName(t.id, t.name, locale),
+      meta: localizedCategoryName(t.categoryId, t.categoryName, locale),
       routerLink: ['/themes', t.id],
     });
   }

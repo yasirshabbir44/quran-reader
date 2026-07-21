@@ -72,9 +72,15 @@ UI locale packs live in:
 
 ## Routing
 
-- `/` redirects to `/surah/67`
-- `/surah/:n` renders the reader for the selected surah number
-- Unknown routes redirect back to `/surah/67`
+- `/` — home landing (surah index, daily verse, continue reading)
+- `/adhkar`, `/adhkar/:id` — morning / evening / night remembrances
+- `/themes`, `/themes/:id` — thematic verse collections
+- `/blog`, `/blog/:id` — articles
+- `/:n` — surah reader (`1`–`114`)
+- `/page/:p` — mushaf page (`1`–`604`)
+- `/juz/:j` — juz reader (`1`–`30`)
+- `/surah/:n` — legacy redirect to `/:n`
+- Unknown routes → 404 page
 
 ## Project Structure (Key Files)
 

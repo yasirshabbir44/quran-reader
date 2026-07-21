@@ -9,7 +9,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { combineLatest, map, switchMap } from 'rxjs';
+import { combineLatest, map, of, switchMap } from 'rxjs';
 import { AdhkarProgressService } from '../core/adhkar/adhkar-progress.service';
 import { AdhkarService } from '../core/adhkar/adhkar.service';
 import type { AdhkarCollection, AdhkarItem } from '../core/adhkar/adhkar.types';
@@ -187,21 +187,41 @@ export class AdhkarDetailComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     this.loading.set(true);
     this.loadError.set(false);
+    this.notFound.set(false);
     this.adhkar.retryLoad();
     this.adhkar
-      .getCollection(id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((data) => {
+      .load()
+      .pipe(
+        switchMap((index) => {
+          if (!index) {
+            return of({ kind: 'error' as const });
+          }
+          const exists = index.collections.some((c) => c.id === id);
+          if (!exists) {
+            return of({ kind: 'missing' as const });
+          }
+          return this.adhkar.getCollection(id).pipe(
+            map((data) =>
+              data ? ({ kind: 'ok' as const, data }) : ({ kind: 'error' as const }),
+            ),
+          );
+        }),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe((result) => {
         this.loading.set(false);
-        if (!data) {
+        if (result.kind === 'error') {
+          this.loadError.set(true);
+          return;
+        }
+        if (result.kind === 'missing') {
           this.notFound.set(true);
           this.syncNotFoundSeo();
           return;
         }
-        this.collection.set(data);
-        this.notFound.set(false);
-        this.syncCollectionSeo(data);
-        this.loadRelated(data.id);
+        this.collection.set(result.data);
+        this.syncCollectionSeo(result.data);
+        this.loadRelated(result.data.id);
       });
   }
 
