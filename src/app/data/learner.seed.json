@@ -1,0 +1,217 @@
+{
+  "version": 1,
+  "lessons": [
+    {
+      "id": "letters",
+      "kind": "letters",
+      "icon": "alphabet",
+      "sortOrder": 1,
+      "skill": "reading",
+      "title": {
+        "en": "Arabic alphabet",
+        "ur": "عربی حروفِ تہجی",
+        "ar": "الحروف العربية"
+      },
+      "description": {
+        "en": "Learn the 28 Arabic letters with names and sounds — the foundation of Quran reading.",
+        "ur": "آٹھائیس عربی حروف نام اور آواز کے ساتھ سیکھیں — قرآن پڑھنے کی بنیاد۔",
+        "ar": "تعلّم الحروف العربية الثمانية والعشرين بأسمائها وأصواتها — أساس قراءة القرآن."
+      },
+      "items": [
+        { "id": "alif", "arabic": "ا", "transliteration": "alif", "meaning": { "en": "Alif — open / long ā sound", "ur": "الف — کھلی / لمبی آ آواز", "ar": "ألف — صوت مفتوح أو ألف ممدودة" }, "tip": { "en": "Often carries a hamza (أ إ آ) when it starts a word.", "ur": "لفظ کے شروع میں اکثر ہمزہ (أ إ آ) کے ساتھ آتی ہے۔", "ar": "غالبًا تحمل همزة (أ إ آ) في بداية الكلمة." } },
+        { "id": "ba", "arabic": "ب", "transliteration": "bā'", "meaning": { "en": "Bā' — like English b", "ur": "با — انگریزی b جیسی", "ar": "باء — كصوت b" }, "tip": { "en": "One dot below. Soft lips together.", "ur": "ایک نقطہ نیچے، ہونٹ نرم ملیں۔", "ar": "نقطة واحدة تحتها. الشفتان تلتقيان برقة." } },
+        { "id": "ta", "arabic": "ت", "transliteration": "tā'", "meaning": { "en": "Tā' — soft t (tip of tongue)", "ur": "تا — نرم ت (زبان کا اگلا حصہ)", "ar": "تاء — تاء خفيفة بطرف اللسان" } },
+        { "id": "tha", "arabic": "ث", "transliteration": "thā'", "meaning": { "en": "Thā' — like th in think", "ur": "ثا — think والی th", "ar": "ثاء — كـ th في think" } },
+        { "id": "jim", "arabic": "ج", "transliteration": "jīm", "meaning": { "en": "Jīm — like j in jam", "ur": "جیم — jam والی j", "ar": "جيم — كـ j في jam" } },
+        { "id": "ha", "arabic": "ح", "transliteration": "ḥā'", "meaning": { "en": "Ḥā' — deep h from the throat", "ur": "حا — گلے سے گہری ح", "ar": "حاء — من وسط الحلق" }, "tip": { "en": "Not the soft English h — squeeze from the throat.", "ur": "انگریزی h نہیں — گلا دبا کر۔", "ar": "ليست الهاء الإنجليزية — اضغط من الحلق." } },
+        { "id": "kha", "arabic": "خ", "transliteration": "khā'", "meaning": { "en": "Khā' — like Scottish loch", "ur": "خا — لوچ والی خ", "ar": "خاء — كصوت الخاء الألماني" } },
+        { "id": "dal", "arabic": "د", "transliteration": "dāl", "meaning": { "en": "Dāl — soft d", "ur": "دال — نرم د", "ar": "دال — دال خفيفة" } },
+        { "id": "dhal", "arabic": "ذ", "transliteration": "dhāl", "meaning": { "en": "Dhāl — like th in this", "ur": "ذال — this والی th", "ar": "ذال — كـ th في this" } },
+        { "id": "ra", "arabic": "ر", "transliteration": "rā'", "meaning": { "en": "Rā' — rolled r", "ur": "را — لپٹی ہوئی ر", "ar": "راء — راء مفخّمة أو مرقّقة حسب الحركة" } },
+        { "id": "zay", "arabic": "ز", "transliteration": "zāy", "meaning": { "en": "Zāy — like z in zoo", "ur": "زے — zoo والی z", "ar": "زاي — كـ z في zoo" } },
+        { "id": "sin", "arabic": "س", "transliteration": "sīn", "meaning": { "en": "Sīn — soft s", "ur": "سین — نرم س", "ar": "سين — سين خفيفة" } },
+        { "id": "shin", "arabic": "ش", "transliteration": "shīn", "meaning": { "en": "Shīn — like sh in ship", "ur": "شین — ship والی sh", "ar": "شين — كـ sh في ship" } },
+        { "id": "sad", "arabic": "ص", "transliteration": "ṣād", "meaning": { "en": "Ṣād — heavy s (tongue back)", "ur": "صاد — بھاری س", "ar": "صاد — سين مفخّمة" } },
+        { "id": "dad", "arabic": "ض", "transliteration": "ḍād", "meaning": { "en": "Ḍād — heavy d (side of tongue)", "ur": "ضاد — بھاری د", "ar": "ضاد — حرف مفخّم مميز" } },
+        { "id": "ta-heavy", "arabic": "ط", "transliteration": "ṭā'", "meaning": { "en": "Ṭā' — heavy t", "ur": "طا — بھاری ت", "ar": "طاء — تاء مفخّمة" } },
+        { "id": "za-heavy", "arabic": "ظ", "transliteration": "ẓā'", "meaning": { "en": "Ẓā' — heavy th (this)", "ur": "ظا — بھاری ذ", "ar": "ظاء — ذال مفخّمة" } },
+        { "id": "ayn", "arabic": "ع", "transliteration": "ʿayn", "meaning": { "en": "ʿAyn — deep throat stop", "ur": "عین — گلے کا دباؤ", "ar": "عين — من وسط الحلق" }, "tip": { "en": "No English match — practice with a teacher if you can.", "ur": "انگریزی میں مماثل نہیں — استاد سے مشق کریں۔", "ar": "لا مقابل إنجليزي — تدرّب مع معلم إن أمكن." } },
+        { "id": "ghayn", "arabic": "غ", "transliteration": "ghayn", "meaning": { "en": "Ghayn — voiced kh / French r", "ur": "غین — آواز والی غ", "ar": "غين — كصوت الغين الفرنسية" } },
+        { "id": "fa", "arabic": "ف", "transliteration": "fā'", "meaning": { "en": "Fā' — like f in far", "ur": "فا — far والی f", "ar": "فاء — كـ f في far" } },
+        { "id": "qaf", "arabic": "ق", "transliteration": "qāf", "meaning": { "en": "Qāf — deep k from the throat", "ur": "قاف — گلے سے گہری ق", "ar": "قاف — من أقصى اللسان مع الحنك" } },
+        { "id": "kaf", "arabic": "ك", "transliteration": "kāf", "meaning": { "en": "Kāf — like k in key", "ur": "کاف — key والی k", "ar": "كاف — كـ k في key" } },
+        { "id": "lam", "arabic": "ل", "transliteration": "lām", "meaning": { "en": "Lām — like l in lamp", "ur": "لام — lamp والی l", "ar": "لام — كـ l في lamp" } },
+        { "id": "mim", "arabic": "م", "transliteration": "mīm", "meaning": { "en": "Mīm — like m in me", "ur": "میم — me والی m", "ar": "ميم — كـ m في me" } },
+        { "id": "nun", "arabic": "ن", "transliteration": "nūn", "meaning": { "en": "Nūn — like n in no", "ur": "نون — no والی n", "ar": "نون — كـ n في no" } },
+        { "id": "ha-soft", "arabic": "ه", "transliteration": "hā'", "meaning": { "en": "Hā' — soft h (breath)", "ur": "ہا — نرم ہ", "ar": "هاء — هاء خفيفة" } },
+        { "id": "waw", "arabic": "و", "transliteration": "wāw", "meaning": { "en": "Wāw — w or long ū", "ur": "واو — و یا لمبی او", "ar": "واو — واو أو مدّة واو" } },
+        { "id": "ya", "arabic": "ي", "transliteration": "yā'", "meaning": { "en": "Yā' — y or long ī", "ur": "یا — ی یا لمبی ای", "ar": "ياء — ياء أو مدّة ياء" } }
+      ]
+    },
+    {
+      "id": "vowels",
+      "kind": "vowels",
+      "icon": "vowels",
+      "sortOrder": 2,
+      "skill": "reading",
+      "title": {
+        "en": "Vowels & marks",
+        "ur": "حرکات اور علامات",
+        "ar": "الحركات والعلامات"
+      },
+      "description": {
+        "en": "Short vowels, sukūn, shadda, and tanwīn — the marks that make Quran reading work.",
+        "ur": "مختصر حرکات، سکون، شدّہ اور تنوین — وہ علامات جو قرآن پڑھنا ممکن بناتی ہیں۔",
+        "ar": "الحركات القصيرة والسكون والشدة والتنوين — علامات تجعل قراءة القرآن ممكنة."
+      },
+      "items": [
+        { "id": "fatha", "arabic": "بَ", "transliteration": "ba", "meaning": { "en": "Fatḥa — short a (as in cat)", "ur": "فتحہ — مختصر اَ", "ar": "فتحة — صوت a قصير" }, "tip": { "en": "A small diagonal mark above the letter.", "ur": "حرف کے اوپر چھوٹی ترچھی لکیر۔", "ar": "شرطة مائلة صغيرة فوق الحرف." } },
+        { "id": "kasra", "arabic": "بِ", "transliteration": "bi", "meaning": { "en": "Kasra — short i (as in bit)", "ur": "کسرہ — مختصر اِ", "ar": "كسرة — صوت i قصير" }, "tip": { "en": "A small diagonal mark below the letter.", "ur": "حرف کے نیچے چھوٹی ترچھی لکیر۔", "ar": "شرطة مائلة صغيرة تحت الحرف." } },
+        { "id": "damma", "arabic": "بُ", "transliteration": "bu", "meaning": { "en": "Ḍamma — short u (as in put)", "ur": "ضمہ — مختصر اُ", "ar": "ضمة — صوت u قصير" }, "tip": { "en": "Looks like a tiny و above the letter.", "ur": "حرف کے اوپر چھوٹی و جیسی۔", "ar": "تشبه واوًا صغيرة فوق الحرف." } },
+        { "id": "sukun", "arabic": "بْ", "transliteration": "b", "meaning": { "en": "Sukūn — no vowel (stop)", "ur": "سکون — بغیر حرکت", "ar": "سكون — بلا حركة" }, "tip": { "en": "Circle or quiet mark — do not add a vowel.", "ur": "دائرہ نما علامت — حرکت نہ لگائیں۔", "ar": "علامة السكون — لا تُضِف حركة." } },
+        { "id": "shadda", "arabic": "بّ", "transliteration": "bb", "meaning": { "en": "Shadda — double the letter", "ur": "شدّہ — حرف کو دوگنا", "ar": "شدة — تضعيف الحرف" }, "tip": { "en": "Hold / stress the consonant once, then continue.", "ur": "حرف کو ایک بار دبا کر پکڑیں پھر آگے بڑھیں۔", "ar": "شدّد الحرف مرة ثم تابع." } },
+        { "id": "tanween-fath", "arabic": "بًا", "transliteration": "ban", "meaning": { "en": "Tanwīn fatḥ — an ending", "ur": "تنوین فتح — ان", "ar": "تنوين فتح — an" } },
+        { "id": "tanween-kasr", "arabic": "بٍ", "transliteration": "bin", "meaning": { "en": "Tanwīn kasr — in ending", "ur": "تنوین کسر — اِن", "ar": "تنوين كسر — in" } },
+        { "id": "tanween-damm", "arabic": "بٌ", "transliteration": "bun", "meaning": { "en": "Tanwīn ḍamm — un ending", "ur": "تنوین ضم — اُن", "ar": "تنوين ضم — un" } },
+        { "id": "madd-alif", "arabic": "بَا", "transliteration": "bā", "meaning": { "en": "Long ā — fatḥa + alif", "ur": "لمبی آ — فتحہ + الف", "ar": "مدّة ألف — فتحة + ألف" }, "tip": { "en": "Stretch about two counts (longer with madd marks).", "ur": "تقریباً دو گنتیاں کھینچیں۔", "ar": "مدّ بحركة تقريبًا (أطول مع علامات المد)." } },
+        { "id": "madd-ya", "arabic": "بِي", "transliteration": "bī", "meaning": { "en": "Long ī — kasra + yā'", "ur": "لمبی ای — کسرہ + یا", "ar": "مدّة ياء — كسرة + ياء" } },
+        { "id": "madd-waw", "arabic": "بُو", "transliteration": "bū", "meaning": { "en": "Long ū — ḍamma + wāw", "ur": "لمبی او — ضمہ + واو", "ar": "مدّة واو — ضمة + واو" } },
+        { "id": "hamza", "arabic": "أ", "transliteration": "ʾa", "meaning": { "en": "Hamza — glottal stop", "ur": "ہمزہ — گلے کا وقفہ", "ar": "همزة — قطع صوتي" }, "tip": { "en": "A brief catch in the throat before the vowel.", "ur": "حرکت سے پہلے گلے میں مختصر رکاوٹ۔", "ar": "انقطاع قصير في الحلق قبل الحركة." } }
+      ]
+    },
+    {
+      "id": "common-words",
+      "kind": "words",
+      "icon": "words",
+      "sortOrder": 3,
+      "skill": "vocabulary",
+      "title": {
+        "en": "High-frequency words",
+        "ur": "عام قرآنی الفاظ",
+        "ar": "كلمات قرآنية شائعة"
+      },
+      "description": {
+        "en": "Words you meet again and again in the Quran — build recognition while you read.",
+        "ur": "وہ الفاظ جو قرآن میں بار بار آتے ہیں — پڑھتے ہوئے پہچان مضبوط کریں۔",
+        "ar": "كلمات تتكرر كثيرًا في القرآن — عزّز التعرف عليها أثناء القراءة."
+      },
+      "items": [
+        { "id": "allah", "arabic": "ٱللَّهُ", "transliteration": "Allāh", "meaning": { "en": "Allah — God", "ur": "اللہ", "ar": "الله" }, "tip": { "en": "The most frequent word in the Quran.", "ur": "قرآن میں سب سے زیادہ بار آنے والا لفظ۔", "ar": "أكثر كلمة تكرارًا في القرآن." } },
+        { "id": "rabb", "arabic": "رَبّ", "transliteration": "rabb", "meaning": { "en": "Lord / Sustainer", "ur": "رب / پالنے والا", "ar": "ربّ / مربّي" } },
+        { "id": "rahman", "arabic": "ٱلرَّحْمَـٰن", "transliteration": "ar-Raḥmān", "meaning": { "en": "The Most Gracious", "ur": "رحمان — نہایت مہربان", "ar": "الرحمن" } },
+        { "id": "rahim", "arabic": "ٱلرَّحِيم", "transliteration": "ar-Raḥīm", "meaning": { "en": "The Most Merciful", "ur": "رحیم — نہایت رحم کرنے والا", "ar": "الرحيم" } },
+        { "id": "kitab", "arabic": "كِتَـٰب", "transliteration": "kitāb", "meaning": { "en": "Book / scripture", "ur": "کتاب", "ar": "كتاب" } },
+        { "id": "quran", "arabic": "قُرْءَان", "transliteration": "qurʾān", "meaning": { "en": "Quran — the Recitation", "ur": "قرآن", "ar": "قرآن" } },
+        { "id": "iman", "arabic": "إِيمَـٰن", "transliteration": "īmān", "meaning": { "en": "Faith / belief", "ur": "ایمان", "ar": "إيمان" } },
+        { "id": "muslim", "arabic": "مُسْلِم", "transliteration": "muslim", "meaning": { "en": "One who submits (to Allah)", "ur": "مسلم — فرمانبردار", "ar": "مسلم" } },
+        { "id": "salat", "arabic": "صَلَوٰة", "transliteration": "ṣalāh", "meaning": { "en": "Prayer", "ur": "نماز / صلاۃ", "ar": "صلاة" } },
+        { "id": "zakat", "arabic": "زَكَوٰة", "transliteration": "zakāh", "meaning": { "en": "Almsgiving / purification", "ur": "زکوٰۃ", "ar": "زكاة" } },
+        { "id": "jannah", "arabic": "جَنَّة", "transliteration": "jannah", "meaning": { "en": "Garden / Paradise", "ur": "جنت", "ar": "جنة" } },
+        { "id": "nar", "arabic": "نَار", "transliteration": "nār", "meaning": { "en": "Fire / Hellfire", "ur": "آگ / جہنم", "ar": "نار" } },
+        { "id": "yawm", "arabic": "يَوْم", "transliteration": "yawm", "meaning": { "en": "Day", "ur": "دن", "ar": "يوم" } },
+        { "id": "sama", "arabic": "سَمَآء", "transliteration": "samāʾ", "meaning": { "en": "Sky / heaven", "ur": "آسمان", "ar": "سماء" } },
+        { "id": "ard", "arabic": "أَرْض", "transliteration": "arḍ", "meaning": { "en": "Earth / land", "ur": "زمین", "ar": "أرض" } },
+        { "id": "insan", "arabic": "إِنسَـٰن", "transliteration": "insān", "meaning": { "en": "Human / mankind", "ur": "انسان", "ar": "إنسان" } },
+        { "id": "qalb", "arabic": "قَلْب", "transliteration": "qalb", "meaning": { "en": "Heart", "ur": "دل", "ar": "قلب" } },
+        { "id": "haqq", "arabic": "حَقّ", "transliteration": "ḥaqq", "meaning": { "en": "Truth / right", "ur": "حق", "ar": "حق" } },
+        { "id": "nur", "arabic": "نُور", "transliteration": "nūr", "meaning": { "en": "Light", "ur": "نور", "ar": "نور" } },
+        { "id": "ilm", "arabic": "عِلْم", "transliteration": "ʿilm", "meaning": { "en": "Knowledge", "ur": "علم", "ar": "علم" } },
+        { "id": "sabr", "arabic": "صَبْر", "transliteration": "ṣabr", "meaning": { "en": "Patience", "ur": "صبر", "ar": "صبر" } },
+        { "id": "shukr", "arabic": "شُكْر", "transliteration": "shukr", "meaning": { "en": "Gratitude / thanks", "ur": "شکر", "ar": "شكر" } },
+        { "id": "tawba", "arabic": "تَوْبَة", "transliteration": "tawbah", "meaning": { "en": "Repentance", "ur": "توبہ", "ar": "توبة" } },
+        { "id": "dhikr", "arabic": "ذِكْر", "transliteration": "dhikr", "meaning": { "en": "Remembrance", "ur": "ذکر", "ar": "ذكر" } },
+        { "id": "dua", "arabic": "دُعَآء", "transliteration": "duʿāʾ", "meaning": { "en": "Supplication / prayer", "ur": "دعا", "ar": "دعاء" } },
+        { "id": "malak", "arabic": "مَلَك", "transliteration": "malak", "meaning": { "en": "Angel", "ur": "فرشتہ", "ar": "ملك" } },
+        { "id": "rasul", "arabic": "رَسُول", "transliteration": "rasūl", "meaning": { "en": "Messenger", "ur": "رسول", "ar": "رسول" } },
+        { "id": "nabi", "arabic": "نَبِىّ", "transliteration": "nabī", "meaning": { "en": "Prophet", "ur": "نبی", "ar": "نبي" } },
+        { "id": "ayah", "arabic": "ءَايَة", "transliteration": "āyah", "meaning": { "en": "Sign / verse", "ur": "آیت / نشانی", "ar": "آية" } },
+        { "id": "sabil", "arabic": "سَبِيل", "transliteration": "sabīl", "meaning": { "en": "Path / way", "ur": "راستہ", "ar": "سبيل" } }
+      ]
+    },
+    {
+      "id": "fatihah",
+      "kind": "verse",
+      "icon": "verse",
+      "sortOrder": 4,
+      "skill": "vocabulary",
+      "title": {
+        "en": "Al-Fātiḥah words",
+        "ur": "سورہ فاتحہ کے الفاظ",
+        "ar": "كلمات الفاتحة"
+      },
+      "description": {
+        "en": "Word-by-word meanings from Surah Al-Fatihah — the opening you recite every prayer.",
+        "ur": "سورہ فاتحہ کے لفظ بہ لفظ معانی — وہ افتتاح جو ہر نماز میں پڑھی جاتی ہے۔",
+        "ar": "معاني كلمة بكلمة من سورة الفاتحة — فاتحة كل صلاة."
+      },
+      "items": [
+        { "id": "1-1-1", "arabic": "بِسْمِ", "transliteration": "bis'mi", "meaning": { "en": "In the name", "ur": "نام سے", "ar": "باسم" }, "verseRef": "1:1" },
+        { "id": "1-1-2", "arabic": "ٱللَّهِ", "transliteration": "Allāhi", "meaning": { "en": "of Allah", "ur": "اللہ کے", "ar": "الله" }, "verseRef": "1:1" },
+        { "id": "1-1-3", "arabic": "ٱلرَّحْمَـٰنِ", "transliteration": "ar-Raḥmāni", "meaning": { "en": "the Most Gracious", "ur": "رحمان", "ar": "الرحمن" }, "verseRef": "1:1" },
+        { "id": "1-1-4", "arabic": "ٱلرَّحِيمِ", "transliteration": "ar-Raḥīmi", "meaning": { "en": "the Most Merciful", "ur": "رحیم", "ar": "الرحيم" }, "verseRef": "1:1" },
+        { "id": "1-2-1", "arabic": "ٱلْحَمْدُ", "transliteration": "al-ḥamdu", "meaning": { "en": "All praise", "ur": "تمام تعریف", "ar": "الحمد" }, "verseRef": "1:2" },
+        { "id": "1-2-2", "arabic": "لِلَّهِ", "transliteration": "lillāhi", "meaning": { "en": "belongs to Allah", "ur": "اللہ کے لیے", "ar": "لله" }, "verseRef": "1:2" },
+        { "id": "1-2-3", "arabic": "رَبِّ", "transliteration": "rabbi", "meaning": { "en": "Lord of", "ur": "ربّ", "ar": "ربّ" }, "verseRef": "1:2" },
+        { "id": "1-2-4", "arabic": "ٱلْعَـٰلَمِينَ", "transliteration": "al-ʿālamīn", "meaning": { "en": "the worlds", "ur": "جہانوں کے", "ar": "العالمين" }, "verseRef": "1:2" },
+        { "id": "1-3-1", "arabic": "ٱلرَّحْمَـٰنِ", "transliteration": "ar-Raḥmāni", "meaning": { "en": "the Most Gracious", "ur": "رحمان", "ar": "الرحمن" }, "verseRef": "1:3" },
+        { "id": "1-3-2", "arabic": "ٱلرَّحِيمِ", "transliteration": "ar-Raḥīmi", "meaning": { "en": "the Most Merciful", "ur": "رحیم", "ar": "الرحيم" }, "verseRef": "1:3" },
+        { "id": "1-4-1", "arabic": "مَـٰلِكِ", "transliteration": "māliki", "meaning": { "en": "Master / Owner of", "ur": "مالک", "ar": "مالك" }, "verseRef": "1:4" },
+        { "id": "1-4-2", "arabic": "يَوْمِ", "transliteration": "yawmi", "meaning": { "en": "the Day of", "ur": "دن کا", "ar": "يوم" }, "verseRef": "1:4" },
+        { "id": "1-4-3", "arabic": "ٱلدِّينِ", "transliteration": "ad-dīn", "meaning": { "en": "Judgment / Recompense", "ur": "جزا / دین", "ar": "الدين" }, "verseRef": "1:4" },
+        { "id": "1-5-1", "arabic": "إِيَّاكَ", "transliteration": "iyyāka", "meaning": { "en": "You alone", "ur": "صرف تیری", "ar": "إياك" }, "verseRef": "1:5" },
+        { "id": "1-5-2", "arabic": "نَعْبُدُ", "transliteration": "naʿbudu", "meaning": { "en": "we worship", "ur": "ہم عبادت کرتے ہیں", "ar": "نعبد" }, "verseRef": "1:5" },
+        { "id": "1-5-3", "arabic": "وَإِيَّاكَ", "transliteration": "wa-iyyāka", "meaning": { "en": "and You alone", "ur": "اور صرف تجھ سے", "ar": "وإياك" }, "verseRef": "1:5" },
+        { "id": "1-5-4", "arabic": "نَسْتَعِينُ", "transliteration": "nastaʿīn", "meaning": { "en": "we seek help", "ur": "ہم مدد مانگتے ہیں", "ar": "نستعين" }, "verseRef": "1:5" },
+        { "id": "1-6-1", "arabic": "ٱهْدِنَا", "transliteration": "ihdinā", "meaning": { "en": "Guide us", "ur": "ہمیں ہدایت دے", "ar": "اهدنا" }, "verseRef": "1:6" },
+        { "id": "1-6-2", "arabic": "ٱلصِّرَٰطَ", "transliteration": "aṣ-ṣirāṭa", "meaning": { "en": "the path", "ur": "راستہ", "ar": "الصراط" }, "verseRef": "1:6" },
+        { "id": "1-6-3", "arabic": "ٱلْمُسْتَقِيمَ", "transliteration": "al-mustaqīm", "meaning": { "en": "the straight", "ur": "سیدھا", "ar": "المستقيم" }, "verseRef": "1:6" },
+        { "id": "1-7-1", "arabic": "صِرَٰطَ", "transliteration": "ṣirāṭa", "meaning": { "en": "the path of", "ur": "راستہ", "ar": "صراط" }, "verseRef": "1:7" },
+        { "id": "1-7-2", "arabic": "ٱلَّذِينَ", "transliteration": "alladhīna", "meaning": { "en": "those who", "ur": "جن لوگوں", "ar": "الذين" }, "verseRef": "1:7" },
+        { "id": "1-7-3", "arabic": "أَنْعَمْتَ", "transliteration": "anʿamta", "meaning": { "en": "You have favored", "ur": "تو نے انعام دیا", "ar": "أنعمت" }, "verseRef": "1:7" },
+        { "id": "1-7-4", "arabic": "عَلَيْهِمْ", "transliteration": "ʿalayhim", "meaning": { "en": "upon them", "ur": "ان پر", "ar": "عليهم" }, "verseRef": "1:7" }
+      ]
+    },
+    {
+      "id": "short-surahs",
+      "kind": "verse",
+      "icon": "verse",
+      "sortOrder": 5,
+      "skill": "vocabulary",
+      "title": {
+        "en": "Short surah words",
+        "ur": "مختصر سورتوں کے الفاظ",
+        "ar": "كلمات السور القصيرة"
+      },
+      "description": {
+        "en": "Key words from Al-Ikhlāṣ, Al-Kawthar, and An-Nās — great for new readers.",
+        "ur": "اخلاص، کوثر اور ناس کے اہم الفاظ — نئے قارئین کے لیے بہترین۔",
+        "ar": "كلمات أساسية من الإخلاص والكوثر والناس — مناسبة للمبتدئين."
+      },
+      "items": [
+        { "id": "112-1-1", "arabic": "قُلْ", "transliteration": "qul", "meaning": { "en": "Say", "ur": "کہو", "ar": "قل" }, "verseRef": "112:1" },
+        { "id": "112-1-2", "arabic": "هُوَ", "transliteration": "huwa", "meaning": { "en": "He", "ur": "وہ", "ar": "هو" }, "verseRef": "112:1" },
+        { "id": "112-1-3", "arabic": "ٱللَّهُ", "transliteration": "Allāhu", "meaning": { "en": "Allah", "ur": "اللہ", "ar": "الله" }, "verseRef": "112:1" },
+        { "id": "112-1-4", "arabic": "أَحَدٌ", "transliteration": "aḥad", "meaning": { "en": "One / Unique", "ur": "ایک / یکتا", "ar": "أحد" }, "verseRef": "112:1" },
+        { "id": "112-2-1", "arabic": "ٱلصَّمَدُ", "transliteration": "aṣ-Ṣamad", "meaning": { "en": "the Eternal Refuge", "ur": "بے نیاز / صمد", "ar": "الصمد" }, "verseRef": "112:2" },
+        { "id": "112-3-1", "arabic": "لَمْ يَلِدْ", "transliteration": "lam yalid", "meaning": { "en": "He neither begets", "ur": "نہ اس نے جنا", "ar": "لم يلد" }, "verseRef": "112:3" },
+        { "id": "112-3-2", "arabic": "وَلَمْ يُولَدْ", "transliteration": "wa-lam yūlad", "meaning": { "en": "nor is He begotten", "ur": "اور نہ وہ جنا گیا", "ar": "ولم يولد" }, "verseRef": "112:3" },
+        { "id": "112-4-1", "arabic": "وَلَمْ يَكُن", "transliteration": "wa-lam yakun", "meaning": { "en": "and there is not", "ur": "اور نہیں ہے", "ar": "ولم يكن" }, "verseRef": "112:4" },
+        { "id": "112-4-2", "arabic": "لَّهُۥ كُفُوًا", "transliteration": "lahu kufuwan", "meaning": { "en": "to Him any equal", "ur": "اس کا کوئی ہمسر", "ar": "له كفوًا" }, "verseRef": "112:4" },
+        { "id": "108-1-1", "arabic": "إِنَّآ", "transliteration": "innā", "meaning": { "en": "Indeed We", "ur": "بیشک ہم نے", "ar": "إنا" }, "verseRef": "108:1" },
+        { "id": "108-1-2", "arabic": "أَعْطَيْنَـٰكَ", "transliteration": "aʿṭaynāka", "meaning": { "en": "have given you", "ur": "تجھے عطا کیا", "ar": "أعطيناك" }, "verseRef": "108:1" },
+        { "id": "108-1-3", "arabic": "ٱلْكَوْثَرَ", "transliteration": "al-Kawthar", "meaning": { "en": "Al-Kawthar (abundance)", "ur": "کوثر", "ar": "الكوثر" }, "verseRef": "108:1" },
+        { "id": "108-2-1", "arabic": "فَصَلِّ", "transliteration": "fa-ṣalli", "meaning": { "en": "so pray", "ur": "پس نماز پڑھو", "ar": "فصلّ" }, "verseRef": "108:2" },
+        { "id": "108-2-2", "arabic": "لِرَبِّكَ", "transliteration": "li-rabbika", "meaning": { "en": "to your Lord", "ur": "اپنے رب کے لیے", "ar": "لربك" }, "verseRef": "108:2" },
+        { "id": "108-2-3", "arabic": "وَٱنْحَرْ", "transliteration": "wa-nḥar", "meaning": { "en": "and sacrifice", "ur": "اور قربانی کرو", "ar": "وانحر" }, "verseRef": "108:2" },
+        { "id": "114-1-1", "arabic": "أَعُوذُ", "transliteration": "aʿūdhu", "meaning": { "en": "I seek refuge", "ur": "میں پناہ مانگتا ہوں", "ar": "أعوذ" }, "verseRef": "114:1" },
+        { "id": "114-1-2", "arabic": "بِرَبِّ", "transliteration": "bi-rabbi", "meaning": { "en": "in the Lord of", "ur": "ربّ کی", "ar": "بربّ" }, "verseRef": "114:1" },
+        { "id": "114-1-3", "arabic": "ٱلنَّاسِ", "transliteration": "an-nās", "meaning": { "en": "mankind", "ur": "لوگوں کے", "ar": "الناس" }, "verseRef": "114:1" },
+        { "id": "114-2-1", "arabic": "مَلِكِ", "transliteration": "maliki", "meaning": { "en": "the Sovereign of", "ur": "بادشاہ", "ar": "ملك" }, "verseRef": "114:2" },
+        { "id": "114-3-1", "arabic": "إِلَـٰهِ", "transliteration": "ilāhi", "meaning": { "en": "the God of", "ur": "معبود", "ar": "إله" }, "verseRef": "114:3" },
+        { "id": "114-4-1", "arabic": "مِن شَرِّ", "transliteration": "min sharri", "meaning": { "en": "from the evil of", "ur": "شر سے", "ar": "من شرّ" }, "verseRef": "114:4" },
+        { "id": "114-4-2", "arabic": "ٱلْوَسْوَاسِ", "transliteration": "al-waswās", "meaning": { "en": "the whisperer", "ur": "وسوسہ ڈالنے والا", "ar": "الوسواس" }, "verseRef": "114:4" },
+        { "id": "114-5-1", "arabic": "ٱلْخَنَّاسِ", "transliteration": "al-khannās", "meaning": { "en": "who withdraws", "ur": "بار بار پلٹنے والا", "ar": "الخناس" }, "verseRef": "114:5" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,238 @@
+@if (loadError()) {
+<main class="lesson lesson--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="lesson__state-card">
+    <p class="lesson__state-text">{{ 'learnerLoadError' | uiTranslate }}</p>
+    <button type="button" class="lesson__btn lesson__btn--primary" (click)="retryLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+  </div>
+</main>
+} @else if (loading()) {
+<main class="lesson lesson--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <p class="lesson__state-text">{{ 'learnerDetailLoading' | uiTranslate }}</p>
+</main>
+} @else if (notFound()) {
+<main class="lesson lesson--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="lesson__state-card">
+    <h1 class="lesson__state-title">{{ 'learnerNotFoundTitle' | uiTranslate }}</h1>
+    <p class="lesson__state-text">{{ 'learnerNotFoundBody' | uiTranslate }}</p>
+    <a class="lesson__btn lesson__btn--primary" routerLink="/learn">
+      {{ 'learnerBackToDirectory' | uiTranslate }}
+    </a>
+  </div>
+</main>
+} @else if (lesson(); as data) {
+<article class="lesson" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <header class="lesson__header">
+    <a class="lesson__back" routerLink="/learn" [attr.aria-label]="'learnerBackToDirectory' | uiTranslate">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+      </svg>
+    </a>
+    <nav class="lesson__breadcrumb" aria-label="Breadcrumb">
+      <a routerLink="/learn">{{ 'learnerTitle' | uiTranslate }}</a>
+      <span class="lesson__breadcrumb-sep" aria-hidden="true">/</span>
+      <span>{{ learner.pickLocalized(data.title) }}</span>
+    </nav>
+    <div class="lesson__header-tools">
+      <label class="lesson__tool-label" for="learner-lesson-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="learner-lesson-locale"
+        class="lesson__select"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+  </header>
+
+  <div class="lesson__intro">
+    <p class="lesson__skill">{{ skillLabel(data.skill) }}</p>
+    <h1 class="lesson__title">{{ learner.pickLocalized(data.title) }}</h1>
+    <p class="lesson__meta">
+      {{ formatUiNum(data.itemCount) }} {{ 'learnerItemCountLabel' | uiTranslate }}
+    </p>
+    <p class="lesson__excerpt">{{ learner.pickLocalized(data.description) }}</p>
+  </div>
+
+  <div
+    class="lesson__progress"
+    [class.lesson__progress--done]="allKnown()"
+    role="status"
+    [attr.aria-label]="
+      'learnerProgressAria'
+        | uiTranslate
+          : {
+              done: formatUiNum(lessonProgress().known),
+              total: formatUiNum(lessonProgress().total),
+            }
+    "
+  >
+    <div class="lesson__progress-row">
+      <p class="lesson__progress-label">
+        @if (allKnown()) {
+        {{ 'learnerProgressComplete' | uiTranslate }}
+        } @else {
+        {{
+          'learnerProgressLabel'
+            | uiTranslate
+              : {
+                  done: formatUiNum(lessonProgress().known),
+                  total: formatUiNum(lessonProgress().total),
+                }
+        }}
+        }
+      </p>
+      <button type="button" class="lesson__reset" (click)="resetProgress()">
+        {{ 'learnerResetProgress' | uiTranslate }}
+      </button>
+    </div>
+    <div class="lesson__progress-track" aria-hidden="true">
+      <span class="lesson__progress-fill" [style.width.%]="lessonProgress().percent"></span>
+    </div>
+  </div>
+
+  <div class="lesson__mode" role="group" [attr.aria-label]="'learnerModeAria' | uiTranslate">
+    <button
+      type="button"
+      class="lesson__mode-chip"
+      [class.lesson__mode-chip--active]="mode() === 'flashcards'"
+      (click)="setMode('flashcards')"
+    >
+      {{ 'learnerModeFlashcards' | uiTranslate }}
+    </button>
+    <button
+      type="button"
+      class="lesson__mode-chip"
+      [class.lesson__mode-chip--active]="mode() === 'list'"
+      (click)="setMode('list')"
+    >
+      {{ 'learnerModeList' | uiTranslate }}
+    </button>
+  </div>
+
+  @if (mode() === 'flashcards' && currentItem(); as item) {
+  <section class="lesson__study" aria-labelledby="lesson-study-heading">
+    <div class="lesson__study-head">
+      <h2 id="lesson-study-heading" class="lesson__study-title">{{ 'learnerStudyTitle' | uiTranslate }}</h2>
+      <p class="lesson__study-count">
+        {{
+          'learnerCardPosition'
+            | uiTranslate
+              : {
+                  current: formatUiNum(cardIndex() + 1),
+                  total: formatUiNum(data.items.length),
+                }
+        }}
+      </p>
+    </div>
+
+    <div
+      class="lesson__card"
+      [class.lesson__card--pulse]="flipPulse()"
+      [class.lesson__card--known]="currentKnown()"
+    >
+      <p class="lesson__card-arabic" dir="rtl" lang="ar">{{ item.arabic }}</p>
+      @if (revealed()) {
+      <p class="lesson__card-translit" dir="ltr" lang="en">{{ item.transliteration }}</p>
+      <p class="lesson__card-meaning">{{ learner.pickLocalized(item.meaning) }}</p>
+      @if (item.tip; as tip) {
+      <p class="lesson__card-tip">{{ learner.pickLocalized(tip) }}</p>
+      }
+      @if (item.verseRef; as ref) {
+      <p class="lesson__card-ref">
+        @if (verseLink(ref); as link) {
+        <a [routerLink]="link" [fragment]="verseFragment(ref) ?? undefined">{{ ref }}</a>
+        } @else {
+        {{ ref }}
+        }
+      </p>
+      }
+      } @else {
+      <p class="lesson__card-hint">{{ 'learnerRevealHint' | uiTranslate }}</p>
+      }
+    </div>
+
+    <div class="lesson__actions">
+      @if (!revealed()) {
+      <button type="button" class="lesson__btn lesson__btn--primary lesson__actions-main" (click)="reveal()">
+        {{ 'learnerReveal' | uiTranslate }}
+      </button>
+      } @else {
+      <button type="button" class="lesson__btn lesson__btn--primary" (click)="markKnown()">
+        {{ 'learnerKnowIt' | uiTranslate }}
+      </button>
+      <button type="button" class="lesson__btn lesson__btn--ghost" (click)="markLearning()">
+        {{ 'learnerStillLearning' | uiTranslate }}
+      </button>
+      }
+    </div>
+
+    <div class="lesson__nav">
+      <button type="button" class="lesson__nav-btn" [disabled]="cardIndex() === 0" (click)="goPrev()">
+        {{ 'learnerPrev' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="lesson__nav-btn"
+        [disabled]="cardIndex() >= data.items.length - 1"
+        (click)="goNext()"
+      >
+        {{ 'learnerNext' | uiTranslate }}
+      </button>
+    </div>
+  </section>
+  } @else {
+  <section class="lesson__list" aria-labelledby="lesson-list-heading">
+    <h2 id="lesson-list-heading" class="lesson__list-title">{{ 'learnerListTitle' | uiTranslate }}</h2>
+    <ul class="lesson__items">
+      @for (item of data.items; track item.id; let i = $index) {
+      <li class="lesson__item" [class.lesson__item--known]="isItemKnown(item)">
+        <button type="button" class="lesson__item-main" (click)="jumpToCard(i)">
+          <span class="lesson__item-arabic" dir="rtl" lang="ar">{{ item.arabic }}</span>
+          <span class="lesson__item-meta">
+            <span class="lesson__item-translit" dir="ltr" lang="en">{{ item.transliteration }}</span>
+            <span class="lesson__item-meaning">{{ learner.pickLocalized(item.meaning) }}</span>
+            @if (item.verseRef; as ref) {
+            <span class="lesson__item-ref">{{ ref }}</span>
+            }
+          </span>
+        </button>
+        <button
+          type="button"
+          class="lesson__item-toggle"
+          [attr.aria-pressed]="isItemKnown(item)"
+          (click)="toggleListKnown(item)"
+        >
+          {{
+            isItemKnown(item)
+              ? ('learnerMarkedKnown' | uiTranslate)
+              : ('learnerMarkKnown' | uiTranslate)
+          }}
+        </button>
+      </li>
+      }
+    </ul>
+  </section>
+  }
+
+  @if (relatedLessons().length > 0) {
+  <section class="lesson__related" aria-labelledby="lesson-related-heading">
+    <h2 id="lesson-related-heading" class="lesson__related-title">{{ 'learnerRelatedTitle' | uiTranslate }}</h2>
+    <ul class="lesson__related-list">
+      @for (related of relatedLessons(); track related.id) {
+      <li>
+        <a class="lesson__related-link" [routerLink]="['/learn', related.id]">
+          {{ learner.pickLocalized(related.title) }}
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+  }
+</article>
+}
