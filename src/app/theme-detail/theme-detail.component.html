@@ -47,7 +47,7 @@
   <nav class="theme-detail__breadcrumb" aria-label="Breadcrumb">
     <a class="theme-detail__crumb" routerLink="/themes">{{ 'themesBackToDirectory' | uiTranslate }}</a>
     <span class="theme-detail__crumb-sep" aria-hidden="true">/</span>
-    <span class="theme-detail__crumb theme-detail__crumb--current">{{ data.categoryName }}</span>
+    <span class="theme-detail__crumb theme-detail__crumb--current">{{ categoryDisplayName(data.theme.categoryId, data.categoryName) }}</span>
   </nav>
 
   <header class="theme-detail__header">
@@ -60,8 +60,8 @@
       <div class="theme-detail__hero-top">
         <span class="theme-detail__hero-icon" aria-hidden="true">{{ themeIcon(data.theme) }}</span>
         <div class="theme-detail__hero-head">
-          <p class="theme-detail__category">{{ data.categoryName }}</p>
-          <h1 class="theme-detail__title">{{ data.theme.name }}</h1>
+          <p class="theme-detail__category">{{ categoryDisplayName(data.theme.categoryId, data.categoryName) }}</p>
+          <h1 class="theme-detail__title">{{ themeDisplayName(data.theme) }}</h1>
         </div>
         <div class="theme-detail__header-tools">
           <label class="theme-detail__tool-label" for="theme-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
@@ -78,8 +78,8 @@
           </select>
         </div>
       </div>
-      @if (data.theme.description) {
-      <p class="theme-detail__desc">{{ data.theme.description }}</p>
+      @if (themeDisplayDescription(data.theme); as desc) {
+      <p class="theme-detail__desc">{{ desc }}</p>
       }
       <div class="theme-detail__hero-foot">
         <span class="theme-detail__badge">
@@ -243,13 +243,19 @@
         }
         <p
           class="theme-detail__tr"
-          [attr.dir]="ui.locale() === 'ur' ? 'rtl' : 'ltr'"
-          [attr.lang]="ui.locale()"
+          [attr.dir]="translationPrimaryMeta(v).dir"
+          [attr.lang]="translationPrimaryMeta(v).lang"
         >
           {{ translationPrimary(v) }}
         </p>
         @if (translationSecondary(v); as secondary) {
-        <p class="theme-detail__tr theme-detail__tr--secondary" dir="ltr" lang="en">{{ secondary }}</p>
+        <p
+          class="theme-detail__tr theme-detail__tr--secondary"
+          [attr.dir]="ui.locale() === 'ur' ? 'ltr' : 'rtl'"
+          [attr.lang]="ui.locale() === 'ur' ? 'en' : 'ur'"
+        >
+          {{ secondary }}
+        </p>
         }
       </blockquote>
 

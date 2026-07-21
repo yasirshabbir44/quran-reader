@@ -19,7 +19,12 @@ import {
   type ThematicThemeListItem,
 } from '../core/thematic-index/thematic-index.service';
 import type { ThematicTheme } from '../core/thematic-index/thematic-index.types';
-import { normalizeVerseTranslations } from '../core/verse-presentation/verse-presentation.strategy';
+import { normalizeVerseTranslations, pickVerseTranslationForLocale } from '../core/verse-presentation/verse-presentation.strategy';
+import {
+  localizedCategoryName,
+  localizedThemeDescription,
+  localizedThemeName,
+} from '../core/thematic-index/theme-locale-labels';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 
@@ -227,7 +232,32 @@ export class ThemesExplorerComponent implements OnInit {
 
   protected dailyTopicTranslation(inspiration: DailyThemeInspiration): string {
     const tr = normalizeVerseTranslations(inspiration.verse.verse);
-    return this.ui.locale() === 'ur' ? tr.ur : tr.en;
+    return pickVerseTranslationForLocale(tr, this.ui.locale()).text;
+  }
+
+  protected dailyTopicTranslationMeta(inspiration: DailyThemeInspiration): {
+    lang: 'en' | 'ur';
+    dir: 'ltr' | 'rtl';
+  } {
+    const tr = normalizeVerseTranslations(inspiration.verse.verse);
+    const picked = pickVerseTranslationForLocale(tr, this.ui.locale());
+    return { lang: picked.lang, dir: picked.dir };
+  }
+
+  protected themeDisplayName(theme: ThematicTheme | ThematicThemeListItem): string {
+    return localizedThemeName(theme.id, theme.name, this.ui.locale());
+  }
+
+  protected themeDisplayDescription(theme: ThematicTheme | ThematicThemeListItem): string {
+    return (
+      localizedThemeDescription(theme.id, theme.description, this.ui.locale()) ??
+      theme.description ??
+      ''
+    );
+  }
+
+  protected categoryDisplayName(id: string, fallback: string): string {
+    return localizedCategoryName(id, fallback, this.ui.locale());
   }
 
   protected dailyVerseRef(inspiration: DailyThemeInspiration): string {
@@ -254,17 +284,28 @@ export class ThemesExplorerComponent implements OnInit {
     if (sort === 'verses') {
       return b.verseCount - a.verseCount || a.name.localeCompare(b.name);
     }
-    return a.name.localeCompare(b.name);
+    const locale = this.ui.locale();
+    const nameA = localizedThemeName(a.id, a.name, locale);
+    const nameB = localizedThemeName(b.id, b.name, locale);
+    return nameA.localeCompare(nameB, locale === 'en' ? 'en' : locale);
   }
 
   private themeMatchesQuery(t: ThematicThemeListItem, needle: string): boolean {
-    if (t.name.toLowerCase().includes(needle)) {
+    const locale = this.ui.locale();
+    const name = localizedThemeName(t.id, t.name, locale).toLowerCase();
+    const category = localizedCategoryName(t.categoryId, t.categoryName, locale).toLowerCase();
+    const description = (
+      localizedThemeDescription(t.id, t.description, locale) ??
+      t.description ??
+      ''
+    ).toLowerCase();
+    if (name.includes(needle) || t.name.toLowerCase().includes(needle)) {
       return true;
     }
-    if (t.categoryName.toLowerCase().includes(needle)) {
+    if (category.includes(needle) || t.categoryName.toLowerCase().includes(needle)) {
       return true;
     }
-    if (t.description?.toLowerCase().includes(needle)) {
+    if (description.includes(needle) || (t.description?.toLowerCase().includes(needle) ?? false)) {
       return true;
     }
     return false;
