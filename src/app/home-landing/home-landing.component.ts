@@ -18,7 +18,10 @@ import { SeoService } from '../core/seo/seo.service';
 import { BlogService } from '../core/blog/blog.service';
 import { DailyVerseService, type DailyVerseRef } from '../core/daily-verse/daily-verse.service';
 import { KhatamService } from '../core/khatam/khatam.service';
-import { KhatamProgressCardComponent } from '../core/khatam/ui/khatam-progress-card.component';
+import {
+  KhatamProgressCardComponent,
+  type KhatamStartEvent,
+} from '../core/khatam/ui/khatam-progress-card.component';
 import { GlobalSearchComponent } from '../core/ui/global-search/global-search.component';
 import { MushafIndexService } from '../core/mushaf/mushaf-index.service';
 import { QURAN_CORPUS_SOURCE } from '../core/quran/quran-corpus.source';
@@ -205,6 +208,7 @@ export class HomeLandingComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.savedPlace.set(this.bookmarkRepo.read());
       this.khatam.hydrateFromStorage();
+      this.khatam.syncDay();
     }
 
     this.mushafIndex
@@ -341,12 +345,20 @@ export class HomeLandingComponent implements OnInit {
     this.quranData.retryLoad();
   }
 
-  protected startKhatam(): void {
-    this.khatam.startNew();
+  protected startKhatam(event?: KhatamStartEvent): void {
+    this.khatam.startNew({ pacePlan: event?.pacePlan ?? 'free' });
   }
 
-  protected resetKhatam(): void {
-    this.khatam.startNew();
+  protected startKhatamFromBookmark(event?: KhatamStartEvent): void {
+    const place = this.savedPlace() ?? this.bookmarkRepo.read();
+    this.khatam.startNew({
+      pacePlan: event?.pacePlan ?? 'free',
+      from: place ?? { surah: 1, ayah: 1 },
+    });
+  }
+
+  protected resetKhatam(event?: KhatamStartEvent): void {
+    this.khatam.startNew({ pacePlan: event?.pacePlan ?? 'free' });
   }
 
   private syncSeo(): void {

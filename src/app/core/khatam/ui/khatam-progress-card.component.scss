@@ -112,6 +112,97 @@
   color: var(--reader-ink-intro-tag, #e8d9a8);
 }
 
+.khatam-card__lifetime {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--reader-ink-subtle, #9a9285);
+}
+
+.khatam-card__pace {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.khatam-card__pace-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--reader-ink-subtle, #9a9285);
+}
+
+.khatam-card__pace-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.khatam-card__pace-chip {
+  min-height: 1.75rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--reader-ink-muted, #ddd7ca);
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  &--active {
+    border-color: color-mix(in srgb, var(--reader-accent, #c9a227) 55%, transparent);
+    background: color-mix(in srgb, var(--reader-accent, #c9a227) 22%, transparent);
+    color: var(--reader-ink-intro-title, #f2ebe0);
+  }
+}
+
+.khatam-card--compact .khatam-card__pace-chip {
+  min-height: 1.5rem;
+  padding: 0.12rem 0.5rem;
+  font-size: 0.68rem;
+}
+
+.khatam-card__today {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.khatam-card__today-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.khatam-card__today-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--reader-ink-subtle, #9a9285);
+}
+
+.khatam-card__today-value {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--reader-ink-muted, #ddd7ca);
+}
+
+.khatam-card__bar--today {
+  height: 0.28rem;
+}
+
+.khatam-card__bar-fill--today {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--reader-accent-gradient-start, #d4af37) 70%, #fff),
+    var(--reader-accent-gradient-end, #8b6914)
+  );
+}
+
 .khatam-card__badge {
   padding: 0.12rem 0.5rem;
   border-radius: 999px;
@@ -209,7 +300,18 @@
   border-radius: 0.28rem;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.03);
+  color: inherit;
+  font: inherit;
+  padding: 0;
+  text-decoration: none;
+  cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: color-mix(in srgb, var(--reader-accent, #c9a227) 45%, transparent);
+    outline: none;
+  }
 
   &--done {
     background: color-mix(in srgb, var(--reader-accent, #c9a227) 28%, transparent);

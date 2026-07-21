@@ -8,7 +8,10 @@ import {
 import { FormsModule } from '@angular/forms';
 import { READING_BOOKMARK_REPOSITORY } from '../../../core/bookmark/reading-bookmark.repository';
 import { KhatamService } from '../../../core/khatam/khatam.service';
-import { KhatamProgressCardComponent } from '../../../core/khatam/ui/khatam-progress-card.component';
+import {
+  KhatamProgressCardComponent,
+  type KhatamStartEvent,
+} from '../../../core/khatam/ui/khatam-progress-card.component';
 import { DailyReminderService } from '../../../core/notifications/daily-reminder.service';
 import { NotificationPreferencesService } from '../../../core/notifications/notification-preferences.service';
 import type { DailyReminderKind } from '../../../core/notifications/notification-storage';
@@ -114,12 +117,21 @@ export class ReaderSettingsPanelComponent {
     this.viewPrefs.resetViewSettings();
   }
 
-  protected startKhatam(): void {
-    this.khatam.startNew();
+  protected startKhatam(event?: KhatamStartEvent): void {
+    this.khatam.startNew({ pacePlan: event?.pacePlan ?? 'free' });
   }
 
-  protected resetKhatam(): void {
-    this.khatam.startNew();
+  protected startKhatamFromBookmark(event?: KhatamStartEvent): void {
+    this.bookmarkUi.refreshFromStorage();
+    const place = this.bookmarkUi.savedPlace() ?? this.readingBookmark.read();
+    this.khatam.startNew({
+      pacePlan: event?.pacePlan ?? 'free',
+      from: place ?? { surah: 1, ayah: 1 },
+    });
+  }
+
+  protected resetKhatam(event?: KhatamStartEvent): void {
+    this.khatam.startNew({ pacePlan: event?.pacePlan ?? 'free' });
   }
 
   protected goToKhatamPlace(): void {

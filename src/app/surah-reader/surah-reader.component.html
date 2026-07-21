@@ -698,8 +698,11 @@
   <app-khatam-progress-card
     variant="compact"
     [formatUiNum]="formatUiNum.bind(this)"
-    (start)="startKhatam()"
-    (startNew)="resetKhatam()"
+    [bookmarkSurah]="bookmarkUi.savedPlace()?.surah ?? null"
+    [bookmarkAyah]="bookmarkUi.savedPlace()?.ayah ?? null"
+    (start)="startKhatam($event)"
+    (startFromBookmark)="startKhatamFromBookmark($event)"
+    (startNew)="resetKhatam($event)"
     (continue)="goToKhatamPlace()"
   />
   <div class="reader__settings-bookmark">

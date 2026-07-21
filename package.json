@@ -20,6 +20,7 @@
     "prerender-seo-html": "node scripts/prerender-seo-html.mjs",
     "build-mushaf-index": "node scripts/build-mushaf-index.mjs",
     "validate-khatam": "node scripts/validate-khatam.mjs",
+    "smoke-khatam": "node scripts/smoke-khatam.mjs",
     "dev:ssr": "ng run surah-mulk-reader:serve-ssr",
     "serve:ssr": "node dist/surah-mulk-reader/server/main.js",
     "build:ssr": "ng build && ng run surah-mulk-reader:server",
