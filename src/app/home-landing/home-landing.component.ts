@@ -34,7 +34,11 @@ import {
   type ThematicThemeListItem,
 } from '../core/thematic-index/thematic-index.service';
 import type { MushafIndexPayload } from '../core/mushaf/mushaf-index.types';
-import { normalizeVerseTranslations } from '../core/verse-presentation/verse-presentation.strategy';
+import { normalizeVerseTranslations, pickVerseTranslationForLocale } from '../core/verse-presentation/verse-presentation.strategy';
+import {
+  localizedCategoryName,
+  localizedThemeName,
+} from '../core/thematic-index/theme-locale-labels';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 import type { SurahNavItem } from '../surah-reader/models/surah-nav-item.model';
@@ -274,7 +278,49 @@ export class HomeLandingComponent implements OnInit {
 
   protected dailyTopicTranslation(inspiration: DailyThemeInspiration): string {
     const tr = normalizeVerseTranslations(inspiration.verse.verse);
-    return this.ui.locale() === 'ur' ? tr.ur : tr.en;
+    return pickVerseTranslationForLocale(tr, this.ui.locale()).text;
+  }
+
+  protected dailyTopicTranslationMeta(inspiration: DailyThemeInspiration): {
+    lang: 'en' | 'ur';
+    dir: 'ltr' | 'rtl';
+  } {
+    const tr = normalizeVerseTranslations(inspiration.verse.verse);
+    const picked = pickVerseTranslationForLocale(tr, this.ui.locale());
+    return { lang: picked.lang, dir: picked.dir };
+  }
+
+  protected dailyVerseTranslation(dv: {
+    translationEn: string;
+    translationUr: string;
+  }): string {
+    return pickVerseTranslationForLocale(
+      { en: dv.translationEn, ur: dv.translationUr },
+      this.ui.locale(),
+    ).text;
+  }
+
+  protected dailyVerseTranslationMeta(dv: {
+    translationEn: string;
+    translationUr: string;
+  }): { lang: 'en' | 'ur'; dir: 'ltr' | 'rtl' } {
+    const picked = pickVerseTranslationForLocale(
+      { en: dv.translationEn, ur: dv.translationUr },
+      this.ui.locale(),
+    );
+    return { lang: picked.lang, dir: picked.dir };
+  }
+
+  protected localizedThemeTitle(theme: { id: string; name: string }): string {
+    return localizedThemeName(theme.id, theme.name, this.ui.locale());
+  }
+
+  protected localizedTopicCategory(inspiration: DailyThemeInspiration): string {
+    return localizedCategoryName(
+      inspiration.theme.categoryId,
+      inspiration.categoryName,
+      this.ui.locale(),
+    );
   }
 
   protected setRevelationFilter(filter: SurahRevelationFilter): void {

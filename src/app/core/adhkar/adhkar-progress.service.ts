@@ -25,16 +25,23 @@ function targetRepeats(item: AdhkarItem): number {
   return Number.isFinite(n) && n > 0 ? Math.floor(n) : 1;
 }
 
-/** Suggest morning / evening / night from local clock. */
+/**
+ * Suggest morning / evening / night from local clock.
+ * Morning: after Fajr window; evening: post-Asr; night: Maghrib onward.
+ */
 export function suggestedAdhkarCollectionId(now = new Date()): string {
   const hour = now.getHours();
   if (hour >= 4 && hour < 12) {
     return 'morning';
   }
-  if (hour >= 12 && hour < 17) {
+  // Post-Asr window (approx. 15:00–18:00); midday keeps morning suggestion.
+  if (hour >= 15 && hour < 18) {
     return 'evening';
   }
-  return 'night';
+  if (hour >= 18 || hour < 4) {
+    return 'night';
+  }
+  return 'morning';
 }
 
 @Injectable({ providedIn: 'root' })
