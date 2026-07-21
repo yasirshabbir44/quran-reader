@@ -23,6 +23,7 @@
   margin: 0 0 0.5rem;
   font-size: 1.2rem;
   font-weight: 700;
+  color: var(--reader-ink-intro-title);
 }
 
 .adhkar-detail__state-text {
@@ -77,7 +78,7 @@
   font-size: clamp(1.35rem, 4vw, 1.75rem);
   font-weight: 800;
   line-height: 1.2;
-  color: var(--reader-heading-ink);
+  color: var(--reader-ink-intro-title);
 }
 
 .adhkar-detail__meta {
@@ -88,10 +89,97 @@
 }
 
 .adhkar-detail__excerpt {
-  margin: 0 0 1.5rem;
+  margin: 0 0 1.25rem;
   font-size: 0.95rem;
   line-height: 1.65;
   color: var(--reader-body-ink);
+}
+
+.adhkar-detail__progress {
+  position: sticky;
+  top: 0.5rem;
+  z-index: 4;
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--reader-radius-lg);
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-chrome-bg-solid);
+  box-shadow: 0 8px 24px var(--reader-shadow-soft);
+}
+
+.adhkar-detail__progress--done {
+  border-color: var(--reader-accent-border-strong);
+}
+
+.adhkar-detail__progress-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.55rem;
+}
+
+.adhkar-detail__progress-label {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--reader-ink-intro-title);
+}
+
+.adhkar-detail__progress-pct {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--reader-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.adhkar-detail__progress-track,
+.adhkar-detail__counter-track {
+  height: 0.35rem;
+  border-radius: var(--reader-radius-pill);
+  background: var(--reader-progress-track);
+  overflow: hidden;
+}
+
+.adhkar-detail__progress-fill,
+.adhkar-detail__counter-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--reader-accent-gradient-start), var(--reader-accent-gradient-end));
+  transition: width 0.25s ease;
+}
+
+.adhkar-detail__progress-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.55rem;
+}
+
+.adhkar-detail__progress-hint {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--reader-ink-muted);
+}
+
+.adhkar-detail__reset {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  padding: 0.15rem 0;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--reader-accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+
+  &:hover {
+    color: var(--reader-ink-ui-hover);
+  }
 }
 
 .adhkar-detail__list {
@@ -103,10 +191,28 @@
 }
 
 .adhkar-detail__item {
-  padding: 1rem 1.05rem;
-  border-radius: 14px;
-  border: 1px solid var(--reader-border-subtle);
-  background: var(--reader-surface-raised);
+  padding: 1rem 1.05rem 1.1rem;
+  border-radius: var(--reader-radius-lg);
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-chrome-bg-panel);
+  box-shadow: 0 10px 28px var(--reader-shadow-card);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.adhkar-detail__item--done {
+  border-color: var(--reader-accent-border-strong);
+  background:
+    linear-gradient(160deg, var(--reader-accent-soft), transparent 50%),
+    var(--reader-chrome-bg-panel);
+}
+
+.adhkar-detail__item--pulse {
+  transform: scale(1.01);
+  box-shadow: 0 0 0 2px var(--reader-accent-border);
 }
 
 .adhkar-detail__item-head {
@@ -123,26 +229,49 @@
   justify-content: center;
   min-width: 1.75rem;
   height: 1.75rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--reader-accent) 14%, transparent);
+  border-radius: var(--reader-radius-pill);
+  background: var(--reader-accent-soft);
   color: var(--reader-accent);
   font-size: 0.78rem;
   font-weight: 700;
 }
 
-.adhkar-detail__repeat {
-  font-size: 0.76rem;
+.adhkar-detail__item-tools {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.adhkar-detail__copy {
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-overlay);
+  border-radius: var(--reader-radius-pill);
+  padding: 0.28rem 0.65rem;
+  font: inherit;
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--reader-body-ink);
-  opacity: 0.85;
+  color: var(--reader-ink-ui);
+  cursor: pointer;
+
+  &:hover {
+    border-color: var(--reader-accent-border);
+    color: var(--reader-accent);
+  }
+}
+
+.adhkar-detail__done-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--reader-accent);
+  letter-spacing: 0.02em;
 }
 
 .adhkar-detail__arabic {
   margin: 0 0 0.65rem;
-  font-family: var(--reader-arabic-font, 'Amiri Quran', serif);
+  font-family: var(--reader-font-arabic);
   font-size: clamp(1.15rem, 3.5vw, 1.45rem);
   line-height: 1.85;
-  color: var(--reader-heading-ink);
+  color: var(--reader-ink-arabic);
   text-align: right;
 }
 
@@ -151,8 +280,7 @@
   font-size: 0.86rem;
   line-height: 1.55;
   font-style: italic;
-  color: var(--reader-body-ink);
-  opacity: 0.9;
+  color: var(--reader-ink-muted);
 }
 
 .adhkar-detail__translation {
@@ -165,20 +293,106 @@
 .adhkar-detail__source {
   margin: 0.65rem 0 0;
   font-size: 0.76rem;
-  color: var(--reader-body-ink);
+  color: var(--reader-ink-subtle);
+}
+
+.adhkar-detail__counter {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.85rem;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--reader-border);
+}
+
+.adhkar-detail__counter-meta {
+  min-width: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.adhkar-detail__counter-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--reader-ink-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.adhkar-detail__tap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  min-width: 5.5rem;
+  min-height: 5.5rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--reader-radius-pill);
+  border: 2px solid var(--reader-accent-border-strong);
+  background: var(--reader-accent-soft);
+  color: var(--reader-ink-intro-title);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition:
+    transform 0.12s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    filter 0.15s ease;
+
+  &:hover:not(:disabled) {
+    filter: brightness(1.08);
+    transform: scale(1.03);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.adhkar-detail__tap--done {
+  border-color: var(--reader-accent-border-strong);
+  background: var(--reader-accent-fill-mid);
+  color: var(--reader-accent);
+}
+
+.adhkar-detail__tap-count {
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--reader-accent);
+}
+
+.adhkar-detail__tap-of {
+  font-size: 0.78rem;
+  font-weight: 600;
   opacity: 0.75;
+}
+
+.adhkar-detail__tap-check {
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
 .adhkar-detail__related {
   margin-top: 2rem;
   padding-top: 1.25rem;
-  border-top: 1px solid var(--reader-border-subtle);
+  border-top: 1px solid var(--reader-border);
 }
 
 .adhkar-detail__related-title {
   margin: 0 0 0.75rem;
   font-size: 1rem;
   font-weight: 700;
+  color: var(--reader-ink-intro-title);
 }
 
 .adhkar-detail__related-list {
@@ -195,19 +409,20 @@
   justify-content: space-between;
   gap: 0.75rem;
   padding: 0.8rem 0.95rem;
-  border-radius: 12px;
-  border: 1px solid var(--reader-border-subtle);
-  background: var(--reader-surface-raised);
+  border-radius: var(--reader-radius-md);
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-chrome-bg-panel);
   color: inherit;
   text-decoration: none;
 
   &:hover {
-    border-color: var(--reader-accent);
+    border-color: var(--reader-accent-border);
   }
 }
 
 .adhkar-detail__related-name {
   font-weight: 600;
+  color: var(--reader-ink-intro-title);
 }
 
 .adhkar-detail__related-meta {
@@ -221,4 +436,18 @@
 
 .adhkar-detail__btn--primary {
   @include ui.ui-btn-primary;
+}
+
+@media (max-width: 420px) {
+  .adhkar-detail__counter {
+    grid-template-columns: 1fr;
+  }
+
+  .adhkar-detail__tap {
+    width: 100%;
+    min-height: 3.75rem;
+    border-radius: var(--reader-radius-lg);
+    flex-direction: row;
+    gap: 0.65rem;
+  }
 }

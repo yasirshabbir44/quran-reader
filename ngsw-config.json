@@ -49,6 +49,15 @@
       }
     },
     {
+      "name": "adhkar-index",
+      "urls": ["/adhkar-index.json"],
+      "cacheConfig": {
+        "maxSize": 2,
+        "maxAge": "365d",
+        "strategy": "performance"
+      }
+    },
+    {
       "name": "quran-corpus",
       "urls": ["/quran-full.json"],
       "cacheConfig": {

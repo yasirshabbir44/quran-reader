@@ -58,17 +58,70 @@
     <p class="adhkar-detail__excerpt">{{ adhkar.pickLocalized(group.description) }}</p>
   </div>
 
+  <div
+    class="adhkar-detail__progress"
+    [class.adhkar-detail__progress--done]="allComplete()"
+    role="status"
+    [attr.aria-label]="'adhkarProgressAria' | uiTranslate: {
+      done: formatUiNum(collectionProgress().completed),
+      total: formatUiNum(collectionProgress().total),
+    }"
+  >
+    <div class="adhkar-detail__progress-row">
+      <p class="adhkar-detail__progress-label">
+        @if (allComplete()) {
+          {{ 'adhkarProgressComplete' | uiTranslate }}
+        } @else {
+          {{
+            'adhkarProgressLabel'
+              | uiTranslate
+                : {
+                    done: formatUiNum(collectionProgress().completed),
+                    total: formatUiNum(collectionProgress().total),
+                  }
+          }}
+        }
+      </p>
+      <span class="adhkar-detail__progress-pct">{{ formatUiNum(collectionProgress().percent) }}%</span>
+    </div>
+    <div class="adhkar-detail__progress-track" aria-hidden="true">
+      <div class="adhkar-detail__progress-fill" [style.width.%]="collectionProgress().percent"></div>
+    </div>
+    <div class="adhkar-detail__progress-actions">
+      <p class="adhkar-detail__progress-hint">{{ 'adhkarProgressHint' | uiTranslate }}</p>
+      @if (collectionProgress().completed > 0) {
+      <button type="button" class="adhkar-detail__reset" (click)="resetProgress()">
+        {{ 'adhkarResetProgress' | uiTranslate }}
+      </button>
+      }
+    </div>
+  </div>
+
   <ol class="adhkar-detail__list" [attr.aria-label]="'adhkarDetailItemsTitle' | uiTranslate">
     @for (item of group.items; track item.id; let i = $index) {
-    <li class="adhkar-detail__item" [id]="'adhkar-item-' + (i + 1)">
+    <li
+      class="adhkar-detail__item"
+      [id]="'adhkar-item-' + (i + 1)"
+      [class.adhkar-detail__item--done]="itemComplete(item)"
+      [class.adhkar-detail__item--pulse]="pulseItemId() === item.id"
+    >
       <div class="adhkar-detail__item-head">
         <span class="adhkar-detail__item-num" aria-hidden="true">{{ formatUiNum(i + 1) }}</span>
-        @if (item.repeat) {
-        <span class="adhkar-detail__repeat">
-          {{ 'adhkarRepeatLabel' | uiTranslate: { count: formatUiNum(item.repeat) } }}
-        </span>
-        }
+        <div class="adhkar-detail__item-tools">
+          <button
+            type="button"
+            class="adhkar-detail__copy"
+            (click)="copyArabic(item)"
+            [attr.aria-label]="'adhkarCopyArabic' | uiTranslate"
+          >
+            {{ copiedItemId() === item.id ? ('adhkarCopied' | uiTranslate) : ('adhkarCopy' | uiTranslate) }}
+          </button>
+          @if (itemComplete(item)) {
+          <span class="adhkar-detail__done-badge">{{ 'adhkarItemDone' | uiTranslate }}</span>
+          }
+        </div>
       </div>
+
       <p class="adhkar-detail__arabic" dir="rtl" lang="ar">{{ item.arabic }}</p>
       @if (item.transliteration) {
       <p class="adhkar-detail__translit">{{ item.transliteration }}</p>
@@ -77,6 +130,50 @@
       @if (item.source) {
       <p class="adhkar-detail__source">{{ 'adhkarSourceLabel' | uiTranslate }}: {{ item.source }}</p>
       }
+
+      <div class="adhkar-detail__counter">
+        <div class="adhkar-detail__counter-meta">
+          <span class="adhkar-detail__counter-label">
+            {{
+              'adhkarCounterLabel'
+                | uiTranslate
+                  : {
+                      count: formatUiNum(itemCount(item)),
+                      target: formatUiNum(itemTarget(item)),
+                    }
+            }}
+          </span>
+          <div class="adhkar-detail__counter-track" aria-hidden="true">
+            <div class="adhkar-detail__counter-fill" [style.width.%]="itemPercent(item)"></div>
+          </div>
+        </div>
+        <button
+          type="button"
+          class="adhkar-detail__tap"
+          [class.adhkar-detail__tap--done]="itemComplete(item)"
+          [disabled]="itemComplete(item)"
+          (click)="onTapCount(item)"
+          [attr.aria-label]="
+            'adhkarTapAria'
+              | uiTranslate
+                : {
+                    count: formatUiNum(itemCount(item)),
+                    target: formatUiNum(itemTarget(item)),
+                  }
+          "
+        >
+          @if (itemComplete(item)) {
+            <span class="adhkar-detail__tap-check" aria-hidden="true">✓</span>
+            <span>{{ 'adhkarTapDone' | uiTranslate }}</span>
+          } @else {
+            <span class="adhkar-detail__tap-count" aria-hidden="true">
+              {{ formatUiNum(itemCount(item)) }}
+              <span class="adhkar-detail__tap-of">/{{ formatUiNum(itemTarget(item)) }}</span>
+            </span>
+            <span>{{ 'adhkarTapAction' | uiTranslate }}</span>
+          }
+        </button>
+      </div>
     </li>
     }
   </ol>
