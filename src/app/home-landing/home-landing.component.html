@@ -127,8 +127,11 @@
         [placeNameAr]="khatamContinueSurah()?.nameAr ?? null"
         [continueRouterLink]="khatamActive() ? verseLink(khatamFurthest().surah, khatamFurthest().ayah) : null"
         [continueFragment]="khatamActive() ? verseFragment(khatamFurthest().ayah) : null"
-        (start)="startKhatam()"
-        (startNew)="resetKhatam()"
+        [bookmarkSurah]="savedPlace()?.surah ?? null"
+        [bookmarkAyah]="savedPlace()?.ayah ?? null"
+        (start)="startKhatam($event)"
+        (startFromBookmark)="startKhatamFromBookmark($event)"
+        (startNew)="resetKhatam($event)"
       />
     </section>
   </div>
