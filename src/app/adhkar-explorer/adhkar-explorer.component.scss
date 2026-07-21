@@ -219,8 +219,9 @@
 }
 
 .adhkar__card-title {
-  font-size: 1.02rem;
+  font-size: 1.05rem;
   font-weight: 700;
+  line-height: 1.35;
   color: var(--reader-ink-intro-title);
 }
 
@@ -234,9 +235,9 @@
 }
 
 .adhkar__card-desc {
-  font-size: 0.86rem;
-  line-height: 1.55;
-  color: var(--reader-body-ink);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--reader-ink-intro-body);
 }
 
 .adhkar__card-meta-row {
@@ -304,4 +305,28 @@
   .adhkar__cards {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+.adhkar[lang='ur'] .adhkar__title,
+.adhkar[lang='ur'] .adhkar__subtitle,
+.adhkar[lang='ur'] .adhkar__intro,
+.adhkar[lang='ur'] .adhkar__suggest-title,
+.adhkar[lang='ur'] .adhkar__suggest-desc,
+.adhkar[lang='ur'] .adhkar__grid-title,
+.adhkar[lang='ur'] .adhkar__grid-subtitle,
+.adhkar[lang='ur'] .adhkar__card-title,
+.adhkar[lang='ur'] .adhkar__card-desc {
+  font-family: var(--reader-font-urdu);
+  line-height: 1.85;
+}
+
+.adhkar[lang='ar'] .adhkar__title,
+.adhkar[lang='ar'] .adhkar__subtitle,
+.adhkar[lang='ar'] .adhkar__intro,
+.adhkar[lang='ar'] .adhkar__suggest-title,
+.adhkar[lang='ar'] .adhkar__suggest-desc,
+.adhkar[lang='ar'] .adhkar__card-title,
+.adhkar[lang='ar'] .adhkar__card-desc {
+  font-family: var(--reader-font-arabic);
+  line-height: 1.75;
 }
