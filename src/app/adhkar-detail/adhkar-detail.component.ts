@@ -109,10 +109,6 @@ export class AdhkarDetailComponent implements OnInit {
     return n.toLocaleString(this.ui.numberLocaleTag());
   }
 
-  protected itemTranslation(item: AdhkarItem): string {
-    return this.adhkar.pickLocalized(item.translation);
-  }
-
   protected itemCount(item: AdhkarItem): number {
     const group = this.collection();
     this.progress.progressSnapshot();
