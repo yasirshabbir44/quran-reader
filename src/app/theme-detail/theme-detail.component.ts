@@ -29,8 +29,14 @@ import {
   VERSE_PRESENTATION_STRATEGY,
   normalizeVerseTranslations,
   normalizeVerseTransliteration,
+  pickVerseTranslationForLocale,
   type VersePresentationContext,
 } from '../core/verse-presentation/verse-presentation.strategy';
+import {
+  localizedCategoryName,
+  localizedThemeDescription,
+  localizedThemeName,
+} from '../core/thematic-index/theme-locale-labels';
 
 const THEME_ICONS: Record<string, string> = {
   hourglass: '⏳',
@@ -182,18 +188,41 @@ export class ThemeDetailComponent implements OnInit {
 
   protected translationPrimary(v: ThematicVerseDetail): string {
     const tr = normalizeVerseTranslations(v.verse);
-    return this.ui.locale() === 'ur' ? tr.ur : tr.en;
+    return pickVerseTranslationForLocale(tr, this.ui.locale()).text;
+  }
+
+  protected translationPrimaryMeta(v: ThematicVerseDetail): {
+    lang: 'en' | 'ur';
+    dir: 'ltr' | 'rtl';
+  } {
+    const tr = normalizeVerseTranslations(v.verse);
+    const picked = pickVerseTranslationForLocale(tr, this.ui.locale());
+    return { lang: picked.lang, dir: picked.dir };
   }
 
   protected translationSecondary(v: ThematicVerseDetail): string | null {
     const tr = normalizeVerseTranslations(v.verse);
-    if (this.ui.locale() === 'ur') {
+    const locale = this.ui.locale();
+    if (locale === 'ur') {
       return tr.en || null;
     }
-    if (this.ui.locale() === 'en') {
+    if (locale === 'en') {
       return tr.ur || null;
     }
-    return tr.en || null;
+    // Arabic UI: primary is English meaning; secondary shows Urdu when available.
+    return tr.ur || null;
+  }
+
+  protected themeDisplayName(theme: ThematicTheme): string {
+    return localizedThemeName(theme.id, theme.name, this.ui.locale());
+  }
+
+  protected themeDisplayDescription(theme: ThematicTheme): string | undefined {
+    return localizedThemeDescription(theme.id, theme.description, this.ui.locale());
+  }
+
+  protected categoryDisplayName(id: string, fallback: string): string {
+    return localizedCategoryName(id, fallback, this.ui.locale());
   }
 
   protected verseLink(surah: number, _ayah: number): readonly (string | number)[] {
@@ -370,18 +399,22 @@ export class ThemeDetailComponent implements OnInit {
   private syncThemeSeo(data: ThemeVersesResult): void {
     const path = `/themes/${data.theme.id}`;
     const origin = this.seo.siteOrigin();
+    const name = localizedThemeName(data.theme.id, data.theme.name, this.ui.locale());
+    const description =
+      localizedThemeDescription(data.theme.id, data.theme.description, this.ui.locale()) ??
+      localizedCategoryName(data.theme.categoryId, data.categoryName, this.ui.locale());
     this.seo.apply({
-      title: this.ui.translate('themesDetailDocumentTitle', { name: data.theme.name }),
+      title: this.ui.translate('themesDetailDocumentTitle', { name }),
       description: this.ui.translate('seoThemeDetailDescription', {
-        name: data.theme.name,
-        description: data.theme.description ?? data.categoryName,
+        name,
+        description,
       }),
       path,
       jsonLd: collectionPageJsonLd({
         origin,
         path,
-        name: data.theme.name,
-        description: data.theme.description ?? data.categoryName,
+        name,
+        description,
       }),
     });
   }

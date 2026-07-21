@@ -15,6 +15,7 @@ import {
   type GlobalSearchResult,
 } from '../../search/global-search.util';
 import type { ThematicThemeListItem } from '../../thematic-index/thematic-index.service';
+import { UiLocaleService } from '../ui-locale.service';
 import { UiTranslatePipe } from '../ui-translate.pipe';
 import type { SurahNavItem } from '../../../surah-reader/models/surah-nav-item.model';
 
@@ -28,6 +29,7 @@ import type { SurahNavItem } from '../../../surah-reader/models/surah-nav-item.m
 export class GlobalSearchComponent {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly router = inject(Router);
+  private readonly ui = inject(UiLocaleService);
 
   readonly surahs = input.required<readonly SurahNavItem[]>();
   readonly themes = input.required<readonly ThematicThemeListItem[]>();
@@ -35,9 +37,10 @@ export class GlobalSearchComponent {
   protected readonly open = signal(false);
   protected readonly activeIndex = signal(-1);
 
-  protected readonly results = computed(() =>
-    buildGlobalSearchResults(this.query(), this.surahs(), this.themes()),
-  );
+  protected readonly results = computed(() => {
+    this.ui.locale();
+    return buildGlobalSearchResults(this.query(), this.surahs(), this.themes(), this.ui.locale());
+  });
 
   protected readonly hasQuery = computed(() => this.query().trim().length > 0);
 

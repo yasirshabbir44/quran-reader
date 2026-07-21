@@ -81,10 +81,10 @@
         <p class="themes__spotlight-kicker">{{ 'homeTopicTodayKicker' | uiTranslate }}</p>
         <h2 id="themes-spotlight-heading" class="themes__spotlight-title">
           <a class="themes__spotlight-link" [routerLink]="['/themes', topic.theme.id]">
-            {{ topic.theme.name }}
+            {{ themeDisplayName(topic.theme) }}
           </a>
         </h2>
-        <p class="themes__spotlight-meta">{{ topic.categoryName }}</p>
+        <p class="themes__spotlight-meta">{{ categoryDisplayName(topic.theme.categoryId, topic.categoryName) }}</p>
       </div>
       <span class="themes__spotlight-icon" aria-hidden="true">{{ themeIcon(topic.theme) }}</span>
     </div>
@@ -98,8 +98,8 @@
       </p>
       <p
         class="themes__verse-tr"
-        [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
-        [attr.lang]="ui.locale()"
+        [attr.dir]="dailyTopicTranslationMeta(topic).dir"
+        [attr.lang]="dailyTopicTranslationMeta(topic).lang"
       >
         {{ dailyTopicTranslation(topic) }}
       </p>
@@ -135,11 +135,11 @@
           class="themes__featured-chip"
           [routerLink]="['/themes', t.id]"
           [attr.aria-label]="
-            'themesCardAria' | uiTranslate: { name: t.name, count: formatUiNum(t.verseCount) }
+            'themesCardAria' | uiTranslate: { name: themeDisplayName(t), count: formatUiNum(t.verseCount) }
           "
         >
           <span class="themes__featured-chip-icon" aria-hidden="true">{{ themeIcon(t) }}</span>
-          <span class="themes__featured-chip-name">{{ t.name }}</span>
+          <span class="themes__featured-chip-name">{{ themeDisplayName(t) }}</span>
           <span class="themes__featured-chip-meta">
             {{ formatUiNum(t.verseCount) }} {{ 'themesVerseCountLabel' | uiTranslate }}
           </span>
@@ -266,7 +266,7 @@
         [class.themes__filter-chip--active]="categoryFilter() === chip.id"
         (click)="setCategoryFilter(chip.id)"
       >
-        {{ chip.name }} ({{ formatUiNum(chip.count) }})
+        {{ categoryDisplayName(chip.id, chip.name) }} ({{ formatUiNum(chip.count) }})
       </button>
       }
     </div>
@@ -292,7 +292,9 @@
     @for (group of filteredGroups(); track group.category.id) {
     <section class="themes__group" [attr.aria-labelledby]="'cat-' + group.category.id">
       <div class="themes__group-head">
-        <h3 [id]="'cat-' + group.category.id" class="themes__group-title">{{ group.category.name }}</h3>
+        <h3 [id]="'cat-' + group.category.id" class="themes__group-title">
+          {{ categoryDisplayName(group.category.id, group.category.name) }}
+        </h3>
         <span class="themes__group-count">{{ formatUiNum(group.themes.length) }}</span>
       </div>
       <ul
@@ -306,20 +308,21 @@
             [class.themes__card--list]="viewMode() === 'list'"
             [routerLink]="['/themes', t.id]"
             [attr.aria-label]="
-              'themesCardAria' | uiTranslate: { name: t.name, count: formatUiNum(t.verseCount) }
+              'themesCardAria'
+                | uiTranslate: { name: themeDisplayName(t), count: formatUiNum(t.verseCount) }
             "
           >
             <span class="themes__card-icon" aria-hidden="true">{{ themeIcon(t) }}</span>
             <span class="themes__card-body">
-              <span class="themes__card-name">{{ t.name }}</span>
-              @if (t.description) {
-              <span class="themes__card-desc">{{ t.description }}</span>
+              <span class="themes__card-name">{{ themeDisplayName(t) }}</span>
+              @if (themeDisplayDescription(t)) {
+              <span class="themes__card-desc">{{ themeDisplayDescription(t) }}</span>
               }
               <span class="themes__card-bar" aria-hidden="true">
                 <span class="themes__card-bar-fill" [style.width.%]="verseBarPercent(t)"></span>
               </span>
               <span class="themes__card-meta">
-                <span class="themes__card-chip">{{ t.categoryName }}</span>
+                <span class="themes__card-chip">{{ categoryDisplayName(t.categoryId, t.categoryName) }}</span>
                 <span class="themes__card-verses">
                   {{ formatUiNum(t.verseCount) }} {{ 'themesVerseCountLabel' | uiTranslate }}
                 </span>

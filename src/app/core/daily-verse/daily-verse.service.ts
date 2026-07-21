@@ -7,6 +7,7 @@ export interface DailyVerseRef {
   readonly surahNameAr: string;
   readonly arabic: string;
   readonly translationEn: string;
+  readonly translationUr: string;
 }
 
 interface FlatVerse {
@@ -15,6 +16,7 @@ interface FlatVerse {
   readonly surahNameAr: string;
   readonly arabic: string;
   readonly translationEn: string;
+  readonly translationUr: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -48,6 +50,7 @@ export class DailyVerseService {
       surahNameAr: s.nameAr,
       arabic: v.ar,
       translationEn: v.en,
+      translationUr: v.ur,
     }));
   }
 

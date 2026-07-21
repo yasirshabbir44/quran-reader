@@ -31,6 +31,20 @@ export function normalizeVerseTranslations(v: QuranVerseRow): { en: string; ur: 
   };
 }
 
+/**
+ * Pick meaning text for the active UI locale.
+ * Corpus has en/ur only — Arabic UI uses English meaning with correct lang/dir.
+ */
+export function pickVerseTranslationForLocale(
+  tr: { readonly en: string; readonly ur: string },
+  locale: 'en' | 'ar' | 'ur',
+): { text: string; lang: 'en' | 'ur'; dir: 'ltr' | 'rtl' } {
+  if (locale === 'ur' && tr.ur) {
+    return { text: tr.ur, lang: 'ur', dir: 'rtl' };
+  }
+  return { text: tr.en, lang: 'en', dir: 'ltr' };
+}
+
 export function normalizeVerseTransliteration(v: QuranVerseRow): string {
   return (v.tr ?? '').trim();
 }
