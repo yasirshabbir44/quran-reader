@@ -57,6 +57,21 @@
     </div>
   </section>
 
+  @if (suggestedCollection(); as suggested) {
+  <section class="adhkar__suggest" aria-labelledby="adhkar-suggest-heading">
+    <div class="adhkar__suggest-copy">
+      <p class="adhkar__suggest-kicker">{{ 'adhkarSuggestKicker' | uiTranslate }}</p>
+      <h2 id="adhkar-suggest-heading" class="adhkar__suggest-title">
+        {{ adhkar.pickLocalized(suggested.title) }}
+      </h2>
+      <p class="adhkar__suggest-desc">{{ 'adhkarSuggestBody' | uiTranslate }}</p>
+    </div>
+    <a class="adhkar__suggest-cta" [routerLink]="['/adhkar', suggested.id]">
+      {{ 'adhkarSuggestCta' | uiTranslate }}
+    </a>
+  </section>
+  }
+
   <section class="adhkar__grid" aria-labelledby="adhkar-grid-heading">
     <h2 id="adhkar-grid-heading" class="adhkar__grid-title">{{ 'adhkarIndexTitle' | uiTranslate }}</h2>
     <p class="adhkar__grid-subtitle">{{ 'adhkarIndexSubtitle' | uiTranslate }}</p>
@@ -65,6 +80,7 @@
       <li>
         <a
           class="adhkar__card"
+          [class.adhkar__card--suggested]="isSuggested(collection.id)"
           [routerLink]="['/adhkar', collection.id]"
           [attr.aria-label]="
             'adhkarCardAria'
@@ -77,11 +93,26 @@
         >
           <span class="adhkar__card-icon" aria-hidden="true">{{ collectionIcon(collection.icon) }}</span>
           <span class="adhkar__card-body">
-            <span class="adhkar__card-title">{{ adhkar.pickLocalized(collection.title) }}</span>
-            <span class="adhkar__card-desc">{{ adhkar.pickLocalized(collection.description) }}</span>
-            <span class="adhkar__card-meta">
-              {{ formatUiNum(collection.itemCount) }} {{ 'adhkarItemCountLabel' | uiTranslate }}
+            <span class="adhkar__card-title-row">
+              <span class="adhkar__card-title">{{ adhkar.pickLocalized(collection.title) }}</span>
+              @if (isSuggested(collection.id)) {
+              <span class="adhkar__card-now">{{ 'adhkarCardNow' | uiTranslate }}</span>
+              }
             </span>
+            <span class="adhkar__card-desc">{{ adhkar.pickLocalized(collection.description) }}</span>
+            <span class="adhkar__card-meta-row">
+              <span class="adhkar__card-meta">
+                {{ formatUiNum(collection.itemCount) }} {{ 'adhkarItemCountLabel' | uiTranslate }}
+              </span>
+              @if (collectionProgressLabel(collection); as progressLabel) {
+              <span class="adhkar__card-progress">{{ progressLabel }}</span>
+              }
+            </span>
+            @if (collectionProgressPercent(collection) > 0) {
+            <span class="adhkar__card-track" aria-hidden="true">
+              <span class="adhkar__card-fill" [style.width.%]="collectionProgressPercent(collection)"></span>
+            </span>
+            }
           </span>
         </a>
       </li>
