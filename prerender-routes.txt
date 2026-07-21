@@ -1,6 +1,7 @@
 /
 /blog
 /adhkar
+/learn
 /themes
 /1
 /2
@@ -818,6 +819,11 @@
 /adhkar/morning
 /adhkar/evening
 /adhkar/night
+/learn/letters
+/learn/vowels
+/learn/common-words
+/learn/fatihah
+/learn/short-surahs
 /themes/patience
 /themes/gratitude
 /themes/honesty-truth

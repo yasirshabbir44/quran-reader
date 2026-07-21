@@ -21,6 +21,7 @@ const SEO_CONFIG = join(ROOT, 'src', 'app', 'core', 'seo', 'seo.config.ts');
 const EN_I18N = join(ROOT, 'src', 'app', 'i18n', 'en.json');
 const BLOG_INDEX = join(ROOT, 'public', 'blog-index.json');
 const ADHKAR_INDEX = join(ROOT, 'public', 'adhkar-index.json');
+const LEARNER_INDEX = join(ROOT, 'public', 'learner-index.json');
 const THEMATIC_INDEX = join(ROOT, 'public', 'thematic-index.json');
 const MUSHAF_INDEX = join(ROOT, 'public', 'mushaf-index.json');
 const QURAN_FULL = join(ROOT, 'public', 'quran-full.json');
@@ -127,6 +128,7 @@ function main() {
   const i18n = JSON.parse(readFileSync(EN_I18N, 'utf8'));
   const blog = JSON.parse(readFileSync(BLOG_INDEX, 'utf8'));
   const adhkar = JSON.parse(readFileSync(ADHKAR_INDEX, 'utf8'));
+  const learner = JSON.parse(readFileSync(LEARNER_INDEX, 'utf8'));
   const themes = JSON.parse(readFileSync(THEMATIC_INDEX, 'utf8'));
   const mushaf = JSON.parse(readFileSync(MUSHAF_INDEX, 'utf8'));
   const quran = JSON.parse(readFileSync(QURAN_FULL, 'utf8'));
@@ -189,6 +191,22 @@ function main() {
       title: i18n.adhkarDocumentTitle,
       description: i18n.seoAdhkarDescription,
       path: '/adhkar',
+    }),
+  );
+  count++;
+
+  writeRouteHtml(
+    '/learn',
+    applySeo(template, {
+      title: i18n.learnerDocumentTitle,
+      description: i18n.seoLearnerDescription,
+      path: '/learn',
+      jsonLd: collectionPageJsonLd({
+        origin: siteUrl,
+        path: '/learn',
+        name: i18n.learnerTitle,
+        description: i18n.seoLearnerDescription,
+      }),
     }),
   );
   count++;
@@ -302,6 +320,27 @@ function main() {
           },
           mainEntityOfPage: `${siteUrl}/adhkar/${collection.id}`,
         },
+      }),
+    );
+    count++;
+  }
+
+  for (const lesson of learner.lessons) {
+    const title = lesson.title?.en ?? lesson.id;
+    const description = lesson.description?.en ?? '';
+    writeRouteHtml(
+      `/learn/${lesson.id}`,
+      applySeo(template, {
+        title: translate(i18n.learnerDetailDocumentTitle, { title }),
+        description,
+        path: `/learn/${lesson.id}`,
+        type: 'article',
+        jsonLd: collectionPageJsonLd({
+          origin: siteUrl,
+          path: `/learn/${lesson.id}`,
+          name: title,
+          description,
+        }),
       }),
     );
     count++;

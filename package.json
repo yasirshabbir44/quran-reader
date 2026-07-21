@@ -24,7 +24,8 @@
     "dev:ssr": "ng run surah-mulk-reader:serve-ssr",
     "serve:ssr": "node dist/surah-mulk-reader/server/main.js",
     "build:ssr": "ng build && ng run surah-mulk-reader:server",
-    "prerender": "ng run surah-mulk-reader:prerender"
+    "prerender": "ng run surah-mulk-reader:prerender",
+    "build-learner-index": "node scripts/build-learner-index.mjs"
   },
   "private": true,
   "dependencies": {

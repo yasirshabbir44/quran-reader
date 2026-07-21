@@ -1,0 +1,161 @@
+@if (loadError()) {
+<main class="learner learner--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="learner__state-card">
+    <p class="learner__state-text">{{ 'learnerLoadError' | uiTranslate }}</p>
+    <button type="button" class="learner__btn learner__btn--primary" (click)="retryLoad()">
+      {{ 'retryLoadButton' | uiTranslate }}
+    </button>
+    <a class="learner__btn learner__btn--ghost" routerLink="/">{{ 'learnerBackHome' | uiTranslate }}</a>
+  </div>
+</main>
+} @else if (loading()) {
+<main class="learner learner--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <p class="learner__state-text">{{ 'learnerLoading' | uiTranslate }}</p>
+</main>
+} @else {
+<div class="learner" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <header class="learner__header">
+    <a class="learner__back" routerLink="/" [attr.aria-label]="'homeNavHomeAria' | uiTranslate">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+      </svg>
+    </a>
+    <div class="learner__brand">
+      <p class="learner__kicker">{{ 'learnerKicker' | uiTranslate }}</p>
+      <h1 class="learner__title">{{ 'learnerTitle' | uiTranslate }}</h1>
+      <p class="learner__subtitle">{{ 'learnerSubtitle' | uiTranslate }}</p>
+      <p class="learner__intro">{{ 'learnerIntro' | uiTranslate }}</p>
+    </div>
+    <div class="learner__header-tools">
+      <label class="learner__tool-label" for="learner-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
+      <select
+        id="learner-ui-locale"
+        class="learner__select"
+        [ngModel]="ui.locale()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onLocaleChange($event)"
+      >
+        @for (opt of ui.availableLocales; track opt.code) {
+        <option [value]="opt.code">{{ opt.label }}</option>
+        }
+      </select>
+    </div>
+  </header>
+
+  <section class="learner__stats" [attr.aria-label]="'learnerStatsAria' | uiTranslate">
+    <div class="learner__stat">
+      <span class="learner__stat-value">{{ formatUiNum(lessons().length) }}</span>
+      <span class="learner__stat-label">{{ 'learnerStatLessons' | uiTranslate }}</span>
+    </div>
+    <div class="learner__stat">
+      <span class="learner__stat-value">{{ formatUiNum(totalItems()) }}</span>
+      <span class="learner__stat-label">{{ 'learnerStatItems' | uiTranslate }}</span>
+    </div>
+    <div class="learner__stat">
+      <span class="learner__stat-value">{{ formatUiNum(2) }}</span>
+      <span class="learner__stat-label">{{ 'learnerStatSkills' | uiTranslate }}</span>
+    </div>
+  </section>
+
+  @if (suggestedLesson(); as suggested) {
+  <section class="learner__suggest" aria-labelledby="learner-suggest-heading">
+    <div class="learner__suggest-copy">
+      <p class="learner__suggest-kicker">{{ 'learnerSuggestKicker' | uiTranslate }}</p>
+      <h2 id="learner-suggest-heading" class="learner__suggest-title">
+        {{ learner.pickLocalized(suggested.title) }}
+      </h2>
+      <p class="learner__suggest-desc">{{ 'learnerSuggestBody' | uiTranslate }}</p>
+    </div>
+    <a class="learner__suggest-cta" [routerLink]="['/learn', suggested.id]">
+      {{ 'learnerSuggestCta' | uiTranslate }}
+    </a>
+  </section>
+  }
+
+  <section class="learner__grid" aria-labelledby="learner-grid-heading">
+    <div class="learner__grid-head">
+      <div>
+        <h2 id="learner-grid-heading" class="learner__grid-title">{{ 'learnerIndexTitle' | uiTranslate }}</h2>
+        <p class="learner__grid-subtitle">{{ 'learnerIndexSubtitle' | uiTranslate }}</p>
+      </div>
+      <div class="learner__filters" role="group" [attr.aria-label]="'learnerFilterAria' | uiTranslate">
+        <button
+          type="button"
+          class="learner__filter-chip"
+          [class.learner__filter-chip--active]="skillFilter() === 'all'"
+          (click)="setSkillFilter('all')"
+        >
+          {{ 'learnerFilterAll' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="learner__filter-chip"
+          [class.learner__filter-chip--active]="skillFilter() === 'reading'"
+          (click)="setSkillFilter('reading')"
+        >
+          {{ 'learnerSkillReading' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="learner__filter-chip"
+          [class.learner__filter-chip--active]="skillFilter() === 'vocabulary'"
+          (click)="setSkillFilter('vocabulary')"
+        >
+          {{ 'learnerSkillVocabulary' | uiTranslate }}
+        </button>
+      </div>
+    </div>
+
+    <ul class="learner__cards">
+      @for (lesson of filteredLessons(); track lesson.id) {
+      <li>
+        <a
+          class="learner__card"
+          [routerLink]="['/learn', lesson.id]"
+          [attr.aria-label]="
+            'learnerCardAria'
+              | uiTranslate
+                : {
+                    name: learner.pickLocalized(lesson.title),
+                    count: formatUiNum(lesson.itemCount),
+                  }
+          "
+        >
+          <span class="learner__card-icon" dir="rtl" lang="ar" aria-hidden="true">{{
+            lessonIcon(lesson.icon)
+          }}</span>
+          <span class="learner__card-body">
+            <span class="learner__card-title-row">
+              <span class="learner__card-title">{{ learner.pickLocalized(lesson.title) }}</span>
+              <span class="learner__card-skill">{{ skillLabel(lesson.skill) }}</span>
+            </span>
+            <span class="learner__card-desc">{{ learner.pickLocalized(lesson.description) }}</span>
+            <span class="learner__card-meta-row">
+              <span class="learner__card-meta">
+                {{ formatUiNum(lesson.itemCount) }} {{ 'learnerItemCountLabel' | uiTranslate }}
+              </span>
+              @if (lessonProgressLabel(lesson); as progressLabel) {
+              <span class="learner__card-progress">{{ progressLabel }}</span>
+              }
+            </span>
+            @if (lessonProgressPercent(lesson) > 0) {
+            <span class="learner__card-track" aria-hidden="true">
+              <span class="learner__card-fill" [style.width.%]="lessonProgressPercent(lesson)"></span>
+            </span>
+            }
+          </span>
+        </a>
+      </li>
+      }
+    </ul>
+  </section>
+
+  <aside class="learner__reader-tip" aria-labelledby="learner-reader-tip-heading">
+    <h2 id="learner-reader-tip-heading" class="learner__reader-tip-title">
+      {{ 'learnerReaderTipTitle' | uiTranslate }}
+    </h2>
+    <p class="learner__reader-tip-body">{{ 'learnerReaderTipBody' | uiTranslate }}</p>
+    <a class="learner__btn learner__btn--ghost" routerLink="/1">{{ 'learnerReaderTipCta' | uiTranslate }}</a>
+  </aside>
+</div>
+}
