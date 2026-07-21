@@ -2,6 +2,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -9,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { combineLatest, map, switchMap } from 'rxjs';
+import { AdhkarProgressService } from '../core/adhkar/adhkar-progress.service';
 import { AdhkarService } from '../core/adhkar/adhkar.service';
 import type { AdhkarCollection, AdhkarItem } from '../core/adhkar/adhkar.types';
 import { collectionPageJsonLd } from '../core/seo/seo-jsonld';
@@ -28,6 +30,7 @@ export class AdhkarDetailComponent implements OnInit {
   private readonly seo = inject(SeoService);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly adhkar = inject(AdhkarService);
+  protected readonly progress = inject(AdhkarProgressService);
 
   protected readonly ui = inject(UiLocaleService);
 
@@ -36,8 +39,25 @@ export class AdhkarDetailComponent implements OnInit {
   protected readonly notFound = signal(false);
   protected readonly collection = signal<AdhkarCollection | null>(null);
   protected readonly relatedCollections = signal<readonly AdhkarCollection[]>([]);
+  protected readonly copiedItemId = signal<string | null>(null);
+  protected readonly pulseItemId = signal<string | null>(null);
+
+  protected readonly collectionProgress = computed(() => {
+    const group = this.collection();
+    this.progress.progressSnapshot();
+    if (!group) {
+      return { completed: 0, total: 0, percent: 0 };
+    }
+    return this.progress.collectionProgress(group);
+  });
+
+  protected readonly allComplete = computed(() => {
+    const p = this.collectionProgress();
+    return p.total > 0 && p.completed === p.total;
+  });
 
   ngOnInit(): void {
+    this.progress.syncDay();
     this.route.paramMap
       .pipe(
         switchMap((params) => {
@@ -46,6 +66,7 @@ export class AdhkarDetailComponent implements OnInit {
           this.loadError.set(false);
           this.notFound.set(false);
           this.relatedCollections.set([]);
+          this.copiedItemId.set(null);
           return combineLatest([this.adhkar.load(), this.adhkar.getCollection(id)]).pipe(
             map(([index, data]) => ({ id, index, data })),
           );
@@ -92,23 +113,113 @@ export class AdhkarDetailComponent implements OnInit {
     return this.adhkar.pickLocalized(item.translation);
   }
 
+  protected itemCount(item: AdhkarItem): number {
+    const group = this.collection();
+    this.progress.progressSnapshot();
+    if (!group) {
+      return 0;
+    }
+    return this.progress.count(group.id, item.id);
+  }
+
+  protected itemTarget(item: AdhkarItem): number {
+    return this.progress.target(item);
+  }
+
+  protected itemComplete(item: AdhkarItem): boolean {
+    const group = this.collection();
+    this.progress.progressSnapshot();
+    if (!group) {
+      return false;
+    }
+    return this.progress.isItemComplete(group.id, item);
+  }
+
+  protected itemPercent(item: AdhkarItem): number {
+    const target = this.itemTarget(item);
+    if (target <= 0) {
+      return 0;
+    }
+    return Math.min(100, Math.round((this.itemCount(item) / target) * 100));
+  }
+
+  protected onTapCount(item: AdhkarItem): void {
+    const group = this.collection();
+    if (!group || this.itemComplete(item)) {
+      return;
+    }
+    this.progress.tap(group.id, item);
+    this.pulseItemId.set(item.id);
+    if (typeof window !== 'undefined') {
+      window.setTimeout(() => {
+        if (this.pulseItemId() === item.id) {
+          this.pulseItemId.set(null);
+        }
+      }, 280);
+    }
+    if (this.progress.isItemComplete(group.id, item)) {
+      this.scrollToNextIncomplete(group, item.id);
+    }
+  }
+
+  protected resetProgress(): void {
+    const group = this.collection();
+    if (!group) {
+      return;
+    }
+    this.progress.resetCollection(group.id, group.items);
+  }
+
+  protected async copyArabic(item: AdhkarItem): Promise<void> {
+    if (typeof navigator === 'undefined' || !navigator.clipboard?.writeText) {
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(item.arabic);
+      this.copiedItemId.set(item.id);
+      window.setTimeout(() => {
+        if (this.copiedItemId() === item.id) {
+          this.copiedItemId.set(null);
+        }
+      }, 1600);
+    } catch {
+      /* clipboard unavailable */
+    }
+  }
+
   protected retryLoad(): void {
     const id = this.route.snapshot.paramMap.get('id') ?? '';
     this.loading.set(true);
     this.loadError.set(false);
     this.adhkar.retryLoad();
-    this.adhkar.getCollection(id).subscribe((data) => {
-      this.loading.set(false);
-      if (!data) {
-        this.notFound.set(true);
-        this.syncNotFoundSeo();
-        return;
-      }
-      this.collection.set(data);
-      this.notFound.set(false);
-      this.syncCollectionSeo(data);
-      this.loadRelated(data.id);
-    });
+    this.adhkar
+      .getCollection(id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((data) => {
+        this.loading.set(false);
+        if (!data) {
+          this.notFound.set(true);
+          this.syncNotFoundSeo();
+          return;
+        }
+        this.collection.set(data);
+        this.notFound.set(false);
+        this.syncCollectionSeo(data);
+        this.loadRelated(data.id);
+      });
+  }
+
+  private scrollToNextIncomplete(group: AdhkarCollection, justCompletedId: string): void {
+    if (typeof document === 'undefined') {
+      return;
+    }
+    const idx = group.items.findIndex((i) => i.id === justCompletedId);
+    const next = group.items.slice(idx + 1).find((i) => !this.progress.isItemComplete(group.id, i));
+    if (!next) {
+      return;
+    }
+    const el = document.getElementById(`adhkar-item-${group.items.indexOf(next) + 1}`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   private loadRelated(id: string): void {
