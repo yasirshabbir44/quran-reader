@@ -60,9 +60,31 @@
       <span class="khatam-card__badge khatam-card__badge--done">{{ 'khatamCompleteBadge' | uiTranslate }}</span>
       }
       <span class="khatam-card__pct" aria-hidden="true">{{ format(khatam.progress().percent) }}%</span>
+      @if (khatam.progress().completedCount > 0) {
+      <span class="khatam-card__lifetime" aria-hidden="true">
+        {{ 'khatamLifetimeCount' | uiTranslate: { count: format(khatam.progress().completedCount) } }}
+      </span>
+      }
     </div>
     }
   </header>
+
+  <div class="khatam-card__pace" role="group" [attr.aria-label]="'khatamPaceAria' | uiTranslate">
+    <span class="khatam-card__pace-label">{{ 'khatamPaceLabel' | uiTranslate }}</span>
+    <div class="khatam-card__pace-chips">
+      @for (plan of pacePlans; track plan) {
+      <button
+        type="button"
+        class="khatam-card__pace-chip"
+        [class.khatam-card__pace-chip--active]="activePace() === plan"
+        [attr.aria-pressed]="activePace() === plan"
+        (click)="choosePace(plan)"
+      >
+        {{ paceLabelKey(plan) | uiTranslate }}
+      </button>
+      }
+    </div>
+  </div>
 
   @if (khatam.isActive() || khatam.isComplete()) {
   <div
@@ -75,6 +97,34 @@
   >
     <span class="khatam-card__bar-fill" [style.width.%]="khatam.progress().percent"></span>
   </div>
+
+  @if (khatam.isActive() && khatam.progress().dailyTarget; as target) {
+  <div class="khatam-card__today">
+    <div class="khatam-card__today-head">
+      <span class="khatam-card__today-label">{{ 'khatamTodayLabel' | uiTranslate }}</span>
+      <span class="khatam-card__today-value">
+        {{
+          'khatamTodayStat'
+            | uiTranslate
+              : {
+                  read: format(khatam.progress().versesReadToday),
+                  target: format(target),
+                }
+        }}
+      </span>
+    </div>
+    <div
+      class="khatam-card__bar khatam-card__bar--today"
+      role="progressbar"
+      [attr.aria-valuenow]="khatam.progress().todayPercent"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [attr.aria-label]="'khatamTodayAria' | uiTranslate: { pct: format(khatam.progress().todayPercent) }"
+    >
+      <span class="khatam-card__bar-fill khatam-card__bar-fill--today" [style.width.%]="khatam.progress().todayPercent"></span>
+    </div>
+  </div>
+  }
 
   <ul class="khatam-card__stats" [attr.aria-label]="'khatamStatsAria' | uiTranslate">
     <li class="khatam-card__stat">
@@ -104,19 +154,43 @@
       <span class="khatam-card__stat-value">{{ daysLabel() }}</span>
     </li>
     }
+    @if (khatam.isActive() && khatam.progress().daysRemainingEstimate; as etaDays) {
+    <li class="khatam-card__stat">
+      <span class="khatam-card__stat-label">{{ 'khatamStatEta' | uiTranslate }}</span>
+      <span class="khatam-card__stat-value">
+        {{ 'khatamEtaDays' | uiTranslate: { days: format(etaDays) } }}
+      </span>
+    </li>
+    }
   </ul>
 
   @if (showJuzGrid()) {
-  <div class="khatam-card__juz-grid" role="img" [attr.aria-label]="juzGridAriaLabel()">
+  <div class="khatam-card__juz-grid" role="navigation" [attr.aria-label]="juzGridAriaLabel()">
     @for (state of khatam.juzSegments(); track $index) {
-    <span
+    @if (juzLinks()) {
+    <a
+      class="khatam-card__juz-cell"
+      [class.khatam-card__juz-cell--done]="state === 'done'"
+      [class.khatam-card__juz-cell--current]="state === 'current'"
+      [routerLink]="['/juz', $index + 1]"
+      [attr.title]="format($index + 1)"
+      [attr.aria-label]="'khatamJuzJumpAria' | uiTranslate: { juz: format($index + 1) }"
+    >
+      <span class="khatam-card__juz-num">{{ format($index + 1) }}</span>
+    </a>
+    } @else {
+    <button
+      type="button"
       class="khatam-card__juz-cell"
       [class.khatam-card__juz-cell--done]="state === 'done'"
       [class.khatam-card__juz-cell--current]="state === 'current'"
       [attr.title]="format($index + 1)"
+      [attr.aria-label]="'khatamJuzJumpAria' | uiTranslate: { juz: format($index + 1) }"
+      (click)="onJuzActivate($index + 1, $event)"
     >
       <span class="khatam-card__juz-num">{{ format($index + 1) }}</span>
-    </span>
+    </button>
+    }
     }
   </div>
   <p class="khatam-card__juz-legend">{{ 'khatamJuzGridLegend' | uiTranslate }}</p>
@@ -149,6 +223,11 @@
     <button type="button" class="khatam-card__btn khatam-card__btn--primary" (click)="onStart()">
       {{ 'khatamStartCta' | uiTranslate }}
     </button>
+    @if (hasBookmark()) {
+    <button type="button" class="khatam-card__btn khatam-card__btn--ghost" (click)="onStartFromBookmark()">
+      {{ 'khatamStartFromBookmark' | uiTranslate }}
+    </button>
+    }
     }
   </div>
 

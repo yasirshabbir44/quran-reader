@@ -57,6 +57,7 @@ export class ReaderRouteCoordinatorService {
   bind(onTitleSync: () => void): void {
     if (isPlatformBrowser(this.platformId)) {
       this.khatam.hydrateFromStorage();
+      this.khatam.syncDay();
     }
 
     const corpus$ = this.corpusSource.load().pipe(
