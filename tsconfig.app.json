@@ -5,5 +5,6 @@
     "types": []
   },
   "files": ["src/main.ts"],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/main.server.ts", "src/server.ts", "src/app/app.config.server.ts"]
 }

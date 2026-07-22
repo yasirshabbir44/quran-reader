@@ -3,43 +3,76 @@ import { juzNumberCanMatch } from './core/routing/juz-number.matcher';
 import { legacySurahRedirect } from './core/routing/legacy-surah-redirect';
 import { mushafPageCanMatch } from './core/routing/mushaf-page.matcher';
 import { surahNumberCanMatch } from './core/routing/surah-number.matcher';
-import { HomeLandingComponent } from './home-landing/home-landing.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { SurahReaderComponent } from './surah-reader/surah-reader.component';
-import { ThemeDetailComponent } from './theme-detail/theme-detail.component';
-import { ThemesExplorerComponent } from './themes-explorer/themes-explorer.component';
-import { BlogExplorerComponent } from './blog-explorer/blog-explorer.component';
-import { BlogDetailComponent } from './blog-detail/blog-detail.component';
-import { AdhkarExplorerComponent } from './adhkar-explorer/adhkar-explorer.component';
-import { AdhkarDetailComponent } from './adhkar-detail/adhkar-detail.component';
-import { LearnerHubComponent } from './learner-hub/learner-hub.component';
-import { LearnerLessonComponent } from './learner-lesson/learner-lesson.component';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', component: HomeLandingComponent },
-  { path: 'blog', component: BlogExplorerComponent },
-  { path: 'blog/:id', component: BlogDetailComponent },
-  { path: 'adhkar', component: AdhkarExplorerComponent },
-  { path: 'adhkar/:id', component: AdhkarDetailComponent },
-  { path: 'learn', component: LearnerHubComponent },
-  { path: 'learn/:id', component: LearnerLessonComponent },
-  { path: 'themes', component: ThemesExplorerComponent },
-  { path: 'themes/:id', component: ThemeDetailComponent },
+  {
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () =>
+      import('./home-landing/home-landing.component').then((m) => m.HomeLandingComponent),
+  },
+  {
+    path: 'blog',
+    loadComponent: () =>
+      import('./blog-explorer/blog-explorer.component').then((m) => m.BlogExplorerComponent),
+  },
+  {
+    path: 'blog/:id',
+    loadComponent: () =>
+      import('./blog-detail/blog-detail.component').then((m) => m.BlogDetailComponent),
+  },
+  {
+    path: 'adhkar',
+    loadComponent: () =>
+      import('./adhkar-explorer/adhkar-explorer.component').then((m) => m.AdhkarExplorerComponent),
+  },
+  {
+    path: 'adhkar/:id',
+    loadComponent: () =>
+      import('./adhkar-detail/adhkar-detail.component').then((m) => m.AdhkarDetailComponent),
+  },
+  {
+    path: 'learn',
+    loadComponent: () =>
+      import('./learner-hub/learner-hub.component').then((m) => m.LearnerHubComponent),
+  },
+  {
+    path: 'learn/:id',
+    loadComponent: () =>
+      import('./learner-lesson/learner-lesson.component').then((m) => m.LearnerLessonComponent),
+  },
+  {
+    path: 'themes',
+    loadComponent: () =>
+      import('./themes-explorer/themes-explorer.component').then((m) => m.ThemesExplorerComponent),
+  },
+  {
+    path: 'themes/:id',
+    loadComponent: () =>
+      import('./theme-detail/theme-detail.component').then((m) => m.ThemeDetailComponent),
+  },
   { path: 'surah/:n', redirectTo: legacySurahRedirect },
   {
     path: 'page/:p',
-    component: SurahReaderComponent,
+    loadComponent: () =>
+      import('./surah-reader/surah-reader.component').then((m) => m.SurahReaderComponent),
     canMatch: [mushafPageCanMatch],
   },
   {
     path: 'juz/:j',
-    component: SurahReaderComponent,
+    loadComponent: () =>
+      import('./surah-reader/surah-reader.component').then((m) => m.SurahReaderComponent),
     canMatch: [juzNumberCanMatch],
   },
   {
     path: ':n',
-    component: SurahReaderComponent,
+    loadComponent: () =>
+      import('./surah-reader/surah-reader.component').then((m) => m.SurahReaderComponent),
     canMatch: [surahNumberCanMatch],
   },
-  { path: '**', component: NotFoundComponent },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./not-found/not-found.component').then((m) => m.NotFoundComponent),
+  },
 ];
