@@ -108,9 +108,20 @@
       · {{ 'learnerStillLearningCount' | uiTranslate: { count: formatUiNum(learningCount()) } }}
       }
     </p>
-    <button type="button" class="lesson__reset" (click)="resetProgress()">
-      {{ 'learnerResetProgress' | uiTranslate }}
-    </button>
+    <div class="lesson__progress-actions">
+      <button
+        type="button"
+        class="lesson__tool-chip"
+        [class.lesson__tool-chip--active]="audio.autoPlay()"
+        [attr.aria-pressed]="audio.autoPlay()"
+        (click)="toggleAutoPlay()"
+      >
+        {{ 'learnerAudioAutoplay' | uiTranslate }}
+      </button>
+      <button type="button" class="lesson__reset" (click)="resetProgress()">
+        {{ 'learnerResetProgress' | uiTranslate }}
+      </button>
+    </div>
   </div>
 
   <div class="lesson__modes" role="tablist" [attr.aria-label]="'learnerModeAria' | uiTranslate">
@@ -217,6 +228,7 @@
       [class.lesson__card--pulse]="flipPulse()"
       [class.lesson__card--known]="currentKnown()"
       [class.lesson__card--revealed]="revealed()"
+      [class.lesson__card--speaking]="audio.speaking()"
       (click)="toggleCardReveal()"
       [attr.aria-pressed]="revealed()"
       [attr.aria-label]="revealed() ? ('learnerHideReveal' | uiTranslate) : ('learnerReveal' | uiTranslate)"
@@ -246,6 +258,23 @@
       <span class="lesson__card-hint">{{ 'learnerRevealHint' | uiTranslate }}</span>
       }
     </button>
+
+    <div class="lesson__audio-bar" role="group" [attr.aria-label]="'learnerAudioAria' | uiTranslate">
+      <button
+        type="button"
+        class="lesson__btn lesson__btn--audio"
+        [class.lesson__btn--audio-active]="audio.speaking()"
+        (click)="audio.speaking() ? stopAudio($event) : playCurrentAudio($event)"
+      >
+        {{ audio.speaking() ? ('learnerAudioStop' | uiTranslate) : ('learnerAudioPlay' | uiTranslate) }}
+      </button>
+      @if (item.verseRef; as ref) {
+      <button type="button" class="lesson__btn lesson__btn--ghost" (click)="playAyahAudio(ref, $event)">
+        {{ 'learnerAudioAyah' | uiTranslate }}
+      </button>
+      }
+      <p class="lesson__audio-hint">{{ 'learnerAudioHint' | uiTranslate }}</p>
+    </div>
 
     <div class="lesson__actions">
       @if (!revealed()) {
@@ -370,6 +399,21 @@
       } @else {
       <p class="lesson__quiz-prompt-meaning">{{ question.promptMeaning }}</p>
       }
+
+      <div class="lesson__audio-bar lesson__audio-bar--compact" role="group" [attr.aria-label]="'learnerAudioAria' | uiTranslate">
+        <button
+          type="button"
+          class="lesson__btn lesson__btn--audio"
+          [class.lesson__btn--audio-active]="audio.speaking()"
+          (click)="
+            audio.speaking()
+              ? stopAudio($event)
+              : playArabicAudio(question.promptArabic, undefined, $event)
+          "
+        >
+          {{ audio.speaking() ? ('learnerAudioStop' | uiTranslate) : ('learnerAudioPlay' | uiTranslate) }}
+        </button>
+      </div>
 
       <div class="lesson__quiz-choices" role="group" [attr.aria-label]="'learnerQuizChoicesAria' | uiTranslate">
         @for (choice of question.choices; track choice.id; let i = $index) {
@@ -572,7 +616,7 @@
           lang="ar"
           (click)="selectMatchArabic(id)"
         >
-          {{ pair.arabic }}
+          <span class="lesson__match-tile-text">{{ pair.arabic }}</span>
         </button>
         }
         }
@@ -630,6 +674,14 @@
             <span class="lesson__item-ref">{{ ref }}</span>
             }
           </span>
+        </button>
+        <button
+          type="button"
+          class="lesson__item-audio"
+          [attr.aria-label]="'learnerAudioPlay' | uiTranslate"
+          (click)="playArabicAudio(item.arabic, item.verseRef, $event)"
+        >
+          {{ 'learnerAudioPlayShort' | uiTranslate }}
         </button>
         <button
           type="button"

@@ -10,6 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { combineLatest, map, switchMap } from 'rxjs';
+import { LearnerAudioService } from '../core/learner/learner-audio.service';
 import { LearnerProgressService } from '../core/learner/learner-progress.service';
 import {
   buildLearnerMatchPairs,
@@ -49,6 +50,7 @@ export class LearnerLessonComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   protected readonly learner = inject(LearnerService);
   protected readonly progress = inject(LearnerProgressService);
+  protected readonly audio = inject(LearnerAudioService);
 
   protected readonly ui = inject(UiLocaleService);
 
@@ -217,6 +219,8 @@ export class LearnerLessonComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.destroyRef.onDestroy(() => this.audio.stop());
+
     this.route.paramMap
       .pipe(
         switchMap((params) => {
@@ -226,6 +230,7 @@ export class LearnerLessonComponent implements OnInit {
           this.notFound.set(false);
           this.relatedLessons.set([]);
           this.revealed.set(false);
+          this.audio.stop();
           this.resetQuizState();
           this.resetMatchState();
           this.deckFilter.set('all');
@@ -258,6 +263,7 @@ export class LearnerLessonComponent implements OnInit {
         this.syncLessonSeo(data);
         this.loadRelated(data.id);
         this.jumpToFirstUnknown(data);
+        this.scheduleAutoPlayCurrent();
       });
   }
 
@@ -278,6 +284,7 @@ export class LearnerLessonComponent implements OnInit {
     if (mode === this.mode()) {
       return;
     }
+    this.audio.stop();
     this.mode.set(mode);
     this.revealed.set(false);
     if (mode === 'quiz') {
@@ -291,12 +298,16 @@ export class LearnerLessonComponent implements OnInit {
       this.matchSelectedMeaning.set(null);
       this.matchWrongPair.set(false);
     }
+    if (mode === 'flashcards') {
+      this.scheduleAutoPlayCurrent();
+    }
   }
 
   protected setDeckFilter(filter: LearnerDeckFilter): void {
     this.deckFilter.set(filter);
     this.deckCursor.set(0);
     this.revealed.set(false);
+    this.scheduleAutoPlayCurrent();
   }
 
   protected shuffleDeck(): void {
@@ -307,6 +318,7 @@ export class LearnerLessonComponent implements OnInit {
     this.deckOrder.set(shuffleInPlace(data.items.map((_, i) => i)));
     this.deckCursor.set(0);
     this.revealed.set(false);
+    this.scheduleAutoPlayCurrent();
   }
 
   protected setQuizFocus(focus: LearnerQuizFocus): void {
@@ -338,6 +350,7 @@ export class LearnerLessonComponent implements OnInit {
     this.quizFeedback.set(null);
     this.quizMissedIds.set([]);
     this.quizPhase.set('playing');
+    this.scheduleAutoPlayQuiz();
   }
 
   protected answerQuiz(choiceId: string): void {
@@ -384,6 +397,7 @@ export class LearnerLessonComponent implements OnInit {
     this.quizIndex.set(next);
     this.quizSelectedId.set(null);
     this.quizFeedback.set(null);
+    this.scheduleAutoPlayQuiz();
   }
 
   protected retryQuiz(): void {
@@ -409,6 +423,7 @@ export class LearnerLessonComponent implements OnInit {
     this.deckCursor.set(0);
     this.revealed.set(false);
     this.mode.set('flashcards');
+    this.scheduleAutoPlayCurrent();
   }
 
   protected choiceState(choiceId: string): 'idle' | 'correct' | 'wrong' | 'missed' {
@@ -454,6 +469,10 @@ export class LearnerLessonComponent implements OnInit {
   protected selectMatchArabic(id: string): void {
     if (this.matchPhase() !== 'playing' || this.matchMatched().has(id) || this.matchWrongPair()) {
       return;
+    }
+    const pair = this.matchPairById(id);
+    if (pair) {
+      this.audio.playArabic(pair.arabic);
     }
     this.matchSelectedArabic.set(id);
     this.tryResolveMatch();
@@ -519,6 +538,7 @@ export class LearnerLessonComponent implements OnInit {
     const next = Math.max(0, this.deckCursor() - 1);
     this.deckCursor.set(next);
     this.revealed.set(false);
+    this.scheduleAutoPlayCurrent();
   }
 
   protected goNext(): void {
@@ -533,6 +553,7 @@ export class LearnerLessonComponent implements OnInit {
     }
     this.deckCursor.set(next);
     this.revealed.set(false);
+    this.scheduleAutoPlayCurrent();
   }
 
   protected jumpToCard(index: number): void {
@@ -549,6 +570,47 @@ export class LearnerLessonComponent implements OnInit {
     this.deckCursor.set(cursor >= 0 ? cursor : index);
     this.revealed.set(false);
     this.mode.set('flashcards');
+    this.scheduleAutoPlayCurrent();
+  }
+
+  protected playCurrentAudio(event?: Event): void {
+    event?.stopPropagation();
+    const item = this.currentItem();
+    if (!item) {
+      return;
+    }
+    this.audio.playItem(item.arabic, item.verseRef);
+  }
+
+  protected playArabicAudio(arabic: string, verseRef?: string, event?: Event): void {
+    event?.stopPropagation();
+    this.audio.playItem(arabic, verseRef);
+  }
+
+  protected playAyahAudio(verseRef: string | undefined, event?: Event): void {
+    event?.stopPropagation();
+    if (!verseRef) {
+      return;
+    }
+    this.audio.playAyah(verseRef);
+  }
+
+  protected toggleAutoPlay(): void {
+    const enabled = this.audio.toggleAutoPlay();
+    if (enabled) {
+      if (this.mode() === 'flashcards') {
+        this.scheduleAutoPlayCurrent();
+      } else if (this.mode() === 'quiz' && this.quizPhase() === 'playing') {
+        this.scheduleAutoPlayQuiz();
+      }
+    } else {
+      this.audio.stop();
+    }
+  }
+
+  protected stopAudio(event?: Event): void {
+    event?.stopPropagation();
+    this.audio.stop();
   }
 
   protected isItemKnown(item: LearnerItem): boolean {
@@ -573,6 +635,7 @@ export class LearnerLessonComponent implements OnInit {
     if (!data) {
       return;
     }
+    this.audio.stop();
     this.progress.resetLesson(data.id);
     this.deckCursor.set(0);
     this.revealed.set(false);
@@ -586,6 +649,21 @@ export class LearnerLessonComponent implements OnInit {
     }
     const target = event.target as HTMLElement | null;
     if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.tagName === 'SELECT' || target.isContentEditable)) {
+      return;
+    }
+
+    if (event.key === 'p' || event.key === 'P') {
+      event.preventDefault();
+      if (this.mode() === 'flashcards') {
+        this.playCurrentAudio();
+        return;
+      }
+      if (this.mode() === 'quiz') {
+        const question = this.currentQuizQuestion();
+        if (question) {
+          this.audio.playArabic(question.promptArabic);
+        }
+      }
       return;
     }
 
@@ -744,6 +822,36 @@ export class LearnerLessonComponent implements OnInit {
     this.matchSelectedMeaning.set(null);
     this.matchWrongPair.set(false);
     this.matchMoves.set(0);
+  }
+
+  private scheduleAutoPlayCurrent(): void {
+    if (!this.audio.autoPlay()) {
+      return;
+    }
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.setTimeout(() => {
+      const item = this.currentItem();
+      if (item && this.mode() === 'flashcards') {
+        this.audio.maybeAutoPlay(item.arabic);
+      }
+    }, 220);
+  }
+
+  private scheduleAutoPlayQuiz(): void {
+    if (!this.audio.autoPlay()) {
+      return;
+    }
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.setTimeout(() => {
+      const question = this.currentQuizQuestion();
+      if (question && this.mode() === 'quiz' && this.quizPhase() === 'playing') {
+        this.audio.maybeAutoPlay(question.promptArabic);
+      }
+    }, 220);
   }
 
   private jumpToFirstUnknown(data: LearnerLesson): void {

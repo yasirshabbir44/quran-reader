@@ -203,6 +203,13 @@
   margin-bottom: 1.25rem;
 }
 
+.lesson__progress-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+}
+
 .lesson__progress-label {
   margin: 0;
   font-size: 0.86rem;
@@ -389,10 +396,47 @@
     box-shadow: 0 10px 28px color-mix(in srgb, var(--reader-accent) 12%, transparent);
   }
 
+  &--speaking {
+    border-color: var(--reader-accent-border-strong);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--reader-accent) 28%, transparent);
+  }
+
   &:focus-visible {
     outline: 2px solid var(--reader-accent);
     outline-offset: 3px;
   }
+}
+
+.lesson__audio-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem 0.75rem;
+  margin-bottom: 0.95rem;
+
+  &--compact {
+    margin-top: 0.15rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.lesson__audio-hint {
+  margin: 0;
+  flex: 1 1 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--reader-ink-subtle);
+}
+
+.lesson__btn--audio {
+  @include ui.ui-btn-primary;
+  min-width: 8.5rem;
+}
+
+.lesson__btn--audio-active {
+  animation: lesson-audio-pulse 1.1s ease infinite;
 }
 
 .lesson__card-badge {
@@ -922,6 +966,10 @@
   }
 }
 
+.lesson__match-tile-text {
+  display: block;
+}
+
 .lesson__match-moves {
   margin: 0;
   text-align: center;
@@ -1018,6 +1066,36 @@
   align-self: center;
 }
 
+.lesson__item-audio {
+  @include ui.ui-filter-chip;
+  align-self: center;
+  color: var(--reader-accent);
+  border-color: var(--reader-accent-border);
+}
+
+@keyframes lesson-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes lesson-audio-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--reader-accent) 35%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--reader-accent) 0%, transparent);
+  }
+}
+
 .lesson__related {
   padding-top: 0.5rem;
   border-top: 1px solid var(--reader-border-strong);
@@ -1042,19 +1120,6 @@
 .lesson__related-link {
   @include ui.ui-btn-ghost;
   text-decoration: none;
-}
-
-@keyframes lesson-shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-4px);
-  }
-  75% {
-    transform: translateX(4px);
-  }
 }
 
 @media (max-width: 560px) {
