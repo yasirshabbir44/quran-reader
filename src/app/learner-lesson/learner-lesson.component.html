@@ -50,112 +50,202 @@
     </div>
   </header>
 
-  <div class="lesson__intro">
-    <p class="lesson__skill">{{ skillLabel(data.skill) }}</p>
-    <h1 class="lesson__title">{{ learner.pickLocalized(data.title) }}</h1>
-    <p class="lesson__meta">
-      {{ formatUiNum(data.itemCount) }} {{ 'learnerItemCountLabel' | uiTranslate }}
+  <div class="lesson__hero">
+    <div class="lesson__hero-copy">
+      <p class="lesson__skill">{{ skillLabel(data.skill) }}</p>
+      <h1 class="lesson__title">{{ learner.pickLocalized(data.title) }}</h1>
+      <p class="lesson__excerpt">{{ learner.pickLocalized(data.description) }}</p>
+    </div>
+    <div
+      class="lesson__ring"
+      [class.lesson__ring--done]="allKnown()"
+      role="img"
+      [attr.aria-label]="
+        'learnerProgressAria'
+          | uiTranslate
+            : {
+                done: formatUiNum(lessonProgress().known),
+                total: formatUiNum(lessonProgress().total),
+              }
+      "
+    >
+      <svg class="lesson__ring-svg" viewBox="0 0 72 72" aria-hidden="true">
+        <circle class="lesson__ring-track" cx="36" cy="36" r="30" />
+        <circle
+          class="lesson__ring-fill"
+          cx="36"
+          cy="36"
+          r="30"
+          [style.stroke-dasharray]="188.4"
+          [style.stroke-dashoffset]="188.4 - (188.4 * lessonProgress().percent) / 100"
+        />
+      </svg>
+      <div class="lesson__ring-label">
+        <span class="lesson__ring-value">{{ formatUiNum(lessonProgress().percent) }}%</span>
+        <span class="lesson__ring-caption">
+          {{ formatUiNum(lessonProgress().known) }}/{{ formatUiNum(lessonProgress().total) }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson__progress-bar" aria-hidden="true">
+    <span class="lesson__progress-fill" [style.width.%]="lessonProgress().percent"></span>
+  </div>
+  <div class="lesson__progress-tools">
+    <p class="lesson__progress-label">
+      @if (allKnown()) {
+      {{ 'learnerProgressComplete' | uiTranslate }}
+      } @else {
+      {{
+        'learnerProgressLabel'
+          | uiTranslate
+            : {
+                done: formatUiNum(lessonProgress().known),
+                total: formatUiNum(lessonProgress().total),
+              }
+      }}
+      · {{ 'learnerStillLearningCount' | uiTranslate: { count: formatUiNum(learningCount()) } }}
+      }
     </p>
-    <p class="lesson__excerpt">{{ learner.pickLocalized(data.description) }}</p>
+    <button type="button" class="lesson__reset" (click)="resetProgress()">
+      {{ 'learnerResetProgress' | uiTranslate }}
+    </button>
   </div>
 
-  <div
-    class="lesson__progress"
-    [class.lesson__progress--done]="allKnown()"
-    role="status"
-    [attr.aria-label]="
-      'learnerProgressAria'
-        | uiTranslate
-          : {
-              done: formatUiNum(lessonProgress().known),
-              total: formatUiNum(lessonProgress().total),
-            }
-    "
-  >
-    <div class="lesson__progress-row">
-      <p class="lesson__progress-label">
-        @if (allKnown()) {
-        {{ 'learnerProgressComplete' | uiTranslate }}
-        } @else {
-        {{
-          'learnerProgressLabel'
-            | uiTranslate
-              : {
-                  done: formatUiNum(lessonProgress().known),
-                  total: formatUiNum(lessonProgress().total),
-                }
-        }}
-        }
-      </p>
-      <button type="button" class="lesson__reset" (click)="resetProgress()">
-        {{ 'learnerResetProgress' | uiTranslate }}
-      </button>
-    </div>
-    <div class="lesson__progress-track" aria-hidden="true">
-      <span class="lesson__progress-fill" [style.width.%]="lessonProgress().percent"></span>
-    </div>
-  </div>
-
-  <div class="lesson__mode" role="group" [attr.aria-label]="'learnerModeAria' | uiTranslate">
+  <div class="lesson__modes" role="tablist" [attr.aria-label]="'learnerModeAria' | uiTranslate">
     <button
       type="button"
-      class="lesson__mode-chip"
-      [class.lesson__mode-chip--active]="mode() === 'flashcards'"
+      role="tab"
+      class="lesson__mode"
+      [class.lesson__mode--active]="mode() === 'flashcards'"
+      [attr.aria-selected]="mode() === 'flashcards'"
       (click)="setMode('flashcards')"
     >
-      {{ 'learnerModeFlashcards' | uiTranslate }}
+      <span class="lesson__mode-glyph" aria-hidden="true">Aa</span>
+      <span class="lesson__mode-copy">
+        <span class="lesson__mode-title">{{ 'learnerModeFlashcards' | uiTranslate }}</span>
+        <span class="lesson__mode-desc">{{ 'learnerModeFlashcardsDesc' | uiTranslate }}</span>
+      </span>
     </button>
     <button
       type="button"
-      class="lesson__mode-chip"
-      [class.lesson__mode-chip--active]="mode() === 'list'"
+      role="tab"
+      class="lesson__mode"
+      [class.lesson__mode--active]="mode() === 'quiz'"
+      [attr.aria-selected]="mode() === 'quiz'"
+      (click)="setMode('quiz')"
+    >
+      <span class="lesson__mode-glyph" aria-hidden="true">?</span>
+      <span class="lesson__mode-copy">
+        <span class="lesson__mode-title">{{ 'learnerModeQuiz' | uiTranslate }}</span>
+        <span class="lesson__mode-desc">{{ 'learnerModeQuizDesc' | uiTranslate }}</span>
+      </span>
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="lesson__mode"
+      [class.lesson__mode--active]="mode() === 'match'"
+      [attr.aria-selected]="mode() === 'match'"
+      (click)="setMode('match')"
+    >
+      <span class="lesson__mode-glyph" aria-hidden="true">⇄</span>
+      <span class="lesson__mode-copy">
+        <span class="lesson__mode-title">{{ 'learnerModeMatch' | uiTranslate }}</span>
+        <span class="lesson__mode-desc">{{ 'learnerModeMatchDesc' | uiTranslate }}</span>
+      </span>
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="lesson__mode"
+      [class.lesson__mode--active]="mode() === 'list'"
+      [attr.aria-selected]="mode() === 'list'"
       (click)="setMode('list')"
     >
-      {{ 'learnerModeList' | uiTranslate }}
+      <span class="lesson__mode-glyph" aria-hidden="true">≡</span>
+      <span class="lesson__mode-copy">
+        <span class="lesson__mode-title">{{ 'learnerModeList' | uiTranslate }}</span>
+        <span class="lesson__mode-desc">{{ 'learnerModeListDesc' | uiTranslate }}</span>
+      </span>
     </button>
   </div>
 
   @if (mode() === 'flashcards' && currentItem(); as item) {
   <section class="lesson__study" aria-labelledby="lesson-study-heading">
-    <div class="lesson__study-head">
-      <h2 id="lesson-study-heading" class="lesson__study-title">{{ 'learnerStudyTitle' | uiTranslate }}</h2>
-      <p class="lesson__study-count">
-        {{
-          'learnerCardPosition'
-            | uiTranslate
-              : {
-                  current: formatUiNum(cardIndex() + 1),
-                  total: formatUiNum(data.items.length),
-                }
-        }}
-      </p>
+    <div class="lesson__toolbar">
+      <div class="lesson__toolbar-left">
+        <h2 id="lesson-study-heading" class="lesson__study-title">{{ 'learnerStudyTitle' | uiTranslate }}</h2>
+        <p class="lesson__study-count">
+          {{
+            'learnerCardPosition'
+              | uiTranslate
+                : {
+                    current: formatUiNum(currentDeckPos().current),
+                    total: formatUiNum(currentDeckPos().total),
+                  }
+          }}
+        </p>
+      </div>
+      <div class="lesson__toolbar-actions" role="group" [attr.aria-label]="'learnerDeckToolsAria' | uiTranslate">
+        <button
+          type="button"
+          class="lesson__tool-chip"
+          [class.lesson__tool-chip--active]="deckFilter() === 'all'"
+          (click)="setDeckFilter('all')"
+        >
+          {{ 'learnerFocusAll' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="lesson__tool-chip"
+          [class.lesson__tool-chip--active]="deckFilter() === 'learning'"
+          (click)="setDeckFilter('learning')"
+        >
+          {{ 'learnerFocusLearning' | uiTranslate }}
+        </button>
+        <button type="button" class="lesson__tool-chip" (click)="shuffleDeck()">
+          {{ 'learnerShuffle' | uiTranslate }}
+        </button>
+      </div>
     </div>
 
-    <div
+    <button
+      type="button"
       class="lesson__card"
       [class.lesson__card--pulse]="flipPulse()"
       [class.lesson__card--known]="currentKnown()"
+      [class.lesson__card--revealed]="revealed()"
+      (click)="toggleCardReveal()"
+      [attr.aria-pressed]="revealed()"
+      [attr.aria-label]="revealed() ? ('learnerHideReveal' | uiTranslate) : ('learnerReveal' | uiTranslate)"
     >
-      <p class="lesson__card-arabic" dir="rtl" lang="ar">{{ item.arabic }}</p>
+      <span class="lesson__card-badge" aria-hidden="true">
+        {{ currentKnown() ? ('learnerMarkedKnown' | uiTranslate) : ('learnerCardTapHint' | uiTranslate) }}
+      </span>
+      <span class="lesson__card-arabic" dir="rtl" lang="ar">{{ item.arabic }}</span>
       @if (revealed()) {
-      <p class="lesson__card-translit" dir="ltr" lang="en">{{ item.transliteration }}</p>
-      <p class="lesson__card-meaning">{{ learner.pickLocalized(item.meaning) }}</p>
+      <span class="lesson__card-translit" dir="ltr" lang="en">{{ item.transliteration }}</span>
+      <span class="lesson__card-meaning">{{ learner.pickLocalized(item.meaning) }}</span>
       @if (item.tip; as tip) {
-      <p class="lesson__card-tip">{{ learner.pickLocalized(tip) }}</p>
+      <span class="lesson__card-tip">{{ learner.pickLocalized(tip) }}</span>
       }
       @if (item.verseRef; as ref) {
-      <p class="lesson__card-ref">
+      <span class="lesson__card-ref">
         @if (verseLink(ref); as link) {
-        <a [routerLink]="link" [fragment]="verseFragment(ref) ?? undefined">{{ ref }}</a>
+        <a [routerLink]="link" [fragment]="verseFragment(ref) ?? undefined" (click)="$event.stopPropagation()">{{
+          ref
+        }}</a>
         } @else {
         {{ ref }}
         }
-      </p>
+      </span>
       }
       } @else {
-      <p class="lesson__card-hint">{{ 'learnerRevealHint' | uiTranslate }}</p>
+      <span class="lesson__card-hint">{{ 'learnerRevealHint' | uiTranslate }}</span>
       }
-    </div>
+    </button>
 
     <div class="lesson__actions">
       @if (!revealed()) {
@@ -163,28 +253,367 @@
         {{ 'learnerReveal' | uiTranslate }}
       </button>
       } @else {
-      <button type="button" class="lesson__btn lesson__btn--primary" (click)="markKnown()">
+      <button type="button" class="lesson__btn lesson__btn--know" (click)="markKnown()">
         {{ 'learnerKnowIt' | uiTranslate }}
       </button>
-      <button type="button" class="lesson__btn lesson__btn--ghost" (click)="markLearning()">
+      <button type="button" class="lesson__btn lesson__btn--learn" (click)="markLearning()">
         {{ 'learnerStillLearning' | uiTranslate }}
       </button>
       }
     </div>
 
     <div class="lesson__nav">
-      <button type="button" class="lesson__nav-btn" [disabled]="cardIndex() === 0" (click)="goPrev()">
+      <button type="button" class="lesson__nav-btn" [disabled]="deckCursor() === 0" (click)="goPrev()">
         {{ 'learnerPrev' | uiTranslate }}
       </button>
+      <p class="lesson__keys-hint">{{ 'learnerKeysHintFlash' | uiTranslate }}</p>
       <button
         type="button"
         class="lesson__nav-btn"
-        [disabled]="cardIndex() >= data.items.length - 1"
+        [disabled]="deckCursor() >= deckIndices().length - 1"
         (click)="goNext()"
       >
         {{ 'learnerNext' | uiTranslate }}
       </button>
     </div>
+  </section>
+  } @else if (mode() === 'quiz') {
+  <section class="lesson__quiz" aria-labelledby="lesson-quiz-heading">
+    <div class="lesson__toolbar">
+      <div class="lesson__toolbar-left">
+        <h2 id="lesson-quiz-heading" class="lesson__study-title">{{ 'learnerQuizTitle' | uiTranslate }}</h2>
+        @if (quizPhase() === 'playing') {
+        <p class="lesson__study-count">
+          {{
+            'learnerCardPosition'
+              | uiTranslate
+                : {
+                    current: formatUiNum(quizIndex() + 1),
+                    total: formatUiNum(quizQuestions().length),
+                  }
+          }}
+        </p>
+        }
+      </div>
+    </div>
+
+    @if (quizPhase() === 'ready') {
+    <div class="lesson__panel lesson__panel--ready">
+      <p class="lesson__panel-kicker">{{ 'learnerQuizReadyLead' | uiTranslate }}</p>
+      <p class="lesson__panel-body">{{ 'learnerQuizReadyBody' | uiTranslate }}</p>
+      <div class="lesson__focus" role="group" [attr.aria-label]="'learnerFocusAria' | uiTranslate">
+        <button
+          type="button"
+          class="lesson__tool-chip"
+          [class.lesson__tool-chip--active]="quizFocus() === 'all'"
+          (click)="setQuizFocus('all')"
+        >
+          {{ 'learnerFocusAll' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="lesson__tool-chip"
+          [class.lesson__tool-chip--active]="quizFocus() === 'learning'"
+          (click)="setQuizFocus('learning')"
+        >
+          {{ 'learnerFocusLearning' | uiTranslate }}
+        </button>
+      </div>
+      @if (canStartQuiz()) {
+      <button type="button" class="lesson__btn lesson__btn--primary lesson__actions-main" (click)="startQuiz()">
+        {{ 'learnerQuizStart' | uiTranslate }}
+      </button>
+      <p class="lesson__keys-hint lesson__keys-hint--solo">{{ 'learnerKeysHintQuiz' | uiTranslate }}</p>
+      } @else {
+      <p class="lesson__panel-hint">{{ 'learnerQuizNeedMore' | uiTranslate }}</p>
+      }
+    </div>
+    } @else if (quizPhase() === 'playing' && currentQuizQuestion(); as question) {
+    <div class="lesson__quiz-progress" aria-hidden="true">
+      <span [style.width.%]="quizProgressPercent()"></span>
+    </div>
+    <div
+      class="lesson__panel lesson__panel--play"
+      [class.lesson__panel--correct]="quizFeedback() === 'correct'"
+      [class.lesson__panel--wrong]="quizFeedback() === 'wrong'"
+      [class.lesson__panel--pulse]="quizPulse()"
+    >
+      <div class="lesson__quiz-meta">
+        <span class="lesson__quiz-score">
+          {{
+            'learnerQuizScoreLive'
+              | uiTranslate
+                : {
+                    score: formatUiNum(quizScore()),
+                    total: formatUiNum(quizQuestions().length),
+                  }
+          }}
+        </span>
+        @if (quizStreak() > 1) {
+        <span class="lesson__quiz-streak">
+          {{ 'learnerQuizStreak' | uiTranslate: { count: formatUiNum(quizStreak()) } }}
+        </span>
+        }
+      </div>
+
+      <p class="lesson__quiz-prompt-label">
+        {{
+          question.promptKind === 'meaning'
+            ? ('learnerQuizPromptMeaning' | uiTranslate)
+            : ('learnerQuizPromptArabic' | uiTranslate)
+        }}
+      </p>
+
+      @if (question.promptKind === 'meaning') {
+      <p class="lesson__quiz-prompt-arabic" dir="rtl" lang="ar">{{ question.promptArabic }}</p>
+      <p class="lesson__quiz-prompt-translit" dir="ltr" lang="en">{{ question.promptTransliteration }}</p>
+      } @else {
+      <p class="lesson__quiz-prompt-meaning">{{ question.promptMeaning }}</p>
+      }
+
+      <div class="lesson__quiz-choices" role="group" [attr.aria-label]="'learnerQuizChoicesAria' | uiTranslate">
+        @for (choice of question.choices; track choice.id; let i = $index) {
+        <button
+          type="button"
+          class="lesson__quiz-choice"
+          [class.lesson__quiz-choice--arabic]="question.promptKind === 'arabic'"
+          [class.lesson__quiz-choice--correct]="choiceState(choice.id) === 'correct'"
+          [class.lesson__quiz-choice--wrong]="choiceState(choice.id) === 'wrong'"
+          [class.lesson__quiz-choice--missed]="choiceState(choice.id) === 'missed'"
+          [disabled]="quizFeedback() !== null"
+          [attr.dir]="question.promptKind === 'arabic' ? 'rtl' : null"
+          [attr.lang]="question.promptKind === 'arabic' ? 'ar' : null"
+          (click)="answerQuiz(choice.id)"
+        >
+          <span class="lesson__quiz-choice-key" aria-hidden="true">{{ formatUiNum(i + 1) }}</span>
+          <span class="lesson__quiz-choice-label">{{ choice.label }}</span>
+        </button>
+        }
+      </div>
+
+      @if (quizFeedback(); as feedback) {
+      <div class="lesson__quiz-feedback" role="status">
+        <p class="lesson__quiz-feedback-text">
+          {{
+            feedback === 'correct'
+              ? ('learnerQuizCorrect' | uiTranslate)
+              : ('learnerQuizWrong' | uiTranslate)
+          }}
+        </p>
+        @if (feedback === 'wrong') {
+        <p
+          class="lesson__quiz-feedback-answer"
+          [class.lesson__quiz-feedback-answer--arabic]="question.promptKind === 'arabic'"
+          [attr.dir]="question.promptKind === 'arabic' ? 'rtl' : null"
+          [attr.lang]="question.promptKind === 'arabic' ? 'ar' : null"
+        >
+          {{ question.promptKind === 'meaning' ? question.promptMeaning : question.promptArabic }}
+        </p>
+        }
+        <button type="button" class="lesson__btn lesson__btn--primary" (click)="nextQuizQuestion()">
+          {{
+            quizIndex() >= quizQuestions().length - 1
+              ? ('learnerQuizSeeResults' | uiTranslate)
+              : ('learnerQuizContinue' | uiTranslate)
+          }}
+        </button>
+      </div>
+      }
+    </div>
+    } @else if (quizPhase() === 'results') {
+    <div class="lesson__panel lesson__panel--results">
+      <div
+        class="lesson__result-ring"
+        role="img"
+        [attr.aria-label]="
+          'learnerQuizResultsScore'
+            | uiTranslate
+              : {
+                  score: formatUiNum(quizScore()),
+                  total: formatUiNum(quizQuestions().length),
+                  percent: formatUiNum(quizPercent()),
+                }
+        "
+      >
+        <svg viewBox="0 0 96 96" aria-hidden="true">
+          <circle class="lesson__result-track" cx="48" cy="48" r="40" />
+          <circle
+            class="lesson__result-fill"
+            cx="48"
+            cy="48"
+            r="40"
+            [style.stroke-dasharray]="251.2"
+            [style.stroke-dashoffset]="251.2 - (251.2 * quizPercent()) / 100"
+          />
+        </svg>
+        <span class="lesson__result-value">{{ formatUiNum(quizPercent()) }}%</span>
+      </div>
+      <p class="lesson__quiz-results-score">
+        {{
+          'learnerQuizResultsScore'
+            | uiTranslate
+              : {
+                  score: formatUiNum(quizScore()),
+                  total: formatUiNum(quizQuestions().length),
+                  percent: formatUiNum(quizPercent()),
+                }
+        }}
+      </p>
+      <p class="lesson__panel-body">
+        @if (quizPercent() >= 80) {
+        {{ 'learnerQuizResultsGreat' | uiTranslate }}
+        } @else if (quizPercent() >= 50) {
+        {{ 'learnerQuizResultsOk' | uiTranslate }}
+        } @else {
+        {{ 'learnerQuizResultsKeepGoing' | uiTranslate }}
+        }
+      </p>
+      @if (quizBestStreak() > 1) {
+      <p class="lesson__quiz-results-streak">
+        {{ 'learnerQuizBestStreak' | uiTranslate: { count: formatUiNum(quizBestStreak()) } }}
+      </p>
+      }
+      @if (quizMissedItems().length > 0) {
+      <div class="lesson__missed">
+        <p class="lesson__missed-title">{{ 'learnerQuizMissedTitle' | uiTranslate }}</p>
+        <ul class="lesson__missed-list">
+          @for (missed of quizMissedItems(); track missed.id) {
+          <li>
+            <span class="lesson__missed-ar" dir="rtl" lang="ar">{{ missed.arabic }}</span>
+            <span class="lesson__missed-meaning">{{ learner.pickLocalized(missed.meaning) }}</span>
+          </li>
+          }
+        </ul>
+      </div>
+      }
+      <div class="lesson__actions">
+        <button type="button" class="lesson__btn lesson__btn--primary" (click)="retryQuiz()">
+          {{ 'learnerQuizRetry' | uiTranslate }}
+        </button>
+        @if (quizMissedItems().length > 0) {
+        <button type="button" class="lesson__btn lesson__btn--ghost" (click)="reviewMissedInFlashcards()">
+          {{ 'learnerQuizReviewMissed' | uiTranslate }}
+        </button>
+        } @else {
+        <button type="button" class="lesson__btn lesson__btn--ghost" (click)="setMode('flashcards')">
+          {{ 'learnerQuizBackFlashcards' | uiTranslate }}
+        </button>
+        }
+      </div>
+    </div>
+    }
+  </section>
+  } @else if (mode() === 'match') {
+  <section class="lesson__match" aria-labelledby="lesson-match-heading">
+    <div class="lesson__toolbar">
+      <div class="lesson__toolbar-left">
+        <h2 id="lesson-match-heading" class="lesson__study-title">{{ 'learnerMatchTitle' | uiTranslate }}</h2>
+        @if (matchPhase() === 'playing') {
+        <p class="lesson__study-count">
+          {{
+            'learnerMatchProgress'
+              | uiTranslate
+                : {
+                    done: formatUiNum(matchMatched().size),
+                    total: formatUiNum(matchPairs().length),
+                  }
+          }}
+        </p>
+        }
+      </div>
+    </div>
+
+    @if (matchPhase() === 'ready') {
+    <div class="lesson__panel lesson__panel--ready">
+      <p class="lesson__panel-kicker">{{ 'learnerMatchReadyLead' | uiTranslate }}</p>
+      <p class="lesson__panel-body">{{ 'learnerMatchReadyBody' | uiTranslate }}</p>
+      <div class="lesson__focus" role="group" [attr.aria-label]="'learnerFocusAria' | uiTranslate">
+        <button
+          type="button"
+          class="lesson__tool-chip"
+          [class.lesson__tool-chip--active]="matchFocus() === 'all'"
+          (click)="setMatchFocus('all')"
+        >
+          {{ 'learnerFocusAll' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="lesson__tool-chip"
+          [class.lesson__tool-chip--active]="matchFocus() === 'learning'"
+          (click)="setMatchFocus('learning')"
+        >
+          {{ 'learnerFocusLearning' | uiTranslate }}
+        </button>
+      </div>
+      @if (canStartMatch()) {
+      <button type="button" class="lesson__btn lesson__btn--primary lesson__actions-main" (click)="startMatch()">
+        {{ 'learnerMatchStart' | uiTranslate }}
+      </button>
+      } @else {
+      <p class="lesson__panel-hint">{{ 'learnerMatchNeedMore' | uiTranslate }}</p>
+      }
+    </div>
+    } @else if (matchPhase() === 'playing') {
+    <div class="lesson__quiz-progress" aria-hidden="true">
+      <span [style.width.%]="matchProgressPercent()"></span>
+    </div>
+    <div class="lesson__match-board" [class.lesson__match-board--wrong]="matchWrongPair()">
+      <div class="lesson__match-col">
+        <p class="lesson__match-col-title">{{ 'learnerMatchArabicCol' | uiTranslate }}</p>
+        @for (id of matchArabicOrder(); track id) {
+        @if (matchPairById(id); as pair) {
+        <button
+          type="button"
+          class="lesson__match-tile lesson__match-tile--arabic"
+          [class.lesson__match-tile--selected]="matchSelectedArabic() === id"
+          [class.lesson__match-tile--matched]="matchMatched().has(id)"
+          [disabled]="matchMatched().has(id) || matchWrongPair()"
+          dir="rtl"
+          lang="ar"
+          (click)="selectMatchArabic(id)"
+        >
+          {{ pair.arabic }}
+        </button>
+        }
+        }
+      </div>
+      <div class="lesson__match-col">
+        <p class="lesson__match-col-title">{{ 'learnerMatchMeaningCol' | uiTranslate }}</p>
+        @for (id of matchMeaningOrder(); track id) {
+        @if (matchPairById(id); as pair) {
+        <button
+          type="button"
+          class="lesson__match-tile"
+          [class.lesson__match-tile--selected]="matchSelectedMeaning() === id"
+          [class.lesson__match-tile--matched]="matchMatched().has(id)"
+          [disabled]="matchMatched().has(id) || matchWrongPair()"
+          (click)="selectMatchMeaning(id)"
+        >
+          {{ pair.meaning }}
+        </button>
+        }
+        }
+      </div>
+    </div>
+    <p class="lesson__match-moves">
+      {{ 'learnerMatchMoves' | uiTranslate: { count: formatUiNum(matchMoves()) } }}
+    </p>
+    } @else if (matchPhase() === 'complete') {
+    <div class="lesson__panel lesson__panel--results">
+      <p class="lesson__panel-kicker">{{ 'learnerMatchCompleteLead' | uiTranslate }}</p>
+      <p class="lesson__panel-body">
+        {{ 'learnerMatchCompleteBody' | uiTranslate: { count: formatUiNum(matchMoves()) } }}
+      </p>
+      <div class="lesson__actions">
+        <button type="button" class="lesson__btn lesson__btn--primary" (click)="retryMatch()">
+          {{ 'learnerMatchRetry' | uiTranslate }}
+        </button>
+        <button type="button" class="lesson__btn lesson__btn--ghost" (click)="setMode('quiz')">
+          {{ 'learnerMatchTryQuiz' | uiTranslate }}
+        </button>
+      </div>
+    </div>
+    }
   </section>
   } @else {
   <section class="lesson__list" aria-labelledby="lesson-list-heading">

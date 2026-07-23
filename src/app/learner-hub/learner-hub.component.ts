@@ -48,6 +48,23 @@ export class LearnerHubComponent implements OnInit {
     this.lessons().reduce((sum, l) => sum + l.itemCount, 0),
   );
 
+  protected readonly overallProgress = computed(() => {
+    this.progress.progressSnapshot();
+    const list = this.lessons();
+    if (list.length === 0) {
+      return { known: 0, total: 0, percent: 0 };
+    }
+    let known = 0;
+    let total = 0;
+    for (const lesson of list) {
+      const p = this.progress.lessonProgress(lesson);
+      known += p.known;
+      total += p.total;
+    }
+    const percent = total > 0 ? Math.round((known / total) * 100) : 0;
+    return { known, total, percent };
+  });
+
   protected readonly filteredLessons = computed(() => {
     const filter = this.skillFilter();
     const list = this.lessons();
