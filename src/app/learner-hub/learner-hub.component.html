@@ -51,9 +51,12 @@
       <span class="learner__stat-value">{{ formatUiNum(totalItems()) }}</span>
       <span class="learner__stat-label">{{ 'learnerStatItems' | uiTranslate }}</span>
     </div>
-    <div class="learner__stat">
-      <span class="learner__stat-value">{{ formatUiNum(2) }}</span>
-      <span class="learner__stat-label">{{ 'learnerStatSkills' | uiTranslate }}</span>
+    <div class="learner__stat learner__stat--progress">
+      <span class="learner__stat-value">{{ formatUiNum(overallProgress().percent) }}%</span>
+      <span class="learner__stat-label">{{ 'learnerStatProgress' | uiTranslate }}</span>
+      <span class="learner__stat-track" aria-hidden="true">
+        <span class="learner__stat-fill" [style.width.%]="overallProgress().percent"></span>
+      </span>
     </div>
   </section>
 
@@ -71,6 +74,16 @@
     </a>
   </section>
   }
+
+  <section class="learner__paths" aria-labelledby="learner-paths-heading">
+    <h2 id="learner-paths-heading" class="learner__paths-title">{{ 'learnerPathsTitle' | uiTranslate }}</h2>
+    <p class="learner__paths-subtitle">{{ 'learnerPathsSubtitle' | uiTranslate }}</p>
+    <ul class="learner__paths-list">
+      <li>{{ 'learnerPathFlash' | uiTranslate }}</li>
+      <li>{{ 'learnerPathQuiz' | uiTranslate }}</li>
+      <li>{{ 'learnerPathMatch' | uiTranslate }}</li>
+    </ul>
+  </section>
 
   <section class="learner__grid" aria-labelledby="learner-grid-heading">
     <div class="learner__grid-head">
