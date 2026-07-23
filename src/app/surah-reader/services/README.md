@@ -26,7 +26,7 @@ import { ReaderCorpusStateService } from './services/corpus/reader-corpus-state.
 | [`bookmark/`](./bookmark/) | Bookmark toast/pulse UI (storage in `core/bookmark`) | `ReaderBookmarkUiService` |
 | [`layout/`](./layout/) | Responsive breakpoints (split / mobile) | `ReaderLayoutBreakpointsService` |
 | [`presentation/`](./presentation/) | Copy, share, intro copy, document title | `ReaderVerseActionsService`, `ReaderIntroContentService`, `ReaderDocumentTitleService` |
-| [`media/`](./media/) | Future recitation audio (no UI) | `ReaderAudioPlaybackService` |
+| [`media/`](./media/) | Ayah recitation playback (Alafasy) | `ReaderAudioPlaybackService` |
 
 ## Dependency flow (simplified)
 

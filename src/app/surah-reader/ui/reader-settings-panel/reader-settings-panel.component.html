@@ -29,6 +29,18 @@
     </label>
     <p class="reader__settings-hint">{{ 'focusModeHint' | uiTranslate }}</p>
   </fieldset>
+  <fieldset class="reader__fieldset reader__fieldset--audio">
+    <legend class="reader__legend">{{ 'audioRecitationLegend' | uiTranslate }}</legend>
+    <label class="reader__check">
+      <input
+        type="checkbox"
+        [checked]="audio.continuousMode()"
+        (change)="onContinuousRecitationChange($event)"
+      />
+      <span>{{ 'audioContinuousOption' | uiTranslate }}</span>
+    </label>
+    <p class="reader__settings-hint">{{ 'audioContinuousHint' | uiTranslate }}</p>
+  </fieldset>
   <fieldset class="reader__fieldset reader__fieldset--theme">
     <legend class="reader__legend">{{ 'colorThemeLegend' | uiTranslate }}</legend>
     <div class="reader__segment reader__segment--theme" role="group" [attr.aria-label]="'colorThemeAria' | uiTranslate">

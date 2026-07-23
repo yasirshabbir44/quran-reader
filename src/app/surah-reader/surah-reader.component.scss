@@ -1953,6 +1953,10 @@ a.reader__settings-btn {
       0 6px 28px var(--reader-shadow-card-hover);
   }
 
+  &--playing {
+    border-color: var(--reader-verse-active-border);
+  }
+
   &--search-hit:not(&--active) {
     border-color: var(--reader-accent-border);
     box-shadow:
@@ -2043,6 +2047,18 @@ a.reader__settings-btn {
     border-color: rgba(201, 162, 39, 0.55);
     color: var(--reader-accent);
     background: rgba(201, 162, 39, 0.12);
+  }
+
+  &--audio {
+    border-color: rgba(201, 162, 39, 0.28);
+    color: var(--reader-accent);
+    background: rgba(201, 162, 39, 0.08);
+  }
+
+  &--audio-active {
+    border-color: rgba(201, 162, 39, 0.55);
+    color: var(--reader-accent);
+    background: rgba(201, 162, 39, 0.14);
   }
 
   &--image {
@@ -2551,14 +2567,15 @@ a.reader__settings-btn {
     }
 
     &--bookmark-active,
-    &--tafsir-active {
+    &--tafsir-active,
+    &--audio-active {
       border-color: var(--reader-accent-border-strong);
       color: var(--reader-accent);
       background: var(--reader-accent-soft);
     }
 
     &--audio {
-      opacity: 0.45;
+      opacity: 1;
     }
   }
 

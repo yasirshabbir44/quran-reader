@@ -1,12 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
+import { alafasyAyahAudioUrl } from '../audio/ayah-audio-url';
 
 const LS_AUTOPLAY = 'quran-reader-learner-audio-autoplay';
-const AYAH_CDN = 'https://everyayah.com/data/Alafasy_128kbps';
-
-function pad3(n: number): string {
-  return String(n).padStart(3, '0');
-}
 
 function parseVerseRef(ref: string | undefined): { surah: number; ayah: number } | null {
   if (!ref) {
@@ -124,7 +120,7 @@ export class LearnerAudioService {
     this.stop();
     this.lastError.set(null);
     const token = ++this.activeToken;
-    const url = `${AYAH_CDN}/${pad3(parsed.surah)}${pad3(parsed.ayah)}.mp3`;
+    const url = alafasyAyahAudioUrl(parsed.surah, parsed.ayah);
 
     const audio = new Audio(url);
     this.audioEl = audio;

@@ -1,5 +1,6 @@
 import {
   ReaderActiveAyahService,
+  ReaderAudioPlaybackService,
   ReaderBookmarkUiService,
   ReaderCorpusStateService,
   ReaderDocumentTitleService,
@@ -48,4 +49,5 @@ export const READER_FEATURE_PROVIDERS = [
   ReaderVerseActionsService,
   ReaderSwipeNavigationService,
   ReaderIntroContentService,
+  ReaderAudioPlaybackService,
 ] as const;
