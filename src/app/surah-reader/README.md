@@ -131,7 +131,7 @@ Angular can emit a separate chunk for deferred template dependencies, keeping th
 
 ### Example: wire recitation audio
 
-Done: `ReaderAudioPlaybackService` plays Alafasy clips, syncs active verse/scroll, supports continuous mode (settings), and is registered in `READER_FEATURE_PROVIDERS`. Mobile bar + per-verse Play/Pause call `audio.toggleActive()` / `audio.playVerse()`.
+Done: `ReaderAudioPlaybackService` plays Alafasy clips, syncs active verse/scroll, highlights words via Quran.com timing segments, supports continuous mode (settings), and is registered in `READER_FEATURE_PROVIDERS`. Mobile bar + per-verse Play/Pause call `audio.toggleActive()` / `audio.playVerse()`.
 
 ## Testing notes
 

@@ -2371,6 +2371,27 @@ a.reader__settings-btn {
   text-wrap: pretty;
 }
 
+.verses__word {
+  display: inline;
+  padding: 0.05em 0.12em;
+  margin-inline: 0.04em;
+  border-radius: 0.28em;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease,
+    box-shadow 0.12s ease;
+
+  &--active {
+    color: var(--reader-btn-on-accent, var(--reader-ink));
+    background: linear-gradient(
+      180deg,
+      var(--reader-accent-gradient-start, var(--reader-accent)),
+      var(--reader-accent-gradient-end, var(--reader-accent))
+    );
+    box-shadow: 0 0 0 1px var(--reader-verse-active-ring, transparent);
+  }
+}
+
 .verses__translations {
   width: 100%;
   display: flex;

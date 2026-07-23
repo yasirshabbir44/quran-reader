@@ -296,7 +296,7 @@
   "audioErrorTitle": "Could not load recitation audio",
   "audioRecitationLegend": "Recitation",
   "audioContinuousOption": "Continuous — play next verse automatically",
-  "audioContinuousHint": "Uses Mishary Rashid Alafasy. Turn off to stop after each verse.",
+  "audioContinuousHint": "Uses Mishary Rashid Alafasy. Words highlight as they are recited. Turn off to stop after each verse.",
   "swipeNavHint": "Swipe left or right to change verse",
   "tafsirReadMore": "Read more explanation",
   "stickyHeaderAria": "Reading indicator: current surah and verse",

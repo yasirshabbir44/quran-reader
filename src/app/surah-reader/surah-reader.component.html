@@ -1233,7 +1233,19 @@
               lang="ar"
               [attr.aria-label]="'verseQuranAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
             >
-              <p class="verses__text">{{ v.ar }}</p>
+              <p class="verses__text">
+                @if (audio.hasWordHighlight(v.surah, v.ayah)) {
+                  @for (w of audio.playbackWords()!; track w.position) {
+                    <span
+                      class="verses__word"
+                      [class.verses__word--active]="audio.isActiveWord(v.surah, v.ayah, w.position)"
+                      [attr.data-word]="w.position"
+                    >{{ w.text }}</span>
+                  }
+                } @else {
+                  {{ v.ar }}
+                }
+              </p>
               @if (showTransliterationBlock() && verseTranslit(v); as translit) {
               <div class="verses__translit-block" dir="ltr" lang="en">
                 <span class="verses__translit-label">{{ 'transliterationShort' | uiTranslate }}</span>
