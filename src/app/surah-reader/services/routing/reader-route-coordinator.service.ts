@@ -20,6 +20,7 @@ import { ReaderViewPreferencesService } from '../preferences/reader-view-prefere
 import { ReaderBookmarkUiService } from '../bookmark/reader-bookmark-ui.service';
 import { ReaderScrollStateService } from '../navigation/reader-scroll-state.service';
 import { ReaderMushafNavService } from '../panels/reader-mushaf-nav.service';
+import { ReaderAudioPlaybackService } from '../media/reader-audio-playback.service';
 import type { ReaderViewKind } from '../../models/reader-view-kind.model';
 
 type ResolvedRoute =
@@ -50,6 +51,7 @@ export class ReaderRouteCoordinatorService {
   private readonly bookmarkUi = inject(ReaderBookmarkUiService);
   private readonly scroll = inject(ReaderScrollStateService);
   private readonly mushafNav = inject(ReaderMushafNavService);
+  private readonly audio = inject(ReaderAudioPlaybackService);
   private readonly khatam = inject(KhatamService);
 
   private lastConsumedStartKey = '';
@@ -144,6 +146,7 @@ export class ReaderRouteCoordinatorService {
 
     const { resetViewport } = this.applyView(resolved, payload, mushaf);
     if (resetViewport) {
+      this.audio.stop();
       this.activeAyah.resetOnViewChange();
       this.scroll.resetViewportScroll();
     }

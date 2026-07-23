@@ -34,6 +34,7 @@ import { VerseQuoteSheetComponent } from '../verse-quote-sheet/verse-quote-sheet
 import { READER_FEATURE_PROVIDERS } from './reader.providers';
 import {
   ReaderActiveAyahService,
+  ReaderAudioPlaybackService,
   ReaderBookmarkUiService,
   ReaderCorpusStateService,
   ReaderDocumentTitleService,
@@ -104,6 +105,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly viewPrefs = inject(ReaderViewPreferencesService);
   protected readonly routeCoord = inject(ReaderRouteCoordinatorService);
   protected readonly activeAyah = inject(ReaderActiveAyahService);
+  protected readonly audio = inject(ReaderAudioPlaybackService);
   protected readonly scroll = inject(ReaderScrollStateService);
   protected readonly search = inject(ReaderSurahSearchService);
   protected readonly surahNav = inject(ReaderSurahNavService);
@@ -493,9 +495,17 @@ export class SurahReaderComponent implements OnInit {
   protected setFocusMode(enabled: boolean): void {
     this.viewPrefs.setFocusMode(enabled);
     if (enabled) {
+      this.audio.stop();
       this.dismissReaderChrome();
     }
     this.scroll.syncTopbarHeightFromDom();
+  }
+
+  protected onContinuousRecitationChange(event: Event): void {
+    const input = event.target;
+    if (input instanceof HTMLInputElement) {
+      this.audio.setContinuousMode(input.checked);
+    }
   }
 
   protected setReadingMode(mode: 'verse-by-verse' | 'reading'): void {
@@ -683,11 +693,31 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected goToPrevAyah(): void {
+    const wasPlaying = this.audio.isPlaying();
     this.activeAyah.goPrev();
+    this.audio.syncAfterNavigation(wasPlaying);
   }
 
   protected goToNextAyah(): void {
+    const wasPlaying = this.audio.isPlaying();
     this.activeAyah.goNext();
+    this.audio.syncAfterNavigation(wasPlaying);
+  }
+
+  protected toggleRecitationForActiveAyah(): void {
+    this.audio.toggleActive();
+  }
+
+  protected toggleRecitationForVerse(v: ReaderDisplayVerse): void {
+    if (this.audio.isPlayingVerse(v.surah, v.ayah)) {
+      this.audio.pause();
+      return;
+    }
+    if (this.audio.isCurrentVerse(v.surah, v.ayah) && this.audio.isPaused()) {
+      this.audio.resume();
+      return;
+    }
+    this.audio.playVerse(v.surah, v.ayah);
   }
 
   protected toggleTafsirForActiveAyah(): void {

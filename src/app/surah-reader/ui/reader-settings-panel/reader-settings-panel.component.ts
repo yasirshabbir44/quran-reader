@@ -18,6 +18,7 @@ import type { DailyReminderKind } from '../../../core/notifications/notification
 import { UiTranslatePipe } from '../../../core/ui/ui-translate.pipe';
 import {
   ReaderActiveAyahService,
+  ReaderAudioPlaybackService,
   ReaderBookmarkUiService,
   ReaderCorpusStateService,
   ReaderPanelCoordinatorService,
@@ -44,6 +45,7 @@ export class ReaderSettingsPanelComponent {
   protected readonly viewPrefs = inject(ReaderViewPreferencesService);
   protected readonly panels = inject(ReaderPanelCoordinatorService);
   protected readonly activeAyah = inject(ReaderActiveAyahService);
+  protected readonly audio = inject(ReaderAudioPlaybackService);
   protected readonly scroll = inject(ReaderScrollStateService);
   protected readonly bookmarkUi = inject(ReaderBookmarkUiService);
   protected readonly khatam = inject(KhatamService);
@@ -73,10 +75,18 @@ export class ReaderSettingsPanelComponent {
   protected setFocusMode(enabled: boolean): void {
     this.viewPrefs.setFocusMode(enabled);
     if (enabled) {
+      this.audio.stop();
       this.panels.closeAllOverlays();
       this.verseActions.closeQuoteSheet();
     }
     this.scroll.syncTopbarHeightFromDom();
+  }
+
+  protected onContinuousRecitationChange(event: Event): void {
+    const input = event.target;
+    if (input instanceof HTMLInputElement) {
+      this.audio.setContinuousMode(input.checked);
+    }
   }
 
   protected setColorTheme(t: Parameters<ReaderViewPreferencesService['setColorTheme']>[0]): void {

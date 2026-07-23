@@ -39,7 +39,7 @@ surah-reader/
 │   ├── bookmark/                      ← bookmark UI feedback
 │   ├── layout/                        ← responsive breakpoints
 │   ├── presentation/                  ← copy/share, intro, title
-│   └── media/                         ← future audio (stub)
+│   └── media/                         ← ayah recitation playback
 └── ui/
     └── reader-tafsir-panel/           ← standalone, OnPush tafsir body
 ```
@@ -78,7 +78,7 @@ Services live in domain subfolders under `services/`. See **[`services/README.md
 | `bookmark/` | `ReaderBookmarkUiService` |
 | `layout/` | `ReaderLayoutBreakpointsService` |
 | `presentation/` | `ReaderVerseActionsService`, `ReaderIntroContentService`, `ReaderDocumentTitleService` |
-| `media/` | `ReaderAudioPlaybackService` (stub) |
+| `media/` | `ReaderAudioPlaybackService` (Alafasy ayah playback) |
 
 ## Shell component role
 
@@ -131,10 +131,7 @@ Angular can emit a separate chunk for deferred template dependencies, keeping th
 
 ### Example: wire recitation audio
 
-1. Implement `ReaderAudioPlaybackService.playVerse(surah, ayah)` (Audio element, stream URL, error handling).
-2. Add the service to `READER_FEATURE_PROVIDERS`.
-3. From the mobile bar button, call `audio.playVerse(corpus.surahNumber(), activeAyah.activeAyah())` — no audio logic in the template.
-4. Optionally extract `ReaderMobileBarComponent` for the bottom chrome.
+Done: `ReaderAudioPlaybackService` plays Alafasy clips, syncs active verse/scroll, supports continuous mode (settings), and is registered in `READER_FEATURE_PROVIDERS`. Mobile bar + per-verse Play/Pause call `audio.toggleActive()` / `audio.playVerse()`.
 
 ## Testing notes
 

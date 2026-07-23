@@ -20,6 +20,11 @@ export class ReaderActiveAyahService {
 
   readonly activeVerse = signal<VerseRef>({ surah: 67, ayah: 1 });
   readonly jumpModel = signal('');
+  /**
+   * When true (recitation playing), scroll-driven active ayah updates are skipped
+   * so audio owns highlight + position.
+   */
+  readonly lockActiveFromScroll = signal(false);
 
   /** Ayah number within the active surah context (bookmark compat). */
   readonly activeAyah = computed(() => this.activeVerse().ayah);
@@ -61,6 +66,7 @@ export class ReaderActiveAyahService {
     const first = this.corpus.displayVerses()[0];
     this.activeVerse.set(first ? { surah: first.surah, ayah: first.ayah } : { surah: 67, ayah: 1 });
     this.jumpModel.set('');
+    this.lockActiveFromScroll.set(false);
     this.fragments.verseFragmentSyncEnabled = false;
   }
 
@@ -192,6 +198,9 @@ export class ReaderActiveAyahService {
   }
 
   updateFromScroll(scrollY?: number): void {
+    if (this.lockActiveFromScroll()) {
+      return;
+    }
     const centerY = (this.document.defaultView?.innerHeight ?? 800) / 2;
     let next: VerseRef = this.corpus.displayVerses()[0]
       ? { surah: this.corpus.displayVerses()[0]!.surah, ayah: this.corpus.displayVerses()[0]!.ayah }

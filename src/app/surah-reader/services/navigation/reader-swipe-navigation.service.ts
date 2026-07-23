@@ -3,6 +3,7 @@ import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { UiLocaleService } from '../../../core/ui/ui-locale.service';
 import { ReaderActiveAyahService } from './reader-active-ayah.service';
 import { ReaderLayoutBreakpointsService } from '../layout/reader-layout-breakpoints.service';
+import { ReaderAudioPlaybackService } from '../media/reader-audio-playback.service';
 
 @Injectable()
 export class ReaderSwipeNavigationService {
@@ -10,6 +11,7 @@ export class ReaderSwipeNavigationService {
   private readonly ui = inject(UiLocaleService);
   private readonly breakpoints = inject(ReaderLayoutBreakpointsService);
   private readonly activeAyah = inject(ReaderActiveAyahService);
+  private readonly audio = inject(ReaderAudioPlaybackService);
 
   private touchStartX = 0;
   private touchStartY = 0;
@@ -50,10 +52,12 @@ export class ReaderSwipeNavigationService {
     }
     const rtl = this.ui.locale() !== 'en';
     const swipeTowardNext = rtl ? dx > 0 : dx < 0;
+    const wasPlaying = this.audio.isPlaying();
     if (swipeTowardNext) {
       this.activeAyah.goNext();
     } else {
       this.activeAyah.goPrev();
     }
+    this.audio.syncAfterNavigation(wasPlaying);
   }
 }

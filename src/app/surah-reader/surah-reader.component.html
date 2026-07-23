@@ -525,6 +525,18 @@
     </label>
     <p class="reader__settings-hint">{{ 'focusModeHint' | uiTranslate }}</p>
   </fieldset>
+  <fieldset class="reader__fieldset reader__fieldset--audio">
+    <legend class="reader__legend">{{ 'audioRecitationLegend' | uiTranslate }}</legend>
+    <label class="reader__check">
+      <input
+        type="checkbox"
+        [checked]="audio.continuousMode()"
+        (change)="onContinuousRecitationChange($event)"
+      />
+      <span>{{ 'audioContinuousOption' | uiTranslate }}</span>
+    </label>
+    <p class="reader__settings-hint">{{ 'audioContinuousHint' | uiTranslate }}</p>
+  </fieldset>
   <fieldset class="reader__fieldset reader__fieldset--theme">
     <legend class="reader__legend">{{ 'colorThemeLegend' | uiTranslate }}</legend>
     <div class="reader__segment reader__segment--theme" role="group" [attr.aria-label]="'colorThemeAria' | uiTranslate">
@@ -884,16 +896,34 @@
     <button
       type="button"
       class="reader__mobile-btn reader__mobile-btn--audio"
-      disabled
-      [attr.aria-label]="'audioComingSoonAria' | uiTranslate"
-      [attr.title]="'audioComingSoonTitle' | uiTranslate"
+      [class.reader__mobile-btn--audio-active]="audio.isPlaying()"
+      (click)="toggleRecitationForActiveAyah()"
+      [attr.aria-pressed]="audio.isPlaying()"
+      [attr.aria-label]="
+        audio.isPlaying()
+          ? ('audioPauseActiveAria' | uiTranslate)
+          : ('audioPlayActiveAria' | uiTranslate)
+      "
+      [attr.title]="
+        audio.loadError()
+          ? ('audioErrorTitle' | uiTranslate)
+          : audio.isPlaying()
+            ? ('audioPauseLabel' | uiTranslate)
+            : ('audioPlayLabel' | uiTranslate)
+      "
     >
+      @if (audio.isPlaying()) {
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M7 6.5h3.5v11H7v-11Zm6.5 0H17v11h-3.5v-11Z" fill="currentColor" />
+      </svg>
+      } @else {
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path
           d="M8 9.5v5l4.5 3V6.5L8 9.5ZM18 12a6 6 0 0 0-3-5.2v10.4A6 6 0 0 0 18 12Z"
           fill="currentColor"
         />
       </svg>
+      }
     </button>
     <button
       type="button"
@@ -1051,6 +1081,7 @@
         <li
           class="verses__item"
           [class.verses__item--active]="isActiveVerse(v)"
+          [class.verses__item--playing]="audio.isPlayingVerse(v.surah, v.ayah)"
           [class.verses__item--bookmarked]="isVerseSavedBookmark(v)"
           [class.verses__item--search-hit]="isVerseSurahSearchHit(v)"
           [class.verses__item--search-active]="isVerseSurahSearchActive(v)"
@@ -1071,6 +1102,29 @@
               }
             </span>
             <div class="verses__actions">
+              <button
+                type="button"
+                class="verses__action-btn verses__action-btn--audio"
+                [class.verses__action-btn--audio-active]="audio.isPlayingVerse(v.surah, v.ayah)"
+                (click)="toggleRecitationForVerse(v)"
+                [attr.aria-pressed]="audio.isPlayingVerse(v.surah, v.ayah)"
+                [attr.aria-label]="
+                  audio.isPlayingVerse(v.surah, v.ayah)
+                    ? ('audioPauseAria' | uiTranslate: { n: formatUiNum(v.ayah) })
+                    : ('audioPlayAria' | uiTranslate: { n: formatUiNum(v.ayah) })
+                "
+                [attr.title]="
+                  audio.isPlayingVerse(v.surah, v.ayah)
+                    ? ('audioPauseLabel' | uiTranslate)
+                    : ('audioPlayLabel' | uiTranslate)
+                "
+              >
+                {{
+                  audio.isPlayingVerse(v.surah, v.ayah)
+                    ? ('audioPauseLabel' | uiTranslate)
+                    : ('audioPlayLabel' | uiTranslate)
+                }}
+              </button>
               <button
                 type="button"
                 class="verses__action-btn"
