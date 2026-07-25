@@ -508,6 +508,21 @@ export class SurahReaderComponent implements OnInit {
     }
   }
 
+  protected onReciterChange(value: string | number): void {
+    this.audio.setReciter(Number(value));
+  }
+
+  protected onPlaybackRateChange(value: string | number): void {
+    this.audio.setPlaybackRate(Number(value));
+  }
+
+  protected onAudioSeek(event: Event): void {
+    const input = event.target;
+    if (input instanceof HTMLInputElement) {
+      this.audio.seekTo(Number(input.value));
+    }
+  }
+
   protected setReadingMode(mode: 'verse-by-verse' | 'reading'): void {
     this.viewPrefs.setReadingMode(mode);
   }
@@ -706,6 +721,14 @@ export class SurahReaderComponent implements OnInit {
 
   protected toggleRecitationForActiveAyah(): void {
     this.audio.toggleActive();
+  }
+
+  protected toggleLoadedRecitation(): void {
+    if (this.audio.isPlaying()) {
+      this.audio.pause();
+    } else {
+      this.audio.resume();
+    }
   }
 
   protected toggleRecitationForVerse(v: ReaderDisplayVerse): void {

@@ -527,6 +527,41 @@
   </fieldset>
   <fieldset class="reader__fieldset reader__fieldset--audio">
     <legend class="reader__legend">{{ 'audioRecitationLegend' | uiTranslate }}</legend>
+    <div class="reader__audio-setting-row">
+      <label class="reader__tool-label reader__tool-label--compact" for="audio-reciter">
+        {{ 'audioVoiceLabel' | uiTranslate }}
+      </label>
+      <select
+        id="audio-reciter"
+        class="reader__select reader__select--compact"
+        [ngModel]="audio.selectedReciterId()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onReciterChange($event)"
+      >
+        @for (reciter of audio.reciters; track reciter.id) {
+        <option [ngValue]="reciter.id">
+          {{ reciter.name }}{{ reciter.style ? ' — ' + reciter.style : '' }}
+        </option>
+        }
+      </select>
+    </div>
+    <div class="reader__audio-setting-row">
+      <label class="reader__tool-label reader__tool-label--compact" for="audio-rate">
+        {{ 'audioSpeedLabel' | uiTranslate }}
+      </label>
+      <select
+        id="audio-rate"
+        class="reader__select reader__select--compact"
+        [ngModel]="audio.playbackRate()"
+        [ngModelOptions]="{ standalone: true }"
+        (ngModelChange)="onPlaybackRateChange($event)"
+      >
+        <option [ngValue]="0.75">0.75×</option>
+        <option [ngValue]="1">1×</option>
+        <option [ngValue]="1.25">1.25×</option>
+        <option [ngValue]="1.5">1.5×</option>
+      </select>
+    </div>
     <label class="reader__check">
       <input
         type="checkbox"
@@ -1233,7 +1268,19 @@
               lang="ar"
               [attr.aria-label]="'verseQuranAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
             >
+              @if (audio.hasWordHighlight(v.surah, v.ayah) && audio.playbackWords(); as words) {
+              <p class="verses__text verses__text--word-synced" [attr.aria-label]="v.ar">
+                @for (word of words; track word.position) {
+                <span
+                  class="verses__audio-word"
+                  [class.verses__audio-word--active]="audio.isActiveWord(v.surah, v.ayah, word.position)"
+                  aria-hidden="true"
+                >{{ word.text }}</span>
+                }
+              </p>
+              } @else {
               <p class="verses__text">{{ v.ar }}</p>
+              }
               @if (showTransliterationBlock() && verseTranslit(v); as translit) {
               <div class="verses__translit-block" dir="ltr" lang="en">
                 <span class="verses__translit-label">{{ 'transliterationShort' | uiTranslate }}</span>
@@ -1351,6 +1398,46 @@
   </div>
 </main>
 
+@if (audio.currentVerse(); as playingVerse) {
+<section
+  class="reader__audio-player"
+  [class.reader__audio-player--mobile]="breakpoints.mobileChrome()"
+  role="region"
+  [attr.aria-label]="'audioPlayerAria' | uiTranslate"
+  dir="ltr"
+>
+  <div class="reader__audio-player-meta">
+    <strong>{{ 'audioNowPlaying' | uiTranslate }}</strong>
+    <span>{{ formatUiNum(playingVerse.surah) }}:{{ formatUiNum(playingVerse.ayah) }}</span>
+  </div>
+  <button
+    type="button"
+    class="reader__audio-player-button"
+    (click)="toggleLoadedRecitation()"
+    [attr.aria-label]="audio.isPlaying() ? ('audioPauseActiveAria' | uiTranslate) : ('audioPlayActiveAria' | uiTranslate)"
+  >
+    {{ audio.isPlaying() ? ('audioPauseLabel' | uiTranslate) : ('audioPlayLabel' | uiTranslate) }}
+  </button>
+  <span class="reader__audio-time">{{ audio.formatTime(audio.currentTime()) }}</span>
+  <input
+    class="reader__audio-seek"
+    type="range"
+    min="0"
+    [max]="audio.duration()"
+    step="0.05"
+    [value]="audio.currentTime()"
+    (input)="onAudioSeek($event)"
+    [attr.aria-label]="'audioSeekAria' | uiTranslate"
+  />
+  <span class="reader__audio-time">{{ audio.formatTime(audio.duration()) }}</span>
+  <button
+    type="button"
+    class="reader__audio-player-close"
+    (click)="audio.stop()"
+    [attr.aria-label]="'audioStopAria' | uiTranslate"
+  >×</button>
+</section>
+}
 
 @defer (when tafsir.mobileSheetOpen() && tafsir.verseForPanel()) {
 @if (tafsir.verseForPanel(); as tafsirVerse) {
