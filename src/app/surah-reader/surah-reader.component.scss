@@ -2405,6 +2405,83 @@ a.reader__settings-btn {
   margin-top: 0.35rem;
 }
 
+.reader__word-study-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: rgba(4, 6, 10, 0.58);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  cursor: pointer;
+}
+
+.reader__word-study-sheet {
+  position: fixed;
+  inset:
+    max(1rem, env(safe-area-inset-top, 0px))
+    max(1rem, env(safe-area-inset-right, 0px))
+    max(1rem, env(safe-area-inset-bottom, 0px))
+    max(1rem, env(safe-area-inset-left, 0px));
+  z-index: 111;
+  display: flex;
+  flex-direction: column;
+  width: min(40rem, 100%);
+  height: fit-content;
+  max-height: min(84dvh, 42rem);
+  margin: auto;
+  border-radius: 1rem;
+  border: 1px solid rgba(120, 170, 210, 0.28);
+  background: var(--reader-elevated);
+  box-shadow: 0 22px 56px var(--reader-shadow);
+}
+
+.reader__word-study-sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem 0.7rem;
+  border-bottom: 1px solid rgba(120, 170, 210, 0.2);
+}
+
+.reader__word-study-sheet-title {
+  margin: 0;
+  font-family: var(--reader-font-ui);
+  font-size: 1.05rem;
+  color: #9ec5e8;
+}
+
+.reader__word-study-sheet-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.9rem 1rem 1.15rem;
+}
+
+@media (max-width: 719px) {
+  .reader__word-study-sheet {
+    inset-inline: 0;
+    top: auto;
+    bottom: 0;
+    width: auto;
+    max-width: none;
+    max-height: min(82dvh, 38rem);
+    margin: 0;
+    border-radius: 1rem 1rem 0 0;
+    border-bottom: none;
+    box-shadow: 0 -18px 48px var(--reader-shadow);
+  }
+
+  .reader__word-study-sheet-scroll {
+    padding-bottom: calc(1.15rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 @keyframes verses-bookmark-pop {
   0% {
     transform: scale(1) rotate(0deg);
@@ -2814,58 +2891,6 @@ a.reader__settings-btn {
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     padding: 0.85rem 1rem 1.1rem;
-  }
-
-  .reader__word-study-sheet-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 110;
-    border: 0;
-    padding: 0;
-    margin: 0;
-    background: rgba(0, 0, 0, 0.52);
-    cursor: pointer;
-  }
-
-  .reader__word-study-sheet {
-    position: fixed;
-    inset-inline: 0;
-    bottom: 0;
-    z-index: 111;
-    display: flex;
-    flex-direction: column;
-    max-height: min(82dvh, 38rem);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    border-radius: 1rem 1rem 0 0;
-    border: 1px solid rgba(120, 170, 210, 0.28);
-    border-bottom: none;
-    background: var(--reader-elevated);
-    box-shadow: 0 -18px 48px var(--reader-shadow);
-  }
-
-  .reader__word-study-sheet-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.85rem 1rem 0.65rem;
-    border-bottom: 1px solid rgba(120, 170, 210, 0.2);
-  }
-
-  .reader__word-study-sheet-title {
-    margin: 0;
-    font-family: var(--reader-font-ui);
-    font-size: 1rem;
-    color: #9ec5e8;
-  }
-
-  .reader__word-study-sheet-scroll {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-    padding: 0.85rem 1rem calc(1.15rem + env(safe-area-inset-bottom, 0px));
   }
 
   .verses__item {

@@ -6,9 +6,8 @@ import type { WordStudyToken } from '../../../core/word-study/quran-word-study.t
 import type { VerseRef } from '../../../core/mushaf/mushaf-index.types';
 import type { ReaderDisplayVerse } from '../../models/reader-display-verse.model';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
-import { ReaderLayoutBreakpointsService } from '../layout/reader-layout-breakpoints.service';
 
-/** Word-by-word panel state for the active verse (inline or mobile sheet). */
+/** Word-by-word panel state shown in a scrollable popup on all screen sizes. */
 @Injectable()
 export class ReaderWordStudyPanelService {
   private readonly document = inject(DOCUMENT);
@@ -16,13 +15,12 @@ export class ReaderWordStudyPanelService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly wordStudyApi = inject(QuranWordStudyService);
   private readonly corpus = inject(ReaderCorpusStateService);
-  private readonly breakpoints = inject(ReaderLayoutBreakpointsService);
 
   readonly expandedVerse = signal<VerseRef | null>(null);
   readonly loading = signal(false);
   readonly error = signal(false);
   readonly words = signal<readonly WordStudyToken[]>([]);
-  readonly mobileSheetOpen = signal(false);
+  readonly sheetOpen = signal(false);
 
   readonly verseForPanel = computed(() => {
     const ref = this.expandedVerse();
@@ -36,17 +34,9 @@ export class ReaderWordStudyPanelService {
 
   private loadGeneration = 0;
 
-  useMobileSheet(): boolean {
-    return this.breakpoints.mobileChrome();
-  }
-
   isOpen(v: ReaderDisplayVerse): boolean {
     const ref = this.expandedVerse();
     return ref !== null && ref.surah === v.surah && ref.ayah === v.ayah;
-  }
-
-  showInline(v: ReaderDisplayVerse): boolean {
-    return this.isOpen(v) && !this.useMobileSheet();
   }
 
   toggle(v: ReaderDisplayVerse): void {
@@ -63,15 +53,13 @@ export class ReaderWordStudyPanelService {
   open(ref: VerseRef): void {
     this.expandedVerse.set(ref);
     this.fetch(ref);
-    if (this.useMobileSheet()) {
-      this.mobileSheetOpen.set(true);
-      this.lockBodyScroll();
-    }
+    this.sheetOpen.set(true);
+    this.lockBodyScroll();
   }
 
   close(): void {
     this.expandedVerse.set(null);
-    this.mobileSheetOpen.set(false);
+    this.sheetOpen.set(false);
     this.unlockBodyScroll();
     this.loading.set(false);
     this.error.set(false);
@@ -81,13 +69,6 @@ export class ReaderWordStudyPanelService {
 
   closeOnViewChange(): void {
     this.close();
-  }
-
-  onBreakpointChange(): void {
-    if (!this.breakpoints.mobileChrome() && this.mobileSheetOpen()) {
-      this.mobileSheetOpen.set(false);
-      this.unlockBodyScroll();
-    }
   }
 
   retry(ref: VerseRef): void {

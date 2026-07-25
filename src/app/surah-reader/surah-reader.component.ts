@@ -87,7 +87,7 @@ import { ReaderWordStudyPanelComponent } from './ui/reader-word-study-panel/read
       'breakpoints.tafsirSplitLayout() && tafsir.expandedAyah() !== null',
     '[class.reader--mobile-chrome]': 'breakpoints.mobileChrome()',
     '[class.reader--tafsir-sheet-open]': 'tafsir.mobileSheetOpen()',
-    '[class.reader--word-study-sheet-open]': 'wordStudy.mobileSheetOpen()',
+    '[class.reader--word-study-sheet-open]': 'wordStudy.sheetOpen()',
     '[class.reader--focus-mode]': 'viewPrefs.focusMode()',
   },
 })
@@ -132,10 +132,7 @@ export class SurahReaderComponent implements OnInit {
         this.breakpoints.bind();
         const splitMql = this.document.defaultView?.matchMedia('(min-width: 1160px)');
         const mobileMql = this.document.defaultView?.matchMedia('(max-width: 719px)');
-        const onLayoutChange = () => {
-          this.tafsir.onBreakpointChange();
-          this.wordStudy.onBreakpointChange();
-        };
+        const onLayoutChange = () => this.tafsir.onBreakpointChange();
         splitMql?.addEventListener('change', onLayoutChange);
         mobileMql?.addEventListener('change', onLayoutChange);
         this.destroyRef.onDestroy(() => {
@@ -265,7 +262,7 @@ export class SurahReaderComponent implements OnInit {
       this.tafsir.close();
       return;
     }
-    if (this.wordStudy.mobileSheetOpen()) {
+    if (this.wordStudy.sheetOpen()) {
       this.wordStudy.close();
       return;
     }
@@ -832,10 +829,6 @@ export class SurahReaderComponent implements OnInit {
     return !this.viewPrefs.focusMode() && this.tafsir.showInline(v);
   }
 
-  protected showWordStudyInline(v: ReaderDisplayVerse): boolean {
-    return !this.viewPrefs.focusMode() && this.wordStudy.showInline(v);
-  }
-
   protected useTafsirMobileSheet(): boolean {
     return this.tafsir.useMobileSheet();
   }
@@ -882,7 +875,7 @@ export class SurahReaderComponent implements OnInit {
       this.mushafNav.open() ||
       !!this.verseActions.quoteSheetVerse() ||
       this.tafsir.mobileSheetOpen() ||
-      this.wordStudy.mobileSheetOpen()
+      this.wordStudy.sheetOpen()
     );
   }
 
