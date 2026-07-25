@@ -17,6 +17,7 @@ export class ReaderVerseActionsService {
   readonly quoteSheetVerse = signal<ReaderDisplayVerse | null>(null);
   readonly copiedAyah = signal<string | null>(null);
   readonly copiedLinkAyah = signal<string | null>(null);
+  readonly shareMenuAyah = signal<string | null>(null);
 
   copyAyah(v: ReaderDisplayVerse, ctx: VersePresentationContext): void {
     if (!isPlatformBrowser(this.platformId) || !navigator.clipboard?.writeText) {
@@ -42,6 +43,7 @@ export class ReaderVerseActionsService {
     const key = `${v.surah}:${v.ayah}`;
     void navigator.clipboard.writeText(url).then(() => {
       this.copiedLinkAyah.set(key);
+      this.closeShareMenu();
       setTimeout(() => {
         if (this.copiedLinkAyah() === key) {
           this.copiedLinkAyah.set(null);
@@ -50,11 +52,32 @@ export class ReaderVerseActionsService {
     });
   }
 
+  canNativeShare(): boolean {
+    return isPlatformBrowser(this.platformId) && typeof navigator.share === 'function';
+  }
+
+  isShareMenuOpen(v: ReaderDisplayVerse): boolean {
+    return this.shareMenuAyah() === `${v.surah}:${v.ayah}`;
+  }
+
+  toggleShareMenu(v: ReaderDisplayVerse): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    const key = `${v.surah}:${v.ayah}`;
+    this.shareMenuAyah.update((open) => (open === key ? null : key));
+  }
+
+  closeShareMenu(): void {
+    this.shareMenuAyah.set(null);
+  }
+
   shareAyah(v: ReaderDisplayVerse, ctx: VersePresentationContext): void {
-    if (!isPlatformBrowser(this.platformId) || typeof navigator.share !== 'function') {
+    if (!this.canNativeShare()) {
       return;
     }
     const sharePayload = this.versePresentation.buildShareData(v, ctx);
+    this.closeShareMenu();
     void navigator.share(sharePayload);
   }
 

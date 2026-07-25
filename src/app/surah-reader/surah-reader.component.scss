@@ -2010,6 +2010,49 @@ a.reader__settings-btn {
   gap: .4rem;
 }
 
+.verses__share {
+  position: relative;
+  display: inline-flex;
+}
+
+.verses__share-menu {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  inset-inline-start: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  min-width: 9.5rem;
+  padding: 0.28rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(201, 162, 39, 0.28);
+  background: var(--reader-surface, #1a1714);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+
+.verses__share-menu-item {
+  min-height: 2rem;
+  padding: 0.28rem 0.7rem;
+  border: 0;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: var(--reader-ink-action);
+  font-size: 0.73rem;
+  text-align: start;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--reader-ink-action-hover);
+    background: rgba(201, 162, 39, 0.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--reader-focus);
+    outline-offset: 1px;
+  }
+}
+
 .verses__action-btn {
   min-height: 2rem;
   padding: 0.2rem 0.62rem;
