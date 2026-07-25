@@ -2014,61 +2014,6 @@ a.reader__settings-btn {
   }
 }
 
-.verses__share {
-  position: relative;
-  display: inline-flex;
-}
-
-.verses__share-menu {
-  position: absolute;
-  top: calc(100% + 0.35rem);
-  inset-inline-start: 0;
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  gap: 0.12rem;
-  min-width: 11rem;
-  padding: 0.34rem;
-  border-radius: 0.85rem;
-  border: 1px solid rgba(201, 162, 39, 0.28);
-  background: var(--reader-surface, #1a1714);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-}
-
-.verses__share-menu-sep {
-  height: 1px;
-  margin: 0.2rem 0.35rem;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.verses__share-menu-item {
-  min-height: 2.15rem;
-  padding: 0.32rem 0.75rem;
-  border: 0;
-  border-radius: 0.6rem;
-  background: transparent;
-  color: var(--reader-ink-action);
-  font-size: 0.76rem;
-  line-height: 1.2;
-  text-align: start;
-  cursor: pointer;
-  white-space: nowrap;
-
-  &:hover {
-    color: var(--reader-ink-action-hover);
-    background: rgba(201, 162, 39, 0.1);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 1px;
-  }
-
-  &--accent {
-    color: var(--reader-accent);
-  }
-}
-
 .verses__action-btn {
   min-height: 2rem;
   padding: 0.2rem 0.62rem;
@@ -2108,7 +2053,8 @@ a.reader__settings-btn {
     background: rgba(201, 162, 39, 0.12);
   }
 
-  &--audio {
+  &--audio,
+  &--share {
     border-color: rgba(201, 162, 39, 0.28);
     color: var(--reader-accent);
     background: rgba(201, 162, 39, 0.08);
@@ -2118,18 +2064,6 @@ a.reader__settings-btn {
     border-color: rgba(201, 162, 39, 0.55);
     color: var(--reader-accent);
     background: rgba(201, 162, 39, 0.14);
-  }
-
-  &--share {
-    border-color: rgba(201, 162, 39, 0.28);
-    color: var(--reader-accent);
-    background: rgba(201, 162, 39, 0.08);
-  }
-
-  &--image {
-    border-color: rgba(201, 162, 39, 0.28);
-    color: var(--reader-accent);
-    background: rgba(201, 162, 39, 0.08);
   }
 
   &--tafsir-active {
@@ -2397,89 +2331,6 @@ a.reader__settings-btn {
   flex-direction: column;
   gap: 0.85rem;
   padding: 0 0.85rem 0.85rem;
-}
-
-.verses__word-study--inline {
-  display: block;
-  width: 100%;
-  margin-top: 0.35rem;
-}
-
-.reader__word-study-sheet-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 110;
-  border: 0;
-  padding: 0;
-  margin: 0;
-  background: rgba(4, 6, 10, 0.58);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  cursor: pointer;
-}
-
-.reader__word-study-sheet {
-  position: fixed;
-  inset:
-    max(1rem, env(safe-area-inset-top, 0px))
-    max(1rem, env(safe-area-inset-right, 0px))
-    max(1rem, env(safe-area-inset-bottom, 0px))
-    max(1rem, env(safe-area-inset-left, 0px));
-  z-index: 111;
-  display: flex;
-  flex-direction: column;
-  width: min(40rem, 100%);
-  height: fit-content;
-  max-height: min(84dvh, 42rem);
-  margin: auto;
-  border-radius: 1rem;
-  border: 1px solid rgba(120, 170, 210, 0.28);
-  background: var(--reader-elevated);
-  box-shadow: 0 22px 56px var(--reader-shadow);
-}
-
-.reader__word-study-sheet-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.9rem 1rem 0.7rem;
-  border-bottom: 1px solid rgba(120, 170, 210, 0.2);
-}
-
-.reader__word-study-sheet-title {
-  margin: 0;
-  font-family: var(--reader-font-ui);
-  font-size: 1.05rem;
-  color: #9ec5e8;
-}
-
-.reader__word-study-sheet-scroll {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  padding: 0.9rem 1rem 1.15rem;
-}
-
-@media (max-width: 719px) {
-  .reader__word-study-sheet {
-    inset-inline: 0;
-    top: auto;
-    bottom: 0;
-    width: auto;
-    max-width: none;
-    max-height: min(82dvh, 38rem);
-    margin: 0;
-    border-radius: 1rem 1rem 0 0;
-    border-bottom: none;
-    box-shadow: 0 -18px 48px var(--reader-shadow);
-  }
-
-  .reader__word-study-sheet-scroll {
-    padding-bottom: calc(1.15rem + env(safe-area-inset-bottom, 0px));
-  }
 }
 
 @keyframes verses-bookmark-pop {
@@ -2996,17 +2847,6 @@ a.reader__settings-btn {
     padding-inline: 0.7rem;
     font-size: 0.72rem;
     touch-action: manipulation;
-  }
-
-  .verses__share-menu {
-    position: absolute;
-    top: auto;
-    bottom: calc(100% + 0.4rem);
-    inset-inline-start: 0;
-    inset-inline-end: auto;
-    z-index: 30;
-    min-width: min(14rem, calc(100vw - 2rem));
-    max-width: calc(100vw - 1.5rem);
   }
 }
 
