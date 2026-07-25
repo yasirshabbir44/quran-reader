@@ -87,6 +87,7 @@ import { ReaderWordStudyPanelComponent } from './ui/reader-word-study-panel/read
       'breakpoints.tafsirSplitLayout() && tafsir.expandedAyah() !== null',
     '[class.reader--mobile-chrome]': 'breakpoints.mobileChrome()',
     '[class.reader--tafsir-sheet-open]': 'tafsir.mobileSheetOpen()',
+    '[class.reader--word-study-sheet-open]': 'wordStudy.mobileSheetOpen()',
     '[class.reader--focus-mode]': 'viewPrefs.focusMode()',
   },
 })
@@ -131,7 +132,10 @@ export class SurahReaderComponent implements OnInit {
         this.breakpoints.bind();
         const splitMql = this.document.defaultView?.matchMedia('(min-width: 1160px)');
         const mobileMql = this.document.defaultView?.matchMedia('(max-width: 719px)');
-        const onLayoutChange = () => this.tafsir.onBreakpointChange();
+        const onLayoutChange = () => {
+          this.tafsir.onBreakpointChange();
+          this.wordStudy.onBreakpointChange();
+        };
         splitMql?.addEventListener('change', onLayoutChange);
         mobileMql?.addEventListener('change', onLayoutChange);
         this.destroyRef.onDestroy(() => {
@@ -259,6 +263,10 @@ export class SurahReaderComponent implements OnInit {
     }
     if (this.tafsir.mobileSheetOpen()) {
       this.tafsir.close();
+      return;
+    }
+    if (this.wordStudy.mobileSheetOpen()) {
+      this.wordStudy.close();
       return;
     }
     if (this.wordStudy.expandedVerse()) {
@@ -647,6 +655,7 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected toggleTafsir(v: ReaderDisplayVerse): void {
+    this.verseActions.closeShareMenu();
     if (!this.tafsir.isOpen(v)) {
       this.wordStudy.close();
     }
@@ -654,6 +663,7 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected toggleWordStudy(v: ReaderDisplayVerse): void {
+    this.verseActions.closeShareMenu();
     if (!this.wordStudy.isOpen(v)) {
       this.tafsir.close();
     }
@@ -806,6 +816,10 @@ export class SurahReaderComponent implements OnInit {
     this.tafsir.close();
   }
 
+  protected closeWordStudyMobileSheet(): void {
+    this.wordStudy.close();
+  }
+
   protected isTafsirOpen(v: ReaderDisplayVerse): boolean {
     return this.tafsir.isOpen(v);
   }
@@ -819,7 +833,7 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected showWordStudyInline(v: ReaderDisplayVerse): boolean {
-    return !this.viewPrefs.focusMode() && this.wordStudy.isOpen(v);
+    return !this.viewPrefs.focusMode() && this.wordStudy.showInline(v);
   }
 
   protected useTafsirMobileSheet(): boolean {
@@ -867,7 +881,8 @@ export class SurahReaderComponent implements OnInit {
       this.surahNav.open() ||
       this.mushafNav.open() ||
       !!this.verseActions.quoteSheetVerse() ||
-      this.tafsir.mobileSheetOpen()
+      this.tafsir.mobileSheetOpen() ||
+      this.wordStudy.mobileSheetOpen()
     );
   }
 

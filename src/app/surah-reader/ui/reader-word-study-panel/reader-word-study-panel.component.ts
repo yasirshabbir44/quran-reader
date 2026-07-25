@@ -11,12 +11,16 @@ import { ReaderWordStudyPanelService } from '../../services/panels/reader-word-s
   templateUrl: './reader-word-study-panel.component.html',
   styleUrl: './reader-word-study-panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[class.verses__word-study-panel--sheet]': 'presentation() === "sheet"',
+  },
 })
 export class ReaderWordStudyPanelComponent {
   protected readonly wordStudy = inject(ReaderWordStudyPanelService);
 
   readonly verse = input.required<ReaderDisplayVerse>();
   readonly formatUiNum = input.required<(n: number) => string>();
+  readonly presentation = input<'inline' | 'sheet'>('inline');
 
   protected readonly links = computed(() => {
     const v = this.verse();

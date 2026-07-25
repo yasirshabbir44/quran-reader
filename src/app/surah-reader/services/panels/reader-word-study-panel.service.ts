@@ -1,22 +1,28 @@
-import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { DestroyRef, Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { QuranWordStudyService } from '../../../core/word-study/quran-word-study.service';
 import type { WordStudyToken } from '../../../core/word-study/quran-word-study.types';
 import type { VerseRef } from '../../../core/mushaf/mushaf-index.types';
 import type { ReaderDisplayVerse } from '../../models/reader-display-verse.model';
 import { ReaderCorpusStateService } from '../corpus/reader-corpus-state.service';
+import { ReaderLayoutBreakpointsService } from '../layout/reader-layout-breakpoints.service';
 
-/** Inline word-by-word panel state for the active verse. */
+/** Word-by-word panel state for the active verse (inline or mobile sheet). */
 @Injectable()
 export class ReaderWordStudyPanelService {
+  private readonly document = inject(DOCUMENT);
+  private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly wordStudyApi = inject(QuranWordStudyService);
   private readonly corpus = inject(ReaderCorpusStateService);
+  private readonly breakpoints = inject(ReaderLayoutBreakpointsService);
 
   readonly expandedVerse = signal<VerseRef | null>(null);
   readonly loading = signal(false);
   readonly error = signal(false);
   readonly words = signal<readonly WordStudyToken[]>([]);
+  readonly mobileSheetOpen = signal(false);
 
   readonly verseForPanel = computed(() => {
     const ref = this.expandedVerse();
@@ -30,12 +36,23 @@ export class ReaderWordStudyPanelService {
 
   private loadGeneration = 0;
 
+  useMobileSheet(): boolean {
+    return this.breakpoints.mobileChrome();
+  }
+
   isOpen(v: ReaderDisplayVerse): boolean {
     const ref = this.expandedVerse();
     return ref !== null && ref.surah === v.surah && ref.ayah === v.ayah;
   }
 
+  showInline(v: ReaderDisplayVerse): boolean {
+    return this.isOpen(v) && !this.useMobileSheet();
+  }
+
   toggle(v: ReaderDisplayVerse): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     if (this.isOpen(v)) {
       this.close();
       return;
@@ -46,10 +63,16 @@ export class ReaderWordStudyPanelService {
   open(ref: VerseRef): void {
     this.expandedVerse.set(ref);
     this.fetch(ref);
+    if (this.useMobileSheet()) {
+      this.mobileSheetOpen.set(true);
+      this.lockBodyScroll();
+    }
   }
 
   close(): void {
     this.expandedVerse.set(null);
+    this.mobileSheetOpen.set(false);
+    this.unlockBodyScroll();
     this.loading.set(false);
     this.error.set(false);
     this.words.set([]);
@@ -58,6 +81,13 @@ export class ReaderWordStudyPanelService {
 
   closeOnViewChange(): void {
     this.close();
+  }
+
+  onBreakpointChange(): void {
+    if (!this.breakpoints.mobileChrome() && this.mobileSheetOpen()) {
+      this.mobileSheetOpen.set(false);
+      this.unlockBodyScroll();
+    }
   }
 
   retry(ref: VerseRef): void {
@@ -90,5 +120,17 @@ export class ReaderWordStudyPanelService {
         }
         this.words.set(tokens);
       });
+  }
+
+  private lockBodyScroll(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.body.style.overflow = 'hidden';
+    }
+  }
+
+  private unlockBodyScroll(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.document.body.style.overflow = '';
+    }
   }
 }

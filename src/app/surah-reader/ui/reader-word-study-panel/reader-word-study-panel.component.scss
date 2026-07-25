@@ -11,6 +11,15 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+:host(.verses__word-study-panel--sheet) {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  border-inline-start: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .verses__section-label--word-study {
   color: #9ec5e8;
 }
@@ -31,15 +40,16 @@
 }
 
 .verses__word-study-retry {
-  min-height: 2rem;
-  padding: 0.2rem 0.7rem;
+  min-height: 2.25rem;
+  padding: 0.3rem 0.85rem;
   border-radius: 999px;
   border: 1px solid rgba(120, 170, 210, 0.35);
   background: rgba(120, 170, 210, 0.12);
   color: #b8daf5;
   font-family: var(--reader-font-ui);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   cursor: pointer;
+  touch-action: manipulation;
 
   &:hover {
     border-color: rgba(120, 170, 210, 0.5);
@@ -54,6 +64,7 @@
 .verses__word-study-table-wrap {
   overflow-x: auto;
   margin-bottom: 0.9rem;
+  -webkit-overflow-scrolling: touch;
 }
 
 .verses__word-study-table {
@@ -108,23 +119,86 @@
 }
 
 .verses__word-study-grammar-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 170, 210, 0.28);
+  background: rgba(120, 170, 210, 0.1);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: #9ec5e8;
   text-decoration: none;
+  touch-action: manipulation;
 
   &:hover {
     color: #c8e4ff;
-    text-decoration: underline;
+    border-color: rgba(120, 170, 210, 0.45);
   }
 
   &:focus-visible {
     outline: 2px solid var(--reader-focus);
     outline-offset: 2px;
-    border-radius: 2px;
   }
+}
+
+.verses__word-study-desktop {
+  display: block;
+}
+
+.verses__word-study-mobile {
+  display: none;
+}
+
+.verses__word-study-cards {
+  list-style: none;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.verses__word-study-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 0.8rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(120, 170, 210, 0.18);
+  background: rgba(120, 170, 210, 0.07);
+}
+
+.verses__word-study-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.verses__word-study-card .verses__word-study-ar {
+  font-size: 1.35rem;
+  line-height: 1.55;
+}
+
+.verses__word-study-card .verses__word-study-tr {
+  font-size: 0.82rem;
+}
+
+.verses__word-study-card .verses__word-study-en {
+  font-size: 0.9rem;
+  color: var(--reader-ink);
+}
+
+.verses__word-study-card .verses__word-study-grammar-link {
+  flex: 0 0 auto;
+  align-self: center;
 }
 
 .verses__word-study-external {
@@ -156,12 +230,13 @@
   display: flex;
   flex-direction: column;
   gap: 0.12rem;
-  padding: 0.55rem 0.65rem;
-  border-radius: 0.55rem;
+  padding: 0.7rem 0.75rem;
+  border-radius: 0.65rem;
   border: 1px solid rgba(120, 170, 210, 0.18);
   background: rgba(120, 170, 210, 0.06);
   text-decoration: none;
   color: inherit;
+  touch-action: manipulation;
 
   &:hover {
     border-color: rgba(120, 170, 210, 0.35);
@@ -194,4 +269,14 @@
   font-size: 0.74rem;
   line-height: 1.45;
   color: var(--reader-ink-muted);
+}
+
+@media (max-width: 719px) {
+  .verses__word-study-desktop {
+    display: none;
+  }
+
+  .verses__word-study-mobile {
+    display: flex;
+  }
 }

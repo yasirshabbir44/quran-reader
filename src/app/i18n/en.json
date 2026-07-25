@@ -393,6 +393,8 @@
   "viewWordStudyAria": "Word-by-word study for verse {{n}}",
   "hideWordStudyAria": "Hide word study for verse {{n}}",
   "wordStudyPanelAria": "Word study for verse {{n}}",
+  "wordStudySheetTitle": "Verse {{n}} — Words",
+  "closeWordStudyPanelAria": "Close word study",
   "wordStudyLoading": "Loading word breakdown…",
   "wordStudyLoadError": "Could not load word data. Check your connection or use the external links below.",
   "wordStudyRetry": "Try again",

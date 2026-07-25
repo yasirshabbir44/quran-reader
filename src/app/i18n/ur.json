@@ -393,6 +393,8 @@
   "viewWordStudyAria": "آیت {{n}} کا لفظ بہ لفظ مطالعہ",
   "hideWordStudyAria": "آیت {{n}} کا لفظی مطالعہ بند کریں",
   "wordStudyPanelAria": "آیت {{n}} کا لفظی مطالعہ",
+  "wordStudySheetTitle": "آیت {{n}} — الفاظ",
+  "closeWordStudyPanelAria": "لفظی مطالعہ بند کریں",
   "wordStudyLoading": "الفاظ کی تفصیل لوڈ ہو رہی ہے…",
   "wordStudyLoadError": "لفظی ڈیٹا لوڈ نہیں ہو سکا۔ کنکشن چیک کریں یا نیچے بیرونی لنک استعمال کریں۔",
   "wordStudyRetry": "دوبارہ کوشش",

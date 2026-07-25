@@ -1363,6 +1363,7 @@
             [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
             [verse]="v"
             [formatUiNum]="formatUiNum"
+            presentation="inline"
           />
           }
           @if (showTafsirInline(v)) {
@@ -1516,6 +1517,47 @@
       editionId="tafsir-edition-sheet"
       [accordion]="true"
       [formatUiNum]="formatUiNum"
+    />
+  </div>
+</aside>
+}
+}
+
+@defer (when wordStudy.mobileSheetOpen() && wordStudy.verseForPanel()) {
+@if (wordStudy.verseForPanel(); as wordStudyVerse) {
+<button
+  type="button"
+  class="reader__word-study-sheet-backdrop"
+  [attr.aria-label]="'closeWordStudyPanelAria' | uiTranslate"
+  (click)="closeWordStudyMobileSheet()"
+></button>
+<aside
+  class="reader__word-study-sheet"
+  role="dialog"
+  aria-modal="true"
+  [id]="'word-study-panel-' + wordStudyVerse.surah + '-' + wordStudyVerse.ayah"
+  [attr.aria-label]="'wordStudyPanelAria' | uiTranslate: { n: formatUiNum(wordStudyVerse.ayah) }"
+  [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
+  [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
+>
+  <header class="reader__word-study-sheet-head">
+    <h2 class="reader__word-study-sheet-title">
+      {{ 'wordStudySheetTitle' | uiTranslate: { n: formatUiNum(wordStudyVerse.ayah) } }}
+    </h2>
+    <button
+      type="button"
+      class="reader__settings-close"
+      (click)="closeWordStudyMobileSheet()"
+      [attr.aria-label]="'closeWordStudyPanelAria' | uiTranslate"
+    >
+      ✕
+    </button>
+  </header>
+  <div class="reader__word-study-sheet-scroll">
+    <app-reader-word-study-panel
+      [verse]="wordStudyVerse"
+      [formatUiNum]="formatUiNum"
+      presentation="sheet"
     />
   </div>
 </aside>
