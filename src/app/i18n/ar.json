@@ -436,6 +436,7 @@
   "copyVerseAria": "نسخ الآية {{n}}",
   "shareLabel": "مشاركة",
   "shareViaLabel": "مشاركة عبر…",
+  "shareCopyVerseLabel": "نسخ الآية",
   "shareVerseAria": "مشاركة الآية {{n}}",
   "copyLinkLabel": "نسخ الرابط",
   "copyLinkAria": "نسخ الرابط الدائم للآية {{n}}",

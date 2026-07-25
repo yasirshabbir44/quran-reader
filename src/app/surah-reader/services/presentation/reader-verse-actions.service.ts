@@ -27,6 +27,7 @@ export class ReaderVerseActionsService {
     const key = `${v.surah}:${v.ayah}`;
     void navigator.clipboard.writeText(text).then(() => {
       this.copiedAyah.set(key);
+      this.closeShareMenu();
       setTimeout(() => {
         if (this.copiedAyah() === key) {
           this.copiedAyah.set(null);
@@ -85,6 +86,7 @@ export class ReaderVerseActionsService {
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
+    this.closeShareMenu();
     this.quoteSheetVerse.set(v);
   }
 

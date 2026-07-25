@@ -436,6 +436,7 @@
   "copyVerseAria": "Copy verse {{n}}",
   "shareLabel": "Share",
   "shareViaLabel": "Share via…",
+  "shareCopyVerseLabel": "Copy verse",
   "shareVerseAria": "Share verse {{n}}",
   "copyLinkLabel": "Copy link",
   "copyLinkAria": "Copy permalink for verse {{n}}",

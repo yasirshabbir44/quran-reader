@@ -625,11 +625,11 @@ export class SurahReaderComponent implements OnInit {
 
   protected toggleShareMenu(v: ReaderDisplayVerse, event: Event): void {
     event.stopPropagation();
-    if (!this.verseActions.canNativeShare()) {
-      this.copyVerseLink(v);
-      return;
-    }
     this.verseActions.toggleShareMenu(v);
+  }
+
+  protected shareFeedbackCopied(v: ReaderDisplayVerse): boolean {
+    return this.verseCopied(v) || this.verseLinkCopied(v);
   }
 
   protected openQuoteImage(v: ReaderDisplayVerse): void {

@@ -1160,32 +1160,29 @@
                     : ('audioPlayLabel' | uiTranslate)
                 }}
               </button>
-              <button
-                type="button"
-                class="verses__action-btn"
-                (click)="copyAyah(v)"
-                [attr.aria-label]="'copyVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
-                [attr.title]="verseCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate)"
-              >
-                {{ verseCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate) }}
-              </button>
               <div
                 class="verses__share"
                 [class.verses__share--open]="isShareMenuOpen(v)"
               >
                 <button
                   type="button"
-                  class="verses__action-btn"
+                  class="verses__action-btn verses__action-btn--share"
                   (click)="toggleShareMenu(v, $event)"
                   [attr.aria-expanded]="isShareMenuOpen(v)"
                   [attr.aria-haspopup]="true"
                   [attr.aria-controls]="'share-menu-' + v.surah + '-' + v.ayah"
                   [attr.aria-label]="'shareVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
                   [attr.title]="
-                    verseLinkCopied(v) ? ('copiedLabel' | uiTranslate) : ('shareLabel' | uiTranslate)
+                    shareFeedbackCopied(v)
+                      ? ('copiedLabel' | uiTranslate)
+                      : ('shareLabel' | uiTranslate)
                   "
                 >
-                  {{ verseLinkCopied(v) ? ('copiedLabel' | uiTranslate) : ('shareLabel' | uiTranslate) }}
+                  {{
+                    shareFeedbackCopied(v)
+                      ? ('copiedLabel' | uiTranslate)
+                      : ('shareLabel' | uiTranslate)
+                  }}
                 </button>
                 @if (isShareMenuOpen(v)) {
                   <div
@@ -1208,6 +1205,17 @@
                       type="button"
                       role="menuitem"
                       class="verses__share-menu-item"
+                      (click)="copyAyah(v)"
+                      [attr.aria-label]="'copyVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                    >
+                      {{
+                        verseCopied(v) ? ('copiedLabel' | uiTranslate) : ('shareCopyVerseLabel' | uiTranslate)
+                      }}
+                    </button>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      class="verses__share-menu-item"
                       (click)="copyVerseLink(v)"
                       [attr.aria-label]="'copyLinkAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
                     >
@@ -1216,6 +1224,16 @@
                           ? ('copiedLabel' | uiTranslate)
                           : ('copyLinkLabel' | uiTranslate)
                       }}
+                    </button>
+                    <div class="verses__share-menu-sep" role="separator"></div>
+                    <button
+                      type="button"
+                      role="menuitem"
+                      class="verses__share-menu-item verses__share-menu-item--accent"
+                      (click)="openQuoteImage(v)"
+                      [attr.aria-label]="'quoteImageVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                    >
+                      {{ 'quoteSheetTitle' | uiTranslate }}
                     </button>
                   </div>
                 }
@@ -1249,15 +1267,6 @@
                 [attr.title]="isTafsirOpen(v) ? ('hideTafsirLabel' | uiTranslate) : ('viewTafsirLabel' | uiTranslate)"
               >
                 {{ isTafsirOpen(v) ? ('hideTafsirLabel' | uiTranslate) : ('viewTafsirLabel' | uiTranslate) }}
-              </button>
-              <button
-                type="button"
-                class="verses__action-btn verses__action-btn--image"
-                (click)="openQuoteImage(v)"
-                [attr.aria-label]="'quoteImageVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
-                [attr.title]="'quoteImageLabel' | uiTranslate"
-              >
-                {{ 'quoteImageLabel' | uiTranslate }}
               </button>
               <button
                 type="button"
