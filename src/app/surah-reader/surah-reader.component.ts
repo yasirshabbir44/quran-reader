@@ -87,6 +87,7 @@ import { ReaderWordStudyPanelComponent } from './ui/reader-word-study-panel/read
       'breakpoints.tafsirSplitLayout() && tafsir.expandedAyah() !== null',
     '[class.reader--mobile-chrome]': 'breakpoints.mobileChrome()',
     '[class.reader--tafsir-sheet-open]': 'tafsir.mobileSheetOpen()',
+    '[class.reader--word-study-sheet-open]': 'wordStudy.sheetOpen()',
     '[class.reader--focus-mode]': 'viewPrefs.focusMode()',
   },
 })
@@ -259,6 +260,10 @@ export class SurahReaderComponent implements OnInit {
     }
     if (this.tafsir.mobileSheetOpen()) {
       this.tafsir.close();
+      return;
+    }
+    if (this.wordStudy.sheetOpen()) {
+      this.wordStudy.close();
       return;
     }
     if (this.wordStudy.expandedVerse()) {
@@ -647,6 +652,7 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected toggleTafsir(v: ReaderDisplayVerse): void {
+    this.verseActions.closeShareMenu();
     if (!this.tafsir.isOpen(v)) {
       this.wordStudy.close();
     }
@@ -654,6 +660,7 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected toggleWordStudy(v: ReaderDisplayVerse): void {
+    this.verseActions.closeShareMenu();
     if (!this.wordStudy.isOpen(v)) {
       this.tafsir.close();
     }
@@ -806,6 +813,10 @@ export class SurahReaderComponent implements OnInit {
     this.tafsir.close();
   }
 
+  protected closeWordStudyMobileSheet(): void {
+    this.wordStudy.close();
+  }
+
   protected isTafsirOpen(v: ReaderDisplayVerse): boolean {
     return this.tafsir.isOpen(v);
   }
@@ -816,10 +827,6 @@ export class SurahReaderComponent implements OnInit {
 
   protected showTafsirInline(v: ReaderDisplayVerse): boolean {
     return !this.viewPrefs.focusMode() && this.tafsir.showInline(v);
-  }
-
-  protected showWordStudyInline(v: ReaderDisplayVerse): boolean {
-    return !this.viewPrefs.focusMode() && this.wordStudy.isOpen(v);
   }
 
   protected useTafsirMobileSheet(): boolean {
@@ -867,7 +874,8 @@ export class SurahReaderComponent implements OnInit {
       this.surahNav.open() ||
       this.mushafNav.open() ||
       !!this.verseActions.quoteSheetVerse() ||
-      this.tafsir.mobileSheetOpen()
+      this.tafsir.mobileSheetOpen() ||
+      this.wordStudy.sheetOpen()
     );
   }
 

@@ -393,6 +393,8 @@
   "viewWordStudyAria": "دراسة كلمة بكلمة للآية {{n}}",
   "hideWordStudyAria": "إخفاء دراسة الكلمات للآية {{n}}",
   "wordStudyPanelAria": "دراسة الكلمات للآية {{n}}",
+  "wordStudySheetTitle": "الآية {{n}} — كلمات",
+  "closeWordStudyPanelAria": "إغلاق دراسة الكلمات",
   "wordStudyLoading": "جارٍ تحميل تفكيك الكلمات…",
   "wordStudyLoadError": "تعذّر تحميل بيانات الكلمات. تحقق من الاتصال أو استخدم الروابط الخارجية أدناه.",
   "wordStudyRetry": "إعادة المحاولة",

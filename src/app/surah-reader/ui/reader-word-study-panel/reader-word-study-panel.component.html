@@ -1,6 +1,8 @@
+@if (presentation() === 'inline') {
 <span class="verses__section-label verses__section-label--word-study">{{
   'verseWordStudySectionLabel' | uiTranslate
 }}</span>
+}
 
 @if (wordStudy.loading()) {
 <p class="verses__word-study-status" role="status">{{ 'wordStudyLoading' | uiTranslate }}</p>
@@ -14,7 +16,11 @@
 }
 
 @if (wordStudy.words().length) {
-<div class="verses__word-study-table-wrap" role="region" [attr.aria-label]="'wordStudyTableAria' | uiTranslate">
+<div
+  class="verses__word-study-table-wrap verses__word-study-desktop"
+  role="region"
+  [attr.aria-label]="'wordStudyTableAria' | uiTranslate"
+>
   <table class="verses__word-study-table">
     <thead>
       <tr>
@@ -50,6 +56,33 @@
     </tbody>
   </table>
 </div>
+
+<ul
+  class="verses__word-study-cards verses__word-study-mobile"
+  role="list"
+  [attr.aria-label]="'wordStudyTableAria' | uiTranslate"
+>
+  @for (token of wordStudy.words(); track token.position) {
+  <li class="verses__word-study-card">
+    <div class="verses__word-study-card-main">
+      <span class="verses__word-study-ar" dir="rtl" lang="ar">{{ token.text }}</span>
+      <span class="verses__word-study-tr" dir="ltr" lang="en">{{ token.transliteration }}</span>
+      <span class="verses__word-study-en" dir="ltr" lang="en">{{ token.translation }}</span>
+    </div>
+    <a
+      class="verses__word-study-grammar-link"
+      [href]="token.corpusMorphologyUrl"
+      target="_blank"
+      rel="noopener noreferrer"
+      [attr.aria-label]="
+        'wordStudyMorphologyLinkAria' | uiTranslate: { n: formatUiNum()(token.position) }
+      "
+    >
+      {{ 'wordStudyMorphologyLink' | uiTranslate }}
+    </a>
+  </li>
+  }
+</ul>
 }
 
 @if (links(); as studyLinks) {

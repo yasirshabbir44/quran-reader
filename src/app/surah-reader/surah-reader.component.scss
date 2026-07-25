@@ -2014,61 +2014,6 @@ a.reader__settings-btn {
   }
 }
 
-.verses__share {
-  position: relative;
-  display: inline-flex;
-}
-
-.verses__share-menu {
-  position: absolute;
-  top: calc(100% + 0.35rem);
-  inset-inline-start: 0;
-  z-index: 20;
-  display: flex;
-  flex-direction: column;
-  gap: 0.12rem;
-  min-width: 11rem;
-  padding: 0.34rem;
-  border-radius: 0.85rem;
-  border: 1px solid rgba(201, 162, 39, 0.28);
-  background: var(--reader-surface, #1a1714);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
-}
-
-.verses__share-menu-sep {
-  height: 1px;
-  margin: 0.2rem 0.35rem;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.verses__share-menu-item {
-  min-height: 2.15rem;
-  padding: 0.32rem 0.75rem;
-  border: 0;
-  border-radius: 0.6rem;
-  background: transparent;
-  color: var(--reader-ink-action);
-  font-size: 0.76rem;
-  line-height: 1.2;
-  text-align: start;
-  cursor: pointer;
-  white-space: nowrap;
-
-  &:hover {
-    color: var(--reader-ink-action-hover);
-    background: rgba(201, 162, 39, 0.1);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--reader-focus);
-    outline-offset: 1px;
-  }
-
-  &--accent {
-    color: var(--reader-accent);
-  }
-}
-
 .verses__action-btn {
   min-height: 2rem;
   padding: 0.2rem 0.62rem;
@@ -2108,7 +2053,8 @@ a.reader__settings-btn {
     background: rgba(201, 162, 39, 0.12);
   }
 
-  &--audio {
+  &--audio,
+  &--share {
     border-color: rgba(201, 162, 39, 0.28);
     color: var(--reader-accent);
     background: rgba(201, 162, 39, 0.08);
@@ -2118,18 +2064,6 @@ a.reader__settings-btn {
     border-color: rgba(201, 162, 39, 0.55);
     color: var(--reader-accent);
     background: rgba(201, 162, 39, 0.14);
-  }
-
-  &--share {
-    border-color: rgba(201, 162, 39, 0.28);
-    color: var(--reader-accent);
-    background: rgba(201, 162, 39, 0.08);
-  }
-
-  &--image {
-    border-color: rgba(201, 162, 39, 0.28);
-    color: var(--reader-accent);
-    background: rgba(201, 162, 39, 0.08);
   }
 
   &--tafsir-active {
@@ -2397,12 +2331,6 @@ a.reader__settings-btn {
   flex-direction: column;
   gap: 0.85rem;
   padding: 0 0.85rem 0.85rem;
-}
-
-.verses__word-study--inline {
-  display: block;
-  width: 100%;
-  margin-top: 0.35rem;
 }
 
 @keyframes verses-bookmark-pop {
@@ -2900,6 +2828,9 @@ a.reader__settings-btn {
     flex-wrap: nowrap;
     overflow-x: auto;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.35rem;
+    padding-block: 0.1rem;
 
     &:has(.verses__share--open) {
       overflow: visible;
@@ -2912,7 +2843,10 @@ a.reader__settings-btn {
 
   .verses__action-btn {
     flex: 0 0 auto;
-    font-size: 0.68rem;
+    min-height: 2.25rem;
+    padding-inline: 0.7rem;
+    font-size: 0.72rem;
+    touch-action: manipulation;
   }
 }
 
