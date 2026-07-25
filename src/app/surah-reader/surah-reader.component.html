@@ -1169,24 +1169,57 @@
               >
                 {{ verseCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLabel' | uiTranslate) }}
               </button>
-              <button
-                type="button"
-                class="verses__action-btn"
-                (click)="shareAyah(v)"
-                [attr.aria-label]="'shareVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
-                [attr.title]="'shareLabel' | uiTranslate"
+              <div
+                class="verses__share"
+                [class.verses__share--open]="isShareMenuOpen(v)"
               >
-                {{ 'shareLabel' | uiTranslate }}
-              </button>
-              <button
-                type="button"
-                class="verses__action-btn"
-                (click)="copyVerseLink(v)"
-                [attr.aria-label]="'copyLinkAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
-                [attr.title]="verseLinkCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLinkLabel' | uiTranslate)"
-              >
-                {{ verseLinkCopied(v) ? ('copiedLabel' | uiTranslate) : ('copyLinkLabel' | uiTranslate) }}
-              </button>
+                <button
+                  type="button"
+                  class="verses__action-btn"
+                  (click)="toggleShareMenu(v, $event)"
+                  [attr.aria-expanded]="isShareMenuOpen(v)"
+                  [attr.aria-haspopup]="true"
+                  [attr.aria-controls]="'share-menu-' + v.surah + '-' + v.ayah"
+                  [attr.aria-label]="'shareVerseAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                  [attr.title]="
+                    verseLinkCopied(v) ? ('copiedLabel' | uiTranslate) : ('shareLabel' | uiTranslate)
+                  "
+                >
+                  {{ verseLinkCopied(v) ? ('copiedLabel' | uiTranslate) : ('shareLabel' | uiTranslate) }}
+                </button>
+                @if (isShareMenuOpen(v)) {
+                  <div
+                    class="verses__share-menu"
+                    role="menu"
+                    [id]="'share-menu-' + v.surah + '-' + v.ayah"
+                    (click)="$event.stopPropagation()"
+                  >
+                    @if (canNativeShare()) {
+                      <button
+                        type="button"
+                        role="menuitem"
+                        class="verses__share-menu-item"
+                        (click)="shareAyah(v)"
+                      >
+                        {{ 'shareViaLabel' | uiTranslate }}
+                      </button>
+                    }
+                    <button
+                      type="button"
+                      role="menuitem"
+                      class="verses__share-menu-item"
+                      (click)="copyVerseLink(v)"
+                      [attr.aria-label]="'copyLinkAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
+                    >
+                      {{
+                        verseLinkCopied(v)
+                          ? ('copiedLabel' | uiTranslate)
+                          : ('copyLinkLabel' | uiTranslate)
+                      }}
+                    </button>
+                  </div>
+                }
+              </div>
               <button
                 type="button"
                 class="verses__action-btn verses__action-btn--word-study"

@@ -245,6 +245,10 @@ export class SurahReaderComponent implements OnInit {
 
   @HostListener('document:keydown.escape')
   protected onEscapeClosePanels(): void {
+    if (this.verseActions.shareMenuAyah()) {
+      this.verseActions.closeShareMenu();
+      return;
+    }
     if (this.viewPrefs.focusMode()) {
       this.setFocusMode(false);
       return;
@@ -271,6 +275,13 @@ export class SurahReaderComponent implements OnInit {
     }
     if (this.panels.settingsOpen()) {
       this.panels.closeSettings();
+    }
+  }
+
+  @HostListener('document:click')
+  protected onDocumentClickCloseShareMenu(): void {
+    if (this.verseActions.shareMenuAyah()) {
+      this.verseActions.closeShareMenu();
     }
   }
 
@@ -604,6 +615,23 @@ export class SurahReaderComponent implements OnInit {
     );
   }
 
+  protected canNativeShare(): boolean {
+    return this.verseActions.canNativeShare();
+  }
+
+  protected isShareMenuOpen(v: ReaderDisplayVerse): boolean {
+    return this.verseActions.isShareMenuOpen(v);
+  }
+
+  protected toggleShareMenu(v: ReaderDisplayVerse, event: Event): void {
+    event.stopPropagation();
+    if (!this.verseActions.canNativeShare()) {
+      this.copyVerseLink(v);
+      return;
+    }
+    this.verseActions.toggleShareMenu(v);
+  }
+
   protected openQuoteImage(v: ReaderDisplayVerse): void {
     this.verseActions.openQuoteImage(v);
     this.panels.closeSettings();
@@ -848,6 +876,7 @@ export class SurahReaderComponent implements OnInit {
     this.tafsir.close();
     this.wordStudy.close();
     this.verseActions.closeQuoteSheet();
+    this.verseActions.closeShareMenu();
   }
 
   private syncDocumentTitle(): void {
