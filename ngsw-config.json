@@ -40,6 +40,15 @@
       }
     },
     {
+      "name": "surah-summaries",
+      "urls": ["/surah-summaries.json"],
+      "cacheConfig": {
+        "maxSize": 2,
+        "maxAge": "365d",
+        "strategy": "performance"
+      }
+    },
+    {
       "name": "thematic-index",
       "urls": ["/thematic-index.json"],
       "cacheConfig": {

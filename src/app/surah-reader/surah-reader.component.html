@@ -1002,7 +1002,15 @@
           @if (viewKind() === 'surah') {
           <p class="reader__intro-kicker">{{ 'introKicker' | uiTranslate }}</p>
           <h2 class="reader__intro-title">{{ 'introTitle' | uiTranslate: { name: corpus.surah()!.nameAr } }}</h2>
-          <p class="reader__intro-body">{{ introSummary() }}</p>
+
+          <p
+            class="reader__intro-body"
+            [attr.lang]="intro.previewLang()"
+            [attr.dir]="intro.previewLang() === 'ur' ? 'rtl' : 'ltr'"
+          >
+            {{ introSummary() }}
+          </p>
+
           <div class="reader__intro-tags">
             <span class="reader__intro-tag">
               {{ 'introTagTranslit' | uiTranslate }}: {{ corpus.surah()!.nameTranslit }}
@@ -1020,31 +1028,116 @@
             </span>
           </div>
 
-          <details class="reader__about">
+          <details class="reader__about" (toggle)="onIntroAboutToggle($event)">
             <summary class="reader__about-summary">{{ introDeepSummary() }}</summary>
-            @if (isMulk()) {
-            <dl class="reader__facts">
+
+            <div class="reader__intro-toolbar">
+              <div class="reader__intro-langs" role="tablist" [attr.aria-label]="'introLangAria' | uiTranslate">
+                <button
+                  type="button"
+                  class="reader__intro-lang"
+                  role="tab"
+                  [class.reader__intro-lang--active]="intro.summaryLang() === 'en'"
+                  [attr.aria-selected]="intro.summaryLang() === 'en'"
+                  (click)="setIntroSummaryLang('en')"
+                >
+                  {{ 'introLangEn' | uiTranslate }}
+                </button>
+                <button
+                  type="button"
+                  class="reader__intro-lang"
+                  role="tab"
+                  [class.reader__intro-lang--active]="intro.summaryLang() === 'ur'"
+                  [attr.aria-selected]="intro.summaryLang() === 'ur'"
+                  (click)="setIntroSummaryLang('ur')"
+                >
+                  {{ 'introLangUr' | uiTranslate }}
+                </button>
+              </div>
+              @if (introSummaryAudio.supported()) {
+              <button
+                type="button"
+                class="reader__intro-listen"
+                [class.reader__intro-listen--active]="introSummaryAudio.speaking()"
+                [attr.aria-label]="
+                  introSummaryAudio.speaking()
+                    ? ('introListenStopAria' | uiTranslate)
+                    : ('introListenAria' | uiTranslate)
+                "
+                (click)="toggleIntroSummaryAudio()"
+              >
+                {{
+                  introSummaryAudio.speaking()
+                    ? ('introListenStop' | uiTranslate)
+                    : ('introListen' | uiTranslate)
+                }}
+              </button>
+              }
+            </div>
+
+            @if (intro.localizedName()) {
+            <p
+              class="reader__intro-meaning"
+              [attr.lang]="intro.summaryLang()"
+              [attr.dir]="intro.summaryLang() === 'ur' ? 'rtl' : 'ltr'"
+            >
+              {{ 'introMeaning' | uiTranslate: { name: intro.localizedName() } }}
+            </p>
+            }
+
+            <p
+              class="reader__about-summary-text"
+              [attr.lang]="intro.summaryLang()"
+              [attr.dir]="intro.summaryLang() === 'ur' ? 'rtl' : 'ltr'"
+            >
+              {{ intro.activeSummary() }}
+            </p>
+
+            @if (intro.facts(); as facts) {
+            <dl class="reader__facts" [attr.aria-label]="'factsAria' | uiTranslate">
+              @if (facts.juz != null) {
               <div class="reader__fact">
                 <dt>{{ 'factJuz' | uiTranslate }}</dt>
-                <dd>{{ formatUiNum(intro.mulkMeta.juz) }}</dd>
+                <dd>{{ formatUiNum(facts.juz) }}</dd>
               </div>
+              }
               <div class="reader__fact">
                 <dt>{{ 'factType' | uiTranslate }}</dt>
-                <dd>{{ intro.mulkMeta.revelationType }}</dd>
+                <dd>
+                  @if (facts.revelationType === 'meccan') {
+                  {{ 'factTypeMeccan' | uiTranslate }}
+                  } @else {
+                  {{ 'factTypeMedinan' | uiTranslate }}
+                  }
+                </dd>
               </div>
+              @if (facts.revelationOrder != null) {
               <div class="reader__fact">
                 <dt>{{ 'factRevelationOrder' | uiTranslate }}</dt>
-                <dd>{{ formatUiNum(intro.mulkMeta.revelationOrder) }}</dd>
+                <dd>{{ formatUiNum(facts.revelationOrder) }}</dd>
               </div>
+              }
+              @if (facts.mushafPageStart != null) {
               <div class="reader__fact">
                 <dt>{{ 'factPageStart' | uiTranslate }}</dt>
-                <dd>{{ formatUiNum(intro.mulkMeta.mushafPageStart) }}</dd>
+                <dd>{{ formatUiNum(facts.mushafPageStart) }}</dd>
               </div>
+              }
             </dl>
-            <p class="reader__about-note">{{ 'aboutNote' | uiTranslate }}</p>
-            } @else {
-            <p class="reader__about-body">{{ 'aboutBodyGeneric' | uiTranslate }}</p>
             }
+            <p
+              class="reader__about-body"
+              [attr.lang]="intro.summaryLang()"
+              [attr.dir]="intro.summaryLang() === 'ur' ? 'rtl' : 'ltr'"
+            >
+              {{ intro.activeDetail() }}
+            </p>
+            @if (intro.activeSource()) {
+            <p class="reader__about-source" [attr.lang]="intro.summaryLang()" [attr.dir]="intro.summaryLang() === 'ur' ? 'rtl' : 'ltr'">
+              {{ 'introSource' | uiTranslate: { source: intro.activeSource() } }}
+            </p>
+            }
+            <p class="reader__about-note">{{ 'aboutNote' | uiTranslate }}</p>
           </details>
           } @else if (viewKind() === 'page') {
           <p class="reader__intro-kicker">{{ 'mushafPageKicker' | uiTranslate }}</p>
