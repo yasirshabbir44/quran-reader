@@ -142,8 +142,4 @@ export class ReaderCorpusStateService {
   surahNameFor(number: number): string {
     return this.loadedCorpus?.surahs[number - 1]?.nameAr ?? '';
   }
-
-  isMulk(): boolean {
-    return this.viewKind() === 'surah' && this.surahNumber() === 67;
-  }
 }

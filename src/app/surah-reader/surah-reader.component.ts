@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  effect,
   HostListener,
   inject,
   Injector,
@@ -39,6 +40,7 @@ import {
   ReaderCorpusStateService,
   ReaderDocumentTitleService,
   ReaderIntroContentService,
+  ReaderIntroSummaryAudioService,
   ReaderLayoutBreakpointsService,
   ReaderPanelCoordinatorService,
   ReaderRouteCoordinatorService,
@@ -120,6 +122,7 @@ export class SurahReaderComponent implements OnInit {
   protected readonly verseActions = inject(ReaderVerseActionsService);
   protected readonly swipe = inject(ReaderSwipeNavigationService);
   protected readonly intro = inject(ReaderIntroContentService);
+  protected readonly introSummaryAudio = inject(ReaderIntroSummaryAudioService);
   protected readonly fragments = inject(ReaderVerseFragmentService);
   private readonly documentTitle = inject(ReaderDocumentTitleService);
 
@@ -127,6 +130,12 @@ export class SurahReaderComponent implements OnInit {
 
   constructor() {
     this.routeCoord.bind(() => this.syncDocumentTitle());
+    // Stop summary TTS when the surah or summary language changes.
+    effect(() => {
+      this.corpus.surahNumber();
+      this.intro.summaryLang();
+      this.introSummaryAudio.stop();
+    });
     if (isPlatformBrowser(this.platformId)) {
       afterNextRender(() => {
         this.breakpoints.bind();
@@ -156,6 +165,7 @@ export class SurahReaderComponent implements OnInit {
       this.fragments.clearSyncTimer();
       this.activeAyah.clearPendingTimer();
       this.bookmarkUi.dispose();
+      this.introSummaryAudio.stop();
       this.readingBookmark.flushPending(this.corpus.surahNumber(), this.activeAyah.activeAyah());
       this.bookmarkUi.refreshFromStorage();
     });
@@ -203,16 +213,44 @@ export class SurahReaderComponent implements OnInit {
     return this.showSurahHeading(v, index);
   }
 
-  protected isMulk(): boolean {
-    return this.corpus.isMulk();
-  }
-
   protected introSummary(): string {
     return this.intro.summary();
   }
 
   protected introDeepSummary(): string {
     return this.intro.deepSummary();
+  }
+
+  protected setIntroSummaryLang(lang: 'en' | 'ur'): void {
+    if (this.intro.summaryLang() === lang) {
+      return;
+    }
+    this.introSummaryAudio.stop();
+    this.intro.setSummaryLang(lang);
+  }
+
+  protected toggleIntroSummaryAudio(): void {
+    const name = this.intro.localizedName();
+    const summary = this.intro.activeSummary();
+    const parts = [
+      name ? this.ui.translate('introMeaning', { name }) : '',
+      summary,
+    ].filter((p) => !!p && p.trim());
+    const text = parts.join('. ');
+    if (!text) {
+      return;
+    }
+    if (this.audio.isPlaying()) {
+      this.audio.stop();
+    }
+    this.introSummaryAudio.toggle(text, this.intro.summaryLang());
+  }
+
+  protected onIntroAboutToggle(event: Event): void {
+    const el = event.target as HTMLDetailsElement | null;
+    if (el && !el.open) {
+      this.introSummaryAudio.stop();
+    }
   }
 
   protected verseTr(v: ReaderDisplayVerse): { en: string; ur: string } {
@@ -755,6 +793,7 @@ export class SurahReaderComponent implements OnInit {
   }
 
   protected toggleRecitationForActiveAyah(): void {
+    this.introSummaryAudio.stop();
     this.audio.toggleActive();
   }
 
@@ -762,6 +801,7 @@ export class SurahReaderComponent implements OnInit {
     if (this.audio.isPlaying()) {
       this.audio.pause();
     } else {
+      this.introSummaryAudio.stop();
       this.audio.resume();
     }
   }
@@ -771,6 +811,7 @@ export class SurahReaderComponent implements OnInit {
       this.audio.pause();
       return;
     }
+    this.introSummaryAudio.stop();
     if (this.audio.isCurrentVerse(v.surah, v.ayah) && this.audio.isPaused()) {
       this.audio.resume();
       return;

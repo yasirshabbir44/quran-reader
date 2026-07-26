@@ -18,3 +18,4 @@ export { ReaderVerseActionsService } from './presentation/reader-verse-actions.s
 export { ReaderIntroContentService } from './presentation/reader-intro-content.service';
 export { ReaderDocumentTitleService } from './presentation/reader-document-title.service';
 export { ReaderAudioPlaybackService } from './media/reader-audio-playback.service';
+export { ReaderIntroSummaryAudioService } from './media/reader-intro-summary-audio.service';

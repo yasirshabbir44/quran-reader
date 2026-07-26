@@ -5,6 +5,7 @@ import {
   ReaderCorpusStateService,
   ReaderDocumentTitleService,
   ReaderIntroContentService,
+  ReaderIntroSummaryAudioService,
   ReaderLayoutBreakpointsService,
   ReaderPanelCoordinatorService,
   ReaderRouteCoordinatorService,
@@ -50,4 +51,5 @@ export const READER_FEATURE_PROVIDERS = [
   ReaderSwipeNavigationService,
   ReaderIntroContentService,
   ReaderAudioPlaybackService,
+  ReaderIntroSummaryAudioService,
 ] as const;
