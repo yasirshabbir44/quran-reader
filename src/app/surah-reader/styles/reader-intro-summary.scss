@@ -1,0 +1,119 @@
+@use '../../core/reader-layout/reader-ui-system' as ui;
+
+/* Surah intro summary chrome — global so it stays outside the component style budget. */
+
+.reader__intro-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem 0.85rem;
+  margin: 0.15rem 0 0;
+  padding: 0.85rem 1.1rem 0;
+}
+
+.reader__intro-langs {
+  display: inline-flex;
+  padding: 0.2rem;
+  border-radius: 999px;
+  border: 1px solid var(--reader-accent-border);
+  background: var(--reader-intro-tag-bg);
+}
+
+.reader__intro-lang {
+  appearance: none;
+  border: 0;
+  margin: 0;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--reader-font-ui);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--reader-ink-intro-tag);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.reader__intro-lang--active {
+  background: var(--reader-accent);
+  color: var(--reader-on-accent, #fff);
+}
+
+.reader__intro-listen {
+  appearance: none;
+  border: 1px solid var(--reader-accent-border);
+  margin: 0;
+  padding: 0.4rem 0.95rem;
+  border-radius: 999px;
+  background: var(--reader-surface-muted);
+  font-family: var(--reader-font-ui);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--reader-accent);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.reader__intro-listen--active {
+  background: var(--reader-accent);
+  border-color: var(--reader-accent);
+  color: var(--reader-on-accent, #fff);
+}
+
+.reader__intro-meaning {
+  margin: 0.75rem 0 0;
+  padding: 0 1.1rem;
+  font-family: var(--reader-font-ui);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--reader-ink-muted);
+  text-align: start;
+}
+
+.reader__about-summary-text {
+  margin: 0.55rem 0 0;
+  padding: 0 1.1rem;
+  font-family: var(--reader-font-reading);
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--reader-ink-soft);
+  text-align: start;
+}
+
+.reader__about-source {
+  margin: 0;
+  padding: 0 1.1rem 0.65rem;
+  font-family: var(--reader-font-ui);
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--reader-ink-muted);
+  text-align: start;
+}
+
+/* Nastaliq needs a larger size and deep leading to stay legible. */
+.reader__intro-body[lang='ur'],
+.reader__about-summary-text[lang='ur'],
+.reader__about-body[lang='ur'] {
+  @include ui.ui-verse-urdu;
+  font-size: 1.12rem;
+  line-height: 2.3;
+  padding-block: 0.15rem 0.35rem;
+  color: var(--reader-ink);
+}
+
+.reader__intro-meaning[lang='ur'],
+.reader__about-source[lang='ur'] {
+  @include ui.ui-verse-urdu;
+  font-size: 0.98rem;
+  line-height: 2;
+}
+
+.reader__about-body[lang='ur'] {
+  max-height: 28rem;
+}
