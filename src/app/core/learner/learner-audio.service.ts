@@ -1,8 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
-import { alafasyAyahAudioUrl } from '../audio/ayah-audio-url';
+import { alafasyAyahAudioUrl, ayahAudioUrl } from '../audio/ayah-audio-url';
 
 const LS_AUTOPLAY = 'quran-reader-learner-audio-autoplay';
+const LS_SLOW = 'quran-reader-learner-audio-slow';
+/** Husary Muallim — slower teaching recitation for learners. */
+const LEARNER_RECITER_ID = 12;
 
 function parseVerseRef(ref: string | undefined): { surah: number; ayah: number } | null {
   if (!ref) {
@@ -26,6 +29,7 @@ export class LearnerAudioService {
   readonly supported = signal(false);
   readonly speaking = signal(false);
   readonly autoPlay = signal(false);
+  readonly slowMode = signal(true);
   readonly lastError = signal<string | null>(null);
 
   constructor() {
@@ -54,7 +58,7 @@ export class LearnerAudioService {
 
     const utter = new SpeechSynthesisUtterance(cleaned);
     utter.lang = 'ar-SA';
-    utter.rate = 0.78;
+    utter.rate = this.slowMode() ? 0.58 : 0.82;
     utter.pitch = 1;
     const voice = this.pickArabicVoice();
     if (voice) {
@@ -120,34 +124,25 @@ export class LearnerAudioService {
     this.stop();
     this.lastError.set(null);
     const token = ++this.activeToken;
-    const url = alafasyAyahAudioUrl(parsed.surah, parsed.ayah);
-
-    const audio = new Audio(url);
-    this.audioEl = audio;
-    this.speaking.set(true);
-
-    const finish = (error?: string) => {
-      if (token !== this.activeToken) {
-        return;
-      }
-      this.speaking.set(false);
-      if (error) {
-        this.lastError.set(error);
-      }
-      if (this.audioEl === audio) {
-        this.audioEl = null;
-      }
-    };
-
-    audio.addEventListener('ended', () => finish());
-    audio.addEventListener('error', () => finish('ayah-failed'));
-    void audio.play().catch(() => finish('ayah-failed'));
+    const primary = ayahAudioUrl(LEARNER_RECITER_ID, parsed.surah, parsed.ayah);
+    const fallback = alafasyAyahAudioUrl(parsed.surah, parsed.ayah);
+    this.startAyahAudio(primary, token, fallback);
   }
 
-  /** Prefer Arabic TTS; fall back to ayah audio when available. */
-  playItem(arabic: string, verseRef?: string): void {
+  /**
+   * Prefer teaching recitation for multi-word ayahs; otherwise slow TTS.
+   * `spoken` is used for isolated letters (letter name instead of the glyph).
+   */
+  playItem(arabic: string, verseRef?: string, spoken?: string): void {
+    const phrase = arabic.trim();
+    const isPhrase = /\s/.test(phrase) || phrase.length >= 8;
+    if (isPhrase && verseRef) {
+      this.playAyah(verseRef);
+      return;
+    }
+    const tts = spoken?.trim() || phrase;
     if (typeof speechSynthesis !== 'undefined') {
-      this.playArabic(arabic);
+      this.playArabic(tts);
       return;
     }
     if (verseRef) {
@@ -179,11 +174,22 @@ export class LearnerAudioService {
     return next;
   }
 
-  maybeAutoPlay(arabic: string): void {
+  setSlowMode(enabled: boolean): void {
+    this.slowMode.set(enabled);
+    this.persistSlowMode();
+  }
+
+  toggleSlowMode(): boolean {
+    const next = !this.slowMode();
+    this.setSlowMode(next);
+    return next;
+  }
+
+  maybeAutoPlay(arabic: string, verseRef?: string, spoken?: string): void {
     if (!this.autoPlay()) {
       return;
     }
-    this.playArabic(arabic);
+    this.playItem(arabic, verseRef, spoken);
   }
 
   private pickArabicVoice(): SpeechSynthesisVoice | null {
@@ -205,8 +211,11 @@ export class LearnerAudioService {
     this.supported.set(typeof speechSynthesis !== 'undefined');
     try {
       this.autoPlay.set(localStorage.getItem(LS_AUTOPLAY) === '1');
+      const slowRaw = localStorage.getItem(LS_SLOW);
+      this.slowMode.set(slowRaw !== '0');
     } catch {
       this.autoPlay.set(false);
+      this.slowMode.set(true);
     }
     // Warm voice list.
     if (typeof speechSynthesis !== 'undefined') {
@@ -223,5 +232,57 @@ export class LearnerAudioService {
     } catch {
       // ignore
     }
+  }
+
+  private persistSlowMode(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    try {
+      localStorage.setItem(LS_SLOW, this.slowMode() ? '1' : '0');
+    } catch {
+      // ignore
+    }
+  }
+
+  private startAyahAudio(url: string, token: number, fallback?: string): void {
+    const audio = new Audio(url);
+    this.audioEl = audio;
+    this.speaking.set(true);
+    audio.playbackRate = this.slowMode() ? 0.82 : 0.95;
+
+    const finish = (error?: string) => {
+      if (token !== this.activeToken) {
+        return;
+      }
+      this.speaking.set(false);
+      if (error) {
+        this.lastError.set(error);
+      }
+      if (this.audioEl === audio) {
+        this.audioEl = null;
+      }
+    };
+
+    let usedFallback = false;
+    const tryFallback = () => {
+      if (usedFallback || token !== this.activeToken) {
+        return;
+      }
+      usedFallback = true;
+      if (fallback && fallback !== url) {
+        audio.pause();
+        if (this.audioEl === audio) {
+          this.audioEl = null;
+        }
+        this.startAyahAudio(fallback, token);
+        return;
+      }
+      finish('ayah-failed');
+    };
+
+    audio.addEventListener('ended', () => finish());
+    audio.addEventListener('error', () => tryFallback());
+    void audio.play().catch(() => tryFallback());
   }
 }

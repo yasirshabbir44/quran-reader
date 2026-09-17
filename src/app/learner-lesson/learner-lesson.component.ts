@@ -3,6 +3,7 @@ import {
   DestroyRef,
   OnInit,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -21,15 +22,17 @@ import {
   type LearnerQuizFocus,
   type LearnerQuizQuestion,
 } from '../core/learner/learner-quiz.util';
+import { LearnerSpeechService } from '../core/learner/learner-speech.service';
 import { LearnerService } from '../core/learner/learner.service';
 import type { LearnerItem, LearnerLesson } from '../core/learner/learner.types';
+import { learnerLevelI18nKey, learnerSkillI18nKey } from '../core/learner/learner.types';
 import { verseFragment as verseHashFragment } from '../core/routing/verse-deep-link.util';
 import { collectionPageJsonLd } from '../core/seo/seo-jsonld';
 import { SeoService } from '../core/seo/seo.service';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
 import { UiTranslatePipe } from '../core/ui/ui-translate.pipe';
 
-export type LearnerStudyMode = 'flashcards' | 'quiz' | 'match' | 'list';
+export type LearnerStudyMode = 'flashcards' | 'quiz' | 'match' | 'speak' | 'list';
 export type LearnerQuizPhase = 'ready' | 'playing' | 'results';
 export type LearnerMatchPhase = 'ready' | 'playing' | 'complete';
 export type LearnerDeckFilter = 'all' | 'learning';
@@ -51,6 +54,7 @@ export class LearnerLessonComponent implements OnInit {
   protected readonly learner = inject(LearnerService);
   protected readonly progress = inject(LearnerProgressService);
   protected readonly audio = inject(LearnerAudioService);
+  protected readonly speech = inject(LearnerSpeechService);
 
   protected readonly ui = inject(UiLocaleService);
 
@@ -89,6 +93,13 @@ export class LearnerLessonComponent implements OnInit {
   protected readonly matchSelectedMeaning = signal<string | null>(null);
   protected readonly matchWrongPair = signal(false);
   protected readonly matchMoves = signal(0);
+
+  private readonly speechProgress = effect(() => {
+    const score = this.speech.lastScore();
+    if (this.mode() === 'speak' && score) {
+      this.applySpeechResult();
+    }
+  });
 
   protected readonly lessonProgress = computed(() => {
     const data = this.lesson();
@@ -218,8 +229,20 @@ export class LearnerLessonComponent implements OnInit {
     return !!data && data.items.length >= 2;
   });
 
+  protected readonly nextLesson = computed(() => {
+    const current = this.lesson();
+    const related = this.relatedLessons();
+    if (!current) {
+      return null;
+    }
+    return related.find((item) => item.sortOrder > current.sortOrder) ?? null;
+  });
+
   ngOnInit(): void {
-    this.destroyRef.onDestroy(() => this.audio.stop());
+    this.destroyRef.onDestroy(() => {
+      this.audio.stop();
+      this.speech.stop();
+    });
 
     this.route.paramMap
       .pipe(
@@ -231,6 +254,7 @@ export class LearnerLessonComponent implements OnInit {
           this.relatedLessons.set([]);
           this.revealed.set(false);
           this.audio.stop();
+          this.speech.stop();
           this.resetQuizState();
           this.resetMatchState();
           this.deckFilter.set('all');
@@ -260,6 +284,7 @@ export class LearnerLessonComponent implements OnInit {
         this.loading.set(false);
         this.lesson.set(data);
         this.deckOrder.set(data.items.map((_, i) => i));
+        this.mode.set(data.skill === 'speaking' ? 'speak' : 'flashcards');
         this.syncLessonSeo(data);
         this.loadRelated(data.id);
         this.jumpToFirstUnknown(data);
@@ -285,6 +310,8 @@ export class LearnerLessonComponent implements OnInit {
       return;
     }
     this.audio.stop();
+    this.speech.stop();
+    this.speech.clearResult();
     this.mode.set(mode);
     this.revealed.set(false);
     if (mode === 'quiz') {
@@ -298,7 +325,7 @@ export class LearnerLessonComponent implements OnInit {
       this.matchSelectedMeaning.set(null);
       this.matchWrongPair.set(false);
     }
-    if (mode === 'flashcards') {
+    if (mode === 'flashcards' || mode === 'speak') {
       this.scheduleAutoPlayCurrent();
     }
   }
@@ -538,6 +565,7 @@ export class LearnerLessonComponent implements OnInit {
     const next = Math.max(0, this.deckCursor() - 1);
     this.deckCursor.set(next);
     this.revealed.set(false);
+    this.speech.clearResult();
     this.scheduleAutoPlayCurrent();
   }
 
@@ -553,6 +581,7 @@ export class LearnerLessonComponent implements OnInit {
     }
     this.deckCursor.set(next);
     this.revealed.set(false);
+    this.speech.clearResult();
     this.scheduleAutoPlayCurrent();
   }
 
@@ -579,12 +608,12 @@ export class LearnerLessonComponent implements OnInit {
     if (!item) {
       return;
     }
-    this.audio.playItem(item.arabic, item.verseRef);
+    this.audio.playItem(item.arabic, item.verseRef, item.spoken);
   }
 
-  protected playArabicAudio(arabic: string, verseRef?: string, event?: Event): void {
+  protected playArabicAudio(arabic: string, verseRef?: string, event?: Event, spoken?: string): void {
     event?.stopPropagation();
-    this.audio.playItem(arabic, verseRef);
+    this.audio.playItem(arabic, verseRef, spoken);
   }
 
   protected playAyahAudio(verseRef: string | undefined, event?: Event): void {
@@ -598,7 +627,7 @@ export class LearnerLessonComponent implements OnInit {
   protected toggleAutoPlay(): void {
     const enabled = this.audio.toggleAutoPlay();
     if (enabled) {
-      if (this.mode() === 'flashcards') {
+      if (this.mode() === 'flashcards' || this.mode() === 'speak') {
         this.scheduleAutoPlayCurrent();
       } else if (this.mode() === 'quiz' && this.quizPhase() === 'playing') {
         this.scheduleAutoPlayQuiz();
@@ -606,6 +635,65 @@ export class LearnerLessonComponent implements OnInit {
     } else {
       this.audio.stop();
     }
+  }
+
+  protected toggleSlowAudio(): void {
+    this.audio.toggleSlowMode();
+  }
+
+  protected startSpeaking(): void {
+    const item = this.currentItem();
+    if (!item) {
+      return;
+    }
+    this.audio.stop();
+    this.speech.listen(item.spoken?.trim() || item.arabic, item.transliteration);
+  }
+
+  protected stopSpeaking(event?: Event): void {
+    event?.stopPropagation();
+    this.speech.stop();
+  }
+
+  protected applySpeechResult(): void {
+    const data = this.lesson();
+    const item = this.currentItem();
+    const score = this.speech.lastScore();
+    if (!data || !item || !score) {
+      return;
+    }
+    if (score === 'match') {
+      this.progress.markKnown(data.id, item.id);
+    } else if (score === 'miss') {
+      this.progress.markLearning(data.id, item.id);
+    }
+  }
+
+  protected markSpokenKnown(): void {
+    const data = this.lesson();
+    const item = this.currentItem();
+    if (!data || !item) {
+      return;
+    }
+    this.speech.stop();
+    this.progress.markKnown(data.id, item.id);
+    this.goNextSpeak();
+  }
+
+  protected markSpokenLearning(): void {
+    const data = this.lesson();
+    const item = this.currentItem();
+    if (!data || !item) {
+      return;
+    }
+    this.speech.stop();
+    this.progress.markLearning(data.id, item.id);
+    this.goNextSpeak();
+  }
+
+  protected goNextSpeak(): void {
+    this.speech.clearResult();
+    this.goNext();
   }
 
   protected stopAudio(event?: Event): void {
@@ -636,6 +724,7 @@ export class LearnerLessonComponent implements OnInit {
       return;
     }
     this.audio.stop();
+    this.speech.stop();
     this.progress.resetLesson(data.id);
     this.deckCursor.set(0);
     this.revealed.set(false);
@@ -654,7 +743,7 @@ export class LearnerLessonComponent implements OnInit {
 
     if (event.key === 'p' || event.key === 'P') {
       event.preventDefault();
-      if (this.mode() === 'flashcards') {
+      if (this.mode() === 'flashcards' || this.mode() === 'speak') {
         this.playCurrentAudio();
         return;
       }
@@ -663,6 +752,40 @@ export class LearnerLessonComponent implements OnInit {
         if (question) {
           this.audio.playArabic(question.promptArabic);
         }
+      }
+      return;
+    }
+
+    if (this.mode() === 'speak') {
+      if (event.key === 'r' || event.key === 'R') {
+        event.preventDefault();
+        if (this.speech.listening()) {
+          this.stopSpeaking();
+        } else {
+          this.startSpeaking();
+        }
+        return;
+      }
+      if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+        event.preventDefault();
+        const rtl = this.ui.locale() !== 'en';
+        const forward = event.key === 'ArrowRight' ? !rtl : rtl;
+        this.speech.clearResult();
+        if (forward) {
+          this.goNext();
+        } else {
+          this.goPrev();
+        }
+        return;
+      }
+      if (event.key === '1' || event.key === 'k' || event.key === 'K') {
+        event.preventDefault();
+        this.markSpokenKnown();
+        return;
+      }
+      if (event.key === '2' || event.key === 'l' || event.key === 'L') {
+        event.preventDefault();
+        this.markSpokenLearning();
       }
       return;
     }
@@ -727,9 +850,11 @@ export class LearnerLessonComponent implements OnInit {
   }
 
   protected skillLabel(skill: LearnerLesson['skill']): string {
-    return this.ui.translate(
-      skill === 'reading' ? 'learnerSkillReading' : 'learnerSkillVocabulary',
-    );
+    return this.ui.translate(learnerSkillI18nKey(skill));
+  }
+
+  protected levelLabel(level: LearnerLesson['level']): string {
+    return this.ui.translate(learnerLevelI18nKey(level));
   }
 
   protected verseLink(ref: string | undefined): readonly (string | number)[] | null {
@@ -833,8 +958,8 @@ export class LearnerLessonComponent implements OnInit {
     }
     window.setTimeout(() => {
       const item = this.currentItem();
-      if (item && this.mode() === 'flashcards') {
-        this.audio.maybeAutoPlay(item.arabic);
+      if (item && (this.mode() === 'flashcards' || this.mode() === 'speak')) {
+        this.audio.maybeAutoPlay(item.arabic, item.verseRef, item.spoken);
       }
     }, 220);
   }

@@ -13,7 +13,8 @@ const SEED = join(ROOT, 'src', 'app', 'data', 'learner.seed.json');
 const OUT = join(ROOT, 'public', 'learner-index.json');
 
 const KINDS = new Set(['letters', 'vowels', 'words', 'verse']);
-const SKILLS = new Set(['reading', 'vocabulary']);
+const SKILLS = new Set(['reading', 'vocabulary', 'speaking']);
+const LEVELS = new Set(['beginner', 'intermediate', 'advanced']);
 
 function loadJson(path, label) {
   let raw;
@@ -65,6 +66,9 @@ function validateSeed(seed) {
     if (!SKILLS.has(lesson.skill)) {
       throw new Error(`${ctx}: skill must be one of ${[...SKILLS].join(', ')}`);
     }
+    if (!LEVELS.has(lesson.level)) {
+      throw new Error(`${ctx}: level must be one of ${[...LEVELS].join(', ')}`);
+    }
     if (!lesson?.icon || typeof lesson.icon !== 'string') {
       throw new Error(`${ctx}: missing icon`);
     }
@@ -96,6 +100,9 @@ function validateSeed(seed) {
       }
       if (item.verseRef !== undefined && typeof item.verseRef !== 'string') {
         throw new Error(`${itemCtx}: verseRef must be a string`);
+      }
+      if (item.spoken !== undefined && typeof item.spoken !== 'string') {
+        throw new Error(`${itemCtx}: spoken must be a string`);
       }
     }
   }

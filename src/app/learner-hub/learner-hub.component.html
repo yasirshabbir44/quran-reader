@@ -60,6 +60,23 @@
     </div>
   </section>
 
+  <section class="learner__tracks" [attr.aria-label]="'learnerTracksAria' | uiTranslate">
+    @for (level of levels; track level) {
+    <button
+      type="button"
+      class="learner__track"
+      [class.learner__track--active]="levelFilter() === level"
+      (click)="setLevelFilter(levelFilter() === level ? 'all' : level)"
+    >
+      <span class="learner__track-label">{{ levelLabel(level) }}</span>
+      <span class="learner__track-value">{{ formatUiNum(levelProgress()[level].percent) }}%</span>
+      <span class="learner__track-bar" aria-hidden="true">
+        <span class="learner__track-fill" [style.width.%]="levelProgress()[level].percent"></span>
+      </span>
+    </button>
+    }
+  </section>
+
   @if (suggestedLesson(); as suggested) {
   <section class="learner__suggest" aria-labelledby="learner-suggest-heading">
     <div class="learner__suggest-copy">
@@ -82,6 +99,7 @@
       <li>{{ 'learnerPathFlash' | uiTranslate }}</li>
       <li>{{ 'learnerPathQuiz' | uiTranslate }}</li>
       <li>{{ 'learnerPathMatch' | uiTranslate }}</li>
+      <li>{{ 'learnerPathSpeak' | uiTranslate }}</li>
     </ul>
   </section>
 
@@ -95,8 +113,8 @@
         <button
           type="button"
           class="learner__filter-chip"
-          [class.learner__filter-chip--active]="skillFilter() === 'all'"
-          (click)="setSkillFilter('all')"
+          [class.learner__filter-chip--active]="skillFilter() === 'all' && levelFilter() === 'all'"
+          (click)="setSkillFilter('all'); setLevelFilter('all')"
         >
           {{ 'learnerFilterAll' | uiTranslate }}
         </button>
@@ -111,6 +129,14 @@
         <button
           type="button"
           class="learner__filter-chip"
+          [class.learner__filter-chip--active]="skillFilter() === 'speaking'"
+          (click)="setSkillFilter('speaking')"
+        >
+          {{ 'learnerSkillSpeaking' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="learner__filter-chip"
           [class.learner__filter-chip--active]="skillFilter() === 'vocabulary'"
           (click)="setSkillFilter('vocabulary')"
         >
@@ -119,48 +145,60 @@
       </div>
     </div>
 
-    <ul class="learner__cards">
-      @for (lesson of filteredLessons(); track lesson.id) {
-      <li>
-        <a
-          class="learner__card"
-          [routerLink]="['/learn', lesson.id]"
-          [attr.aria-label]="
-            'learnerCardAria'
-              | uiTranslate
-                : {
-                    name: learner.pickLocalized(lesson.title),
-                    count: formatUiNum(lesson.itemCount),
+    <div class="learner__tracks-grid">
+      @for (group of lessonsByLevel(); track group.level) {
+      <section class="learner__level" [attr.aria-labelledby]="'learner-level-' + group.level">
+        <div class="learner__level-head">
+          <h3 [id]="'learner-level-' + group.level" class="learner__level-title">
+            {{ levelLabel(group.level) }}
+          </h3>
+          <p class="learner__level-lead">{{ levelLeadKey(group.level) | uiTranslate }}</p>
+        </div>
+        <ul class="learner__cards">
+          @for (lesson of group.lessons; track lesson.id) {
+          <li>
+            <a
+              class="learner__card"
+              [routerLink]="['/learn', lesson.id]"
+              [attr.aria-label]="
+                'learnerCardAria'
+                  | uiTranslate
+                    : {
+                        name: learner.pickLocalized(lesson.title),
+                        count: formatUiNum(lesson.itemCount),
+                      }
+              "
+            >
+              <span class="learner__card-icon" dir="rtl" lang="ar" aria-hidden="true">{{
+                lessonIcon(lesson.icon)
+              }}</span>
+              <span class="learner__card-body">
+                <span class="learner__card-title-row">
+                  <span class="learner__card-title">{{ learner.pickLocalized(lesson.title) }}</span>
+                  <span class="learner__card-skill">{{ skillLabel(lesson.skill) }}</span>
+                </span>
+                <span class="learner__card-desc">{{ learner.pickLocalized(lesson.description) }}</span>
+                <span class="learner__card-meta-row">
+                  <span class="learner__card-meta">
+                    {{ formatUiNum(lesson.itemCount) }} {{ 'learnerItemCountLabel' | uiTranslate }}
+                  </span>
+                  @if (lessonProgressLabel(lesson); as progressLabel) {
+                  <span class="learner__card-progress">{{ progressLabel }}</span>
                   }
-          "
-        >
-          <span class="learner__card-icon" dir="rtl" lang="ar" aria-hidden="true">{{
-            lessonIcon(lesson.icon)
-          }}</span>
-          <span class="learner__card-body">
-            <span class="learner__card-title-row">
-              <span class="learner__card-title">{{ learner.pickLocalized(lesson.title) }}</span>
-              <span class="learner__card-skill">{{ skillLabel(lesson.skill) }}</span>
-            </span>
-            <span class="learner__card-desc">{{ learner.pickLocalized(lesson.description) }}</span>
-            <span class="learner__card-meta-row">
-              <span class="learner__card-meta">
-                {{ formatUiNum(lesson.itemCount) }} {{ 'learnerItemCountLabel' | uiTranslate }}
+                </span>
+                @if (lessonProgressPercent(lesson) > 0) {
+                <span class="learner__card-track" aria-hidden="true">
+                  <span class="learner__card-fill" [style.width.%]="lessonProgressPercent(lesson)"></span>
+                </span>
+                }
               </span>
-              @if (lessonProgressLabel(lesson); as progressLabel) {
-              <span class="learner__card-progress">{{ progressLabel }}</span>
-              }
-            </span>
-            @if (lessonProgressPercent(lesson) > 0) {
-            <span class="learner__card-track" aria-hidden="true">
-              <span class="learner__card-fill" [style.width.%]="lessonProgressPercent(lesson)"></span>
-            </span>
-            }
-          </span>
-        </a>
-      </li>
+            </a>
+          </li>
+          }
+        </ul>
+      </section>
       }
-    </ul>
+    </div>
   </section>
 
   <aside class="learner__reader-tip" aria-labelledby="learner-reader-tip-heading">
