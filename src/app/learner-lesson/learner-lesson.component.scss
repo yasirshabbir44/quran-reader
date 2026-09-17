@@ -240,7 +240,11 @@
   margin-bottom: 1.35rem;
 
   @media (min-width: 720px) {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (min-width: 980px) {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
 
@@ -1120,6 +1124,124 @@
 .lesson__related-link {
   @include ui.ui-btn-ghost;
   text-decoration: none;
+}
+
+.lesson__speak-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+  padding: 1.4rem 1.1rem 1.2rem;
+  border-radius: var(--reader-radius-lg);
+  border: 1px solid var(--reader-border-strong);
+  background: var(--reader-chrome-bg-panel);
+  text-align: center;
+
+  &--listening {
+    border-color: var(--reader-accent-border-strong);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--reader-accent) 22%, transparent);
+  }
+
+  &--match {
+    border-color: color-mix(in srgb, #2f9e6a 55%, var(--reader-border-strong));
+  }
+
+  &--close {
+    border-color: color-mix(in srgb, #c48a1a 55%, var(--reader-border-strong));
+  }
+
+  &--miss {
+    border-color: color-mix(in srgb, #c45b4a 55%, var(--reader-border-strong));
+  }
+}
+
+.lesson__speak-arabic {
+  margin: 0;
+  font-family: var(--reader-font-arabic, 'Amiri', 'Scheherazade New', serif);
+  font-size: clamp(2.1rem, 6vw, 3.4rem);
+  line-height: 1.4;
+  color: var(--reader-ink-intro-title);
+}
+
+.lesson__speak-translit,
+.lesson__speak-meaning,
+.lesson__speak-tip {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--reader-body-ink);
+}
+
+.lesson__speak-translit {
+  direction: ltr;
+  color: var(--reader-ink-subtle);
+}
+
+.lesson__speak-tip {
+  font-size: 0.86rem;
+  color: var(--reader-ink-subtle);
+  max-width: 36rem;
+}
+
+.lesson__btn--speak {
+  @include ui.ui-btn-primary;
+}
+
+.lesson__speak-hint,
+.lesson__speak-heard,
+.lesson__speak-result {
+  margin: 0 0 0.75rem;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--reader-ink-subtle);
+}
+
+.lesson__speak-heard span {
+  color: var(--reader-ink-intro-title);
+  font-weight: 650;
+}
+
+.lesson__speak-result[data-score='match'] {
+  color: #2f9e6a;
+  font-weight: 700;
+}
+
+.lesson__speak-result[data-score='close'] {
+  color: #b57a12;
+  font-weight: 700;
+}
+
+.lesson__speak-result[data-score='miss'] {
+  color: #c45b4a;
+  font-weight: 700;
+}
+
+.lesson__next {
+  margin: 0 0 1.5rem;
+  padding: 1.1rem 1.2rem;
+  border-radius: var(--reader-radius-lg);
+  border: 1px solid var(--reader-accent-border);
+  background:
+    radial-gradient(ellipse 100% 120% at 0% 0%, var(--reader-accent-soft), transparent 55%),
+    var(--reader-intro-bg);
+}
+
+.lesson__next-kicker {
+  @include ui.ui-kicker;
+  margin: 0 0 0.35rem;
+}
+
+.lesson__next-link {
+  font-size: 1.1rem;
+  font-weight: 750;
+  color: var(--reader-ink-action);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 @media (max-width: 560px) {

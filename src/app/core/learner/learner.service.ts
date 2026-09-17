@@ -50,7 +50,21 @@ export class LearnerService {
 
   getRelatedLessons(id: string, limit = 2): Observable<readonly LearnerLesson[]> {
     return this.getLessons().pipe(
-      map((lessons) => lessons.filter((l) => l.id !== id).slice(0, limit)),
+      map((lessons) => {
+        const sorted = [...lessons].sort((a, b) => a.sortOrder - b.sortOrder);
+        const idx = sorted.findIndex((l) => l.id === id);
+        if (idx < 0) {
+          return [];
+        }
+        const related: LearnerLesson[] = [];
+        if (idx > 0) {
+          related.push(sorted[idx - 1]!);
+        }
+        if (idx < sorted.length - 1) {
+          related.push(sorted[idx + 1]!);
+        }
+        return related.slice(0, Math.max(limit, related.length));
+      }),
     );
   }
 

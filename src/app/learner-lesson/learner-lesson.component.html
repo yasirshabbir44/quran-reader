@@ -52,7 +52,7 @@
 
   <div class="lesson__hero">
     <div class="lesson__hero-copy">
-      <p class="lesson__skill">{{ skillLabel(data.skill) }}</p>
+      <p class="lesson__skill">{{ skillLabel(data.skill) }} · {{ levelLabel(data.level) }}</p>
       <h1 class="lesson__title">{{ learner.pickLocalized(data.title) }}</h1>
       <p class="lesson__excerpt">{{ learner.pickLocalized(data.description) }}</p>
     </div>
@@ -112,6 +112,15 @@
       <button
         type="button"
         class="lesson__tool-chip"
+        [class.lesson__tool-chip--active]="audio.slowMode()"
+        [attr.aria-pressed]="audio.slowMode()"
+        (click)="toggleSlowAudio()"
+      >
+        {{ 'learnerAudioSlow' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="lesson__tool-chip"
         [class.lesson__tool-chip--active]="audio.autoPlay()"
         [attr.aria-pressed]="audio.autoPlay()"
         (click)="toggleAutoPlay()"
@@ -165,6 +174,20 @@
       <span class="lesson__mode-copy">
         <span class="lesson__mode-title">{{ 'learnerModeMatch' | uiTranslate }}</span>
         <span class="lesson__mode-desc">{{ 'learnerModeMatchDesc' | uiTranslate }}</span>
+      </span>
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="lesson__mode"
+      [class.lesson__mode--active]="mode() === 'speak'"
+      [attr.aria-selected]="mode() === 'speak'"
+      (click)="setMode('speak')"
+    >
+      <span class="lesson__mode-glyph" aria-hidden="true">♪</span>
+      <span class="lesson__mode-copy">
+        <span class="lesson__mode-title">{{ 'learnerModeSpeak' | uiTranslate }}</span>
+        <span class="lesson__mode-desc">{{ 'learnerModeSpeakDesc' | uiTranslate }}</span>
       </span>
     </button>
     <button
@@ -659,6 +682,141 @@
     </div>
     }
   </section>
+  } @else if (mode() === 'speak' && currentItem(); as item) {
+  <section class="lesson__speak" aria-labelledby="lesson-speak-heading">
+    <div class="lesson__toolbar">
+      <div class="lesson__toolbar-left">
+        <h2 id="lesson-speak-heading" class="lesson__study-title">{{ 'learnerSpeakTitle' | uiTranslate }}</h2>
+        <p class="lesson__study-count">
+          {{
+            'learnerCardPosition'
+              | uiTranslate
+                : {
+                    current: formatUiNum(currentDeckPos().current),
+                    total: formatUiNum(currentDeckPos().total),
+                  }
+          }}
+        </p>
+      </div>
+      <div class="lesson__toolbar-actions" role="group" [attr.aria-label]="'learnerDeckToolsAria' | uiTranslate">
+        <button
+          type="button"
+          class="lesson__tool-chip"
+          [class.lesson__tool-chip--active]="deckFilter() === 'all'"
+          (click)="setDeckFilter('all')"
+        >
+          {{ 'learnerFocusAll' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="lesson__tool-chip"
+          [class.lesson__tool-chip--active]="deckFilter() === 'learning'"
+          (click)="setDeckFilter('learning')"
+        >
+          {{ 'learnerFocusLearning' | uiTranslate }}
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="lesson__speak-card"
+      [class.lesson__speak-card--listening]="speech.listening()"
+      [class.lesson__speak-card--match]="speech.lastScore() === 'match'"
+      [class.lesson__speak-card--close]="speech.lastScore() === 'close'"
+      [class.lesson__speak-card--miss]="speech.lastScore() === 'miss'"
+    >
+      <p class="lesson__speak-arabic" dir="rtl" lang="ar">{{ item.arabic }}</p>
+      <p class="lesson__speak-translit" dir="ltr" lang="en">{{ item.transliteration }}</p>
+      <p class="lesson__speak-meaning">{{ learner.pickLocalized(item.meaning) }}</p>
+      @if (item.tip; as tip) {
+      <p class="lesson__speak-tip">{{ learner.pickLocalized(tip) }}</p>
+      }
+    </div>
+
+    <div class="lesson__audio-bar" role="group" [attr.aria-label]="'learnerAudioAria' | uiTranslate">
+      <button
+        type="button"
+        class="lesson__btn lesson__btn--audio"
+        [class.lesson__btn--audio-active]="audio.speaking()"
+        (click)="audio.speaking() ? stopAudio($event) : playCurrentAudio($event)"
+      >
+        {{ audio.speaking() ? ('learnerAudioStop' | uiTranslate) : ('learnerSpeakListen' | uiTranslate) }}
+      </button>
+      @if (item.verseRef; as ref) {
+      <button type="button" class="lesson__btn lesson__btn--ghost" (click)="playAyahAudio(ref, $event)">
+        {{ 'learnerAudioAyah' | uiTranslate }}
+      </button>
+      }
+      @if (speech.supported()) {
+      <button
+        type="button"
+        class="lesson__btn lesson__btn--speak"
+        [class.lesson__btn--audio-active]="speech.listening()"
+        (click)="speech.listening() ? stopSpeaking($event) : startSpeaking()"
+      >
+        {{
+          speech.listening()
+            ? ('learnerSpeakRecording' | uiTranslate)
+            : ('learnerSpeakRecord' | uiTranslate)
+        }}
+      </button>
+      }
+    </div>
+
+    @if (!speech.supported()) {
+    <p class="lesson__speak-hint">{{ 'learnerSpeakUnsupported' | uiTranslate }}</p>
+    } @else if (speech.lastError() === 'permission') {
+    <p class="lesson__speak-hint">{{ 'learnerSpeakPermission' | uiTranslate }}</p>
+    } @else if (speech.lastError() === 'no-speech') {
+    <p class="lesson__speak-hint">{{ 'learnerSpeakNoSpeech' | uiTranslate }}</p>
+    } @else if (speech.listening()) {
+    <p class="lesson__speak-hint">{{ 'learnerSpeakListening' | uiTranslate }}</p>
+    } @else {
+    <p class="lesson__speak-hint">{{ 'learnerSpeakHint' | uiTranslate }}</p>
+    }
+
+    @if (speech.lastHeard(); as heard) {
+    <p class="lesson__speak-heard" dir="auto">
+      {{ 'learnerSpeakHeard' | uiTranslate }}
+      <span>{{ heard }}</span>
+    </p>
+    }
+    @if (speech.lastScore(); as score) {
+    <p class="lesson__speak-result" [attr.data-score]="score" role="status">
+      @if (score === 'match') {
+      {{ 'learnerSpeakMatch' | uiTranslate }}
+      } @else if (score === 'close') {
+      {{ 'learnerSpeakClose' | uiTranslate }}
+      } @else {
+      {{ 'learnerSpeakMiss' | uiTranslate }}
+      }
+    </p>
+    }
+
+    <div class="lesson__actions">
+      <button type="button" class="lesson__btn lesson__btn--know" (click)="markSpokenKnown()">
+        {{ 'learnerKnowIt' | uiTranslate }}
+      </button>
+      <button type="button" class="lesson__btn lesson__btn--learn" (click)="markSpokenLearning()">
+        {{ 'learnerStillLearning' | uiTranslate }}
+      </button>
+    </div>
+
+    <div class="lesson__nav">
+      <button type="button" class="lesson__nav-btn" [disabled]="deckCursor() === 0" (click)="goPrev()">
+        {{ 'learnerPrev' | uiTranslate }}
+      </button>
+      <p class="lesson__keys-hint">{{ 'learnerKeysHintSpeak' | uiTranslate }}</p>
+      <button
+        type="button"
+        class="lesson__nav-btn"
+        [disabled]="deckCursor() >= deckIndices().length - 1"
+        (click)="goNextSpeak()"
+      >
+        {{ 'learnerNext' | uiTranslate }}
+      </button>
+    </div>
+  </section>
   } @else {
   <section class="lesson__list" aria-labelledby="lesson-list-heading">
     <h2 id="lesson-list-heading" class="lesson__list-title">{{ 'learnerListTitle' | uiTranslate }}</h2>
@@ -679,7 +837,7 @@
           type="button"
           class="lesson__item-audio"
           [attr.aria-label]="'learnerAudioPlay' | uiTranslate"
-          (click)="playArabicAudio(item.arabic, item.verseRef, $event)"
+          (click)="playArabicAudio(item.arabic, item.verseRef, $event, item.spoken)"
         >
           {{ 'learnerAudioPlayShort' | uiTranslate }}
         </button>
@@ -699,6 +857,15 @@
       }
     </ul>
   </section>
+  }
+
+  @if (nextLesson(); as next) {
+  <aside class="lesson__next" aria-labelledby="lesson-next-heading">
+    <p id="lesson-next-heading" class="lesson__next-kicker">{{ 'learnerNextLesson' | uiTranslate }}</p>
+    <a class="lesson__next-link" [routerLink]="['/learn', next.id]">
+      {{ learner.pickLocalized(next.title) }}
+    </a>
+  </aside>
   }
 
   @if (relatedLessons().length > 0) {

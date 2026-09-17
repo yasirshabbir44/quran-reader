@@ -11,7 +11,16 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LearnerProgressService } from '../core/learner/learner-progress.service';
 import { LearnerService } from '../core/learner/learner.service';
-import type { LearnerLesson, LearnerSkill } from '../core/learner/learner.types';
+import type {
+  LearnerLesson,
+  LearnerLevel,
+  LearnerSkill,
+} from '../core/learner/learner.types';
+import {
+  LEARNER_LEVELS,
+  learnerLevelI18nKey,
+  learnerSkillI18nKey,
+} from '../core/learner/learner.types';
 import { collectionPageJsonLd } from '../core/seo/seo-jsonld';
 import { SeoService } from '../core/seo/seo.service';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
@@ -22,6 +31,12 @@ const LESSON_ICONS: Record<string, string> = {
   vowels: 'َ ِ ُ',
   words: 'كلمة',
   verse: 'آية',
+  forms: 'ـبـ',
+  similar: 'ب ت',
+  sounds: 'بَ',
+  joined: 'كَتَبَ',
+  tajweed: 'تجويد',
+  recite: '۞',
 };
 
 @Component({
@@ -43,6 +58,8 @@ export class LearnerHubComponent implements OnInit {
   protected readonly loadError = signal(false);
   protected readonly lessons = signal<readonly LearnerLesson[]>([]);
   protected readonly skillFilter = signal<LearnerSkill | 'all'>('all');
+  protected readonly levelFilter = signal<LearnerLevel | 'all'>('all');
+  protected readonly levels = LEARNER_LEVELS;
 
   protected readonly totalItems = computed(() =>
     this.lessons().reduce((sum, l) => sum + l.itemCount, 0),
@@ -66,12 +83,45 @@ export class LearnerHubComponent implements OnInit {
   });
 
   protected readonly filteredLessons = computed(() => {
-    const filter = this.skillFilter();
+    const skill = this.skillFilter();
+    const level = this.levelFilter();
+    return this.lessons().filter((lesson) => {
+      if (skill !== 'all' && lesson.skill !== skill) {
+        return false;
+      }
+      if (level !== 'all' && lesson.level !== level) {
+        return false;
+      }
+      return true;
+    });
+  });
+
+  protected readonly lessonsByLevel = computed(() => {
+    const filtered = this.filteredLessons();
+    return LEARNER_LEVELS.map((level) => ({
+      level,
+      lessons: filtered.filter((lesson) => lesson.level === level),
+    })).filter((group) => group.lessons.length > 0);
+  });
+
+  protected readonly levelProgress = computed(() => {
+    this.progress.progressSnapshot();
     const list = this.lessons();
-    if (filter === 'all') {
-      return list;
+    const result: Record<LearnerLevel, { known: number; total: number; percent: number }> = {
+      beginner: { known: 0, total: 0, percent: 0 },
+      intermediate: { known: 0, total: 0, percent: 0 },
+      advanced: { known: 0, total: 0, percent: 0 },
+    };
+    for (const lesson of list) {
+      const p = this.progress.lessonProgress(lesson);
+      result[lesson.level].known += p.known;
+      result[lesson.level].total += p.total;
     }
-    return list.filter((l) => l.skill === filter);
+    for (const level of LEARNER_LEVELS) {
+      const row = result[level];
+      row.percent = row.total > 0 ? Math.round((row.known / row.total) * 100) : 0;
+    }
+    return result;
   });
 
   protected readonly suggestedLesson = computed(() => {
@@ -115,6 +165,10 @@ export class LearnerHubComponent implements OnInit {
     this.skillFilter.set(filter);
   }
 
+  protected setLevelFilter(filter: LearnerLevel | 'all'): void {
+    this.levelFilter.set(filter);
+  }
+
   protected lessonIcon(icon: string): string {
     return LESSON_ICONS[icon] ?? 'تعلّم';
   }
@@ -140,7 +194,21 @@ export class LearnerHubComponent implements OnInit {
   }
 
   protected skillLabel(skill: LearnerSkill): string {
-    return this.ui.translate(skill === 'reading' ? 'learnerSkillReading' : 'learnerSkillVocabulary');
+    return this.ui.translate(learnerSkillI18nKey(skill));
+  }
+
+  protected levelLabel(level: LearnerLevel): string {
+    return this.ui.translate(learnerLevelI18nKey(level));
+  }
+
+  protected levelLeadKey(level: LearnerLevel): string {
+    if (level === 'intermediate') {
+      return 'learnerTrackIntermediateLead';
+    }
+    if (level === 'advanced') {
+      return 'learnerTrackAdvancedLead';
+    }
+    return 'learnerTrackBeginnerLead';
   }
 
   protected retryLoad(): void {
