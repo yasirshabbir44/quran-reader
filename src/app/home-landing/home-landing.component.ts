@@ -37,7 +37,10 @@ import {
   type ThematicThemeListItem,
 } from '../core/thematic-index/thematic-index.service';
 import type { MushafIndexPayload } from '../core/mushaf/mushaf-index.types';
-import { normalizeVerseTranslations, pickVerseTranslationForLocale } from '../core/verse-presentation/verse-presentation.strategy';
+import {
+  normalizeVerseTranslations,
+  pickVerseTranslationForLocale,
+} from '../core/verse-presentation/verse-presentation.strategy';
 import {
   localizedCategoryName,
   localizedThemeName,
@@ -50,17 +53,31 @@ import {
   filterSurahJuzGroups,
   groupSurahsByJuz,
 } from './utils/surah-juz-groups.util';
+import { ReadingStreakService } from '../core/streak/reading-streak.service';
+import { DashboardAudioService } from '../core/audio/dashboard-audio.service';
+import { AdhkarService } from '../core/adhkar/adhkar.service';
+import {
+  AdhkarProgressService,
+  suggestedAdhkarCollectionId,
+} from '../core/adhkar/adhkar-progress.service';
+import type { AdhkarCollection, AdhkarItem } from '../core/adhkar/adhkar.types';
 
-export type SurahRevelationFilter = 'all' | 'meccan' | 'medinan';
-export type SurahIndexLayout = 'list' | 'juz';
+export type SurahRevelationFilter = 'all' | 'meccan' | 'medinan' | 'bookmarked';
+export type SurahIndexLayout = 'grid' | 'list' | 'juz';
 
-/** Frequently opened surahs — quick access from the home dashboard. */
-const POPULAR_SURAHS: readonly number[] = [1, 18, 36, 55, 67, 112];
+/** 8 frequently recited and beloved surahs for quick dashboard access */
+const POPULAR_SURAHS: readonly number[] = [1, 2, 18, 36, 55, 56, 67, 112];
 
 @Component({
   selector: 'app-home-landing',
   standalone: true,
-  imports: [RouterLink, FormsModule, UiTranslatePipe, KhatamProgressCardComponent, GlobalSearchComponent],
+  imports: [
+    RouterLink,
+    FormsModule,
+    UiTranslatePipe,
+    KhatamProgressCardComponent,
+    GlobalSearchComponent,
+  ],
   templateUrl: './home-landing.component.html',
   styleUrl: './home-landing.component.scss',
 })
@@ -77,9 +94,16 @@ export class HomeLandingComponent implements OnInit {
   private readonly khatam = inject(KhatamService);
   private readonly mushafIndex = inject(MushafIndexService);
 
+  // New spiritual companion services
+  protected readonly streak = inject(ReadingStreakService);
+  protected readonly audio = inject(DashboardAudioService);
+  protected readonly adhkarService = inject(AdhkarService);
+  protected readonly adhkarProgress = inject(AdhkarProgressService);
+
   protected readonly ui = inject(UiLocaleService);
   protected readonly khatamActive = this.khatam.isActive;
   protected readonly khatamFurthest = this.khatam.furthest;
+  protected readonly khatamProgress = this.khatam.progress;
 
   protected readonly corpusLoading = signal(true);
   protected readonly corpusError = signal(false);
@@ -87,13 +111,15 @@ export class HomeLandingComponent implements OnInit {
   protected readonly daily = signal<DailyVerseRef | null>(null);
   protected readonly savedPlace = signal<ReadingBookmark | null>(null);
   protected readonly indexQuery = signal('');
-  protected readonly indexLayout = signal<SurahIndexLayout>('list');
+  protected readonly indexLayout = signal<SurahIndexLayout>('grid');
   protected readonly revelationFilter = signal<SurahRevelationFilter>('all');
   protected readonly mushafPayload = signal<MushafIndexPayload | null>(null);
   protected readonly themeItems = signal<readonly ThematicThemeListItem[]>([]);
   protected readonly themeCount = signal(0);
   protected readonly blogCount = signal(0);
   protected readonly dailyTopic = signal<DailyThemeInspiration | null>(null);
+  protected readonly adhkarCollections = signal<readonly AdhkarCollection[]>([]);
+  protected readonly copiedToast = signal(false);
 
   protected readonly popularSurahs = POPULAR_SURAHS;
 
@@ -109,11 +135,56 @@ export class HomeLandingComponent implements OnInit {
     () => this.surahs().filter((s) => s.revelationType === 'medinan').length,
   );
 
+  protected readonly activeBookmark = computed(() => {
+    return this.savedPlace() ?? { surah: 1, ayah: 1 };
+  });
+
+  protected readonly activeBookmarkSurah = computed(() => {
+    const list = this.surahs();
+    if (list.length === 0) return null;
+    const bm = this.activeBookmark();
+    return list[bm.surah - 1] ?? list[0] ?? null;
+  });
+
+  protected readonly continueProgressPct = computed(() => {
+    const bm = this.savedPlace();
+    const surah = this.continueReadingSurah();
+    if (!bm || !surah || surah.versesCount <= 0) {
+      return 0;
+    }
+    return Math.min(100, Math.round((bm.ayah / surah.versesCount) * 100));
+  });
+
+  protected readonly continueReadingSurah = computed(() => {
+    const bm = this.savedPlace();
+    const list = this.surahs();
+    if (!bm || list.length === 0) {
+      return null;
+    }
+    return list[bm.surah - 1] ?? null;
+  });
+
+  protected readonly khatamContinueSurah = computed(() => {
+    const ref = this.khatamFurthest();
+    const list = this.surahs();
+    if (list.length === 0) {
+      return null;
+    }
+    return list[ref.surah - 1] ?? null;
+  });
+
   protected readonly filteredSurahs = computed(() => {
     const list = this.surahs();
     const filter = this.revelationFilter();
-    const byType =
-      filter === 'all' ? list : list.filter((s) => s.revelationType === filter);
+    let byType: readonly QuranSurahPayload[];
+    if (filter === 'all') {
+      byType = list;
+    } else if (filter === 'bookmarked') {
+      const bm = this.savedPlace();
+      byType = bm ? list.filter((s) => s.number === bm.surah) : list;
+    } else {
+      byType = list.filter((s) => s.revelationType === filter);
+    }
     const navItems = byType.map((s) => this.toSurahNavItem(s));
     const filtered = filterSurahNavItems(navItems, this.indexQuery());
     if (filtered.length === navItems.length) {
@@ -141,31 +212,40 @@ export class HomeLandingComponent implements OnInit {
     return list[d.surah - 1] ?? null;
   });
 
-  protected readonly continueReadingSurah = computed(() => {
-    const bm = this.savedPlace();
-    const list = this.surahs();
-    if (!bm || list.length === 0) {
-      return null;
+  /** Time-aware Islamic greeting key */
+  protected readonly greetingKey = computed(() => {
+    const hour = new Date().getHours();
+    if (hour >= 4 && hour < 12) {
+      return 'dashboardHeroGreetingMorning';
     }
-    return list[bm.surah - 1] ?? null;
+    if (hour >= 12 && hour < 17) {
+      return 'dashboardHeroGreetingAfternoon';
+    }
+    if (hour >= 17 && hour < 21) {
+      return 'dashboardHeroGreetingEvening';
+    }
+    return 'dashboardHeroGreetingNight';
   });
 
-  protected readonly continueProgressPct = computed(() => {
-    const bm = this.savedPlace();
-    const surah = this.continueReadingSurah();
-    if (!bm || !surah || surah.versesCount <= 0) {
-      return 0;
+  /** Authentic Hijri date formatted in current locale */
+  protected readonly hijriDateLabel = computed(() => {
+    this.ui.locale();
+    const now = new Date();
+    try {
+      const localeTag =
+        this.ui.locale() === 'ar'
+          ? 'ar-SA-u-ca-islamic-umalqura'
+          : this.ui.locale() === 'ur'
+            ? 'ur-PK-u-ca-islamic-umalqura'
+            : 'en-US-u-ca-islamic-umalqura';
+      return new Intl.DateTimeFormat(localeTag, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }).format(now);
+    } catch {
+      return '';
     }
-    return Math.min(100, Math.round((bm.ayah / surah.versesCount) * 100));
-  });
-
-  protected readonly khatamContinueSurah = computed(() => {
-    const ref = this.khatamFurthest();
-    const list = this.surahs();
-    if (list.length === 0) {
-      return null;
-    }
-    return list[ref.surah - 1] ?? null;
   });
 
   protected readonly todayLabel = computed(() => {
@@ -173,7 +253,7 @@ export class HomeLandingComponent implements OnInit {
     const date = new Date();
     const tag =
       this.ui.locale() === 'ar'
-        ? 'ar-SA-u-ca-islamic'
+        ? 'ar-SA'
         : this.ui.locale() === 'ur'
           ? 'ur-PK'
           : 'en-US';
@@ -201,6 +281,41 @@ export class HomeLandingComponent implements OnInit {
     const key = this.dailyVerseDateKey(new Date()) + ':random-surah';
     const index = this.hashString(key) % list.length;
     return list[index]!.number;
+  });
+
+  /** Current suggested time-based Adhkar collection */
+  protected readonly currentAdhkarCollection = computed((): AdhkarCollection | null => {
+    const cols = this.adhkarCollections();
+    if (cols.length === 0) return null;
+    const suggestedId = suggestedAdhkarCollectionId();
+    return cols.find((c) => c.id === suggestedId) ?? cols[0] ?? null;
+  });
+
+  /** Prime Dhikr item for current time of day */
+  protected readonly currentDhikrItem = computed((): AdhkarItem | null => {
+    const col = this.currentAdhkarCollection();
+    if (!col || col.items.length === 0) return null;
+    // Prefer one with a repeat counter like SubhanAllah or Istighfar
+    const withRepeat = col.items.find((i) => (i.repeat ?? 1) > 1);
+    return withRepeat ?? col.items[0] ?? null;
+  });
+
+  /** Current tap count for the highlighted dhikr */
+  protected readonly currentDhikrCount = computed(() => {
+    const col = this.currentAdhkarCollection();
+    const item = this.currentDhikrItem();
+    if (!col || !item) return 0;
+    this.adhkarProgress.progressSnapshot(); // trigger reactive subscription
+    return this.adhkarProgress.count(col.id, item.id);
+  });
+
+  protected readonly currentDhikrTarget = computed(() => {
+    const item = this.currentDhikrItem();
+    return item?.repeat ?? 33;
+  });
+
+  protected readonly isDhikrCompleted = computed(() => {
+    return this.currentDhikrCount() >= this.currentDhikrTarget();
   });
 
   ngOnInit(): void {
@@ -256,6 +371,15 @@ export class HomeLandingComponent implements OnInit {
           this.blogCount.set(payload.posts.length);
         }
       });
+
+    this.adhkarService
+      .load()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((payload) => {
+        if (payload) {
+          this.adhkarCollections.set(payload.collections);
+        }
+      });
   }
 
   protected formatUiNum(n: number): string {
@@ -266,6 +390,10 @@ export class HomeLandingComponent implements OnInit {
   protected onLocaleChange(code: string): void {
     this.ui.setLocale(code as UiLocaleCode);
     this.syncSeo();
+  }
+
+  protected onReciterChange(reciterId: string | number): void {
+    this.audio.setReciter(Number(reciterId));
   }
 
   protected revelationLabel(type: QuranSurahPayload['revelationType']): string {
@@ -325,6 +453,42 @@ export class HomeLandingComponent implements OnInit {
       inspiration.categoryName,
       this.ui.locale(),
     );
+  }
+
+  protected localizedDhikrText(item: AdhkarItem): string {
+    return this.adhkarService.pickLocalized(item.translation);
+  }
+
+  protected onDhikrTap(): void {
+    const col = this.currentAdhkarCollection();
+    const item = this.currentDhikrItem();
+    if (!col || !item) return;
+    this.adhkarProgress.tap(col.id, item);
+    this.streak.recordActivity(1);
+  }
+
+  protected resetDhikr(): void {
+    const col = this.currentAdhkarCollection();
+    const item = this.currentDhikrItem();
+    if (!col || !item) return;
+    this.adhkarProgress.resetItem(col.id, item.id);
+  }
+
+  protected playAudio(surah: number, ayah: number, label?: string): void {
+    this.audio.toggle(surah, ayah, label);
+  }
+
+  protected isAudioPlaying(surah: number, ayah: number): boolean {
+    return this.audio.isCurrentAyahPlaying(surah, ayah);
+  }
+
+  protected copyVerse(text: string, ref: string): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const full = `${text}\n\n— ${ref}`;
+    navigator.clipboard?.writeText(full).then(() => {
+      this.copiedToast.set(true);
+      setTimeout(() => this.copiedToast.set(false), 2500);
+    });
   }
 
   protected setRevelationFilter(filter: SurahRevelationFilter): void {

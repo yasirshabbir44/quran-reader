@@ -1,125 +1,335 @@
 @if (corpusError()) {
-<main class="landing landing--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
-  <div class="landing__state-card">
-    <p class="landing__state-text">{{ 'loadError' | uiTranslate }}</p>
-    <button type="button" class="landing__btn landing__btn--primary" (click)="retryCorpusLoad()">
+<main class="dashboard dashboard--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="dashboard__state-card">
+    <p class="dashboard__state-text">{{ 'loadError' | uiTranslate }}</p>
+    <button type="button" class="dashboard__btn dashboard__btn--primary" (click)="retryCorpusLoad()">
       {{ 'retryLoadButton' | uiTranslate }}
     </button>
   </div>
 </main>
 } @else if (corpusLoading()) {
-<main class="landing landing--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
-  <p class="landing__state-text">{{ 'loadingCorpus' | uiTranslate }}</p>
+<main class="dashboard dashboard--state" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+  <div class="dashboard__loader">
+    <div class="dashboard__loader-spinner" aria-hidden="true"></div>
+    <p class="dashboard__state-text">{{ 'loadingCorpus' | uiTranslate }}</p>
+  </div>
 </main>
 } @else {
-<div class="landing" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
-  <header class="landing__hero">
-    <div class="landing__hero-top">
-      <div class="landing__brand">
-        <p class="landing__kicker">{{ 'homeKicker' | uiTranslate }}</p>
-        <h1 class="landing__title">{{ 'homeTitle' | uiTranslate }}</h1>
-        <p class="landing__subtitle">{{ 'homeSubtitle' | uiTranslate }}</p>
-        <p class="landing__date" aria-hidden="true">{{ todayLabel() }}</p>
-      </div>
-      <div class="landing__header-tools">
-        <span class="landing__offline-badge">{{ 'homeOfflineBadge' | uiTranslate }}</span>
-        <label class="landing__tool-label" for="home-ui-locale">{{ 'languageLabel' | uiTranslate }}</label>
-        <select
-          id="home-ui-locale"
-          class="landing__select"
-          [ngModel]="ui.locale()"
-          [ngModelOptions]="{ standalone: true }"
-          (ngModelChange)="onLocaleChange($event)"
-        >
-          @for (opt of ui.availableLocales; track opt.code) {
-          <option [value]="opt.code">{{ opt.label }}</option>
+<div class="dashboard" [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'" [attr.lang]="ui.locale()">
+
+  @if (copiedToast()) {
+  <div class="dashboard__toast" role="status" aria-live="polite">
+    <span class="dashboard__toast-icon" aria-hidden="true">✓</span>
+    <span>{{ 'dashboardVerseCopied' | uiTranslate }}</span>
+  </div>
+  }
+
+  <!-- LUXURY ISLAMIC DASHBOARD HERO -->
+  <header class="dashboard__hero">
+    <div class="dashboard__hero-pattern" aria-hidden="true"></div>
+
+    <div class="dashboard__hero-top">
+      <div class="dashboard__brand">
+        <div class="dashboard__kicker-row">
+          <span class="dashboard__kicker-badge" aria-hidden="true">✦</span>
+          <span class="dashboard__kicker">{{ 'dashboardHeroKicker' | uiTranslate }}</span>
+        </div>
+        <h1 class="dashboard__greeting">{{ greetingKey() | uiTranslate }}</h1>
+        <p class="dashboard__subtitle">{{ 'homeSubtitle' | uiTranslate }}</p>
+
+        <!-- DUAL DATES & STATUS CHIPS -->
+        <div class="dashboard__meta-row">
+          @if (hijriDateLabel()) {
+          <span class="dashboard__date-chip dashboard__date-chip--hijri">
+            <span class="dashboard__chip-icon" aria-hidden="true">🌙</span>
+            <span>{{ hijriDateLabel() }}</span>
+          </span>
           }
-        </select>
+          <span class="dashboard__date-chip">
+            <span class="dashboard__chip-icon" aria-hidden="true">📅</span>
+            <span>{{ todayLabel() }}</span>
+          </span>
+          <span class="dashboard__date-chip dashboard__date-chip--accent">
+            <span class="dashboard__chip-icon" aria-hidden="true">⚡</span>
+            <span>{{ 'homeOfflineBadge' | uiTranslate }}</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- DASHBOARD CONTROLS & COMPANION PILLS -->
+      <div class="dashboard__header-tools">
+        <!-- Streak Indicator Pill -->
+        <div class="dashboard__streak-pill" [attr.aria-label]="'dashboardStreakTitle' | uiTranslate">
+          <span class="dashboard__streak-icon" aria-hidden="true">🔥</span>
+          <div class="dashboard__streak-info">
+            <span class="dashboard__streak-num">{{ formatUiNum(streak.currentStreak()) }}</span>
+            <span class="dashboard__streak-sub">{{ 'dashboardStreakDays' | uiTranslate: { count: formatUiNum(streak.currentStreak()) } }}</span>
+          </div>
+        </div>
+
+        <!-- Reciter Selector -->
+        <div class="dashboard__tool-select-wrap">
+          <label class="dashboard__tool-label" for="dashboard-reciter">
+            <span class="dashboard__tool-icon" aria-hidden="true">🎧</span>
+            <span>{{ 'dashboardAudioReciter' | uiTranslate }}</span>
+          </label>
+          <select
+            id="dashboard-reciter"
+            class="dashboard__select"
+            [ngModel]="audio.selectedReciterId()"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onReciterChange($event)"
+          >
+            @for (rec of audio.reciters; track rec.id) {
+            <option [value]="rec.id">{{ rec.name }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Language Selector -->
+        <div class="dashboard__tool-select-wrap">
+          <label class="dashboard__tool-label" for="home-ui-locale">
+            <span class="dashboard__tool-icon" aria-hidden="true">🌐</span>
+            <span>{{ 'languageLabel' | uiTranslate }}</span>
+          </label>
+          <select
+            id="home-ui-locale"
+            class="dashboard__select"
+            [ngModel]="ui.locale()"
+            [ngModelOptions]="{ standalone: true }"
+            (ngModelChange)="onLocaleChange($event)"
+          >
+            @for (opt of ui.availableLocales; track opt.code) {
+            <option [value]="opt.code">{{ opt.label }}</option>
+            }
+          </select>
+        </div>
       </div>
     </div>
 
-    <div class="landing__search-hero">
+    <!-- GLOBAL SEARCH INTEGRATION -->
+    <div class="dashboard__search-hero">
       <app-global-search [surahs]="surahNavItems()" [themes]="themeItems()" />
     </div>
 
-    <div class="landing__stats" role="list" [attr.aria-label]="'homeStatsAria' | uiTranslate">
-      <div class="landing__stat" role="listitem">
-        <span class="landing__stat-value">{{ formatUiNum(surahs().length) }}</span>
-        <span class="landing__stat-label">{{ 'homeStatSurahs' | uiTranslate }}</span>
+    <!-- 4 SPIRITUAL METRIC PILLARS -->
+    <div class="dashboard__stats-grid" role="list" [attr.aria-label]="'homeStatsAria' | uiTranslate">
+      <!-- 1: Reading Streak -->
+      <div class="dashboard__stat-card" role="listitem">
+        <div class="dashboard__stat-head">
+          <span class="dashboard__stat-icon dashboard__stat-icon--gold" aria-hidden="true">🔥</span>
+          <span class="dashboard__stat-title">{{ 'dashboardStreakTitle' | uiTranslate }}</span>
+        </div>
+        <div class="dashboard__stat-main">
+          <span class="dashboard__stat-number">{{ formatUiNum(streak.currentStreak()) }}</span>
+          <span class="dashboard__stat-unit">{{ 'daysLabel' | uiTranslate: { count: streak.currentStreak() } }}</span>
+        </div>
+        <!-- Weekly Habit Track -->
+        <div class="dashboard__streak-week" [attr.aria-label]="'dashboardStreakWeeklyAria' | uiTranslate">
+          @for (day of streak.weeklyDays(); track day.dateKey) {
+          <div
+            class="dashboard__streak-day"
+            [class.dashboard__streak-day--active]="day.active"
+            [class.dashboard__streak-day--today]="day.isToday"
+            [title]="day.dateKey"
+          >
+            <span class="dashboard__streak-day-dot"></span>
+            <span class="dashboard__streak-day-label">{{ day.label }}</span>
+          </div>
+          }
+        </div>
+        <p class="dashboard__stat-caption">
+          @if (streak.isReadToday()) {
+          <span class="dashboard__stat-badge dashboard__stat-badge--success">{{ 'dashboardStreakActiveToday' | uiTranslate }}</span>
+          } @else {
+          <span class="dashboard__stat-badge">{{ 'dashboardStreakPendingToday' | uiTranslate }}</span>
+          }
+        </p>
       </div>
-      <div class="landing__stat" role="listitem">
-        <span class="landing__stat-value">{{ formatUiNum(totalVerses()) }}</span>
-        <span class="landing__stat-label">{{ 'homeStatVerses' | uiTranslate }}</span>
+
+      <!-- 2: Khatam Tracker -->
+      <div class="dashboard__stat-card" role="listitem">
+        <div class="dashboard__stat-head">
+          <span class="dashboard__stat-icon dashboard__stat-icon--emerald" aria-hidden="true">◎</span>
+          <span class="dashboard__stat-title">{{ 'dashboardKhatamCardTitle' | uiTranslate }}</span>
+        </div>
+        <div class="dashboard__stat-main">
+          <span class="dashboard__stat-number">{{ formatUiNum(khatamProgress().percent) }}%</span>
+          <span class="dashboard__stat-unit">
+            {{ formatUiNum(khatamProgress().juzCompleted) }}/30 {{ 'homeStatJuz' | uiTranslate }}
+          </span>
+        </div>
+        <div class="dashboard__meter-bar" role="progressbar" [attr.aria-valuenow]="khatamProgress().percent" aria-valuemin="0" aria-valuemax="100">
+          <span class="dashboard__meter-fill dashboard__meter-fill--gold" [style.width.%]="khatamProgress().percent"></span>
+        </div>
+        <p class="dashboard__stat-caption">
+          {{ formatUiNum(khatamProgress().versesRead) }} / {{ formatUiNum(khatamProgress().totalVerses || 6236) }} {{ 'homeStatVerses' | uiTranslate }}
+        </p>
       </div>
-      <div class="landing__stat" role="listitem">
-        <span class="landing__stat-value">{{ formatUiNum(604) }}</span>
-        <span class="landing__stat-label">{{ 'homeStatPages' | uiTranslate }}</span>
+
+      <!-- 3: Daily Target -->
+      <div class="dashboard__stat-card" role="listitem">
+        <div class="dashboard__stat-head">
+          <span class="dashboard__stat-icon dashboard__stat-icon--teal" aria-hidden="true">📖</span>
+          <span class="dashboard__stat-title">{{ 'dashboardDailyGoalTitle' | uiTranslate }}</span>
+        </div>
+        <div class="dashboard__stat-main">
+          <span class="dashboard__stat-number">{{ formatUiNum(streak.versesReadToday()) }}</span>
+          <span class="dashboard__stat-unit">/ {{ formatUiNum(streak.dailyTarget()) }} {{ 'versesWord' | uiTranslate }}</span>
+        </div>
+        <div class="dashboard__meter-bar" role="progressbar" [attr.aria-valuenow]="streak.dailyProgressPct()" aria-valuemin="0" aria-valuemax="100">
+          <span class="dashboard__meter-fill dashboard__meter-fill--emerald" [style.width.%]="streak.dailyProgressPct()"></span>
+        </div>
+        <p class="dashboard__stat-caption">
+          @if (streak.dailyProgressPct() >= 100) {
+          <span class="dashboard__stat-badge dashboard__stat-badge--success">{{ 'dashboardDailyGoalMet' | uiTranslate }}</span>
+          } @else {
+          <span class="dashboard__stat-badge">{{ formatUiNum(streak.dailyProgressPct()) }}% completed</span>
+          }
+        </p>
       </div>
-      <div class="landing__stat" role="listitem">
-        <span class="landing__stat-value">{{ formatUiNum(30) }}</span>
-        <span class="landing__stat-label">{{ 'homeStatJuz' | uiTranslate }}</span>
+
+      <!-- 4: Time-Based Remembrance -->
+      <div class="dashboard__stat-card dashboard__stat-card--interactive" role="listitem">
+        <div class="dashboard__stat-head">
+          <span class="dashboard__stat-icon dashboard__stat-icon--gold" aria-hidden="true">🤲</span>
+          <span class="dashboard__stat-title">{{ 'dashboardDailyDhikrTitle' | uiTranslate }}</span>
+        </div>
+        @if (currentDhikrItem(); as dhikr) {
+        <div class="dashboard__dhikr-mini">
+          <p class="dashboard__dhikr-snippet" dir="rtl" lang="ar">{{ dhikr.arabic }}</p>
+          <div class="dashboard__dhikr-action">
+            <button
+              type="button"
+              class="dashboard__dhikr-tap-btn"
+              [class.dashboard__dhikr-tap-btn--done]="isDhikrCompleted()"
+              (click)="onDhikrTap()"
+              [attr.aria-label]="'dashboardDailyDhikrTap' | uiTranslate"
+            >
+              @if (isDhikrCompleted()) {
+              <span class="dashboard__dhikr-btn-icon" aria-hidden="true">✓</span>
+              <span>{{ 'dashboardDailyDhikrCompleted' | uiTranslate }}</span>
+              } @else {
+              <span class="dashboard__dhikr-btn-icon" aria-hidden="true">⚡</span>
+              <span>{{ formatUiNum(currentDhikrCount()) }} / {{ formatUiNum(currentDhikrTarget()) }}</span>
+              }
+            </button>
+            @if (currentDhikrCount() > 0) {
+            <button
+              type="button"
+              class="dashboard__dhikr-reset-btn"
+              (click)="resetDhikr()"
+              [title]="'dashboardDhikrReset' | uiTranslate"
+            >
+              ↺
+            </button>
+            }
+          </div>
+        </div>
+        } @else {
+        <p class="dashboard__stat-caption">{{ 'homeNavAdhkarHint' | uiTranslate }}</p>
+        }
       </div>
-      @if (themeCount() > 0) {
-      <div class="landing__stat" role="listitem">
-        <span class="landing__stat-value">{{ formatUiNum(themeCount()) }}</span>
-        <span class="landing__stat-label">{{ 'homeStatThemes' | uiTranslate }}</span>
-      </div>
-      }
-      @if (blogCount() > 0) {
-      <div class="landing__stat" role="listitem">
-        <span class="landing__stat-value">{{ formatUiNum(blogCount()) }}</span>
-        <span class="landing__stat-label">{{ 'homeStatBlog' | uiTranslate }}</span>
-      </div>
-      }
     </div>
   </header>
 
-  <div
-    class="landing__reading-row"
-    [class.landing__reading-row--single]="!savedPlace()"
-  >
-    @if (savedPlace(); as bm) {
-    <section class="landing__continue" aria-labelledby="continue-heading">
-      <div class="landing__continue-head">
-        <div>
-          <h2 id="continue-heading" class="landing__continue-title">{{ 'homeNavContinue' | uiTranslate }}</h2>
+  <!-- SACRED JOURNEY HUB: TWO-COLUMN MASTERPIECE -->
+  <section class="dashboard__journey-row" aria-labelledby="journey-heading">
+    <h2 id="journey-heading" class="sr-only">{{ 'dashboardActiveCardTitle' | uiTranslate }}</h2>
+
+    <!-- LEFT: ACTIVE READING SPOT & IN-DASHBOARD AUDIO -->
+    <div class="dashboard__active-card">
+      <div class="dashboard__active-top">
+        <div class="dashboard__active-meta">
+          <span class="dashboard__card-tag">{{ 'dashboardActiveCardTitle' | uiTranslate }}</span>
           @if (continueReadingSurah(); as cs) {
-          <p class="landing__continue-meta">
-            {{
-              'homeNavContinueDetail'
-                | uiTranslate
-                  : {
-                      name: cs.nameAr,
-                      ayah: formatUiNum(bm.ayah),
-                      total: formatUiNum(cs.versesCount),
-                    }
-            }}
+          <h3 class="dashboard__active-surah-title">
+            <span class="dashboard__active-ar" dir="rtl" lang="ar">{{ cs.nameAr }}</span>
+            <span class="dashboard__active-en">{{ cs.nameTranslit }}</span>
+          </h3>
+          <p class="dashboard__active-coords">
+            {{ 'surahWord' | uiTranslate }} {{ formatUiNum(cs.number) }} ·
+            {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(savedPlace()?.ayah ?? 1) }} {{ 'ofTotal' | uiTranslate: { total: formatUiNum(cs.versesCount) } }} ·
+            {{ revelationLabel(cs.revelationType) }}
+          </p>
+          } @else {
+          <h3 class="dashboard__active-surah-title">
+            <span class="dashboard__active-ar" dir="rtl" lang="ar">سُورَةُ الفَاتِحَة</span>
+            <span class="dashboard__active-en">Al-Fatihah</span>
+          </h3>
+          <p class="dashboard__active-coords">
+            {{ 'surahWord' | uiTranslate }} 1 · {{ 'verseLabel' | uiTranslate }} 1
           </p>
           }
         </div>
-        <span class="landing__continue-pct" aria-hidden="true">{{ formatUiNum(continueProgressPct()) }}%</span>
+        <div class="dashboard__active-pct-badge" aria-hidden="true">
+          {{ formatUiNum(continueProgressPct()) }}%
+        </div>
       </div>
+
+      <!-- Surah Reading Progress Bar -->
       <div
-        class="landing__continue-bar"
+        class="dashboard__meter-bar dashboard__meter-bar--lg"
         role="progressbar"
         [attr.aria-valuenow]="continueProgressPct()"
         aria-valuemin="0"
         aria-valuemax="100"
-        [attr.aria-label]="'homeContinueProgress' | uiTranslate: { pct: formatUiNum(continueProgressPct()) }"
       >
-        <span class="landing__continue-bar-fill" [style.width.%]="continueProgressPct()"></span>
+        <span class="dashboard__meter-fill dashboard__meter-fill--gold" [style.width.%]="continueProgressPct()"></span>
       </div>
-      <a
-        class="landing__btn landing__btn--primary landing__continue-cta"
-        [routerLink]="verseLink(bm.surah, bm.ayah)"
-        [fragment]="verseFragment(bm.ayah)"
-      >
-        {{ 'homeContinueCta' | uiTranslate }}
-      </a>
-    </section>
-    }
 
-    <section class="landing__khatam-wrap" [attr.aria-label]="'khatamTitle' | uiTranslate">
+      <!-- AUDIO PLAYER BAR FOR ACTIVE AYAH -->
+      <div class="dashboard__active-audio-bar">
+        @let curSurah = savedPlace()?.surah ?? 1;
+        @let curAyah = savedPlace()?.ayah ?? 1;
+        <button
+          type="button"
+          class="dashboard__audio-circle-btn"
+          [class.dashboard__audio-circle-btn--playing]="isAudioPlaying(curSurah, curAyah)"
+          (click)="playAudio(curSurah, curAyah, continueReadingSurah()?.nameTranslit)"
+          [attr.aria-label]="isAudioPlaying(curSurah, curAyah) ? ('dashboardAudioPause' | uiTranslate) : ('dashboardAudioPlay' | uiTranslate)"
+        >
+          @if (isAudioPlaying(curSurah, curAyah)) {
+          <span class="dashboard__audio-icon" aria-hidden="true">❚❚</span>
+          } @else {
+          <span class="dashboard__audio-icon" aria-hidden="true">▶</span>
+          }
+        </button>
+
+        <div class="dashboard__audio-info">
+          <div class="dashboard__audio-title-row">
+            <span class="dashboard__audio-label">
+              {{ isAudioPlaying(curSurah, curAyah) ? ('dashboardActiveAudioNow' | uiTranslate) : ('dashboardAudioPlay' | uiTranslate) }}
+            </span>
+            @if (isAudioPlaying(curSurah, curAyah)) {
+            <!-- Animated Waveform Bars -->
+            <div class="dashboard__audio-wave" aria-hidden="true">
+              <span class="dashboard__wave-bar"></span>
+              <span class="dashboard__wave-bar"></span>
+              <span class="dashboard__wave-bar"></span>
+              <span class="dashboard__wave-bar"></span>
+              <span class="dashboard__wave-bar"></span>
+            </div>
+            }
+          </div>
+          <span class="dashboard__audio-reciter-name">
+            {{ formatUiNum(curSurah) }}:{{ formatUiNum(curAyah) }} · {{ audio.reciters[0].name }}
+          </span>
+        </div>
+
+        <a
+          class="dashboard__btn dashboard__btn--primary dashboard__active-cta"
+          [routerLink]="verseLink(curSurah, curAyah)"
+          [fragment]="verseFragment(curAyah)"
+        >
+          <span>{{ 'homeContinueCta' | uiTranslate }}</span>
+          <span class="dashboard__btn-arrow" aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT: KHATAM COMPANION SHOWCASE -->
+    <div class="dashboard__khatam-card">
       <app-khatam-progress-card
         variant="hero"
         headingId="khatam-heading"
@@ -133,207 +343,366 @@
         (startFromBookmark)="startKhatamFromBookmark($event)"
         (startNew)="resetKhatam($event)"
       />
-    </section>
-  </div>
-
-  <section class="landing__quick" aria-labelledby="quick-heading">
-    <h2 id="quick-heading" class="landing__quick-title">{{ 'homeQuickActionsTitle' | uiTranslate }}</h2>
-    <ul class="landing__quick-grid">
-      <li>
-        <a class="landing__quick-card" routerLink="/themes">
-          <span class="landing__quick-icon" aria-hidden="true">◈</span>
-          <span class="landing__quick-card-title">{{ 'homeNavThemes' | uiTranslate }}</span>
-          <span class="landing__quick-card-meta">{{
-            'homeNavThemesHint' | uiTranslate: { count: formatUiNum(themeCount() || 30) }
-          }}</span>
-        </a>
-      </li>
-      <li>
-        <a class="landing__quick-card" routerLink="/blog">
-          <span class="landing__quick-icon" aria-hidden="true">✦</span>
-          <span class="landing__quick-card-title">{{ 'homeNavBlog' | uiTranslate }}</span>
-          <span class="landing__quick-card-meta">{{ 'homeNavBlogHint' | uiTranslate }}</span>
-        </a>
-      </li>
-      <li>
-        <a class="landing__quick-card" routerLink="/adhkar">
-          <span class="landing__quick-icon" aria-hidden="true">🤲</span>
-          <span class="landing__quick-card-title">{{ 'homeNavAdhkar' | uiTranslate }}</span>
-          <span class="landing__quick-card-meta">{{ 'homeNavAdhkarHint' | uiTranslate }}</span>
-        </a>
-      </li>
-      <li>
-        <a class="landing__quick-card" routerLink="/learn">
-          <span class="landing__quick-icon" aria-hidden="true">ا</span>
-          <span class="landing__quick-card-title">{{ 'homeNavLearn' | uiTranslate }}</span>
-          <span class="landing__quick-card-meta">{{ 'homeNavLearnHint' | uiTranslate }}</span>
-        </a>
-      </li>
-      <li>
-        <a class="landing__quick-card" routerLink="/page/1">
-          <span class="landing__quick-icon" aria-hidden="true">▤</span>
-          <span class="landing__quick-card-title">{{ 'homeNavPages' | uiTranslate }}</span>
-          <span class="landing__quick-card-meta">{{ 'homeNavPagesHint' | uiTranslate }}</span>
-        </a>
-      </li>
-      <li>
-        <a class="landing__quick-card" routerLink="/juz/1">
-          <span class="landing__quick-icon" aria-hidden="true">▥</span>
-          <span class="landing__quick-card-title">{{ 'homeNavJuz' | uiTranslate }}</span>
-          <span class="landing__quick-card-meta">{{ 'homeNavJuzHint' | uiTranslate }}</span>
-        </a>
-      </li>
-      <li>
-        <a class="landing__quick-card" href="#surah-index">
-          <span class="landing__quick-icon" aria-hidden="true">☰</span>
-          <span class="landing__quick-card-title">{{ 'homeNavIndex' | uiTranslate }}</span>
-          <span class="landing__quick-card-meta">{{ 'homeIndexSubtitle' | uiTranslate }}</span>
-        </a>
-      </li>
-      <li>
-        <a class="landing__quick-card" href="#khatam-heading">
-          <span class="landing__quick-icon" aria-hidden="true">◎</span>
-          <span class="landing__quick-card-title">{{ 'homeNavKhatam' | uiTranslate }}</span>
-          <span class="landing__quick-card-meta">{{ 'homeNavKhatamHint' | uiTranslate }}</span>
-        </a>
-      </li>
-      <li>
-        <a class="landing__quick-card" [routerLink]="['/', randomSurahNumber()]">
-          <span class="landing__quick-icon" aria-hidden="true">↻</span>
-          <span class="landing__quick-card-title">{{ 'homeQuickActionRandom' | uiTranslate }}</span>
-          <span class="landing__quick-card-meta">{{
-            'homeQuickActionRandomHint' | uiTranslate: { num: formatUiNum(randomSurahNumber()) }
-          }}</span>
-        </a>
-      </li>
-    </ul>
+    </div>
   </section>
 
-  <section class="landing__popular" aria-labelledby="popular-heading">
-    <h2 id="popular-heading" class="landing__section-title">{{ 'homePopularTitle' | uiTranslate }}</h2>
-    <p class="landing__index-subtitle">{{ 'homePopularSubtitle' | uiTranslate }}</p>
-    <ul class="landing__popular-list">
+  <!-- DAILY SPIRITUAL INSPIRATIONS (3-CARD GRID) -->
+  <section class="dashboard__inspirations" aria-labelledby="inspirations-heading">
+    <div class="dashboard__section-header">
+      <div>
+        <p class="dashboard__section-kicker">{{ 'homeFeaturedKicker' | uiTranslate }}</p>
+        <h2 id="inspirations-heading" class="dashboard__section-title">{{ 'homeHighlightsTitle' | uiTranslate }}</h2>
+      </div>
+    </div>
+
+    <div class="dashboard__inspirations-grid">
+      <!-- 1: AYAH OF THE DAY -->
+      @if (daily(); as dv) {
+      <article class="dashboard__card dashboard__card--highlight" aria-labelledby="daily-verse-heading">
+        <div class="dashboard__card-header">
+          <div class="dashboard__card-tag-wrap">
+            <span class="dashboard__card-tag dashboard__card-tag--gold">✦ {{ 'homeFeaturedKicker' | uiTranslate }}</span>
+          </div>
+          <span class="dashboard__card-ref">
+            <span dir="rtl" lang="ar">{{ dv.surahNameAr }}</span>
+            · {{ formatUiNum(dv.surah) }}:{{ formatUiNum(dv.ayah) }}
+          </span>
+        </div>
+
+        <blockquote class="dashboard__quote-block">
+          <p class="dashboard__ayah-arabic" dir="rtl" lang="ar">
+            {{ dv.arabic }}
+            <span class="dashboard__ayah-marker" aria-hidden="true">﴿{{ formatUiNum(dv.ayah) }}﴾</span>
+          </p>
+          <p
+            class="dashboard__ayah-trans"
+            [class.dashboard__ayah-trans--ur]="dailyVerseTranslationMeta(dv).lang === 'ur'"
+            [attr.dir]="dailyVerseTranslationMeta(dv).dir"
+            [attr.lang]="dailyVerseTranslationMeta(dv).lang"
+          >
+            {{ dailyVerseTranslation(dv) }}
+          </p>
+        </blockquote>
+
+        <div class="dashboard__card-actions">
+          <button
+            type="button"
+            class="dashboard__action-btn"
+            [class.dashboard__action-btn--playing]="isAudioPlaying(dv.surah, dv.ayah)"
+            (click)="playAudio(dv.surah, dv.ayah, dv.surahNameAr)"
+            [attr.aria-label]="isAudioPlaying(dv.surah, dv.ayah) ? ('dashboardAudioPause' | uiTranslate) : ('dashboardAudioPlay' | uiTranslate)"
+          >
+            <span aria-hidden="true">{{ isAudioPlaying(dv.surah, dv.ayah) ? '❚❚' : '▶' }}</span>
+            <span>{{ isAudioPlaying(dv.surah, dv.ayah) ? ('dashboardAudioPause' | uiTranslate) : ('dashboardAudioPlay' | uiTranslate) }}</span>
+          </button>
+
+          <a
+            class="dashboard__action-btn dashboard__action-btn--primary"
+            [routerLink]="verseLink(dv.surah, dv.ayah)"
+            [fragment]="verseFragment(dv.ayah)"
+          >
+            <span>{{ 'homeFeaturedReadVerse' | uiTranslate }}</span>
+          </a>
+
+          <button
+            type="button"
+            class="dashboard__action-btn dashboard__action-btn--ghost"
+            (click)="copyVerse(dv.arabic, dv.surahNameAr + ' ' + dv.surah + ':' + dv.ayah)"
+            [title]="'dashboardVerseShare' | uiTranslate"
+          >
+            <span>📋</span>
+          </button>
+        </div>
+      </article>
+      }
+
+      <!-- 2: DAILY DHIKR & SUPPLICATION -->
+      @if (currentDhikrItem(); as dhikr) {
+      <article class="dashboard__card" aria-labelledby="daily-dhikr-heading">
+        <div class="dashboard__card-header">
+          <div class="dashboard__card-tag-wrap">
+            <span class="dashboard__card-tag dashboard__card-tag--emerald">🤲 {{ 'dashboardDailyDhikrTitle' | uiTranslate }}</span>
+          </div>
+          <span class="dashboard__card-ref">
+            {{ currentAdhkarCollection() ? (adhkarService.pickLocalized(currentAdhkarCollection()!.title)) : '' }}
+          </span>
+        </div>
+
+        <blockquote class="dashboard__quote-block">
+          <p class="dashboard__ayah-arabic dashboard__ayah-arabic--compact" dir="rtl" lang="ar">
+            {{ dhikr.arabic }}
+          </p>
+          <p class="dashboard__ayah-trans">
+            {{ localizedDhikrText(dhikr) }}
+          </p>
+          @if (dhikr.source) {
+          <p class="dashboard__dhikr-source">
+            <span class="dashboard__source-icon" aria-hidden="true">📜</span>
+            <span>{{ dhikr.source }}</span>
+          </p>
+          }
+        </blockquote>
+
+        <div class="dashboard__card-actions dashboard__card-actions--dhikr">
+          <button
+            type="button"
+            class="dashboard__tap-counter-btn"
+            [class.dashboard__tap-counter-btn--done]="isDhikrCompleted()"
+            (click)="onDhikrTap()"
+          >
+            <span class="dashboard__tap-badge" aria-hidden="true">
+              {{ isDhikrCompleted() ? '✓' : formatUiNum(currentDhikrCount()) }}
+            </span>
+            <div class="dashboard__tap-text">
+              <span class="dashboard__tap-label">
+                {{ isDhikrCompleted() ? ('dashboardDailyDhikrCompleted' | uiTranslate) : ('dashboardDailyDhikrTap' | uiTranslate) }}
+              </span>
+              <span class="dashboard__tap-goal">
+                {{ formatUiNum(currentDhikrCount()) }} / {{ formatUiNum(currentDhikrTarget()) }}
+              </span>
+            </div>
+          </button>
+
+          <a class="dashboard__action-btn dashboard__action-btn--ghost" routerLink="/adhkar">
+            <span>{{ 'dashboardDhikrExploreAll' | uiTranslate }}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </article>
+      }
+
+      <!-- 3: TOPIC INSPIRATION -->
+      @if (dailyTopic(); as topic) {
+      <article class="dashboard__card" aria-labelledby="daily-topic-heading">
+        <div class="dashboard__card-header">
+          <div class="dashboard__card-tag-wrap">
+            <span class="dashboard__card-tag dashboard__card-tag--teal">🧭 {{ 'homeTopicTodayKicker' | uiTranslate }}</span>
+          </div>
+          <span class="dashboard__card-ref">{{ localizedTopicCategory(topic) }}</span>
+        </div>
+
+        <div class="dashboard__topic-body">
+          <h3 id="daily-topic-heading" class="dashboard__topic-title">
+            <a class="dashboard__topic-title-link" [routerLink]="['/themes', topic.theme.id]">
+              {{ localizedThemeTitle(topic.theme) }}
+            </a>
+          </h3>
+
+          <blockquote class="dashboard__quote-block">
+            <p class="dashboard__ayah-arabic dashboard__ayah-arabic--compact" dir="rtl" lang="ar">
+              {{ topic.verse.verse.ar }}
+              <span class="dashboard__ayah-marker" aria-hidden="true">﴿{{ formatUiNum(topic.verse.ayah) }}﴾</span>
+            </p>
+            <p
+              class="dashboard__ayah-trans"
+              [class.dashboard__ayah-trans--ur]="dailyTopicTranslationMeta(topic).lang === 'ur'"
+              [attr.dir]="dailyTopicTranslationMeta(topic).dir"
+              [attr.lang]="dailyTopicTranslationMeta(topic).lang"
+            >
+              {{ dailyTopicTranslation(topic) }}
+            </p>
+          </blockquote>
+        </div>
+
+        <div class="dashboard__card-actions">
+          <a
+            class="dashboard__action-btn dashboard__action-btn--primary"
+            [routerLink]="verseLink(topic.verse.surah, topic.verse.ayah)"
+            [fragment]="verseFragment(topic.verse.ayah)"
+          >
+            <span>{{ 'homeTopicTodayReadVerse' | uiTranslate }}</span>
+          </a>
+          <a class="dashboard__action-btn dashboard__action-btn--ghost" [routerLink]="['/themes', topic.theme.id]">
+            <span>{{ 'homeTopicTodayBrowseTopic' | uiTranslate }}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </article>
+      }
+    </div>
+  </section>
+
+  <!-- 8 CURATED PORTALS & HUBS -->
+  <section class="dashboard__portals" aria-labelledby="portals-heading">
+    <div class="dashboard__section-header">
+      <div>
+        <p class="dashboard__section-kicker">{{ 'dashboardQuickExplore' | uiTranslate }}</p>
+        <h2 id="portals-heading" class="dashboard__section-title">{{ 'homeQuickActionsTitle' | uiTranslate }}</h2>
+      </div>
+    </div>
+
+    <div class="dashboard__portals-grid">
+      <!-- 1: All Surahs -->
+      <a class="dashboard__portal-card" href="#surah-explorer">
+        <div class="dashboard__portal-icon-wrap dashboard__portal-icon-wrap--gold" aria-hidden="true">
+          <span>📖</span>
+        </div>
+        <div class="dashboard__portal-info">
+          <h3 class="dashboard__portal-title">{{ 'homeNavIndex' | uiTranslate }}</h3>
+          <p class="dashboard__portal-meta">114 {{ 'homeStatSurahs' | uiTranslate }} · 6,236 {{ 'homeStatVerses' | uiTranslate }}</p>
+        </div>
+        <span class="dashboard__portal-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <!-- 2: Mushaf Pages -->
+      <a class="dashboard__portal-card" routerLink="/page/1">
+        <div class="dashboard__portal-icon-wrap dashboard__portal-icon-wrap--emerald" aria-hidden="true">
+          <span>▤</span>
+        </div>
+        <div class="dashboard__portal-info">
+          <h3 class="dashboard__portal-title">{{ 'homeNavPages' | uiTranslate }}</h3>
+          <p class="dashboard__portal-meta">604 {{ 'homeStatPages' | uiTranslate }} · Madinah 15-line</p>
+        </div>
+        <span class="dashboard__portal-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <!-- 3: 30 Juz -->
+      <a class="dashboard__portal-card" routerLink="/juz/1">
+        <div class="dashboard__portal-icon-wrap dashboard__portal-icon-wrap--teal" aria-hidden="true">
+          <span>▥</span>
+        </div>
+        <div class="dashboard__portal-info">
+          <h3 class="dashboard__portal-title">{{ 'homeNavJuz' | uiTranslate }}</h3>
+          <p class="dashboard__portal-meta">30 {{ 'homeStatJuz' | uiTranslate }} · Complete Quran</p>
+        </div>
+        <span class="dashboard__portal-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <!-- 4: Daily Adhkar -->
+      <a class="dashboard__portal-card" routerLink="/adhkar">
+        <div class="dashboard__portal-icon-wrap dashboard__portal-icon-wrap--gold" aria-hidden="true">
+          <span>🤲</span>
+        </div>
+        <div class="dashboard__portal-info">
+          <h3 class="dashboard__portal-title">{{ 'homeNavAdhkar' | uiTranslate }}</h3>
+          <p class="dashboard__portal-meta">{{ 'homeNavAdhkarHint' | uiTranslate }}</p>
+        </div>
+        <span class="dashboard__portal-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <!-- 5: Learn Quran -->
+      <a class="dashboard__portal-card" routerLink="/learn">
+        <div class="dashboard__portal-icon-wrap dashboard__portal-icon-wrap--emerald" aria-hidden="true">
+          <span>ا</span>
+        </div>
+        <div class="dashboard__portal-info">
+          <h3 class="dashboard__portal-title">{{ 'homeNavLearn' | uiTranslate }}</h3>
+          <p class="dashboard__portal-meta">{{ 'homeNavLearnHint' | uiTranslate }}</p>
+        </div>
+        <span class="dashboard__portal-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <!-- 6: Thematic Topics -->
+      <a class="dashboard__portal-card" routerLink="/themes">
+        <div class="dashboard__portal-icon-wrap dashboard__portal-icon-wrap--teal" aria-hidden="true">
+          <span>🧭</span>
+        </div>
+        <div class="dashboard__portal-info">
+          <h3 class="dashboard__portal-title">{{ 'homeNavThemes' | uiTranslate }}</h3>
+          <p class="dashboard__portal-meta">{{ formatUiNum(themeCount() || 30) }} {{ 'homeStatThemes' | uiTranslate }}</p>
+        </div>
+        <span class="dashboard__portal-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <!-- 7: Islamic Stories -->
+      <a class="dashboard__portal-card" routerLink="/blog">
+        <div class="dashboard__portal-icon-wrap dashboard__portal-icon-wrap--gold" aria-hidden="true">
+          <span>✦</span>
+        </div>
+        <div class="dashboard__portal-info">
+          <h3 class="dashboard__portal-title">{{ 'homeNavBlog' | uiTranslate }}</h3>
+          <p class="dashboard__portal-meta">{{ formatUiNum(blogCount() || 65) }}+ {{ 'homeStatBlog' | uiTranslate }}</p>
+        </div>
+        <span class="dashboard__portal-arrow" aria-hidden="true">→</span>
+      </a>
+
+      <!-- 8: Surprise Me / Random -->
+      <a class="dashboard__portal-card" [routerLink]="['/', randomSurahNumber()]">
+        <div class="dashboard__portal-icon-wrap dashboard__portal-icon-wrap--purple" aria-hidden="true">
+          <span>🎲</span>
+        </div>
+        <div class="dashboard__portal-info">
+          <h3 class="dashboard__portal-title">{{ 'homeQuickActionRandom' | uiTranslate }}</h3>
+          <p class="dashboard__portal-meta">{{ 'homeQuickActionRandomHint' | uiTranslate: { num: formatUiNum(randomSurahNumber()) } }}</p>
+        </div>
+        <span class="dashboard__portal-arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- POPULAR & BELOVED SURAHS SHOWCASE -->
+  <section class="dashboard__popular" aria-labelledby="popular-heading">
+    <div class="dashboard__section-header">
+      <div>
+        <p class="dashboard__section-kicker">✦ {{ 'homePopularTitle' | uiTranslate }}</p>
+        <h2 id="popular-heading" class="dashboard__section-title">{{ 'dashboardPopularSurahs' | uiTranslate }}</h2>
+      </div>
+      <p class="dashboard__section-desc">{{ 'homePopularSubtitle' | uiTranslate }}</p>
+    </div>
+
+    <div class="dashboard__popular-grid">
       @for (num of popularSurahs; track num) {
       @if (surahByNumber(num); as s) {
-      <li>
-        <a
-          class="landing__popular-chip"
-          [routerLink]="['/', s.number]"
-          [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
-        >
-          <span class="landing__popular-num">{{ formatUiNum(s.number) }}</span>
-          <span class="landing__popular-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
-        </a>
-      </li>
+      <div class="dashboard__pop-card">
+        <div class="dashboard__pop-top">
+          <!-- 8-point Islamic star number badge -->
+          <div class="dashboard__star-badge" aria-hidden="true">
+            <span class="dashboard__star-num">{{ formatUiNum(s.number) }}</span>
+          </div>
+
+          <div class="dashboard__pop-names">
+            <span class="dashboard__pop-ar" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+            <span class="dashboard__pop-en">{{ s.nameTranslit }}</span>
+          </div>
+
+          <span
+            class="dashboard__rev-badge"
+            [class.dashboard__rev-badge--meccan]="s.revelationType === 'meccan'"
+            [class.dashboard__rev-badge--medinan]="s.revelationType === 'medinan'"
+            [title]="revelationLabel(s.revelationType)"
+          >
+            {{ s.revelationType === 'meccan' ? '🕋' : '🕌' }}
+          </span>
+        </div>
+
+        <div class="dashboard__pop-meta">
+          <span>{{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}</span>
+          <span>·</span>
+          <span>{{ revelationLabel(s.revelationType) }}</span>
+        </div>
+
+        <div class="dashboard__pop-actions">
+          <button
+            type="button"
+            class="dashboard__pop-action-btn"
+            [class.dashboard__pop-action-btn--playing]="isAudioPlaying(s.number, 1)"
+            (click)="playAudio(s.number, 1, s.nameTranslit)"
+            [title]="'dashboardPopularListen' | uiTranslate"
+          >
+            <span aria-hidden="true">{{ isAudioPlaying(s.number, 1) ? '❚❚' : '▶' }}</span>
+            <span>{{ 'dashboardPopularListen' | uiTranslate }}</span>
+          </button>
+
+          <a class="dashboard__pop-action-btn dashboard__pop-action-btn--read" [routerLink]="['/', s.number]">
+            <span>{{ 'dashboardPopularRead' | uiTranslate }}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
       }
       }
-    </ul>
+    </div>
   </section>
 
-  <div class="landing__highlights">
-    @if (daily(); as dv) {
-    <section id="featured-today" class="landing__featured" aria-labelledby="featured-heading">
-      <div class="landing__featured-intro">
-        <p class="landing__featured-kicker">{{ 'homeFeaturedKicker' | uiTranslate }}</p>
-        <h2 id="featured-heading" class="landing__section-title">
-          @if (featuredSurah(); as fs) {
-          {{ fs.nameAr }}
-          <span class="landing__featured-translit" dir="ltr" lang="en">{{ fs.nameTranslit }}</span>
-          }
-        </h2>
-        @if (featuredSurah(); as fs) {
-        <p class="landing__featured-meta">
-          {{ 'surahWord' | uiTranslate }} {{ formatUiNum(fs.number) }} ·
-          {{ formatUiNum(fs.versesCount) }} {{ 'versesWord' | uiTranslate }} ·
-          {{ revelationLabel(fs.revelationType) }}
-        </p>
-        }
-      </div>
-
-      <blockquote class="landing__verse-card">
-        <p class="landing__verse-ar" dir="rtl" lang="ar">{{ dv.arabic }}</p>
-        <p class="landing__verse-ref">
-          {{ 'homeFeaturedSurahLabel' | uiTranslate }}
-          <span dir="rtl" lang="ar">{{ dv.surahNameAr }}</span>
-          · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(dv.ayah) }}
-        </p>
-        <p
-          class="landing__verse-en"
-          [class.landing__verse-en--ur]="dailyVerseTranslationMeta(dv).lang === 'ur'"
-          [attr.dir]="dailyVerseTranslationMeta(dv).dir"
-          [attr.lang]="dailyVerseTranslationMeta(dv).lang"
-        >
-          {{ dailyVerseTranslation(dv) }}
-        </p>
-      </blockquote>
-
-      <div class="landing__featured-actions">
-        <a
-          class="landing__btn landing__btn--primary"
-          [routerLink]="verseLink(dv.surah, dv.ayah)"
-          [fragment]="verseFragment(dv.ayah)"
-        >
-          {{ 'homeFeaturedReadVerse' | uiTranslate }}
-        </a>
-        <a class="landing__btn landing__btn--ghost" [routerLink]="['/', dv.surah]">
-          {{ 'homeFeaturedReadSurah' | uiTranslate }}
-        </a>
-      </div>
-    </section>
-    }
-
-    @if (dailyTopic(); as topic) {
-    <section id="topic-today" class="landing__topic-today" aria-labelledby="topic-today-heading">
-      <div class="landing__topic-today-intro">
-        <p class="landing__topic-today-kicker">{{ 'homeTopicTodayKicker' | uiTranslate }}</p>
-        <h2 id="topic-today-heading" class="landing__section-title">
-          <a class="landing__topic-today-link" [routerLink]="['/themes', topic.theme.id]">
-            {{ localizedThemeTitle(topic.theme) }}
-          </a>
-        </h2>
-        <p class="landing__topic-today-meta">{{ localizedTopicCategory(topic) }}</p>
-      </div>
-
-      <blockquote class="landing__verse-card">
-        <p class="landing__verse-ar" dir="rtl" lang="ar">{{ topic.verse.verse.ar }}</p>
-        <p class="landing__verse-ref">
-          {{ 'homeFeaturedSurahLabel' | uiTranslate }}
-          <span dir="rtl" lang="ar">{{ topic.verse.surahNameAr }}</span>
-          · {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(topic.verse.ayah) }}
-        </p>
-        <p
-          class="landing__verse-en"
-          [class.landing__verse-en--ur]="dailyTopicTranslationMeta(topic).lang === 'ur'"
-          [attr.dir]="dailyTopicTranslationMeta(topic).dir"
-          [attr.lang]="dailyTopicTranslationMeta(topic).lang"
-        >
-          {{ dailyTopicTranslation(topic) }}
-        </p>
-      </blockquote>
-
-      <div class="landing__featured-actions">
-        <a
-          class="landing__btn landing__btn--primary"
-          [routerLink]="verseLink(topic.verse.surah, topic.verse.ayah)"
-          [fragment]="verseFragment(topic.verse.ayah)"
-        >
-          {{ 'homeTopicTodayReadVerse' | uiTranslate }}
-        </a>
-        <a class="landing__btn landing__btn--ghost" [routerLink]="['/themes', topic.theme.id]">
-          {{ 'homeTopicTodayBrowseTopic' | uiTranslate }}
-        </a>
-      </div>
-    </section>
-    }
-  </div>
-
-  <section id="surah-index" class="landing__index" aria-labelledby="index-heading">
-    <div class="landing__index-head">
+  <!-- COMPREHENSIVE SURAH & JUZ EXPLORER -->
+  <section id="surah-explorer" class="dashboard__explorer" aria-labelledby="explorer-heading">
+    <div class="dashboard__explorer-header">
       <div>
-        <h2 id="index-heading" class="landing__section-title">{{ 'homeIndexTitle' | uiTranslate }}</h2>
-        <p class="landing__index-subtitle">{{ 'homeIndexSubtitle' | uiTranslate }}</p>
+        <p class="dashboard__section-kicker">114 {{ 'homeStatSurahs' | uiTranslate }}</p>
+        <h2 id="explorer-heading" class="dashboard__section-title">{{ 'dashboardSurahExplorer' | uiTranslate }}</h2>
       </div>
-      <p class="landing__index-count" aria-live="polite">
+
+      <p class="dashboard__explorer-count" aria-live="polite">
         {{
           'homeIndexCount'
             | uiTranslate: {
@@ -344,139 +713,271 @@
       </p>
     </div>
 
-    <div class="landing__index-controls">
-      <div class="landing__filters" role="group" [attr.aria-label]="'homeFilterAria' | uiTranslate">
+    <!-- EXPLORER CONTROLS & FILTER TABS -->
+    <div class="dashboard__explorer-controls">
+      <!-- Revelation Period Filters -->
+      <div class="dashboard__filter-tabs" role="group" [attr.aria-label]="'homeFilterAria' | uiTranslate">
         <button
           type="button"
-          class="landing__filter-chip"
-          [class.landing__filter-chip--active]="revelationFilter() === 'all'"
+          class="dashboard__tab-btn"
+          [class.dashboard__tab-btn--active]="revelationFilter() === 'all'"
           (click)="setRevelationFilter('all')"
         >
-          {{ 'homeFilterAll' | uiTranslate }} ({{ formatUiNum(surahs().length) }})
+          <span>{{ 'dashboardFilterAll' | uiTranslate }}</span>
+          <span class="dashboard__tab-count">{{ formatUiNum(surahs().length) }}</span>
         </button>
+
         <button
           type="button"
-          class="landing__filter-chip"
-          [class.landing__filter-chip--active]="revelationFilter() === 'meccan'"
+          class="dashboard__tab-btn"
+          [class.dashboard__tab-btn--active]="revelationFilter() === 'meccan'"
           (click)="setRevelationFilter('meccan')"
         >
-          {{ 'factTypeMeccan' | uiTranslate }} ({{ formatUiNum(meccanCount()) }})
+          <span>🕋 {{ 'dashboardFilterMeccan' | uiTranslate }}</span>
+          <span class="dashboard__tab-count">{{ formatUiNum(meccanCount()) }}</span>
         </button>
+
         <button
           type="button"
-          class="landing__filter-chip"
-          [class.landing__filter-chip--active]="revelationFilter() === 'medinan'"
+          class="dashboard__tab-btn"
+          [class.dashboard__tab-btn--active]="revelationFilter() === 'medinan'"
           (click)="setRevelationFilter('medinan')"
         >
-          {{ 'factTypeMedinan' | uiTranslate }} ({{ formatUiNum(medinanCount()) }})
+          <span>🕌 {{ 'dashboardFilterMedinan' | uiTranslate }}</span>
+          <span class="dashboard__tab-count">{{ formatUiNum(medinanCount()) }}</span>
         </button>
+
+        @if (savedPlace(); as bm) {
+        <button
+          type="button"
+          class="dashboard__tab-btn"
+          [class.dashboard__tab-btn--active]="revelationFilter() === 'bookmarked'"
+          (click)="setRevelationFilter('bookmarked')"
+        >
+          <span>🔖 {{ 'dashboardFilterBookmark' | uiTranslate }}</span>
+        </button>
+        }
       </div>
 
-      <div class="landing__layout-toggle" role="group" [attr.aria-label]="'homeIndexLayoutAria' | uiTranslate">
+      <!-- Layout Toggle: Grid / List / Juz -->
+      <div class="dashboard__layout-group" role="group" aria-label="Layout">
         <button
           type="button"
-          class="landing__filter-chip"
-          [class.landing__filter-chip--active]="indexLayout() === 'list'"
-          [disabled]="!mushafPayload()"
-          (click)="setIndexLayout('list')"
+          class="dashboard__layout-btn"
+          [class.dashboard__layout-btn--active]="indexLayout() === 'grid'"
+          (click)="setIndexLayout('grid')"
+          [attr.aria-pressed]="indexLayout() === 'grid'"
+          [title]="'dashboardViewGrid' | uiTranslate"
         >
-          {{ 'homeIndexLayoutList' | uiTranslate }}
+          <span aria-hidden="true">⊞</span>
+          <span class="dashboard__layout-label">{{ 'dashboardViewGrid' | uiTranslate }}</span>
         </button>
+
         <button
           type="button"
-          class="landing__filter-chip"
-          [class.landing__filter-chip--active]="indexLayout() === 'juz'"
-          [disabled]="!mushafPayload()"
-          (click)="setIndexLayout('juz')"
+          class="dashboard__layout-btn"
+          [class.dashboard__layout-btn--active]="indexLayout() === 'list'"
+          (click)="setIndexLayout('list')"
+          [attr.aria-pressed]="indexLayout() === 'list'"
+          [title]="'dashboardViewList' | uiTranslate"
         >
-          {{ 'homeIndexLayoutJuz' | uiTranslate }}
+          <span aria-hidden="true">☰</span>
+          <span class="dashboard__layout-label">{{ 'dashboardViewList' | uiTranslate }}</span>
+        </button>
+
+        <button
+          type="button"
+          class="dashboard__layout-btn"
+          [class.dashboard__layout-btn--active]="indexLayout() === 'juz'"
+          (click)="setIndexLayout('juz')"
+          [attr.aria-pressed]="indexLayout() === 'juz'"
+          [title]="'dashboardViewJuz' | uiTranslate"
+        >
+          <span aria-hidden="true">▥</span>
+          <span class="dashboard__layout-label">{{ 'dashboardViewJuz' | uiTranslate }}</span>
         </button>
       </div>
     </div>
 
-    <div class="landing__search" role="search">
-      <label class="landing__tool-label" for="surah-index-search">{{ 'homeIndexSearchLabel' | uiTranslate }}</label>
+    <!-- QUICK JUMP SEARCH FILTER INPUT -->
+    <div class="dashboard__search-box">
+      <span class="dashboard__search-icon" aria-hidden="true">🔍</span>
       <input
-        id="surah-index-search"
-        class="landing__search-input"
         type="search"
-        autocomplete="off"
-        spellcheck="false"
-        [attr.placeholder]="'homeIndexSearchPlaceholder' | uiTranslate"
+        class="dashboard__search-input"
+        [placeholder]="'homeQuickJumpPlaceholder' | uiTranslate"
         [ngModel]="indexQuery()"
         (ngModelChange)="indexQuery.set($event)"
+        [attr.aria-label]="'homeQuickJumpLabel' | uiTranslate"
       />
+      @if (indexQuery()) {
+      <button
+        type="button"
+        class="dashboard__clear-search"
+        (click)="indexQuery.set('')"
+        aria-label="Clear search"
+      >
+        ✕
+      </button>
+      }
     </div>
 
-    @if (filteredSurahs().length === 0) {
-    <p class="landing__index-empty">{{ 'homeIndexEmpty' | uiTranslate }}</p>
-    } @else if (indexLayout() === 'juz' && mushafPayload()) {
-    <nav class="landing__juz-nav" aria-labelledby="index-heading">
-      <ul class="landing__juz-groups">
-        @for (group of indexJuzGroups(); track group.juz) {
-        <li class="landing__juz-block">
-          <div class="landing__juz-block-head">
-            <h3 [id]="'juz-block-' + group.juz" class="landing__juz-block-title">
-              {{ 'homeJuzGroupTitle' | uiTranslate: { juz: formatUiNum(group.juz) } }}
-            </h3>
-            <a
-              class="landing__juz-block-link"
-              [routerLink]="['/juz', group.juz]"
-              [attr.aria-label]="'homeJuzGroupReadAria' | uiTranslate: { juz: formatUiNum(group.juz) }"
-            >
-              {{ 'homeJuzGroupRead' | uiTranslate }}
+    <!-- 1: GRID VIEW -->
+    @if (indexLayout() === 'grid') {
+    <div class="dashboard__surah-grid">
+      @for (s of filteredSurahs(); track s.number) {
+      <div
+        class="dashboard__surah-card"
+        [class.dashboard__surah-card--bookmarked]="savedPlace()?.surah === s.number"
+      >
+        <div class="dashboard__surah-head">
+          <div class="dashboard__star-badge" aria-hidden="true">
+            <span class="dashboard__star-num">{{ formatUiNum(s.number) }}</span>
+          </div>
+
+          <div class="dashboard__surah-names">
+            <a class="dashboard__surah-title-link" [routerLink]="['/', s.number]">
+              <span class="dashboard__surah-ar" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+            </a>
+            <span class="dashboard__surah-en">{{ s.nameTranslit }}</span>
+          </div>
+
+          <span
+            class="dashboard__rev-badge"
+            [class.dashboard__rev-badge--meccan]="s.revelationType === 'meccan'"
+            [class.dashboard__rev-badge--medinan]="s.revelationType === 'medinan'"
+            [title]="revelationLabel(s.revelationType)"
+          >
+            {{ s.revelationType === 'meccan' ? '🕋' : '🕌' }}
+          </span>
+        </div>
+
+        <div class="dashboard__surah-details">
+          <span>{{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}</span>
+          @if (savedPlace()?.surah === s.number) {
+          <span class="dashboard__surah-bookmark-chip">
+            🔖 {{ 'verseLabel' | uiTranslate }} {{ formatUiNum(savedPlace()!.ayah) }}
+          </span>
+          }
+        </div>
+
+        <div class="dashboard__surah-card-actions">
+          <button
+            type="button"
+            class="dashboard__surah-mini-btn"
+            [class.dashboard__surah-mini-btn--playing]="isAudioPlaying(s.number, 1)"
+            (click)="playAudio(s.number, 1, s.nameTranslit)"
+            [title]="'dashboardPopularListen' | uiTranslate"
+          >
+            <span aria-hidden="true">{{ isAudioPlaying(s.number, 1) ? '❚❚' : '▶' }}</span>
+          </button>
+
+          <a class="dashboard__surah-open-link" [routerLink]="['/', s.number]">
+            <span>{{ 'homePopularRead' | uiTranslate }}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- 2: LIST VIEW -->
+    @else if (indexLayout() === 'list') {
+    <div class="dashboard__surah-list">
+      @for (s of filteredSurahs(); track s.number) {
+      <div
+        class="dashboard__list-row"
+        [class.dashboard__list-row--bookmarked]="savedPlace()?.surah === s.number"
+      >
+        <div class="dashboard__list-start">
+          <span class="dashboard__list-num">{{ formatUiNum(s.number) }}</span>
+          <div class="dashboard__list-names">
+            <a class="dashboard__list-link" [routerLink]="['/', s.number]">
+              <span class="dashboard__list-ar" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+              <span class="dashboard__list-en">{{ s.nameTranslit }}</span>
             </a>
           </div>
-          <ul class="landing__grid landing__grid--compact">
-            @for (s of group.surahs; track s.number) {
-            <li>
-              <a
-                class="landing__surah-card"
-                [routerLink]="['/', s.number]"
-                [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
-              >
-                <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
-                <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
-                <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
-                <span class="landing__surah-meta">
-                  <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
-                  <span class="landing__surah-verses">
-                    {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
-                  </span>
-                </span>
-              </a>
-            </li>
-            }
-          </ul>
-        </li>
-        }
-      </ul>
-    </nav>
-    } @else {
-    <nav class="landing__surah-nav" aria-labelledby="index-heading">
-      <ul class="landing__grid">
-        @for (s of filteredSurahs(); track s.number) {
-        <li>
-          <a
-            class="landing__surah-card"
-            [routerLink]="['/', s.number]"
-            [attr.aria-label]="'homeSurahCardAria' | uiTranslate: { num: formatUiNum(s.number), name: s.nameAr }"
+        </div>
+
+        <div class="dashboard__list-middle">
+          <span
+            class="dashboard__rev-badge dashboard__rev-badge--sm"
+            [class.dashboard__rev-badge--meccan]="s.revelationType === 'meccan'"
+            [class.dashboard__rev-badge--medinan]="s.revelationType === 'medinan'"
           >
-            <span class="landing__surah-num" aria-hidden="true">{{ formatUiNum(s.number) }}</span>
-            <span class="landing__surah-name" dir="rtl" lang="ar">{{ s.nameAr }}</span>
-            <span class="landing__surah-translit" dir="ltr" lang="en">{{ s.nameTranslit }}</span>
-            <span class="landing__surah-meta">
-              <span class="landing__surah-chip">{{ revelationLabel(s.revelationType) }}</span>
-              <span class="landing__surah-verses">
-                {{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}
-              </span>
-            </span>
+            {{ revelationLabel(s.revelationType) }}
+          </span>
+          <span class="dashboard__list-verses">{{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}</span>
+          @if (savedPlace()?.surah === s.number) {
+          <span class="dashboard__surah-bookmark-chip">
+            🔖 {{ formatUiNum(savedPlace()!.ayah) }}
+          </span>
+          }
+        </div>
+
+        <div class="dashboard__list-end">
+          <button
+            type="button"
+            class="dashboard__surah-mini-btn"
+            [class.dashboard__surah-mini-btn--playing]="isAudioPlaying(s.number, 1)"
+            (click)="playAudio(s.number, 1, s.nameTranslit)"
+            [title]="'dashboardPopularListen' | uiTranslate"
+          >
+            <span aria-hidden="true">{{ isAudioPlaying(s.number, 1) ? '❚❚' : '▶' }}</span>
+          </button>
+          <a class="dashboard__btn dashboard__btn--sm" [routerLink]="['/', s.number]">
+            {{ 'homePopularRead' | uiTranslate }}
           </a>
-        </li>
-        }
-      </ul>
-    </nav>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+    <!-- 3: JUZ VIEW -->
+    @else {
+    <div class="dashboard__juz-list">
+      @for (g of indexJuzGroups(); track g.juz) {
+      <div class="dashboard__juz-section">
+        <div class="dashboard__juz-header">
+          <h3 class="dashboard__juz-title">
+            <span class="dashboard__juz-badge">{{ formatUiNum(g.juz) }}</span>
+            <span>{{ 'homeNavJuz' | uiTranslate }} {{ formatUiNum(g.juz) }}</span>
+          </h3>
+          <a class="dashboard__juz-open-link" [routerLink]="['/juz', g.juz]">
+            <span>{{ 'homeNavJuzHint' | uiTranslate }}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+
+        <div class="dashboard__surah-grid">
+          @for (s of g.surahs; track s.number) {
+          <div class="dashboard__surah-card">
+            <div class="dashboard__surah-head">
+              <div class="dashboard__star-badge" aria-hidden="true">
+                <span class="dashboard__star-num">{{ formatUiNum(s.number) }}</span>
+              </div>
+              <div class="dashboard__surah-names">
+                <a class="dashboard__surah-title-link" [routerLink]="['/', s.number]">
+                  <span class="dashboard__surah-ar" dir="rtl" lang="ar">{{ s.nameAr }}</span>
+                </a>
+                <span class="dashboard__surah-en">{{ s.nameTranslit }}</span>
+              </div>
+            </div>
+            <div class="dashboard__surah-details">
+              <span>{{ formatUiNum(s.versesCount) }} {{ 'versesWord' | uiTranslate }}</span>
+              <span>·</span>
+              <span>{{ revelationLabel(s.revelationType) }}</span>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+      }
+    </div>
     }
   </section>
+
 </div>
 }
