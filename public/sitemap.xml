@@ -4176,6 +4176,31 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://qurandaily.live/adhkar/post-prayer</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://qurandaily.live/adhkar/quranic-duas</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://qurandaily.live/adhkar/daily-living</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://qurandaily.live/adhkar/distress-protection</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://qurandaily.live/adhkar/forgiveness-tasbih</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://qurandaily.live/learn/letters</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

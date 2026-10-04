@@ -1,95 +1,362 @@
-<span class="verses__section-label verses__section-label--tafsir">{{ 'verseTafsirSectionLabel' | uiTranslate }}</span>
-<div class="verses__tafsir-toolbar">
-  <label class="verses__tafsir-label" [attr.for]="editionId()">
-    {{ 'tafsirSourceLabel' | uiTranslate }}
-  </label>
-  <select
-    class="verses__tafsir-select reader__select reader__select--compact"
-    [id]="editionId()"
-    [ngModel]="tafsir.editionSlug()"
-    [ngModelOptions]="{ standalone: true }"
-    (ngModelChange)="onEditionChange($event)"
-  >
-    @for (ed of tafsir.editionsForLocale(); track ed.slug) {
-    <option [value]="ed.slug">{{ ed.labelKey | uiTranslate }}</option>
+<!-- Section Header & Language Selector -->
+<div class="tafsir__head">
+  <div class="tafsir__head-meta">
+    <span class="verses__section-label verses__section-label--tafsir">
+      {{ 'verseTafsirSectionLabel' | uiTranslate }}
+    </span>
+    <span class="tafsir__verse-badge">
+      {{ formatUiNum()(verse().surah) }}:{{ formatUiNum()(verse().ayah) }}
+    </span>
+  </div>
+
+  <!-- Language Switcher: Urdu (Default), English, Arabic -->
+  <div class="tafsir__lang-pills" role="radiogroup" [attr.aria-label]="'tafsirSourceLabel' | uiTranslate">
+    @for (lang of availableLanguages; track lang.code) {
+    <button
+      type="button"
+      class="tafsir__lang-pill"
+      [class.tafsir__lang-pill--active]="tafsir.selectedLanguage() === lang.code"
+      (click)="onLanguageChange(lang.code)"
+    >
+      <span class="tafsir__lang-flag">{{ lang.flag }}</span>
+      <span class="tafsir__lang-name">{{ lang.labelKey | uiTranslate }}</span>
+    </button>
     }
-  </select>
+  </div>
 </div>
-@if (tafsir.loading()) {
-<p class="verses__tafsir-status" role="status">{{ 'tafsirLoading' | uiTranslate }}</p>
-} @else if (tafsir.error()) {
-<div class="verses__tafsir-status verses__tafsir-status--error">
-  <p>{{ 'tafsirLoadError' | uiTranslate }}</p>
-  <button type="button" class="verses__tafsir-retry" (click)="retry()">
-    {{ 'tafsirRetry' | uiTranslate }}
-  </button>
-</div>
-} @else if (accordion() && tafsir.blocks().length > 1) {
-<div class="verses__tafsir-body verses__tafsir-body--accordion">
-  @for (block of tafsir.blocks(); track block.type) {
-    @if ($index === 0) {
-    <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId() + '-block-' + block.type">
-      <span
-        class="verses__section-label verses__section-label--tafsir-block"
-        [id]="editionId() + '-block-' + block.type"
+
+<!-- Toolbar: Edition dropdown & Utility Controls -->
+<div class="verses__tafsir-toolbar tafsir__toolbar">
+  <div class="tafsir__source-field">
+    <label class="verses__tafsir-label" [attr.for]="editionId()">
+      {{ 'tafsirSourceLabel' | uiTranslate }}
+    </label>
+    <select
+      class="verses__tafsir-select reader__select reader__select--compact tafsir__edition-select"
+      [id]="editionId()"
+      [ngModel]="tafsir.editionSlug()"
+      [ngModelOptions]="{ standalone: true }"
+      (ngModelChange)="onEditionChange($event)"
+    >
+      @for (ed of tafsir.editionsForSelectedLanguage(); track ed.slug) {
+      <option [value]="ed.slug">{{ ed.titleNative }} ({{ ed.author }})</option>
+      }
+    </select>
+  </div>
+
+  <div class="tafsir__ctrls">
+    <!-- Font Sizing -->
+    <div class="tafsir__font-box" role="group" [attr.aria-label]="'tafsirFontSizeAria' | uiTranslate">
+      <button
+        type="button"
+        class="tafsir__ctrl-btn"
+        (click)="decreaseFont()"
+        [attr.aria-label]="'tafsirFontSizeDecAria' | uiTranslate"
+        title="Font Size -"
       >
-        {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
-      </span>
-      <div class="verses__tafsir-block-body">
-        @for (para of block.paragraphs; track $index) {
-        <p class="verses__tafsir-p">{{ para }}</p>
-        }
-      </div>
-    </section>
+        A-
+      </button>
+      <button
+        type="button"
+        class="tafsir__ctrl-btn"
+        (click)="increaseFont()"
+        [attr.aria-label]="'tafsirFontSizeIncAria' | uiTranslate"
+        title="Font Size +"
+      >
+        A+
+      </button>
+    </div>
+
+    <!-- Copy Action -->
+    <button
+      type="button"
+      class="tafsir__ctrl-btn tafsir__copy-btn"
+      [class.tafsir__copy-btn--copied]="tafsir.copied()"
+      (click)="copyText()"
+      [attr.aria-label]="'tafsirCopyAction' | uiTranslate"
+      title="Copy Tafsir text"
+    >
+      @if (tafsir.copied()) {
+      <span class="tafsir__btn-icon">✓</span>
+      <span class="tafsir__copy-text">{{ 'tafsirCopiedToast' | uiTranslate }}</span>
+      } @else {
+      <span class="tafsir__btn-icon">📋</span>
+      <span class="tafsir__copy-text">{{ 'tafsirCopyAction' | uiTranslate }}</span>
+      }
+    </button>
+  </div>
+</div>
+
+<!-- Navigation Tabs: Commentary, Related Hadiths, Occasions of Revelation -->
+<nav class="tafsir__tabs" role="tablist">
+  <button
+    type="button"
+    role="tab"
+    class="tafsir__tab"
+    [class.tafsir__tab--active]="tafsir.activeTab() === 'tafsir'"
+    [attr.aria-selected]="tafsir.activeTab() === 'tafsir'"
+    (click)="setTab('tafsir')"
+  >
+    <span class="tafsir__tab-icon">📖</span>
+    <span>{{ 'tafsirTabCommentary' | uiTranslate }}</span>
+  </button>
+
+  <button
+    type="button"
+    role="tab"
+    class="tafsir__tab"
+    [class.tafsir__tab--active]="tafsir.activeTab() === 'hadith'"
+    [attr.aria-selected]="tafsir.activeTab() === 'hadith'"
+    (click)="setTab('hadith')"
+  >
+    <span class="tafsir__tab-icon">📜</span>
+    <span>{{ 'tafsirTabHadith' | uiTranslate }}</span>
+    @if (tafsir.relatedHadiths().length > 0) {
+    <span class="tafsir__tab-count">{{ formatUiNum()(tafsir.relatedHadiths().length) }}</span>
     }
-  }
-  <details class="verses__tafsir-more">
-    <summary class="verses__tafsir-more-summary">{{ 'tafsirReadMore' | uiTranslate }}</summary>
-    <div class="verses__tafsir-more-body">
+  </button>
+
+  <button
+    type="button"
+    role="tab"
+    class="tafsir__tab"
+    [class.tafsir__tab--active]="tafsir.activeTab() === 'asbab'"
+    [attr.aria-selected]="tafsir.activeTab() === 'asbab'"
+    (click)="setTab('asbab')"
+  >
+    <span class="tafsir__tab-icon">🏛️</span>
+    <span>{{ 'tafsirTabAsbab' | uiTranslate }}</span>
+  </button>
+</nav>
+
+<!-- Tab 1: Tafsir & Scholarly Commentary -->
+@if (tafsir.activeTab() === 'tafsir') {
+<div
+  class="tafsir__content-pane"
+  [style.--tafsir-user-scale]="tafsir.fontSizeScale()"
+>
+  @if (tafsir.loading()) {
+  <div class="verses__tafsir-status" role="status">
+    <div class="tafsir__spinner" aria-hidden="true"></div>
+    <span>{{ 'tafsirLoading' | uiTranslate }}</span>
+  </div>
+  } @else if (tafsir.error()) {
+  <div class="verses__tafsir-status verses__tafsir-status--error">
+    <p>{{ 'tafsirLoadError' | uiTranslate }}</p>
+    <button type="button" class="verses__tafsir-retry" (click)="retry()">
+      {{ 'tafsirRetry' | uiTranslate }}
+    </button>
+  </div>
+  } @else {
+    <!-- Section quick-filter chips if there are 2+ distinct sections -->
+    @if (tafsir.blocks().length > 1) {
+    <div class="tafsir__filter-chips">
+      <button
+        type="button"
+        class="tafsir__chip"
+        [class.tafsir__chip--active]="tafsir.selectedBlockFilter() === 'all'"
+        (click)="setFilter('all')"
+      >
+        {{ 'tafsirSectionFilterAll' | uiTranslate }}
+      </button>
       @for (block of tafsir.blocks(); track block.type) {
-        @if ($index > 0) {
-        <section
-          class="verses__tafsir-block"
-          [attr.aria-labelledby]="editionId() + '-block-more-' + block.type"
-        >
+      <button
+        type="button"
+        class="tafsir__chip"
+        [class.tafsir__chip--active]="tafsir.selectedBlockFilter() === block.type"
+        (click)="setFilter(block.type)"
+      >
+        <span>{{ tafsirBlockIcon(block.type) }}</span>
+        <span>{{ tafsirBlockLabelKey(block.type) | uiTranslate }}</span>
+      </button>
+      }
+    </div>
+    }
+
+    <!-- Mobile Accordion Layout -->
+    @if (accordion() && tafsir.filteredBlocks().length > 1) {
+    <div class="verses__tafsir-body verses__tafsir-body--accordion">
+      @for (block of tafsir.filteredBlocks(); track block.type) {
+        @if ($index === 0) {
+        <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId() + '-block-' + block.type">
           <span
             class="verses__section-label verses__section-label--tafsir-block"
-            [id]="editionId() + '-block-more-' + block.type"
+            [id]="editionId() + '-block-' + block.type"
           >
+            <span class="tafsir__block-icon">{{ tafsirBlockIcon(block.type) }}</span>
             {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
           </span>
           <div class="verses__tafsir-block-body">
             @for (para of block.paragraphs; track $index) {
-            <p class="verses__tafsir-p">{{ para }}</p>
+              @if (isHadith(para)) {
+              <div class="tafsir__hadith-callout">
+                <span class="tafsir__hadith-badge">📜 {{ 'tafsirBlockHadith' | uiTranslate }}</span>
+                <p class="verses__tafsir-p tafsir__p--hadith">{{ para }}</p>
+              </div>
+              } @else {
+              <p class="verses__tafsir-p">{{ para }}</p>
+              }
             }
           </div>
         </section>
         }
       }
+      <details class="verses__tafsir-more">
+        <summary class="verses__tafsir-more-summary">{{ 'tafsirReadMore' | uiTranslate }}</summary>
+        <div class="verses__tafsir-more-body">
+          @for (block of tafsir.filteredBlocks(); track block.type) {
+            @if ($index > 0) {
+            <section
+              class="verses__tafsir-block"
+              [attr.aria-labelledby]="editionId() + '-block-more-' + block.type"
+            >
+              <span
+                class="verses__section-label verses__section-label--tafsir-block"
+                [id]="editionId() + '-block-more-' + block.type"
+              >
+                <span class="tafsir__block-icon">{{ tafsirBlockIcon(block.type) }}</span>
+                {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
+              </span>
+              <div class="verses__tafsir-block-body">
+                @for (para of block.paragraphs; track $index) {
+                  @if (isHadith(para)) {
+                  <div class="tafsir__hadith-callout">
+                    <span class="tafsir__hadith-badge">📜 {{ 'tafsirBlockHadith' | uiTranslate }}</span>
+                    <p class="verses__tafsir-p tafsir__p--hadith">{{ para }}</p>
+                  </div>
+                  } @else {
+                  <p class="verses__tafsir-p">{{ para }}</p>
+                  }
+                }
+              </div>
+            </section>
+            }
+          }
+        </div>
+      </details>
     </div>
-  </details>
-</div>
-} @else if (tafsir.blocks().length) {
-<div class="verses__tafsir-body">
-  @for (block of tafsir.blocks(); track block.type) {
-  <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId() + '-block-' + block.type">
-    <span
-      class="verses__section-label verses__section-label--tafsir-block"
-      [id]="editionId() + '-block-' + block.type"
-    >
-      {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
-    </span>
-    <div class="verses__tafsir-block-body">
-      @for (para of block.paragraphs; track $index) {
-      <p class="verses__tafsir-p">{{ para }}</p>
+    } @else if (tafsir.filteredBlocks().length) {
+    <!-- Standard Desktop / Side Panel Block Layout -->
+    <div class="verses__tafsir-body">
+      @for (block of tafsir.filteredBlocks(); track block.type) {
+      <section class="verses__tafsir-block" [attr.aria-labelledby]="editionId() + '-block-' + block.type">
+        <span
+          class="verses__section-label verses__section-label--tafsir-block"
+          [id]="editionId() + '-block-' + block.type"
+        >
+          <span class="tafsir__block-icon">{{ tafsirBlockIcon(block.type) }}</span>
+          {{ tafsirBlockLabelKey(block.type) | uiTranslate }}
+        </span>
+        <div class="verses__tafsir-block-body">
+          @for (para of block.paragraphs; track $index) {
+            @if (isHadith(para)) {
+            <div class="tafsir__hadith-callout">
+              <span class="tafsir__hadith-badge">📜 {{ 'tafsirBlockHadith' | uiTranslate }}</span>
+              <p class="verses__tafsir-p tafsir__p--hadith">{{ para }}</p>
+            </div>
+            } @else {
+            <p class="verses__tafsir-p">{{ para }}</p>
+            }
+          }
+        </div>
+      </section>
       }
     </div>
-  </section>
+    } @else if (tafsir.text()) {
+    <div class="verses__tafsir-body">
+      <p class="verses__tafsir-p">{{ tafsir.text() }}</p>
+    </div>
+    }
   }
 </div>
-} @else if (tafsir.text()) {
-<div class="verses__tafsir-body">
-  <p class="verses__tafsir-p">{{ tafsir.text() }}</p>
+}
+
+<!-- Tab 2: Related Hadiths & Traditions -->
+@if (tafsir.activeTab() === 'hadith') {
+<div class="tafsir__content-pane tafsir__content-pane--hadith">
+  @if (tafsir.relatedHadiths().length > 0) {
+  <div class="tafsir__hadith-list">
+    @for (h of tafsir.relatedHadiths(); track h.id) {
+    <article class="hadith-card">
+      <header class="hadith-card__head">
+        <div class="hadith-card__meta-tags">
+          <span class="hadith-tag hadith-tag--theme">
+            {{ hadithService.pickLocalized(h.theme) }}
+          </span>
+          <span class="hadith-tag hadith-tag--grade">
+            {{ hadithService.pickLocalized(h.grade) }}
+          </span>
+        </div>
+        <span class="hadith-card__source">
+          📖 {{ hadithService.pickLocalized(h.source) }}
+        </span>
+      </header>
+
+      <!-- Arabic Matn -->
+      <div class="hadith-card__arabic" dir="rtl" lang="ar">
+        <p class="hadith-card__arabic-text">{{ h.arabic }}</p>
+      </div>
+
+      <!-- Urdu Translation (Prominent) -->
+      <div class="hadith-card__translation hadith-card__translation--ur" dir="rtl" lang="ur">
+        <span class="hadith-card__lang-title">اردو ترجمہ:</span>
+        <p class="hadith-card__text-ur">{{ h.urdu }}</p>
+      </div>
+
+      <!-- English Translation -->
+      <div class="hadith-card__translation hadith-card__translation--en" dir="ltr" lang="en">
+        <span class="hadith-card__lang-title">English Translation:</span>
+        <p class="hadith-card__text-en">{{ h.english }}</p>
+      </div>
+
+      <footer class="hadith-card__footer">
+        <span class="hadith-card__narrator">
+          🎙️ {{ hadithService.pickLocalized(h.narrator) }}
+        </span>
+      </footer>
+    </article>
+    }
+  </div>
+  } @else {
+  <div class="tafsir__empty-box">
+    <div class="tafsir__empty-icon">📜</div>
+    <h3 class="tafsir__empty-title">{{ 'tafsirTabHadith' | uiTranslate }}</h3>
+    <p class="tafsir__empty-desc">
+      {{ 'tafsirNoHadithForVerse' | uiTranslate }}
+    </p>
+  </div>
+  }
 </div>
 }
+
+<!-- Tab 3: Occasions of Revelation (Asbab al-Nuzul) -->
+@if (tafsir.activeTab() === 'asbab') {
+<div class="tafsir__content-pane tafsir__content-pane--asbab">
+  @if (tafsir.asbabLoading()) {
+  <div class="verses__tafsir-status" role="status">
+    <div class="tafsir__spinner" aria-hidden="true"></div>
+    <span>{{ 'tafsirAsbabLoading' | uiTranslate }}</span>
+  </div>
+  } @else if (tafsir.asbabAlNuzulText()) {
+  <article class="tafsir__asbab-card">
+    <header class="tafsir__asbab-head">
+      <span class="tafsir__asbab-badge">🏛️ {{ 'tafsirTabAsbab' | uiTranslate }}</span>
+      <span class="tafsir__asbab-author">أسباب النزول — الإمام الواحدي النيسابوري</span>
+    </header>
+    <div class="tafsir__asbab-body">
+      <p class="verses__tafsir-p tafsir__asbab-p">{{ tafsir.asbabAlNuzulText() }}</p>
+    </div>
+  </article>
+  } @else {
+  <div class="tafsir__empty-box">
+    <div class="tafsir__empty-icon">🏛️</div>
+    <h3 class="tafsir__empty-title">{{ 'tafsirTabAsbab' | uiTranslate }}</h3>
+    <p class="tafsir__empty-desc">
+      {{ 'tafsirAsbabNoEntry' | uiTranslate }}
+    </p>
+  </div>
+  }
+</div>
+}
+
 <p class="verses__tafsir-attribution">{{ 'tafsirAttribution' | uiTranslate }}</p>

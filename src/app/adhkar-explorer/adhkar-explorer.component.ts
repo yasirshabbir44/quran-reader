@@ -9,12 +9,14 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { AdhkarAudioService } from '../core/adhkar/adhkar-audio.service';
+import { AdhkarFavoritesService } from '../core/adhkar/adhkar-favorites.service';
 import {
   AdhkarProgressService,
   suggestedAdhkarCollectionId,
 } from '../core/adhkar/adhkar-progress.service';
 import { AdhkarService } from '../core/adhkar/adhkar.service';
-import type { AdhkarCollection } from '../core/adhkar/adhkar.types';
+import type { AdhkarCollection, AdhkarItem, AdhkarSearchResult } from '../core/adhkar/adhkar.types';
 import { collectionPageJsonLd } from '../core/seo/seo-jsonld';
 import { SeoService } from '../core/seo/seo.service';
 import { UiLocaleService, type UiLocaleCode } from '../core/ui/ui-locale.service';
@@ -24,8 +26,30 @@ const COLLECTION_ICONS: Record<string, string> = {
   sun: '☀️',
   sunset: '🌇',
   moon: '🌙',
+  prayer: '🕌',
+  book: '📖',
+  heart: '💚',
+  shield: '🛡️',
+  sparkle: '✨',
   hands: '🤲',
 };
+
+export interface AdhkarCategoryFilter {
+  readonly id: string;
+  readonly labelKey: string;
+  readonly icon: string;
+}
+
+const CATEGORY_FILTERS: readonly AdhkarCategoryFilter[] = [
+  { id: 'all', labelKey: 'adhkarFilterAll', icon: '✨' },
+  { id: 'time', labelKey: 'adhkarFilterTime', icon: '🌅' },
+  { id: 'salah', labelKey: 'adhkarFilterSalah', icon: '🕌' },
+  { id: 'quran', labelKey: 'adhkarFilterQuran', icon: '📖' },
+  { id: 'daily', labelKey: 'adhkarFilterDaily', icon: '💚' },
+  { id: 'protection', labelKey: 'adhkarFilterProtection', icon: '🛡️' },
+  { id: 'praise', labelKey: 'adhkarFilterPraise', icon: '📿' },
+  { id: 'favorites', labelKey: 'adhkarFilterFavorites', icon: '⭐' },
+];
 
 @Component({
   selector: 'app-adhkar-explorer',
@@ -39,7 +63,8 @@ export class AdhkarExplorerComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   protected readonly adhkar = inject(AdhkarService);
   protected readonly progress = inject(AdhkarProgressService);
-
+  protected readonly favorites = inject(AdhkarFavoritesService);
+  protected readonly audio = inject(AdhkarAudioService);
   protected readonly ui = inject(UiLocaleService);
 
   protected readonly loading = signal(true);
@@ -47,13 +72,101 @@ export class AdhkarExplorerComponent implements OnInit {
   protected readonly collections = signal<readonly AdhkarCollection[]>([]);
   protected readonly suggestedId = signal(suggestedAdhkarCollectionId());
 
+  // Search & Filter State
+  protected readonly searchQuery = signal('');
+  protected readonly selectedCategory = signal<string>('all');
+  protected readonly categoryFilters = CATEGORY_FILTERS;
+
   protected readonly totalItems = computed(() =>
     this.collections().reduce((sum, c) => sum + c.itemCount, 0),
   );
 
+  protected readonly totalCompletedToday = computed(() => {
+    this.progress.progressSnapshot();
+    let total = 0;
+    for (const col of this.collections()) {
+      total += this.progress.collectionProgress(col).completed;
+    }
+    return total;
+  });
+
   protected readonly suggestedCollection = computed(() => {
     const id = this.suggestedId();
     return this.collections().find((c) => c.id === id) ?? null;
+  });
+
+  // Filtered collections based on category
+  protected readonly filteredCollections = computed(() => {
+    const cat = this.selectedCategory();
+    const all = this.collections();
+    if (cat === 'all') {
+      return all;
+    }
+    if (cat === 'favorites') {
+      return [];
+    }
+    return all.filter((c) => c.category === cat);
+  });
+
+  // Favorite items resolved with collection metadata
+  protected readonly favoriteItemsWithMeta = computed(() => {
+    const favs = this.favorites.favorites();
+    const cols = this.collections();
+    const results: Array<{ item: AdhkarItem; collection: AdhkarCollection; itemIndex: number }> = [];
+
+    for (const fav of favs) {
+      const col = cols.find((c) => c.id === fav.collectionId);
+      if (!col) continue;
+      const idx = col.items.findIndex((i) => i.id === fav.itemId);
+      if (idx !== -1) {
+        results.push({ item: col.items[idx], collection: col, itemIndex: idx + 1 });
+      }
+    }
+    return results;
+  });
+
+  // Instant reactive search results
+  protected readonly searchResults = computed<readonly AdhkarSearchResult[]>(() => {
+    const query = this.searchQuery().trim().toLowerCase();
+    if (!query || query.length < 2) {
+      return [];
+    }
+    const cols = this.collections();
+    const results: AdhkarSearchResult[] = [];
+
+    for (const col of cols) {
+      for (const item of col.items) {
+        const ar = item.arabic.toLowerCase();
+        const translit = (item.transliteration ?? '').toLowerCase();
+        const en = item.translation.en.toLowerCase();
+        const ur = item.translation.ur.toLowerCase();
+        const src = (item.source ?? '').toLowerCase();
+        const benefitEn = (item.benefit?.en ?? '').toLowerCase();
+        const benefitUr = (item.benefit?.ur ?? '').toLowerCase();
+
+        let matchField: AdhkarSearchResult['matchField'] | null = null;
+        if (ar.includes(query)) {
+          matchField = 'arabic';
+        } else if (translit.includes(query)) {
+          matchField = 'transliteration';
+        } else if (en.includes(query) || ur.includes(query) || benefitEn.includes(query) || benefitUr.includes(query)) {
+          matchField = 'translation';
+        } else if (src.includes(query)) {
+          matchField = 'source';
+        }
+
+        if (matchField) {
+          results.push({
+            item,
+            collectionId: col.id,
+            collectionTitle: col.title,
+            collectionIcon: col.icon,
+            matchField,
+          });
+        }
+      }
+    }
+    return results;
   });
 
   ngOnInit(): void {
@@ -75,6 +188,14 @@ export class AdhkarExplorerComponent implements OnInit {
   protected onLocaleChange(code: string): void {
     this.ui.setLocale(code as UiLocaleCode);
     this.syncSeo();
+  }
+
+  protected setCategory(catId: string): void {
+    this.selectedCategory.set(catId);
+  }
+
+  protected clearSearch(): void {
+    this.searchQuery.set('');
   }
 
   protected formatUiNum(n: number): string {
@@ -114,6 +235,18 @@ export class AdhkarExplorerComponent implements OnInit {
     this.loading.set(true);
     this.loadError.set(false);
     this.adhkar.retryLoad();
+  }
+
+  protected playItemAudio(item: AdhkarItem, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.audio.play(item.id, item.arabic);
+  }
+
+  protected toggleFavorite(item: AdhkarItem, collectionId: string, event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.favorites.toggle(item, collectionId);
   }
 
   private syncSeo(): void {

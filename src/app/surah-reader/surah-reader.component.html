@@ -1526,11 +1526,13 @@
           @if (showTafsirInline(v)) {
           <aside
             class="verses__tafsir verses__tafsir--inline"
+            [class.verses__tafsir--ur]="tafsir.currentLanguage() === 'ur'"
+            [class.verses__tafsir--ar]="tafsir.currentLanguage() === 'ar'"
             [id]="'tafsir-panel-' + v.surah + '-' + v.ayah"
             role="region"
             [attr.aria-label]="'tafsirPanelAria' | uiTranslate: { n: formatUiNum(v.ayah) }"
-            [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
-            [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
+            [attr.dir]="tafsir.currentDirection()"
+            [attr.lang]="tafsir.currentLanguage()"
           >
             <app-reader-tafsir-panel
               [verse]="v"
@@ -1566,10 +1568,12 @@
     <aside
       id="tafsir-side-panel"
       class="reader__side reader__side--tafsir reader__panel verses__tafsir verses__tafsir--side"
+      [class.verses__tafsir--ur]="tafsir.currentLanguage() === 'ur'"
+      [class.verses__tafsir--ar]="tafsir.currentLanguage() === 'ar'"
       role="region"
       [attr.aria-label]="'tafsirPanelAria' | uiTranslate: { n: formatUiNum(tafsirVerse.ayah) }"
-      [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
-      [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
+      [attr.dir]="tafsir.currentDirection()"
+      [attr.lang]="tafsir.currentLanguage()"
     >
       <header class="reader__settings-head reader__tafsir-side-head">
         <h2 class="reader__settings-title reader__tafsir-side-title">
@@ -1649,11 +1653,13 @@
 ></button>
 <aside
   class="reader__tafsir-sheet"
+  [class.reader__tafsir-sheet--ur]="tafsir.currentLanguage() === 'ur'"
+  [class.reader__tafsir-sheet--ar]="tafsir.currentLanguage() === 'ar'"
   role="dialog"
   aria-modal="true"
   [attr.aria-label]="'tafsirPanelAria' | uiTranslate: { n: formatUiNum(tafsirVerse.ayah) }"
-  [attr.dir]="ui.locale() === 'en' ? 'ltr' : 'rtl'"
-  [attr.lang]="ui.locale() === 'en' ? 'en' : ui.locale() === 'ur' ? 'ur' : 'ar'"
+  [attr.dir]="tafsir.currentDirection()"
+  [attr.lang]="tafsir.currentLanguage()"
 >
   <header class="reader__tafsir-sheet-head">
     <h2 class="reader__tafsir-sheet-title">

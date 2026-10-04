@@ -58,6 +58,67 @@
     <p class="adhkar-detail__excerpt">{{ adhkar.pickLocalized(group.description) }}</p>
   </div>
 
+  <!-- Customization Toolbar: Font size and view toggles -->
+  <div class="adhkar-detail__toolbar" aria-label="Reading Controls">
+    <div class="adhkar-detail__font-ctrls">
+      <span class="adhkar-detail__ctrl-label">{{ 'adhkarTextSize' | uiTranslate }}:</span>
+      <div class="adhkar-detail__font-btns" role="group">
+        <button
+          type="button"
+          class="adhkar-detail__font-btn"
+          [class.adhkar-detail__font-btn--active]="arabicFontSize() === 'md'"
+          (click)="setFontSize('md')"
+        >
+          A
+        </button>
+        <button
+          type="button"
+          class="adhkar-detail__font-btn"
+          [class.adhkar-detail__font-btn--active]="arabicFontSize() === 'lg'"
+          (click)="setFontSize('lg')"
+        >
+          A+
+        </button>
+        <button
+          type="button"
+          class="adhkar-detail__font-btn"
+          [class.adhkar-detail__font-btn--active]="arabicFontSize() === 'xl'"
+          (click)="setFontSize('xl')"
+        >
+          A++
+        </button>
+      </div>
+    </div>
+
+    <div class="adhkar-detail__toggle-ctrls">
+      <button
+        type="button"
+        class="adhkar-detail__toggle-chip"
+        [class.adhkar-detail__toggle-chip--active]="showTransliteration()"
+        (click)="toggleTransliteration()"
+      >
+        {{ 'adhkarToggleTranslit' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="adhkar-detail__toggle-chip"
+        [class.adhkar-detail__toggle-chip--active]="showTranslation()"
+        (click)="toggleTranslation()"
+      >
+        {{ 'adhkarToggleTranslation' | uiTranslate }}
+      </button>
+      <button
+        type="button"
+        class="adhkar-detail__toggle-chip"
+        [class.adhkar-detail__toggle-chip--active]="showVirtue()"
+        (click)="toggleVirtue()"
+      >
+        🌟 {{ 'adhkarToggleVirtue' | uiTranslate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Sticky Daily Progress Tracker -->
   <div
     class="adhkar-detail__progress"
     [class.adhkar-detail__progress--done]="allComplete()"
@@ -70,7 +131,7 @@
     <div class="adhkar-detail__progress-row">
       <p class="adhkar-detail__progress-label">
         @if (allComplete()) {
-          {{ 'adhkarProgressComplete' | uiTranslate }}
+          ✨ {{ 'adhkarProgressComplete' | uiTranslate }}
         } @else {
           {{
             'adhkarProgressLabel'
@@ -94,8 +155,14 @@
     <div class="adhkar-detail__progress-track" aria-hidden="true">
       <div class="adhkar-detail__progress-fill" [style.width.%]="collectionProgress().percent"></div>
     </div>
+    @if (allComplete()) {
+    <p class="adhkar-detail__celebration">
+      {{ 'adhkarAllCompletedCelebration' | uiTranslate }}
+    </p>
+    }
   </div>
 
+  <!-- Adhkar List -->
   <ol class="adhkar-detail__list" [attr.aria-label]="'adhkarDetailItemsTitle' | uiTranslate">
     @for (item of group.items; track item.id; let i = $index) {
     <li
@@ -111,25 +178,77 @@
             {{ 'adhkarRepeatLabel' | uiTranslate: { count: formatUiNum(itemTarget(item)) } }}
           </span>
           @if (itemComplete(item)) {
-          <span class="adhkar-detail__done-badge">{{ 'adhkarItemDone' | uiTranslate }}</span>
+          <span class="adhkar-detail__done-badge">{{ 'adhkarItemDone' | uiTranslate }} ✓</span>
           }
         </div>
-        <button
-          type="button"
-          class="adhkar-detail__copy"
-          (click)="copyArabic(item)"
-          [attr.aria-label]="'adhkarCopyArabic' | uiTranslate"
-        >
-          {{ copiedItemId() === item.id ? ('adhkarCopied' | uiTranslate) : ('adhkarCopy' | uiTranslate) }}
-        </button>
+
+        <div class="adhkar-detail__item-actions">
+          <!-- Audio Recitation -->
+          <button
+            type="button"
+            class="adhkar-detail__btn-icon"
+            [class.adhkar-detail__btn-icon--active]="audio.isSpeaking(item.id)"
+            (click)="playItemAudio(item)"
+            [attr.aria-label]="audio.isSpeaking(item.id) ? ('adhkarStopAudio' | uiTranslate) : ('adhkarPlayAudio' | uiTranslate)"
+          >
+            @if (audio.isSpeaking(item.id)) {
+              <span class="adhkar-detail__pulse-speaker" aria-hidden="true">🔊</span>
+            } @else {
+              <span aria-hidden="true">🔈</span>
+            }
+          </button>
+
+          <!-- Favorite / Bookmark -->
+          <button
+            type="button"
+            class="adhkar-detail__btn-icon"
+            [class.adhkar-detail__btn-icon--fav]="favorites.isFavorite(item.id)"
+            (click)="toggleFavorite(item)"
+            [attr.aria-label]="favorites.isFavorite(item.id) ? ('adhkarRemoveFavorite' | uiTranslate) : ('adhkarSaveFavorite' | uiTranslate)"
+          >
+            {{ favorites.isFavorite(item.id) ? '★' : '☆' }}
+          </button>
+
+          <!-- Copy Arabic -->
+          <button
+            type="button"
+            class="adhkar-detail__btn-icon"
+            (click)="copyArabic(item)"
+            [attr.aria-label]="'adhkarCopyArabic' | uiTranslate"
+          >
+            {{ copiedItemId() === item.id ? '✓' : '⧉' }}
+          </button>
+
+          <!-- Share Dua -->
+          <button
+            type="button"
+            class="adhkar-detail__btn-icon"
+            (click)="shareItem(item)"
+            [attr.aria-label]="'adhkarShare' | uiTranslate"
+          >
+            {{ sharedItemId() === item.id ? '✓' : '↗' }}
+          </button>
+        </div>
       </div>
 
-      <p class="adhkar-detail__arabic" dir="rtl" lang="ar">{{ item.arabic }}</p>
+      <!-- Arabic Text with dynamic font size -->
+      <p
+        class="adhkar-detail__arabic"
+        [class.adhkar-detail__arabic--lg]="arabicFontSize() === 'lg'"
+        [class.adhkar-detail__arabic--xl]="arabicFontSize() === 'xl'"
+        dir="rtl"
+        lang="ar"
+      >
+        {{ item.arabic }}
+      </p>
 
-      @if (item.transliteration) {
+      <!-- Transliteration -->
+      @if (showTransliteration() && item.transliteration) {
       <p class="adhkar-detail__translit">{{ item.transliteration }}</p>
       }
 
+      <!-- Meanings & Translations -->
+      @if (showTranslation()) {
       <div class="adhkar-detail__meanings">
         @if (ui.locale() === 'ar') {
         <div class="adhkar-detail__meaning adhkar-detail__meaning--ar" dir="rtl" lang="ar">
@@ -160,23 +279,44 @@
         </div>
         }
       </div>
+      }
+
+      <!-- Hadith Virtue & Reward Callout -->
+      @if (showVirtue() && item.benefit) {
+      <div class="adhkar-detail__virtue">
+        <span class="adhkar-detail__virtue-badge" aria-hidden="true">🌟 {{ 'adhkarVirtueHeading' | uiTranslate }}</span>
+        <p class="adhkar-detail__virtue-text">{{ adhkar.pickLocalized(item.benefit) }}</p>
+      </div>
+      }
 
       @if (item.source) {
       <p class="adhkar-detail__source">{{ 'adhkarSourceLabel' | uiTranslate }}: {{ item.source }}</p>
       }
 
+      <!-- Interactive Tap Counter -->
       <div class="adhkar-detail__counter">
         <div class="adhkar-detail__counter-meta">
-          <span class="adhkar-detail__counter-label">
-            {{
-              'adhkarCounterLabel'
-                | uiTranslate
-                  : {
-                      count: formatUiNum(itemCount(item)),
-                      target: formatUiNum(itemTarget(item)),
-                    }
-            }}
-          </span>
+          <div class="adhkar-detail__counter-info-row">
+            <span class="adhkar-detail__counter-label">
+              {{
+                'adhkarCounterLabel'
+                  | uiTranslate
+                    : {
+                        count: formatUiNum(itemCount(item)),
+                        target: formatUiNum(itemTarget(item)),
+                      }
+              }}
+            </span>
+            @if (itemCount(item) > 0 && !itemComplete(item)) {
+            <button
+              type="button"
+              class="adhkar-detail__item-reset-btn"
+              (click)="resetItemProgress(item, $event)"
+            >
+              {{ 'adhkarResetItem' | uiTranslate }}
+            </button>
+            }
+          </div>
           <div class="adhkar-detail__counter-track" aria-hidden="true">
             <div class="adhkar-detail__counter-fill" [style.width.%]="itemPercent(item)"></div>
           </div>
@@ -212,6 +352,28 @@
     }
   </ol>
 
+  <!-- Adjacent Collection Fast Navigation -->
+  @if (adjacent().prev || adjacent().next) {
+  <nav class="adhkar-detail__nav-adj" aria-label="Collections Navigation">
+    @if (adjacent().prev; as prevCol) {
+    <a class="adhkar-detail__adj-card adhkar-detail__adj-card--prev" [routerLink]="['/adhkar', prevCol.id]">
+      <span class="adhkar-detail__adj-label">← {{ 'adhkarPrevCollection' | uiTranslate }}</span>
+      <span class="adhkar-detail__adj-title">{{ adhkar.pickLocalized(prevCol.title) }}</span>
+    </a>
+    } @else {
+    <div></div>
+    }
+
+    @if (adjacent().next; as nextCol) {
+    <a class="adhkar-detail__adj-card adhkar-detail__adj-card--next" [routerLink]="['/adhkar', nextCol.id]">
+      <span class="adhkar-detail__adj-label">{{ 'adhkarNextCollection' | uiTranslate }} →</span>
+      <span class="adhkar-detail__adj-title">{{ adhkar.pickLocalized(nextCol.title) }}</span>
+    </a>
+    }
+  </nav>
+  }
+
+  <!-- Related Collections -->
   @if (relatedCollections().length > 0) {
   <section class="adhkar-detail__related" aria-labelledby="adhkar-related-heading">
     <h2 id="adhkar-related-heading" class="adhkar-detail__related-title">

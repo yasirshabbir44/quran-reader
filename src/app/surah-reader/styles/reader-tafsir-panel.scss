@@ -1,0 +1,575 @@
+@use '../../core/reader-layout/reader-ui-system' as ui;
+
+// =============================================================================
+// Comprehensive Tafsir Section Styles (Urdu Default, Hadiths, Asbab al-Nuzul)
+// =============================================================================
+
+.tafsir__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem 0.85rem;
+  margin-bottom: 0.85rem;
+}
+
+.tafsir__head-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tafsir__verse-badge {
+  display: inline-block;
+  font-family: var(--reader-font-ui);
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--reader-accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--reader-accent) 28%, transparent);
+  color: var(--reader-accent);
+  letter-spacing: 0.02em;
+}
+
+// -----------------------------------------------------------------------------
+// Language Selection Switcher Pills (Urdu default)
+// -----------------------------------------------------------------------------
+.tafsir__lang-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--reader-border-subtle);
+}
+
+.tafsir__lang-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--reader-ink-muted);
+  font-family: var(--reader-font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--reader-body-ink);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  &--active {
+    background: var(--reader-accent);
+    color: #111215 !important;
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(201, 162, 39, 0.35);
+  }
+}
+
+.tafsir__lang-flag {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+// -----------------------------------------------------------------------------
+// Toolbar: Source Selection & Font / Copy Utilities
+// -----------------------------------------------------------------------------
+.tafsir__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem 0.85rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--reader-tafsir-border);
+}
+
+.tafsir__source-field {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1 1 14rem;
+}
+
+.tafsir__edition-select {
+  flex: 1 1 12rem;
+  min-width: min(100%, 14rem);
+  max-width: 100%;
+}
+
+.tafsir__ctrls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.tafsir__font-box {
+  display: inline-flex;
+  border-radius: 0.5rem;
+  border: 1px solid var(--reader-tafsir-border);
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+}
+
+.tafsir__ctrl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.55rem;
+  min-height: 1.9rem;
+  border: none;
+  background: transparent;
+  color: var(--reader-ink-muted);
+  font-family: var(--reader-font-ui);
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--reader-body-ink);
+  }
+
+  & + & {
+    border-inline-start: 1px solid var(--reader-tafsir-border);
+  }
+}
+
+.tafsir__copy-btn {
+  border-radius: 0.5rem;
+  border: 1px solid var(--reader-tafsir-border);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.25rem 0.7rem;
+
+  &--copied {
+    border-color: rgba(16, 185, 129, 0.45);
+    background: rgba(16, 185, 129, 0.14);
+    color: #10b981 !important;
+  }
+}
+
+.tafsir__btn-icon {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+// -----------------------------------------------------------------------------
+// Navigation Tabs (Tafsir, Related Hadiths, Asbab al-Nuzul)
+// -----------------------------------------------------------------------------
+.tafsir__tabs {
+  display: flex;
+  align-items: stretch;
+  gap: 0.35rem;
+  margin-bottom: 1.15rem;
+  padding-bottom: 0.15rem;
+  border-bottom: 1px solid var(--reader-tafsir-border);
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.tafsir__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.55rem 0.85rem;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--reader-ink-muted);
+  font-family: var(--reader-font-ui);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--reader-body-ink);
+  }
+
+  &--active {
+    color: var(--reader-tafsir-accent);
+    border-bottom-color: var(--reader-tafsir-accent);
+    font-weight: 700;
+  }
+}
+
+.tafsir__tab-icon {
+  font-size: 0.95rem;
+}
+
+.tafsir__tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.15rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--reader-accent) 22%, transparent);
+  color: var(--reader-accent);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+// -----------------------------------------------------------------------------
+// Section Filter Chips
+// -----------------------------------------------------------------------------
+.tafsir__filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.tafsir__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--reader-tafsir-border);
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--reader-ink-muted);
+  font-family: var(--reader-font-ui);
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--reader-body-ink);
+  }
+
+  &--active {
+    background: color-mix(in srgb, var(--reader-tafsir-accent) 18%, transparent);
+    border-color: var(--reader-tafsir-accent);
+    color: var(--reader-tafsir-accent);
+    font-weight: 700;
+  }
+}
+
+.tafsir__block-icon {
+  margin-inline-end: 0.35rem;
+  font-size: 0.85rem;
+}
+
+// -----------------------------------------------------------------------------
+// In-Text Hadith Callout
+// -----------------------------------------------------------------------------
+.tafsir__hadith-callout {
+  margin: 0.45rem 0;
+  padding: 0.75rem 0.95rem;
+  border-radius: 0.65rem;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-inline-start: 4px solid #10b981;
+}
+
+.tafsir__hadith-badge {
+  display: inline-block;
+  font-family: var(--reader-font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #10b981;
+  margin-bottom: 0.35rem;
+  letter-spacing: 0.03em;
+}
+
+.tafsir__p--hadith {
+  color: var(--reader-ink-intro-body) !important;
+}
+
+// -----------------------------------------------------------------------------
+// Tab 2: Related Hadiths Cards
+// -----------------------------------------------------------------------------
+.tafsir__hadith-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.hadith-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: 1.15rem 1.25rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--reader-tafsir-border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    border-color: rgba(201, 162, 39, 0.35);
+  }
+}
+
+.hadith-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.hadith-card__meta-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.hadith-tag {
+  display: inline-block;
+  font-family: var(--reader-font-ui);
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+
+  &--theme {
+    background: color-mix(in srgb, var(--reader-accent) 15%, transparent);
+    color: var(--reader-accent);
+    border: 1px solid color-mix(in srgb, var(--reader-accent) 30%, transparent);
+  }
+
+  &--grade {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+  }
+}
+
+.hadith-card__source {
+  font-family: var(--reader-font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--reader-ink-muted);
+}
+
+.hadith-card__arabic {
+  padding: 0.95rem 1.15rem;
+  border-radius: 0.65rem;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.hadith-card__arabic-text {
+  margin: 0;
+  font-family: 'Amiri Quran', 'Amiri', 'Noto Naskh Arabic', serif;
+  font-size: 1.3rem;
+  line-height: 2.15;
+  color: var(--reader-ink-intro-title);
+  text-align: right;
+  direction: rtl;
+}
+
+.hadith-card__translation {
+  padding: 0.75rem 0.95rem;
+  border-radius: 0.6rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--reader-border-subtle);
+
+  &--ur {
+    direction: rtl;
+    text-align: right;
+  }
+
+  &--en {
+    direction: ltr;
+    text-align: left;
+  }
+}
+
+.hadith-card__lang-title {
+  display: block;
+  font-family: var(--reader-font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--reader-ink-faint);
+  margin-bottom: 0.35rem;
+}
+
+.hadith-card__text-ur {
+  margin: 0;
+  font-family: 'Noto Nastaliq Urdu', serif;
+  font-size: 1.125rem;
+  line-height: 2.3;
+  color: var(--reader-body-ink);
+  direction: rtl;
+}
+
+.hadith-card__text-en {
+  margin: 0;
+  font-family: var(--reader-font-ui);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: var(--reader-body-ink);
+}
+
+.hadith-card__footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--reader-border-subtle);
+}
+
+.hadith-card__narrator {
+  font-family: var(--reader-font-ui);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--reader-ink-muted);
+}
+
+// -----------------------------------------------------------------------------
+// Tab 3: Occasions of Revelation (Asbab al-Nuzul) Card
+// -----------------------------------------------------------------------------
+.tafsir__asbab-card {
+  padding: 1.15rem 1.25rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--reader-tafsir-border);
+}
+
+.tafsir__asbab-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.95rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--reader-tafsir-border);
+}
+
+.tafsir__asbab-badge {
+  font-family: var(--reader-font-ui);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--reader-accent);
+}
+
+.tafsir__asbab-author {
+  font-family: var(--reader-font-arabic);
+  font-size: 0.84rem;
+  color: var(--reader-ink-muted);
+}
+
+.tafsir__asbab-p {
+  font-size: max(1.02rem, var(--tafsir-fs));
+  line-height: calc(var(--tafsir-lh) + 0.1);
+  color: var(--reader-body-ink);
+}
+
+// -----------------------------------------------------------------------------
+// Empty / Notice States
+// -----------------------------------------------------------------------------
+.tafsir__empty-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2.5rem 1.25rem;
+  color: var(--reader-ink-muted);
+}
+
+.tafsir__empty-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.65rem;
+  opacity: 0.75;
+}
+
+.tafsir__empty-title {
+  margin: 0 0 0.4rem;
+  font-family: var(--reader-font-ui);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--reader-body-ink);
+}
+
+.tafsir__empty-desc {
+  margin: 0;
+  max-width: 28rem;
+  font-family: var(--reader-font-ui);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.tafsir__spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--reader-accent);
+  border-radius: 50%;
+  animation: tafsir-spin 0.8s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+  margin-inline-end: 0.5rem;
+}
+
+@keyframes tafsir-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Typography & Language Specific Rules
+// -----------------------------------------------------------------------------
+.tafsir__content-pane {
+  --tafsir-scale-val: var(--tafsir-user-scale, 1);
+}
+
+.verses__tafsir[dir='rtl'] .verses__tafsir-p {
+  text-align: right;
+  direction: rtl;
+}
+
+.verses__tafsir[lang='ur'] .verses__tafsir-p,
+.verses__tafsir--ur .verses__tafsir-p,
+.reader__tafsir-sheet--ur .verses__tafsir-p {
+  font-family: 'Noto Nastaliq Urdu', 'Noto Naskh Arabic', serif !important;
+  font-size: calc(max(1.1rem, calc(var(--tafsir-fs) + 0.1rem)) * var(--tafsir-user-scale, 1));
+  line-height: calc(2.35 * var(--tafsir-user-scale, 1));
+  letter-spacing: 0;
+  text-align: right;
+  direction: rtl;
+  color: var(--reader-body-ink);
+}
+
+.verses__tafsir[lang='ar'] .verses__tafsir-p,
+.verses__tafsir--ar .verses__tafsir-p,
+.reader__tafsir-sheet--ar .verses__tafsir-p {
+  font-family: var(--reader-font-arabic), 'Amiri', 'Noto Naskh Arabic', serif !important;
+  font-size: calc(max(1.15rem, calc(var(--tafsir-fs) + 0.12rem)) * var(--tafsir-user-scale, 1));
+  line-height: calc(2.15 * var(--tafsir-user-scale, 1));
+  text-align: right;
+  direction: rtl;
+}
+
+.verses__tafsir[lang='en'] .verses__tafsir-p {
+  font-size: calc(max(1rem, var(--tafsir-fs)) * var(--tafsir-user-scale, 1));
+  line-height: calc(var(--tafsir-lh) * var(--tafsir-user-scale, 1));
+}
