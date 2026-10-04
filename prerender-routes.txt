@@ -824,6 +824,13 @@
 /learn/common-words
 /learn/fatihah
 /learn/short-surahs
+/learn/letter-forms
+/learn/similar-letters
+/learn/letter-sounds
+/learn/joined-reading
+/learn/tajweed-basics
+/learn/tajweed-rules
+/learn/recite-shorts
 /themes/patience
 /themes/gratitude
 /themes/honesty-truth

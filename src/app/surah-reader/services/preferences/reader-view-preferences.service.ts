@@ -3,6 +3,8 @@ import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   ReaderLayoutPreferencesService,
+  type ReaderArabicAlign,
+  type ReaderArabicFont,
   type ReaderColorTheme,
   type ReaderFont,
   type ReaderLine,
@@ -31,6 +33,8 @@ export class ReaderViewPreferencesService {
   readonly line = this.readerLayout.line;
   readonly width = this.readerLayout.width;
   readonly colorTheme = this.readerLayout.colorTheme;
+  readonly arabicFont = this.readerLayout.arabicFont;
+  readonly arabicAlign = this.readerLayout.arabicAlign;
 
   readonly readingMode = signal<ReaderMode>('verse-by-verse');
   readonly showTranslationEn = signal(true);
@@ -98,6 +102,8 @@ export class ReaderViewPreferencesService {
     this.showTranslationUr.set(true);
     this.setShowTransliteration(true);
     this.setFocusMode(false);
+    this.readerLayout.setArabicFont('madinah');
+    this.readerLayout.setArabicAlign('right');
     this.syncQueryParams();
   }
 
@@ -115,6 +121,14 @@ export class ReaderViewPreferencesService {
 
   setColorTheme(theme: ReaderColorTheme): void {
     this.readerLayout.setColorTheme(theme);
+  }
+
+  setArabicFont(f: ReaderArabicFont): void {
+    this.readerLayout.setArabicFont(f);
+  }
+
+  setArabicAlign(a: ReaderArabicAlign): void {
+    this.readerLayout.setArabicAlign(a);
   }
 
   syncQueryParams(): void {

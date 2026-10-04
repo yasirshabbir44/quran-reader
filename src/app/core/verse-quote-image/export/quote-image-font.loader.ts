@@ -11,6 +11,7 @@ export class QuoteImageFontLoader {
       return;
     }
     await Promise.all([
+      fonts.load('48px "Scheherazade New"'),
       fonts.load('48px "Amiri Quran"'),
       fonts.load('48px "Amiri"'),
       fonts.load('32px "Noto Naskh Arabic"'),

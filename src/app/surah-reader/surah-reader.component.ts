@@ -14,6 +14,7 @@ import {
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { verseElementId as verseElementIdForLocation } from '../core/routing/verse-location.util';
+import { toArabicDigits } from '../core/arabic/arabic-number.util';
 import type { ReaderDisplayVerse } from './models/reader-display-verse.model';
 import type { ReaderViewKind } from './models/reader-view-kind.model';
 import { READING_BOOKMARK_REPOSITORY } from '../core/bookmark/reading-bookmark.repository';
@@ -599,6 +600,18 @@ export class SurahReaderComponent implements OnInit {
 
   protected setColorTheme(t: Parameters<ReaderViewPreferencesService['setColorTheme']>[0]): void {
     this.viewPrefs.setColorTheme(t);
+  }
+
+  protected setArabicFont(f: Parameters<ReaderViewPreferencesService['setArabicFont']>[0]): void {
+    this.viewPrefs.setArabicFont(f);
+  }
+
+  protected setArabicAlign(a: Parameters<ReaderViewPreferencesService['setArabicAlign']>[0]): void {
+    this.viewPrefs.setArabicAlign(a);
+  }
+
+  protected formatArabicNum(n: number): string {
+    return toArabicDigits(n);
   }
 
   protected onSurahSearchChange(value: string): void {

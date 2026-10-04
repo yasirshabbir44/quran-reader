@@ -24,6 +24,22 @@ html[data-reader-theme='sepia'] {
   @include themes.reader-theme-sepia;
 }
 
+html[data-reader-arabic-font='madinah'] {
+  --reader-font-arabic: var(--reader-font-arabic-madinah);
+}
+
+html[data-reader-arabic-font='amiri'] {
+  --reader-font-arabic: var(--reader-font-arabic-amiri);
+}
+
+html[data-reader-arabic-font='noto'] {
+  --reader-font-arabic: var(--reader-font-arabic-noto);
+}
+
+html[data-reader-arabic-font='indopak'] {
+  --reader-font-arabic: var(--reader-font-arabic-indopak);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

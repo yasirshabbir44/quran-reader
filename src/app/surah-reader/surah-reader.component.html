@@ -635,6 +635,72 @@
   </div>
   <div class="reader__settings-tools">
     <fieldset class="reader__fieldset">
+      <legend class="reader__legend">{{ 'arabicFontLegend' | uiTranslate }}</legend>
+      <div class="reader__segment" role="group" [attr.aria-label]="'arabicFontAria' | uiTranslate">
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.arabicFont() === 'madinah'"
+          [attr.aria-pressed]="viewPrefs.arabicFont() === 'madinah'"
+          (click)="setArabicFont('madinah')"
+        >
+          {{ 'fontMadinah' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.arabicFont() === 'amiri'"
+          [attr.aria-pressed]="viewPrefs.arabicFont() === 'amiri'"
+          (click)="setArabicFont('amiri')"
+        >
+          {{ 'fontAmiri' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.arabicFont() === 'noto'"
+          [attr.aria-pressed]="viewPrefs.arabicFont() === 'noto'"
+          (click)="setArabicFont('noto')"
+        >
+          {{ 'fontNoto' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.arabicFont() === 'indopak'"
+          [attr.aria-pressed]="viewPrefs.arabicFont() === 'indopak'"
+          (click)="setArabicFont('indopak')"
+        >
+          {{ 'fontIndoPak' | uiTranslate }}
+        </button>
+      </div>
+    </fieldset>
+
+    <fieldset class="reader__fieldset">
+      <legend class="reader__legend">{{ 'arabicAlignLegend' | uiTranslate }}</legend>
+      <div class="reader__segment" role="group" [attr.aria-label]="'arabicAlignAria' | uiTranslate">
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.arabicAlign() === 'right'"
+          [attr.aria-pressed]="viewPrefs.arabicAlign() === 'right'"
+          (click)="setArabicAlign('right')"
+        >
+          {{ 'alignRight' | uiTranslate }}
+        </button>
+        <button
+          type="button"
+          class="reader__seg-btn"
+          [class.reader__seg-btn--active]="viewPrefs.arabicAlign() === 'center'"
+          [attr.aria-pressed]="viewPrefs.arabicAlign() === 'center'"
+          (click)="setArabicAlign('center')"
+        >
+          {{ 'alignCenter' | uiTranslate }}
+        </button>
+      </div>
+    </fieldset>
+
+    <fieldset class="reader__fieldset">
       <legend class="reader__legend">{{ 'fontSizeLegend' | uiTranslate }}</legend>
       <div class="reader__segment" role="group" [attr.aria-label]="'fontSizeAria' | uiTranslate">
         <button
@@ -991,7 +1057,14 @@
   class="reader"
   dir="rtl"
   lang="ar"
-  [ngClass]="['reader--font-' + viewPrefs.font(), 'reader--line-' + viewPrefs.line(), 'reader--measure-' + viewPrefs.width()]"
+  [ngClass]="[
+    'reader--font-' + viewPrefs.font(),
+    'reader--line-' + viewPrefs.line(),
+    'reader--measure-' + viewPrefs.width(),
+    'reader--mode-' + viewPrefs.readingMode(),
+    'reader--arabic-font-' + viewPrefs.arabicFont(),
+    'reader--arabic-align-' + viewPrefs.arabicAlign()
+  ]"
 >
   <div class="reader__layout">
 
@@ -1412,9 +1485,13 @@
                   aria-hidden="true"
                 >{{ word.text }}</span>
                 }
+                <span class="verses__ayah-end" aria-hidden="true">﴿{{ formatArabicNum(v.ayah) }}﴾</span>
               </p>
               } @else {
-              <p class="verses__text">{{ v.ar }}</p>
+              <p class="verses__text">
+                <span class="verses__text-body">{{ v.ar }}</span>
+                <span class="verses__ayah-end" aria-hidden="true">﴿{{ formatArabicNum(v.ayah) }}﴾</span>
+              </p>
               }
               @if (showTransliterationBlock() && verseTranslit(v); as translit) {
               <div class="verses__translit-block" dir="ltr" lang="en">

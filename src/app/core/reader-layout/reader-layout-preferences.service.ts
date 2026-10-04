@@ -5,17 +5,29 @@ const LS_FONT = 'surah-reader-font';
 const LS_LINE = 'surah-reader-line';
 const LS_WIDTH = 'surah-reader-width';
 const LS_COLOR_THEME = 'surah-reader-color-theme';
+const LS_ARABIC_FONT = 'surah-reader-arabic-font';
+const LS_ARABIC_ALIGN = 'surah-reader-arabic-align';
 
 export type ReaderFont = 's' | 'm' | 'l' | 'xl';
 export type ReaderLine = 'normal' | 'relaxed' | 'loose';
 export type ReaderWidth = 'narrow' | 'medium' | 'wide';
 export type ReaderColorTheme = 'twilight' | 'night' | 'sepia';
-type ReaderSetting = ReaderFont | ReaderLine | ReaderWidth | ReaderColorTheme;
+export type ReaderArabicFont = 'madinah' | 'amiri' | 'noto' | 'indopak';
+export type ReaderArabicAlign = 'right' | 'center';
+type ReaderSetting =
+  | ReaderFont
+  | ReaderLine
+  | ReaderWidth
+  | ReaderColorTheme
+  | ReaderArabicFont
+  | ReaderArabicAlign;
 
 const FONT_OPTIONS: readonly ReaderFont[] = ['s', 'm', 'l', 'xl'];
 const LINE_OPTIONS: readonly ReaderLine[] = ['normal', 'relaxed', 'loose'];
 const WIDTH_OPTIONS: readonly ReaderWidth[] = ['narrow', 'medium', 'wide'];
 const COLOR_THEME_OPTIONS: readonly ReaderColorTheme[] = ['twilight', 'night', 'sepia'];
+const ARABIC_FONT_OPTIONS: readonly ReaderArabicFont[] = ['madinah', 'amiri', 'noto', 'indopak'];
+const ARABIC_ALIGN_OPTIONS: readonly ReaderArabicAlign[] = ['right', 'center'];
 
 const THEME_COLOR_META: Record<ReaderColorTheme, string> = {
   twilight: '#0c0e12',
@@ -35,6 +47,8 @@ export class ReaderLayoutPreferencesService {
   readonly line = signal<ReaderLine>('normal');
   readonly width = signal<ReaderWidth>('medium');
   readonly colorTheme = signal<ReaderColorTheme>('twilight');
+  readonly arabicFont = signal<ReaderArabicFont>('madinah');
+  readonly arabicAlign = signal<ReaderArabicAlign>('right');
 
   constructor() {
     if (!isPlatformBrowser(this.platformId)) {
@@ -44,6 +58,8 @@ export class ReaderLayoutPreferencesService {
     this.line.set(this.readSetting(LS_LINE, LINE_OPTIONS, this.line()));
     this.width.set(this.readSetting(LS_WIDTH, WIDTH_OPTIONS, this.width()));
     this.colorTheme.set(this.readSetting(LS_COLOR_THEME, COLOR_THEME_OPTIONS, this.colorTheme()));
+    this.arabicFont.set(this.readSetting(LS_ARABIC_FONT, ARABIC_FONT_OPTIONS, this.arabicFont()));
+    this.arabicAlign.set(this.readSetting(LS_ARABIC_ALIGN, ARABIC_ALIGN_OPTIONS, this.arabicAlign()));
 
     effect(() => {
       const theme = this.colorTheme();
@@ -51,6 +67,18 @@ export class ReaderLayoutPreferencesService {
       html.dataset['readerTheme'] = theme;
       const meta = this.document.querySelector('meta[name="theme-color"]');
       meta?.setAttribute('content', THEME_COLOR_META[theme]);
+    });
+
+    effect(() => {
+      const font = this.arabicFont();
+      const html = this.document.documentElement;
+      html.dataset['readerArabicFont'] = font;
+    });
+
+    effect(() => {
+      const align = this.arabicAlign();
+      const html = this.document.documentElement;
+      html.dataset['readerArabicAlign'] = align;
     });
   }
 
@@ -72,6 +100,16 @@ export class ReaderLayoutPreferencesService {
   setColorTheme(value: ReaderColorTheme): void {
     this.colorTheme.set(value);
     this.persist(LS_COLOR_THEME, value);
+  }
+
+  setArabicFont(value: ReaderArabicFont): void {
+    this.arabicFont.set(value);
+    this.persist(LS_ARABIC_FONT, value);
+  }
+
+  setArabicAlign(value: ReaderArabicAlign): void {
+    this.arabicAlign.set(value);
+    this.persist(LS_ARABIC_ALIGN, value);
   }
 
   private persist(key: string, value: string): void {
