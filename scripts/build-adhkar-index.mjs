@@ -76,6 +76,9 @@ function validateSeed(seed) {
         throw new Error(`${itemCtx}: missing arabic text`);
       }
       assertLocalized(item.translation, `${itemCtx} translation`);
+      if (item.benefit) {
+        assertLocalized(item.benefit, `${itemCtx} benefit`);
+      }
       if (item.repeat !== undefined && (!Number.isInteger(item.repeat) || item.repeat < 1)) {
         throw new Error(`${itemCtx}: repeat must be a positive integer`);
       }
@@ -93,6 +96,7 @@ function main() {
       id: collection.id,
       icon: collection.icon ?? 'hands',
       sortOrder: collection.sortOrder ?? 0,
+      ...(collection.category ? { category: collection.category } : {}),
       title: collection.title,
       description: collection.description,
       itemCount: collection.items.length,
@@ -103,6 +107,8 @@ function main() {
         translation: item.translation,
         ...(item.repeat ? { repeat: item.repeat } : {}),
         ...(item.source ? { source: item.source } : {}),
+        ...(item.benefit ? { benefit: item.benefit } : {}),
+        ...(item.category ? { category: item.category } : {}),
       })),
     }));
 

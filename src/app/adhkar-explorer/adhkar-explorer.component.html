@@ -42,6 +42,7 @@
     </div>
   </header>
 
+  <!-- Overview Stats Bar -->
   <section class="adhkar__stats" [attr.aria-label]="'adhkarStatsAria' | uiTranslate">
     <div class="adhkar__stat">
       <span class="adhkar__stat-value">{{ formatUiNum(collections().length) }}</span>
@@ -52,17 +53,235 @@
       <span class="adhkar__stat-label">{{ 'adhkarStatItems' | uiTranslate }}</span>
     </div>
     <div class="adhkar__stat">
+      <span class="adhkar__stat-value adhkar__stat-value--accent">{{ formatUiNum(totalCompletedToday()) }}</span>
+      <span class="adhkar__stat-label">{{ 'homeStatCompletedLabel' | uiTranslate }}</span>
+    </div>
+    <div class="adhkar__stat">
       <span class="adhkar__stat-value">{{ formatUiNum(3) }}</span>
       <span class="adhkar__stat-label">{{ 'adhkarStatLanguages' | uiTranslate }}</span>
     </div>
   </section>
 
-  @if (suggestedCollection(); as suggested) {
+  <!-- Search & Discovery Bar -->
+  <section class="adhkar__search-bar" aria-label="Search Adhkar & Duas">
+    <div class="adhkar__search-wrap">
+      <span class="adhkar__search-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+          <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+        </svg>
+      </span>
+      <input
+        type="search"
+        class="adhkar__search-input"
+        [placeholder]="'adhkarSearchPlaceholder' | uiTranslate"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        [attr.aria-label]="'adhkarSearchPlaceholder' | uiTranslate"
+      />
+      @if (searchQuery()) {
+      <button
+        type="button"
+        class="adhkar__search-clear"
+        (click)="clearSearch()"
+        [attr.aria-label]="'adhkarClearSearch' | uiTranslate"
+      >
+        ✕
+      </button>
+      }
+    </div>
+  </section>
+
+  <!-- Category Filter Chips -->
+  <nav class="adhkar__filters" aria-label="Categories">
+    <div class="adhkar__filters-scroll">
+      @for (filter of categoryFilters; track filter.id) {
+      <button
+        type="button"
+        class="adhkar__filter-chip"
+        [class.adhkar__filter-chip--active]="selectedCategory() === filter.id"
+        (click)="setCategory(filter.id)"
+      >
+        <span class="adhkar__filter-icon" aria-hidden="true">{{ filter.icon }}</span>
+        <span class="adhkar__filter-label">{{ filter.labelKey | uiTranslate }}</span>
+        @if (filter.id === 'favorites' && favorites.favoriteCount() > 0) {
+        <span class="adhkar__filter-badge">{{ formatUiNum(favorites.favoriteCount()) }}</span>
+        }
+      </button>
+      }
+    </div>
+  </nav>
+
+  <!-- SEARCH RESULTS VIEW (When query entered) -->
+  @if (searchQuery().trim().length >= 2) {
+  <section class="adhkar__search-results" aria-labelledby="adhkar-search-heading">
+    <div class="adhkar__search-results-head">
+      <h2 id="adhkar-search-heading" class="adhkar__search-results-title">
+        {{ 'adhkarSearchResultsTitle' | uiTranslate }}
+      </h2>
+      <span class="adhkar__search-count">
+        {{ 'adhkarSearchResultsCount' | uiTranslate: { count: formatUiNum(searchResults().length) } }}
+      </span>
+    </div>
+
+    @if (searchResults().length === 0) {
+    <div class="adhkar__empty-state">
+      <span class="adhkar__empty-icon" aria-hidden="true">🔍</span>
+      <p class="adhkar__empty-text">{{ 'adhkarSearchNoResults' | uiTranslate }}</p>
+      <button type="button" class="adhkar__btn adhkar__btn--ghost" (click)="clearSearch()">
+        {{ 'adhkarClearSearch' | uiTranslate }}
+      </button>
+    </div>
+    } @else {
+    <ul class="adhkar__result-list">
+      @for (res of searchResults(); track res.item.id) {
+      <li class="adhkar__result-card">
+        <div class="adhkar__result-header">
+          <a class="adhkar__result-badge" [routerLink]="['/adhkar', res.collectionId]">
+            <span aria-hidden="true">{{ collectionIcon(res.collectionIcon) }}</span>
+            <span>{{ adhkar.pickLocalized(res.collectionTitle) }}</span>
+          </a>
+          <div class="adhkar__result-actions">
+            <button
+              type="button"
+              class="adhkar__icon-action"
+              [class.adhkar__icon-action--active]="audio.isSpeaking(res.item.id)"
+              (click)="playItemAudio(res.item, $event)"
+              [attr.aria-label]="'adhkarPlayAudio' | uiTranslate"
+            >
+              @if (audio.isSpeaking(res.item.id)) {
+                <span class="adhkar__audio-anim" aria-hidden="true">🔊</span>
+              } @else {
+                <span aria-hidden="true">🔈</span>
+              }
+            </button>
+            <button
+              type="button"
+              class="adhkar__icon-action"
+              [class.adhkar__icon-action--fav]="favorites.isFavorite(res.item.id)"
+              (click)="toggleFavorite(res.item, res.collectionId, $event)"
+              [attr.aria-label]="favorites.isFavorite(res.item.id) ? ('adhkarRemoveFavorite' | uiTranslate) : ('adhkarSaveFavorite' | uiTranslate)"
+            >
+              {{ favorites.isFavorite(res.item.id) ? '★' : '☆' }}
+            </button>
+          </div>
+        </div>
+
+        <a class="adhkar__result-link" [routerLink]="['/adhkar', res.collectionId]">
+          <p class="adhkar__result-arabic" dir="rtl" lang="ar">{{ res.item.arabic }}</p>
+          @if (res.item.transliteration) {
+          <p class="adhkar__result-translit">{{ res.item.transliteration }}</p>
+          }
+          <p class="adhkar__result-meaning">{{ adhkar.pickLocalized(res.item.translation) }}</p>
+        </a>
+
+        @if (res.item.benefit) {
+        <div class="adhkar__result-benefit">
+          <span class="adhkar__benefit-star" aria-hidden="true">🌟</span>
+          <span>{{ adhkar.pickLocalized(res.item.benefit) }}</span>
+        </div>
+        }
+
+        <div class="adhkar__result-footer">
+          @if (res.item.source) {
+          <span class="adhkar__result-source">{{ res.item.source }}</span>
+          }
+          <a class="adhkar__result-jump" [routerLink]="['/adhkar', res.collectionId]">
+            {{ 'adhkarSuggestCta' | uiTranslate }} →
+          </a>
+        </div>
+      </li>
+      }
+    </ul>
+    }
+  </section>
+  } @else if (selectedCategory() === 'favorites') {
+  <!-- FAVORITES TAB VIEW -->
+  <section class="adhkar__favorites-view" aria-labelledby="adhkar-fav-heading">
+    <div class="adhkar__section-head">
+      <h2 id="adhkar-fav-heading" class="adhkar__grid-title">{{ 'adhkarFilterFavorites' | uiTranslate }}</h2>
+      <span class="adhkar__fav-count">{{ formatUiNum(favoriteItemsWithMeta().length) }}</span>
+    </div>
+
+    @if (favoriteItemsWithMeta().length === 0) {
+    <div class="adhkar__empty-state">
+      <span class="adhkar__empty-icon" aria-hidden="true">⭐</span>
+      <p class="adhkar__empty-text">{{ 'adhkarFavoritesEmpty' | uiTranslate }}</p>
+      <button type="button" class="adhkar__btn adhkar__btn--ghost" (click)="setCategory('all')">
+        {{ 'adhkarFilterAll' | uiTranslate }}
+      </button>
+    </div>
+    } @else {
+    <ul class="adhkar__result-list">
+      @for (fav of favoriteItemsWithMeta(); track fav.item.id) {
+      <li class="adhkar__result-card">
+        <div class="adhkar__result-header">
+          <a class="adhkar__result-badge" [routerLink]="['/adhkar', fav.collection.id]">
+            <span aria-hidden="true">{{ collectionIcon(fav.collection.icon) }}</span>
+            <span>{{ adhkar.pickLocalized(fav.collection.title) }}</span>
+          </a>
+          <div class="adhkar__result-actions">
+            <button
+              type="button"
+              class="adhkar__icon-action"
+              [class.adhkar__icon-action--active]="audio.isSpeaking(fav.item.id)"
+              (click)="playItemAudio(fav.item, $event)"
+              [attr.aria-label]="'adhkarPlayAudio' | uiTranslate"
+            >
+              @if (audio.isSpeaking(fav.item.id)) {
+                <span class="adhkar__audio-anim" aria-hidden="true">🔊</span>
+              } @else {
+                <span aria-hidden="true">🔈</span>
+              }
+            </button>
+            <button
+              type="button"
+              class="adhkar__icon-action adhkar__icon-action--fav"
+              (click)="toggleFavorite(fav.item, fav.collection.id, $event)"
+              [attr.aria-label]="'adhkarRemoveFavorite' | uiTranslate"
+            >
+              ★
+            </button>
+          </div>
+        </div>
+
+        <a class="adhkar__result-link" [routerLink]="['/adhkar', fav.collection.id]">
+          <p class="adhkar__result-arabic" dir="rtl" lang="ar">{{ fav.item.arabic }}</p>
+          @if (fav.item.transliteration) {
+          <p class="adhkar__result-translit">{{ fav.item.transliteration }}</p>
+          }
+          <p class="adhkar__result-meaning">{{ adhkar.pickLocalized(fav.item.translation) }}</p>
+        </a>
+
+        @if (fav.item.benefit) {
+        <div class="adhkar__result-benefit">
+          <span class="adhkar__benefit-star" aria-hidden="true">🌟</span>
+          <span>{{ adhkar.pickLocalized(fav.item.benefit) }}</span>
+        </div>
+        }
+
+        <div class="adhkar__result-footer">
+          @if (fav.item.source) {
+          <span class="adhkar__result-source">{{ fav.item.source }}</span>
+          }
+          <a class="adhkar__result-jump" [routerLink]="['/adhkar', fav.collection.id]">
+            {{ 'adhkarSuggestCta' | uiTranslate }} →
+          </a>
+        </div>
+      </li>
+      }
+    </ul>
+    }
+  </section>
+  } @else {
+  <!-- STANDARD CATEGORY & COLLECTIONS VIEW -->
+
+  <!-- Time of Day Suggested Card (Shown when 'all' or 'time' selected) -->
+  @if ((selectedCategory() === 'all' || selectedCategory() === 'time') && suggestedCollection(); as suggested) {
   <section class="adhkar__suggest" aria-labelledby="adhkar-suggest-heading">
     <div class="adhkar__suggest-copy">
       <p class="adhkar__suggest-kicker">{{ 'adhkarSuggestKicker' | uiTranslate }}</p>
       <h2 id="adhkar-suggest-heading" class="adhkar__suggest-title">
-        {{ adhkar.pickLocalized(suggested.title) }}
+        {{ collectionIcon(suggested.icon) }} {{ adhkar.pickLocalized(suggested.title) }}
       </h2>
       <p class="adhkar__suggest-desc">{{ 'adhkarSuggestBody' | uiTranslate }}</p>
     </div>
@@ -73,10 +292,18 @@
   }
 
   <section class="adhkar__grid" aria-labelledby="adhkar-grid-heading">
-    <h2 id="adhkar-grid-heading" class="adhkar__grid-title">{{ 'adhkarIndexTitle' | uiTranslate }}</h2>
-    <p class="adhkar__grid-subtitle">{{ 'adhkarIndexSubtitle' | uiTranslate }}</p>
+    <div class="adhkar__grid-header">
+      <div>
+        <h2 id="adhkar-grid-heading" class="adhkar__grid-title">{{ 'adhkarIndexTitle' | uiTranslate }}</h2>
+        <p class="adhkar__grid-subtitle">{{ 'adhkarIndexSubtitle' | uiTranslate }}</p>
+      </div>
+      <span class="adhkar__grid-badge">
+        {{ formatUiNum(filteredCollections().length) }} {{ 'adhkarStatCollections' | uiTranslate }}
+      </span>
+    </div>
+
     <ul class="adhkar__cards">
-      @for (collection of collections(); track collection.id) {
+      @for (collection of filteredCollections(); track collection.id) {
       <li>
         <a
           class="adhkar__card"
@@ -91,7 +318,9 @@
                   }
           "
         >
-          <span class="adhkar__card-icon" aria-hidden="true">{{ collectionIcon(collection.icon) }}</span>
+          <div class="adhkar__card-icon-wrap" aria-hidden="true">
+            <span class="adhkar__card-icon">{{ collectionIcon(collection.icon) }}</span>
+          </div>
           <span class="adhkar__card-body">
             <span class="adhkar__card-title-row">
               <span class="adhkar__card-title">{{ adhkar.pickLocalized(collection.title) }}</span>
@@ -114,10 +343,12 @@
             </span>
             }
           </span>
+          <span class="adhkar__card-chevron" aria-hidden="true">›</span>
         </a>
       </li>
       }
     </ul>
   </section>
+  }
 </div>
 }

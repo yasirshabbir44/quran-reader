@@ -819,6 +819,11 @@
 /adhkar/morning
 /adhkar/evening
 /adhkar/night
+/adhkar/post-prayer
+/adhkar/quranic-duas
+/adhkar/daily-living
+/adhkar/distress-protection
+/adhkar/forgiveness-tasbih
 /learn/letters
 /learn/vowels
 /learn/common-words
