@@ -1,5 +1,5 @@
 export const QUOTE_IMAGE_FONTS = {
-  ar: '"Amiri Quran", "Amiri", "Noto Naskh Arabic", serif',
+  ar: '"Scheherazade New", "Amiri Quran", "Amiri", "Noto Naskh Arabic", serif',
   en: 'Georgia, "Times New Roman", serif',
   ur: '"Noto Nastaliq Urdu", "Noto Naskh Arabic", serif',
   ui: 'system-ui, -apple-system, "Segoe UI", sans-serif',

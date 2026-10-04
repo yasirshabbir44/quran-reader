@@ -79,26 +79,26 @@
 
 
 .reader.reader--font-s {
-  --verse-fs: clamp(1.32rem, 3.4vw, 1.6rem);
+  --verse-fs: clamp(1.55rem, 3.8vw, 1.95rem);
   --tr-fs: 1rem;
   --tafsir-fs: 1rem;
 }
 
 .reader.reader--font-m {
-  --verse-fs: clamp(1.5rem, 3.9vw, 1.88rem);
+  --verse-fs: clamp(1.88rem, 4.6vw, 2.45rem);
   --tr-fs: 1.0625rem;
   --tafsir-fs: 1rem;
 }
 
 .reader.reader--font-l {
-  --verse-fs: clamp(1.65rem, 4.2vw, 2.1rem);
-  --tr-fs: 1.125rem;
+  --verse-fs: clamp(2.28rem, 5.6vw, 3rem);
+  --tr-fs: 1.15rem;
   --tafsir-fs: 1.0625rem;
 }
 
 .reader.reader--font-xl {
-  --verse-fs: clamp(1.82rem, 4.5vw, 2.3rem);
-  --tr-fs: 1.1875rem;
+  --verse-fs: clamp(2.75rem, 6.8vw, 3.65rem);
+  --tr-fs: 1.25rem;
   --tafsir-fs: 1.125rem;
 }
 
@@ -108,13 +108,25 @@
 }
 
 .reader.reader--line-relaxed {
-  --verse-lh: 2.55;
+  --verse-lh: 2.6;
   --tafsir-lh: 1.75;
 }
 
 .reader.reader--line-loose {
-  --verse-lh: 2.8;
+  --verse-lh: 2.9;
   --tafsir-lh: 1.85;
+}
+
+.reader.reader--arabic-font-indopak {
+  --verse-lh: 2.7;
+
+  &.reader--line-relaxed {
+    --verse-lh: 3.0;
+  }
+
+  &.reader--line-loose {
+    --verse-lh: 3.3;
+  }
 }
 
 .reader.reader--measure-narrow {
@@ -122,11 +134,11 @@
 }
 
 .reader.reader--measure-medium {
-  --shell-max: min(40rem, 100% - 2rem);
+  --shell-max: min(44rem, 100% - 2rem);
 }
 
 .reader.reader--measure-wide {
-  --shell-max: min(46rem, 100% - 2rem);
+  --shell-max: min(52rem, 100% - 2rem);
 }
 
 .reader__visually-hidden {
@@ -1470,13 +1482,6 @@ a.reader__settings-btn {
 .reader__topbar-bookmark-btn {
   min-height: 2.05rem;
   padding: 0.28rem 0.75rem;
-
-  @media (min-width: 720px) {
-    min-height: 1.9rem;
-    padding: 0.22rem 0.55rem;
-    font-size: 0.74rem;
-    white-space: nowrap;
-  }
   border-radius: 0.55rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
   background: rgba(255, 255, 255, 0.05);
@@ -1489,6 +1494,13 @@ a.reader__settings-btn {
     border-color 0.15s ease,
     color 0.15s ease,
     background 0.15s ease;
+
+  @media (min-width: 720px) {
+    min-height: 1.9rem;
+    padding: 0.22rem 0.55rem;
+    font-size: 0.74rem;
+    white-space: nowrap;
+  }
 
   &:hover {
     border-color: rgba(201, 162, 39, 0.4);
@@ -1888,7 +1900,8 @@ a.reader__settings-btn {
   margin: 0;
   text-align: center;
   @include ui.ui-verse-arabic;
-  font-size: clamp(1.5rem, 4.5vw, 2rem);
+  font-size: clamp(1.7rem, 4.8vw, 2.35rem);
+  line-height: 2.3;
   color: var(--reader-ink-arabic, var(--reader-ink-bismillah));
 }
 
@@ -2363,17 +2376,66 @@ a.reader__settings-btn {
   font-family: var(--reader-font-arabic);
   font-size: var(--verse-fs);
   line-height: var(--verse-lh);
-  text-align: center;
+  text-align: right;
+  text-align-last: right;
+  direction: rtl;
   color: var(--reader-ink-arabic, var(--reader-ink));
   font-weight: 400;
   text-wrap: pretty;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+.reader.reader--arabic-align-center .verses__text {
+  text-align: center;
+  text-align-last: center;
+}
+
+.reader.reader--arabic-align-right .verses__text {
+  text-align: right;
+  text-align-last: right;
+}
+
+.verses__ayah-end {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: 0.35em;
+  padding: 0 0.15em;
+  font-family: var(--reader-font-arabic);
+  font-size: 0.85em;
+  line-height: 1;
+  color: var(--reader-accent);
+  vertical-align: baseline;
+  user-select: none;
+  font-weight: 400;
+  white-space: nowrap;
+  letter-spacing: normal;
+  text-shadow: 0 0 12px var(--reader-accent-soft);
+  transition: color 0.18s ease, transform 0.18s ease;
+
+  .verses__item--active & {
+    color: var(--reader-accent-gradient-start);
+    font-weight: 600;
+    text-shadow: 0 0 16px var(--reader-accent-glow);
+  }
 }
 
 .verses__text--word-synced {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 0.05em 0.3em;
+  align-items: center;
+  direction: rtl;
+  gap: 0.08em 0.32em;
+}
+
+.reader.reader--arabic-align-center .verses__text--word-synced {
+  justify-content: center;
+}
+
+.reader.reader--arabic-align-right .verses__text--word-synced {
+  justify-content: flex-start;
 }
 
 .verses__audio-word {
@@ -3040,7 +3102,18 @@ a.reader__settings-btn {
   }
 
   .verses__text {
-    text-align: center;
     font-size: calc(var(--verse-fs) * 1.06);
+  }
+}
+
+.reader.reader--mode-reading {
+  .verses__item {
+    margin-bottom: 0.75rem;
+    padding: 1.15rem 1.35rem 1.45rem;
+  }
+
+  .verses__quran {
+    border-bottom: none;
+    padding-bottom: 0.35rem;
   }
 }

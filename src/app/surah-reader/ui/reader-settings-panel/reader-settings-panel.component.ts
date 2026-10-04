@@ -119,6 +119,14 @@ export class ReaderSettingsPanelComponent {
     this.viewPrefs.setLine(l);
   }
 
+  protected setArabicFont(f: Parameters<ReaderViewPreferencesService['setArabicFont']>[0]): void {
+    this.viewPrefs.setArabicFont(f);
+  }
+
+  protected setArabicAlign(a: Parameters<ReaderViewPreferencesService['setArabicAlign']>[0]): void {
+    this.viewPrefs.setArabicAlign(a);
+  }
+
   protected setWidth(w: Parameters<ReaderViewPreferencesService['setWidth']>[0]): void {
     this.viewPrefs.setWidth(w);
   }
